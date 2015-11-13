@@ -1,4 +1,4 @@
-// Copyright (C) 2014 The Android Open Source Project
+package charter3;// Copyright (C) 2014 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,9 +72,9 @@ public class TicTacToe {
         }
     }
 
-    private static final int X = -1;
-    private static final int O = 1;
-    private static final int None = 0;
+    public static final int X = -1;
+    public static final int O = 1;
+    public static final int None = 0;
 
     private static String playerOf(int playerId) {
         return playerId == None ? " " : playerId == X ? "X" : "O";
@@ -212,8 +212,13 @@ public class TicTacToe {
         return None;
     }
 
-    public void nextPlayer() {
+    public int nextPlayer() {
         currentPlayer = -currentPlayer;
+        return currentPlayer;
+    }
+
+    public int currentPlayer() {
+        return currentPlayer;
     }
 
     public void clean() {

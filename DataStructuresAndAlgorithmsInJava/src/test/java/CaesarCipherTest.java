@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import charter3.CaesarCipher;
 import com.google.common.truth.Truth;
 import org.junit.Before;
 import org.junit.Test;

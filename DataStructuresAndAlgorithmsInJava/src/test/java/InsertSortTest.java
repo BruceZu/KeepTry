@@ -14,7 +14,7 @@
 
 import static com.google.common.truth.Truth.assertThat;
 
-import org.junit.Before;
+import charter3.InsertSort;
 import org.junit.Test;
 
 import java.util.Arrays;

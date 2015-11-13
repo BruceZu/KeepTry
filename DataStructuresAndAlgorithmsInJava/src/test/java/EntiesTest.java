@@ -14,6 +14,8 @@
 
 import static com.google.common.truth.Truth.assertThat;
 
+import charter3.Entries;
+import charter3.Entry;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
