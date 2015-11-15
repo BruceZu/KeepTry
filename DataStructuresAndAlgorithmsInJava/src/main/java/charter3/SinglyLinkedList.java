@@ -25,8 +25,8 @@ public class SinglyLinkedList<T extends Object> {
         }
     }
 
-    private Node head = null;
-    private int sizeOfList = 0;
+    private Node head;
+    private int sizeOfList;
 
     private int indexOfEndNode() {
         // index starts from 0
@@ -61,8 +61,8 @@ public class SinglyLinkedList<T extends Object> {
     }
 
     /*
- Be Default, the Added one will be the head
-  */
+     * Be Default, the Added one will be the head
+     */
     public void add(T newContent) {
         this.head = new Node(newContent, head);
         sizeOfList++;
