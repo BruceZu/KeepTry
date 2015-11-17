@@ -1,4 +1,3 @@
 .idea
-mysite.iml
+*.iml
 out/
-DataStructuresAndAlgorithmsInJava/DataStructuresAndAlgorithmsInJava.iml
