@@ -64,13 +64,10 @@ public class SinglyLinkedList<E> {
     }
 
     public void add(E newContent) {
-        Node<E> newHead = new Node(newContent, headNode);
-        if (empty()) {
-            headNode = endNode = newHead;
-            sizeOfList++;
-            return;
-        }
         headNode = new Node(newContent, headNode);
+        if (empty()) {
+            endNode = headNode;
+        }
         sizeOfList++;
     }
 
