@@ -78,10 +78,10 @@ public class SinglyLinkedList<E> {
             sizeOfList++;
             return;
         }
-        endNode.next = newEnd;
-        sizeOfList++;
 
+        endNode.next = newEnd;
         endNode = newEnd;
+        sizeOfList++;
     }
 
     public void addBefore(E newContent, int index) {

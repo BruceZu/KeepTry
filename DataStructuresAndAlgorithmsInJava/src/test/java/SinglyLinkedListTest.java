@@ -49,6 +49,8 @@ public class SinglyLinkedListTest {
     @Test(timeout = 90000L, expected = Test.None.class)
     public void testWithString() {
         list.add("head");
+        list.deleteHead();
+        list.appendToTheEnd("head");
         Truth.assertThat(list.getHead()).isEqualTo("head");
         Truth.assertThat(list.getEnd()).isEqualTo("head");
 
