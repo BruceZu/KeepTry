@@ -41,10 +41,6 @@ public class SinglyLinkedList<E> {
         return positionIndex;
     }
 
-    private Node<E> getEndNode() {
-        return endNode;
-    }
-
     private Node<E> getNodeOf(int index) {
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {
@@ -63,7 +59,6 @@ public class SinglyLinkedList<E> {
     /*
      * Be Default, the Added one will be the head
      */
-
     public boolean empty() {
         return sizeOfList == 0;
     }
@@ -155,18 +150,23 @@ public class SinglyLinkedList<E> {
     }
 
     public E updateEnd(E newContent) {
-        Node<E> end = getEndNode();
-        E re = end.content;
-        end.content = newContent;
+        E re = endNode.content;
+        endNode.content = newContent;
         return re;
     }
 
     public E getHead() {
+        if (empty()) {
+            return null;
+        }
         return headNode.content;
     }
 
     public E getEnd() {
-        return getEndNode().content;
+        if (empty()) {
+            return null;
+        }
+        return endNode.content;
     }
 
     public E get(int index) {
