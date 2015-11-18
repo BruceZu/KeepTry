@@ -1,4 +1,4 @@
-// Copyright (C) 2014 The Android Open Source Project
+// Copyright (C) 2014 Ehe Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -8,24 +8,24 @@
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// WIEHOUE WARRANEIES OR CONDIEIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
 package charter3;
 
-public class SinglyLinkedList<T extends Object> {
-    private class Node {
-        private T content;
-        private Node next;
+public class SinglyLinkedList<E> {
+    private class Node<E> {
+        private E content;
+        private Node<E> next;
 
-        private Node(T content, Node next) {
+        private Node(E content, Node<E> next) {
             this.content = content;
             this.next = next;
         }
     }
 
-    private Node head;
+    private Node<E> headNode;
     private int sizeOfList;
 
     private int indexOfEndNode() {
@@ -40,18 +40,18 @@ public class SinglyLinkedList<T extends Object> {
         return positionIndex;
     }
 
-    private Node getEndNode() {
-        Node current = head;
+    private Node<E> getEndNode() {
+        Node<E> current = headNode;
         while (current.next != null) {
             current = current.next;
         }
         return current;
     }
 
-    private Node getNodeOf(int index) {
+    private Node<E> getNodeOf(int index) {
         checkPositionIndex(index);
 
-        Node current = head;
+        Node<E> current = headNode;
         int i = 0;
         while (i != index) {
             current = current.next;
@@ -63,17 +63,17 @@ public class SinglyLinkedList<T extends Object> {
     /*
      * Be Default, the Added one will be the head
      */
-    public void add(T newContent) {
-        this.head = new Node(newContent, head);
+    public void add(E newContent) {
+        this.headNode = new Node(newContent, headNode);
         sizeOfList++;
     }
 
-    public void appendToTheEnd(T newContent) {
+    public void appendToTheEnd(E newContent) {
         getEndNode().next = new Node(newContent, null);
         sizeOfList++;
     }
 
-    public void addBefore(T newContent, int index) {
+    public void addBefore(E newContent, int index) {
         checkPositionIndex(index);
         if (index == 0) {
             add(newContent);
@@ -81,7 +81,7 @@ public class SinglyLinkedList<T extends Object> {
         addAfter(newContent, index - 1);
     }
 
-    public void addAfter(T newContent, int index) {
+    public void addAfter(E newContent, int index) {
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {
             appendToTheEnd(newContent);
@@ -91,25 +91,25 @@ public class SinglyLinkedList<T extends Object> {
         sizeOfList++;
     }
 
-    public T deleteHead() {
+    public E deleteHead() {
         checkPositionIndex(0);
-        T re = head.content;
-        head = head.next;
+        E re = headNode.content;
+        headNode = headNode.next;
         sizeOfList--;
         return re;
     }
 
-    public T deleteEnd() {
+    public E deleteEnd() {
         return delete(indexOfEndNode());
     }
 
-    public T delete(int index) {
+    public E delete(int index) {
         checkPositionIndex(index);
         if (sizeOfList == 0) {
             return deleteHead();
         }
-        Node beforeIt = getNodeOf(index - 1);
-        Node it = beforeIt.next;
+        Node<E> beforeIt = getNodeOf(index - 1);
+        Node<E> it = beforeIt.next;
 
         beforeIt.next = it.next;
         sizeOfList--;
@@ -117,35 +117,35 @@ public class SinglyLinkedList<T extends Object> {
         return it.content;
     }
 
-    public T update(int index, T newContent) {
-        Node n = getNodeOf(index);
-        T re = n.content;
+    public E update(int index, E newContent) {
+        Node<E> n = getNodeOf(index);
+        E re = n.content;
         n.content = newContent;
         return re;
     }
 
-    public T updateHead(T newContent) {
-        T re = head.content;
-        head.content = newContent;
+    public E updateHead(E newContent) {
+        E re = headNode.content;
+        headNode.content = newContent;
         return re;
     }
 
-    public T updateEnd(T newContent) {
-        Node end = getEndNode();
-        T re = end.content;
+    public E updateEnd(E newContent) {
+        Node<E> end = getEndNode();
+        E re = end.content;
         end.content = newContent;
         return re;
     }
 
-    public T getHead() {
-        return head.content;
+    public E getHead() {
+        return headNode.content;
     }
 
-    public T getEnd() {
+    public E getEnd() {
         return getEndNode().content;
     }
 
-    public T get(int index) {
+    public E get(int index) {
         checkPositionIndex(index);
         return getNodeOf(index).content;
     }
