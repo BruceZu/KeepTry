@@ -109,6 +109,9 @@ public class SinglyLinkedList<E> {
         E re = headNode.content;
         headNode = headNode.next;
         sizeOfList--;
+        if (empty()) {
+            endNode = null;
+        }
         return re;
     }
 

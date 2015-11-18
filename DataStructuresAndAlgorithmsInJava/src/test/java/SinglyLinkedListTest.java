@@ -47,9 +47,23 @@ public class SinglyLinkedListTest {
     }
 
     @Test(timeout = 90000L, expected = Test.None.class)
+    public void testEndNodeAfterDeleteHead() {
+        list.add("head");
+        Truth.assertThat(list.deleteHead()).isEqualTo("head");
+        Truth.assertThat(list.getEnd()).isNull();
+    }
+
+    @Test(timeout = 90000L, expected = Test.None.class)
+    public void testHeadNodeAfterDeleteEnd() {
+        list.add("end");
+        Truth.assertThat(list.deleteEnd().equals("end"));
+        Truth.assertThat(list.getHead()).isNull();
+    }
+
+    @Test(timeout = 90000L, expected = Test.None.class)
     public void testWithString() {
         list.add("head");
-        list.deleteHead();
+        Truth.assertThat(list.deleteHead()).isEqualTo("head");
         list.appendToTheEnd("head");
         Truth.assertThat(list.getHead()).isEqualTo("head");
         Truth.assertThat(list.getEnd()).isEqualTo("head");
