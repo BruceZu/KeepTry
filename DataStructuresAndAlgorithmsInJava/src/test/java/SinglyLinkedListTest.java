@@ -50,6 +50,7 @@ public class SinglyLinkedListTest {
     public void testWithString() {
         list.add("head");
         Truth.assertThat(list.getHead()).isEqualTo("head");
+        Truth.assertThat(list.getEnd()).isEqualTo("head");
 
         list.appendToTheEnd("end");
         Truth.assertThat(list.getEnd()).isEqualTo("end");
@@ -57,18 +58,28 @@ public class SinglyLinkedListTest {
         list.addAfter("second", 0);
         Truth.assertThat(list.get(1)).isEqualTo("second");
 
+        Truth.assertThat(list.get(2)).isEqualTo("end");
         list.addBefore("third", 2);
         Truth.assertThat(list.get(2)).isEqualTo("third");
+        Truth.assertThat(list.get(3)).isEqualTo("end");
 
         Truth.assertThat(list.delete(1)).isEqualTo("second");
+
+        Truth.assertThat(list.delete(0)).isEqualTo("head");
+        list.add("head");
+        Truth.assertThat(list.delete(2)).isEqualTo("end");
+        list.appendToTheEnd("end");
 
         Truth.assertThat(list.get(0)).isEqualTo("head");
         Truth.assertThat(list.get(1)).isEqualTo("third");
         Truth.assertThat(list.get(2)).isEqualTo("end");
 
         Truth.assertThat(list.updateHead("zero")).isEqualTo("head");
-        Truth.assertThat(list.get(0)).isEqualTo("zero");
+
         Truth.assertThat(list.updateEnd("last")).isEqualTo("end");
+
+        Truth.assertThat(list.get(0)).isEqualTo("zero");
+        Truth.assertThat(list.get(1)).isEqualTo("third");
         Truth.assertThat(list.get(2)).isEqualTo("last");
 
         Truth.assertThat(list.deleteEnd()).isEqualTo("last");

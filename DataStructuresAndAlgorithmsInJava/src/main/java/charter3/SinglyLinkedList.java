@@ -26,6 +26,7 @@ public class SinglyLinkedList<E> {
     }
 
     private Node<E> headNode;
+    private Node<E> endNode;
     private int sizeOfList;
 
     private int indexOfEndNode() {
@@ -41,15 +42,14 @@ public class SinglyLinkedList<E> {
     }
 
     private Node<E> getEndNode() {
-        Node<E> current = headNode;
-        while (current.next != null) {
-            current = current.next;
-        }
-        return current;
+        return endNode;
     }
 
     private Node<E> getNodeOf(int index) {
         checkPositionIndex(index);
+        if (index == indexOfEndNode()) {
+            return endNode;
+        }
 
         Node<E> current = headNode;
         int i = 0;
@@ -63,20 +63,40 @@ public class SinglyLinkedList<E> {
     /*
      * Be Default, the Added one will be the head
      */
+
+    public boolean empty() {
+        return sizeOfList == 0;
+    }
+
     public void add(E newContent) {
-        this.headNode = new Node(newContent, headNode);
+        Node<E> newHead = new Node(newContent, headNode);
+        if (empty()) {
+            headNode = endNode = newHead;
+            sizeOfList++;
+            return;
+        }
+        headNode = new Node(newContent, headNode);
         sizeOfList++;
     }
 
     public void appendToTheEnd(E newContent) {
-        getEndNode().next = new Node(newContent, null);
+        Node<E> newEnd = new Node(newContent, null);
+        if (empty()) {
+            headNode = endNode = newEnd;
+            sizeOfList++;
+            return;
+        }
+        endNode.next = newEnd;
         sizeOfList++;
+
+        endNode = newEnd;
     }
 
     public void addBefore(E newContent, int index) {
         checkPositionIndex(index);
         if (index == 0) {
             add(newContent);
+            return;
         }
         addAfter(newContent, index - 1);
     }
@@ -85,6 +105,7 @@ public class SinglyLinkedList<E> {
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {
             appendToTheEnd(newContent);
+            return;
         }
         Node n = getNodeOf(index);
         n.next = new Node(newContent, n.next);
@@ -105,12 +126,15 @@ public class SinglyLinkedList<E> {
 
     public E delete(int index) {
         checkPositionIndex(index);
-        if (sizeOfList == 0) {
+        if (index == 0) {
             return deleteHead();
         }
         Node<E> beforeIt = getNodeOf(index - 1);
-        Node<E> it = beforeIt.next;
+        if (index == indexOfEndNode()) {
+            endNode = beforeIt;
+        }
 
+        Node<E> it = beforeIt.next;
         beforeIt.next = it.next;
         sizeOfList--;
 
