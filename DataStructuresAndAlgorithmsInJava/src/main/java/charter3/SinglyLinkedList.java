@@ -63,6 +63,10 @@ public class SinglyLinkedList<E> {
         return sizeOfList == 0;
     }
 
+    public int size() {
+        return sizeOfList;
+    }
+
     public void add(E newContent) {
         headNode = new Node(newContent, headNode);
         if (empty()) {
