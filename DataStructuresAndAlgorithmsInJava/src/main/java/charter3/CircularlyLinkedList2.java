@@ -14,6 +14,7 @@
 
 package charter3;
 
+//TODO:  support multi threads access concurrently.
 public class CircularlyLinkedList2<E> implements MyRotateList {
     private class Node<E> {
         private E content;
@@ -197,4 +198,3 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
         endNode = null;
     }
 }
-

@@ -14,6 +14,7 @@
 
 package charter3;
 
+//TODO:  support multi threads access concurrently.
 public class SinglyLinkedList<E> implements MyLinkedList {
     private class Node<E> {
         private E content;
@@ -184,7 +185,7 @@ public class SinglyLinkedList<E> implements MyLinkedList {
 
     @Override
     public void clean() {
-        sizeOfList=0;
-        headNode=endNode=null;
+        sizeOfList = 0;
+        headNode = endNode = null;
     }
 }
