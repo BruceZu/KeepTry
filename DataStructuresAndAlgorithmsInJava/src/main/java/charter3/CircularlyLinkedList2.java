@@ -14,7 +14,7 @@
 
 package charter3;
 
-public class CircularlyLinkedList2<E> implements Rotate {
+public class CircularlyLinkedList2<E> implements MyRotateList {
     private class Node<E> {
         private E content;
         private Node<E> next;
@@ -70,11 +70,8 @@ public class CircularlyLinkedList2<E> implements Rotate {
         return sizeOfList;
     }
 
-    /*
-     * Be Default, the Added one will be the head
-     */
-    public void add(E newContent) {
-        Node<E> newNode = new Node<E>(newContent, null);
+    public void add(Object newContent) {
+        Node<E> newNode = new Node<E>((E) newContent, null);
         if (empty()) {
             endNode = newNode;
             newNode.next = newNode;
@@ -87,8 +84,8 @@ public class CircularlyLinkedList2<E> implements Rotate {
         sizeOfList++;
     }
 
-    public void appendToTheEnd(E newContent) {
-        Node<E> newEnd = new Node<E>(newContent, null);
+    public void appendToTheEnd(Object newContent) {
+        Node<E> newEnd = new Node<E>((E) newContent, null);
         if (empty()) {
             endNode = newEnd;
             newEnd.next = newEnd;
@@ -102,7 +99,7 @@ public class CircularlyLinkedList2<E> implements Rotate {
         endNode = newEnd;
     }
 
-    public void addBefore(E newContent, int index) {
+    public void addBefore(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == 0) {
             add(newContent);
@@ -111,14 +108,14 @@ public class CircularlyLinkedList2<E> implements Rotate {
         addAfter(newContent, index - 1);
     }
 
-    public void addAfter(E newContent, int index) {
+    public void addAfter(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {
             appendToTheEnd(newContent);
             return;
         }
         Node<E> n = getNodeOf(index);
-        n.next = new Node<E>(newContent, n.next);
+        n.next = new Node<E>((E) newContent, n.next);
         sizeOfList++;
     }
 
@@ -156,22 +153,22 @@ public class CircularlyLinkedList2<E> implements Rotate {
         return it.content;
     }
 
-    public E update(int index, E newContent) {
+    public E update(int index, Object newContent) {
         Node<E> n = getNodeOf(index);
         E re = n.content;
-        n.content = newContent;
+        n.content = (E) newContent;
         return re;
     }
 
-    public E updateHead(E newContent) {
+    public E updateHead(Object newContent) {
         E re = endNode.next.content;
-        endNode.next.content = newContent;
+        endNode.next.content = (E) newContent;
         return re;
     }
 
-    public E updateEnd(E newContent) {
+    public E updateEnd(Object newContent) {
         E re = endNode.content;
-        endNode.content = newContent;
+        endNode.content = (E) newContent;
         return re;
     }
 
@@ -192,6 +189,12 @@ public class CircularlyLinkedList2<E> implements Rotate {
     public E get(int index) {
         checkPositionIndex(index);
         return getNodeOf(index).content;
+    }
+
+    @Override
+    public void clean() {
+        sizeOfList = 0;
+        endNode = null;
     }
 }
 

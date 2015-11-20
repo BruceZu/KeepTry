@@ -14,7 +14,7 @@
 
 package charter3;
 
-public class SinglyLinkedList<E> {
+public class SinglyLinkedList<E> implements MyLinkedList {
     private class Node<E> {
         private E content;
         private Node<E> next;
@@ -56,9 +56,6 @@ public class SinglyLinkedList<E> {
         return current;
     }
 
-    /*
-     * Be Default, the Added one will be the head
-     */
     public boolean empty() {
         return sizeOfList == 0;
     }
@@ -67,16 +64,18 @@ public class SinglyLinkedList<E> {
         return sizeOfList;
     }
 
-    public void add(E newContent) {
-        headNode = new Node(newContent, headNode);
+    @Override
+    public void add(Object newContent) {
+        headNode = new Node<E>((E) newContent, headNode);
         if (empty()) {
             endNode = headNode;
         }
         sizeOfList++;
     }
 
-    public void appendToTheEnd(E newContent) {
-        Node<E> newEnd = new Node(newContent, null);
+    @Override
+    public void appendToTheEnd(Object newContent) {
+        Node<E> newEnd = new Node<E>((E) newContent, null);
         if (empty()) {
             headNode = endNode = newEnd;
             sizeOfList++;
@@ -88,7 +87,8 @@ public class SinglyLinkedList<E> {
         sizeOfList++;
     }
 
-    public void addBefore(E newContent, int index) {
+    @Override
+    public void addBefore(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == 0) {
             add(newContent);
@@ -97,14 +97,15 @@ public class SinglyLinkedList<E> {
         addAfter(newContent, index - 1);
     }
 
-    public void addAfter(E newContent, int index) {
+    @Override
+    public void addAfter(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {
             appendToTheEnd(newContent);
             return;
         }
-        Node n = getNodeOf(index);
-        n.next = new Node(newContent, n.next);
+        Node<E> n = getNodeOf(index);
+        n.next = new Node<E>((E) newContent, n.next);
         sizeOfList++;
     }
 
@@ -140,22 +141,25 @@ public class SinglyLinkedList<E> {
         return it.content;
     }
 
-    public E update(int index, E newContent) {
+    @Override
+    public E update(int index, Object newContent) {
         Node<E> n = getNodeOf(index);
         E re = n.content;
-        n.content = newContent;
+        n.content = (E) newContent;
         return re;
     }
 
-    public E updateHead(E newContent) {
+    @Override
+    public E updateHead(Object newContent) {
         E re = headNode.content;
-        headNode.content = newContent;
+        headNode.content = (E) newContent;
         return re;
     }
 
-    public E updateEnd(E newContent) {
+    @Override
+    public E updateEnd(Object newContent) {
         E re = endNode.content;
-        endNode.content = newContent;
+        endNode.content = (E) newContent;
         return re;
     }
 
@@ -176,5 +180,11 @@ public class SinglyLinkedList<E> {
     public E get(int index) {
         checkPositionIndex(index);
         return getNodeOf(index).content;
+    }
+
+    @Override
+    public void clean() {
+        sizeOfList=0;
+        headNode=endNode=null;
     }
 }
