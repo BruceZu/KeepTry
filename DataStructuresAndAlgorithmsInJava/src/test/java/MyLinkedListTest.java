@@ -12,23 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import com.google.common.truth.Truth;
-import org.junit.Before;
-import org.junit.Test;
+import charter3.CircularlyLinkedList;
+import charter3.CircularlyLinkedList2;
+import charter3.MyLinkedList;
 import charter3.SinglyLinkedList;
+import com.google.common.truth.Truth;
+import junit.runner.Version;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 
-public class SinglyLinkedListTest {
-    private SinglyLinkedList list;
+@RunWith(Parameterized.class)
+public class MyLinkedListTest {
+    private static Logger log = LoggerFactory.getLogger(EntiesTest.class);
 
-    @Before
-    public void setup() {
-        list = new SinglyLinkedList();
+    @Parameters(name = "{index}:  concrete linked list: {0} ")
+    public static Iterable<MyLinkedList> data() {
+        return Arrays.asList(new MyLinkedList[]{new SinglyLinkedList(), new CircularlyLinkedList(), new CircularlyLinkedList2()}
+        );
+    }
+
+    private MyLinkedList list;
+
+    public MyLinkedListTest(MyLinkedList list) {
+        this.list = list;
+    }
+
+    @After
+    public void teardown() {
+        list.clean();
+    }
+
+    @Test(timeout = 90000L, expected = Test.None.class)
+    public void testVersion() {
+        org.junit.Assert.assertEquals("4.12", Version.id());
     }
 
     @Test(timeout = 90000L, expected = IndexOutOfBoundsException.class)
     public void testAdd() {
-        list.addAfter(3, 3);
+        list.addAfter(0, 1);
     }
 
     @Test(timeout = 90000L, expected = IndexOutOfBoundsException.class)
@@ -38,18 +65,20 @@ public class SinglyLinkedListTest {
 
     @Test(timeout = 90000L, expected = IndexOutOfBoundsException.class)
     public void testUpdate() {
-        list.update(3, 3);
+        list.update(1, 3);
     }
 
     @Test(timeout = 90000L, expected = IndexOutOfBoundsException.class)
     public void testGetOf() {
-        list.get(2);
+        list.get(0);
     }
 
     @Test(timeout = 90000L, expected = Test.None.class)
     public void testEndNodeAfterDeleteHead() {
+        Truth.assertThat(list.size()).isEqualTo(0);
         list.add("head");
         Truth.assertThat(list.deleteHead()).isEqualTo("head");
+        Truth.assertThat(list.size()).isEqualTo(0);
         Truth.assertThat(list.getEnd()).isNull();
     }
 
@@ -63,6 +92,9 @@ public class SinglyLinkedListTest {
     @Test(timeout = 90000L, expected = Test.None.class)
     public void testWithString() {
         list.add("head");
+        Truth.assertThat(list.getHead()).isEqualTo("head");
+        Truth.assertThat(list.getEnd()).isEqualTo("head");
+
         Truth.assertThat(list.deleteHead()).isEqualTo("head");
         list.appendToTheEnd("head");
         Truth.assertThat(list.getHead()).isEqualTo("head");
@@ -70,19 +102,25 @@ public class SinglyLinkedListTest {
 
         list.appendToTheEnd("end");
         Truth.assertThat(list.getEnd()).isEqualTo("end");
+        Truth.assertThat(list.getHead()).isEqualTo("head");
+        Truth.assertThat(list.get(1)).isEqualTo("end");
+        Truth.assertThat(list.get(0)).isEqualTo("head");
 
         list.addAfter("second", 0);
+        Truth.assertThat(list.get(0)).isEqualTo("head");
         Truth.assertThat(list.get(1)).isEqualTo("second");
-
         Truth.assertThat(list.get(2)).isEqualTo("end");
+
         list.addBefore("third", 2);
+        Truth.assertThat(list.get(0)).isEqualTo("head");
+        Truth.assertThat(list.get(1)).isEqualTo("second");
         Truth.assertThat(list.get(2)).isEqualTo("third");
         Truth.assertThat(list.get(3)).isEqualTo("end");
 
         Truth.assertThat(list.delete(1)).isEqualTo("second");
-
         Truth.assertThat(list.delete(0)).isEqualTo("head");
         list.add("head");
+
         Truth.assertThat(list.delete(2)).isEqualTo("end");
         list.appendToTheEnd("end");
 
@@ -91,7 +129,6 @@ public class SinglyLinkedListTest {
         Truth.assertThat(list.get(2)).isEqualTo("end");
 
         Truth.assertThat(list.updateHead("zero")).isEqualTo("head");
-
         Truth.assertThat(list.updateEnd("last")).isEqualTo("end");
 
         Truth.assertThat(list.get(0)).isEqualTo("zero");
@@ -105,50 +142,12 @@ public class SinglyLinkedListTest {
         Truth.assertThat(list.getEnd()).isEqualTo("third");
         Truth.assertThat(list.getHead()).isEqualTo("third");
 
-        Truth.assertThat(list.update(0, "any")).isEqualTo("third");
-    }
+        Truth.assertThat(list.update(0, "only you")).isEqualTo("third");
+        Truth.assertThat(list.getEnd()).isEqualTo("only you");
+        Truth.assertThat(list.getHead()).isEqualTo("only you");
 
-    @Test(timeout = 90000L, expected = Test.None.class)
-    public void testWithIntAndString() {
-        int head = 0;
-        String zero = "0";
-        int first = 2;
-        int second = 3;
-        int third = 4;
-        int end = 5;
-        String last = "5";
-
-
-        list.add(head);
-        Truth.assertThat(list.getHead()).isEqualTo(head);
-
-        list.appendToTheEnd(end);
-        Truth.assertThat(list.getEnd()).isEqualTo(end);
-
-        list.addAfter(second, 0);
-        Truth.assertThat(list.get(1)).isEqualTo(second);
-
-        list.addBefore(third, 2);
-        Truth.assertThat(list.get(2)).isEqualTo(third);
-
-        Truth.assertThat(list.delete(1)).isEqualTo(second);
-
-        Truth.assertThat(list.get(0)).isEqualTo(head);
-        Truth.assertThat(list.get(1)).isEqualTo(third);
-        Truth.assertThat(list.get(2)).isEqualTo(end);
-
-        Truth.assertThat(list.updateHead(zero)).isEqualTo(head);
-        Truth.assertThat(list.get(0)).isEqualTo(zero);
-        Truth.assertThat(list.updateEnd(last)).isEqualTo(end);
-        Truth.assertThat(list.get(2)).isEqualTo(last);
-
-        Truth.assertThat(list.deleteEnd()).isEqualTo(last);
-        Truth.assertThat(list.getEnd()).isEqualTo(third);
-
-        Truth.assertThat(list.deleteHead()).isEqualTo(zero);
-        Truth.assertThat(list.getEnd()).isEqualTo(third);
-        Truth.assertThat(list.getHead()).isEqualTo(third);
-
-        Truth.assertThat(list.update(0, "any")).isEqualTo(third);
+        Truth.assertThat(list.updateHead(5)).isEqualTo("only you");
+        Truth.assertThat(list.getEnd()).isEqualTo(5);
+        Truth.assertThat(list.getHead()).isEqualTo(5);
     }
 }
