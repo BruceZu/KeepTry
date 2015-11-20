@@ -14,6 +14,7 @@
 
 package charter3;
 
+@Deprecated
 public class CircularlyLinkedList<E> implements MyRotateList {
     private class Node<E> {
         private E content;
