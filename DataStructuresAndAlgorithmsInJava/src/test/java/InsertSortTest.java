@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import static com.google.common.truth.Truth.assertThat;
-
 import charter3.InsertSort;
 import org.junit.Test;
 
 import java.util.Arrays;
+
+import static com.google.common.truth.Truth.assertThat;
 
 public class InsertSortTest {
     private int length = 6;

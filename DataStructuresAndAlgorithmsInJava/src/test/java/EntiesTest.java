@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import static com.google.common.truth.Truth.assertThat;
-
 import charter3.Entries;
 import charter3.Entry;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.google.common.truth.Truth.assertThat;
 
 public class EntiesTest {
     static private Logger log = LoggerFactory.getLogger(EntiesTest.class);
