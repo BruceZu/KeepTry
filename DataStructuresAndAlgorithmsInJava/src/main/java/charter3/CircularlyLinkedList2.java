@@ -86,18 +86,8 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
     }
 
     public void appendToTheEnd(Object newContent) {
-        Node<E> newEnd = new Node<E>((E) newContent, null);
-        if (empty()) {
-            endNode = newEnd;
-            newEnd.next = newEnd;
-            sizeOfList++;
-            return;
-        }
-        newEnd.next = endNode.next;
-        endNode.next = newEnd;
-        sizeOfList++;
-
-        endNode = newEnd;
+        add(newContent);
+        endNode = endNode.next;
     }
 
     public void addBefore(Object newContent, int index) {
