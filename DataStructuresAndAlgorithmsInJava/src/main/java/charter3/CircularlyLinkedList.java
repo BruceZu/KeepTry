@@ -65,7 +65,7 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         }
     }
 
-    public boolean empty() {
+    public boolean isEmpty() {
         return sizeOfList == 0;
     }
 
@@ -75,7 +75,7 @@ public class CircularlyLinkedList<E> implements MyRotateList {
 
     public void add(Object newContent) {
         headNode = new Node<E>((E) newContent, headNode);
-        if (empty()) {
+        if (isEmpty()) {
             endNode = headNode;
         }
 
@@ -85,7 +85,7 @@ public class CircularlyLinkedList<E> implements MyRotateList {
 
     public void appendToTheEnd(Object newContent) {
         Node<E> newEnd = new Node<E>((E) newContent, headNode);
-        if (empty()) {
+        if (isEmpty()) {
             headNode = endNode = newEnd;
             newEnd.next = newEnd;
             sizeOfList++;
@@ -120,7 +120,7 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         checkPositionIndex(0);
         E re = headNode.content;
         sizeOfList--;
-        if (empty()) {
+        if (isEmpty()) {
             headNode = endNode = null;
             return re;
         }
@@ -170,14 +170,14 @@ public class CircularlyLinkedList<E> implements MyRotateList {
     }
 
     public E getHead() {
-        if (empty()) {
+        if (isEmpty()) {
             return null;
         }
         return headNode.content;
     }
 
     public E getEnd() {
-        if (empty()) {
+        if (isEmpty()) {
             return null;
         }
         return endNode.content;

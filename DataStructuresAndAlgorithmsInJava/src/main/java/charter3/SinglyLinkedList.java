@@ -57,7 +57,7 @@ public class SinglyLinkedList<E> implements MyLinkedList {
         return current;
     }
 
-    public boolean empty() {
+    public boolean isEmpty() {
         return sizeOfList == 0;
     }
 
@@ -68,7 +68,7 @@ public class SinglyLinkedList<E> implements MyLinkedList {
     @Override
     public void add(Object newContent) {
         headNode = new Node<E>((E) newContent, headNode);
-        if (empty()) {
+        if (isEmpty()) {
             endNode = headNode;
         }
         sizeOfList++;
@@ -77,7 +77,7 @@ public class SinglyLinkedList<E> implements MyLinkedList {
     @Override
     public void appendToTheEnd(Object newContent) {
         Node<E> newEnd = new Node<E>((E) newContent, null);
-        if (empty()) {
+        if (isEmpty()) {
             headNode = endNode = newEnd;
             sizeOfList++;
             return;
@@ -115,7 +115,7 @@ public class SinglyLinkedList<E> implements MyLinkedList {
         E re = headNode.content;
         headNode = headNode.next;
         sizeOfList--;
-        if (empty()) {
+        if (isEmpty()) {
             endNode = null;
         }
         return re;
@@ -165,14 +165,14 @@ public class SinglyLinkedList<E> implements MyLinkedList {
     }
 
     public E getHead() {
-        if (empty()) {
+        if (isEmpty()) {
             return null;
         }
         return headNode.content;
     }
 
     public E getEnd() {
-        if (empty()) {
+        if (isEmpty()) {
             return null;
         }
         return endNode.content;

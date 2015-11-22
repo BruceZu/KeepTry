@@ -16,7 +16,7 @@ package charter3;
 
 public interface MyLinkedList<E> {
 
-    public boolean empty();
+    public boolean isEmpty();
 
     public int size();
 
