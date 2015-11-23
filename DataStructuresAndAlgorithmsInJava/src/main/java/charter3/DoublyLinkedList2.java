@@ -77,7 +77,8 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return current;
     }
 
-    private void addBetween(Node it, Node p, Node n) {
+    private void addBetween(E newContent, Node p, Node n) {
+        Node<E> it = new Node<E>(newContent);
         p.next = it;
         it.next = n;
         n.prev = it;
@@ -89,6 +90,12 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         p.next = n;
         n.prev = p;
         sizeOfList--;
+    }
+
+    private E delete(int itsIndex, Node<E> it) {
+        checkPositionIndex(itsIndex);
+        deleteBetween(it.prev, it.next);
+        return it.content;
     }
 
     public DoublyLinkedList2() {
@@ -109,48 +116,36 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
     }
 
     public void add(Object newContent) {
-        Node<E> newNode = new Node<E>((E) newContent);
-        addBetween(newNode, headSentinel, headSentinel.next);
+        addBetween((E) newContent, headSentinel, headSentinel.next);
     }
 
     public void appendToTheEnd(Object newContent) {
-        Node<E> newNode = new Node<E>((E) newContent);
-        addBetween(newNode, endSentinel.prev, endSentinel);
+        addBetween((E) newContent, endSentinel.prev, endSentinel);
     }
 
     public void addBefore(Object newContent, int index) {
         checkPositionIndex(index);
         Node<E> i = getNodeOf(index);
-        Node<E> newNode = new Node<E>((E) newContent);
-        addBetween(newNode, i.prev, i);
+        addBetween((E) newContent, i.prev, i);
     }
 
     public void addAfter(Object newContent, int index) {
         checkPositionIndex(index);
         Node<E> i = getNodeOf(index);
-        Node<E> newNode = new Node<E>((E) newContent);
-        addBetween(newNode, i, i.next);
+        addBetween((E) newContent, i, i.next);
     }
 
     public E deleteHead() {
-        checkPositionIndex(0);
-        E re = headSentinel.next.content;
-        deleteBetween(headSentinel, headSentinel.next.next);
-        return re;
+        return delete(0, headSentinel.next);
     }
 
     public E deleteEnd() {
-        checkPositionIndex(indexOfEndNode());
-        E re = endSentinel.prev.content;
-        deleteBetween(endSentinel.prev.prev, endSentinel);
-        return re;
+        return delete(indexOfEndNode(), endSentinel.prev);
     }
 
     public E delete(int index) {
-        checkPositionIndex(index);
         Node<E> it = getNodeOf(index);
-        deleteBetween(it.prev, it.next);
-        return it.content;
+        return delete(index, it);
     }
 
     public E update(int index, Object newContent) {
