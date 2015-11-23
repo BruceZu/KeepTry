@@ -31,13 +31,18 @@ public class CircularlyLinkedList<E> implements MyRotateList {
     private int sizeOfList;
 
     private int indexOfEndNode() {
-        // index starts from 0
+        if (isEmpty()) {
+            throw new IndexOutOfBoundsException("This list is empty");
+        }
         return sizeOfList - 1;
     }
 
     private int checkPositionIndex(int positionIndex) {
+        if (isEmpty()) {
+            throw new IndexOutOfBoundsException("This list is empty");
+        }
         if (positionIndex < 0 || indexOfEndNode() < positionIndex) {
-            throw new IndexOutOfBoundsException("position index is wrong or this list is empty");
+            throw new IndexOutOfBoundsException("Index is wrong ");
         }
         return positionIndex;
     }
@@ -190,6 +195,9 @@ public class CircularlyLinkedList<E> implements MyRotateList {
 
     @Override
     public void clean() {
+        if (size() == 0) {
+            return;
+        }
         sizeOfList = 0;
         headNode = endNode = null;
     }
