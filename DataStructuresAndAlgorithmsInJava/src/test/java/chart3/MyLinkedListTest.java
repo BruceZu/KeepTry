@@ -16,11 +16,14 @@ package chart3;
 
 import charter3.CircularlyLinkedList;
 import charter3.CircularlyLinkedList2;
+import charter3.DoublyLinkedList;
+import charter3.DoublyLinkedList2;
 import charter3.MyLinkedList;
 import charter3.SinglyLinkedList;
 import com.google.common.truth.Truth;
 import junit.runner.Version;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -35,7 +38,12 @@ public class MyLinkedListTest {
 
     @Parameters(name = "{index}:  concrete linked list: {0} ")
     public static Iterable<MyLinkedList> data() {
-        return Arrays.asList(new MyLinkedList[]{new SinglyLinkedList(), new CircularlyLinkedList(), new CircularlyLinkedList2()}
+        return Arrays.asList(new MyLinkedList[]{new SinglyLinkedList(),
+                        new CircularlyLinkedList(),
+                        new CircularlyLinkedList2(),
+                        new DoublyLinkedList(),
+                        new DoublyLinkedList2()
+                }
         );
     }
 
@@ -92,7 +100,7 @@ public class MyLinkedListTest {
     }
 
     @Test(timeout = 90000L, expected = Test.None.class)
-    public void testWithString() {
+    public void test() {
         list.add("head");
         Truth.assertThat(list.getHead()).isEqualTo("head");
         Truth.assertThat(list.getEnd()).isEqualTo("head");
