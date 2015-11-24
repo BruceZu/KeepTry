@@ -50,6 +50,16 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
         return positionIndex;
     }
 
+    @Override
+    public MyLinkedList clone() {
+        return null;
+    }
+
+    @Override
+    public boolean equal(Object withit) {
+        return false;
+    }
+
     private Node<E> getNodeOf(int index) {
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {

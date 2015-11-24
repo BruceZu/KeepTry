@@ -52,4 +52,8 @@ public interface MyLinkedList<E> {
     public E get(int index);
 
     public void clean();
+
+    public MyLinkedList<E> clone();
+
+    public boolean equal(Object withit);
 }

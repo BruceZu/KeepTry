@@ -49,6 +49,16 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         return positionIndex;
     }
 
+    @Override
+    public MyLinkedList clone() {
+        return null;
+    }
+
+    @Override
+    public boolean equal(Object withit) {
+        return false;
+    }
+
     private Node<E> getNodeOf(int index) {
         checkPositionIndex(index);
         Node<E> current;

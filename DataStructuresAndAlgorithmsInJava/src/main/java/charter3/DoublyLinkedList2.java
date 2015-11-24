@@ -195,4 +195,14 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         endSentinel.next = endSentinel;
         endSentinel.prev = headSentinel;
     }
+
+    @Override
+    public MyLinkedList clone() {
+        return null;
+    }
+
+    @Override
+    public boolean equal(Object withit) {
+        return false;
+    }
 }
