@@ -146,34 +146,46 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         sizeOfList++;
     }
 
+    private E deleteTheOnlyOne() {
+        E re = headNode.content;
+        headNode = endNode = null;
+        sizeOfList = 0;
+        return re;
+    }
+
     public E deleteHead() {
         checkPositionIndex(0);
-        E re = headNode.content;
         if (hasOnlyOneElement()) {
-            headNode = endNode = null;
-            sizeOfList = 0;
-            return re;
+            return deleteTheOnlyOne();
         }
+        Node<E> pre = null;
+        Node<E> it = headNode;
+        Node<E> next = it.next;
 
-        headNode = headNode.next;
-        headNode.prev = null;
+        headNode = next;
+
+        next.prev = pre;
+        it.next = null;
         sizeOfList--;
-        return re;
+        return it.content;
     }
 
     public E deleteEnd() {
         checkPositionIndex(indexOfEndNode());
-        E re = endNode.content;
         if (hasOnlyOneElement()) {
-            headNode = endNode = null;
-            sizeOfList = 0;
-            return re;
+            return deleteTheOnlyOne();
         }
 
-        endNode = endNode.prev;
-        endNode.next = null;
+        Node<E> pre = endNode.prev;
+        Node<E> it = endNode;
+        Node<E> next = null;
+
+        endNode = pre;
+
+        pre.next = next;
+        it.prev = null;
         sizeOfList--;
-        return re;
+        return it.content;
     }
 
     public E delete(int index) {
@@ -185,10 +197,14 @@ public class DoublyLinkedList<E> implements MyLinkedList {
             return deleteEnd();
         }
 
-        Node<E> beforeIt = getNodeOf(index - 1);
-        Node<E> it = beforeIt.next;
-        beforeIt.next = it.next;
-        it.next.prev = beforeIt;
+        Node<E> pre = getNodeOf(index - 1);
+        Node<E> it = pre.next;
+        Node<E> next = it.next;
+
+        pre.next = next;
+        next.prev = pre;
+        it.next = it.prev = null;
+
         sizeOfList--;
         return it.content;
     }

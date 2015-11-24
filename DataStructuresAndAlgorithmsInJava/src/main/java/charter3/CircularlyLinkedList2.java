@@ -131,31 +131,25 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
 
     public E deleteHead() {
         checkPositionIndex(0);
-        E re = endNode.next.content;
+        Node<E> it;
         if (hasOnlyOneElement()) {
+            it = endNode;
+            it.next = null;
             endNode = null;
-            sizeOfList--;
-            return re;
+
+            sizeOfList = 0;
+            return it.content;
         }
-        endNode.next = endNode.next.next;
+        it = endNode.next;
+        endNode.next = it.next;
+        it.next = null;
+
         sizeOfList--;
-        return re;
+        return it.content;
     }
 
     public E deleteEnd() {
-        checkPositionIndex(indexOfEndNode());
-        E re = endNode.content;
-        if (hasOnlyOneElement()) {
-            endNode = null;
-            sizeOfList--;
-            return re;
-        }
-
-        Node<E> beforeEnd = getNodeOf(indexOfEndNode()-1);
-        beforeEnd.next=endNode.next;
-        endNode=beforeEnd;
-        sizeOfList--;
-        return re;
+        return delete(indexOfEndNode());
     }
 
     public E delete(int index) {
@@ -163,13 +157,15 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
         if (index == 0) {
             return deleteHead();
         }
-
-        if (index == indexOfEndNode()) {
-           return deleteEnd();
-        }
         Node<E> beforeIt = getNodeOf(index - 1);
         Node<E> it = beforeIt.next;
         beforeIt.next = it.next;
+        it.next = null;
+
+        if (index == indexOfEndNode()) {
+            endNode = beforeIt;
+        }
+
         sizeOfList--;
         return it.content;
     }

@@ -37,6 +37,10 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         return sizeOfList - 1;
     }
 
+    private boolean hasOnlyOneElement() {
+        return sizeOfList == 1;
+    }
+
     private int checkPositionIndex(int positionIndex) {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
@@ -133,14 +137,17 @@ public class CircularlyLinkedList<E> implements MyRotateList {
 
     public E deleteHead() {
         checkPositionIndex(0);
-        E re = headNode.content;
+        Node<E> oldHead = headNode;
+        E re = oldHead.content;
         sizeOfList--;
         if (isEmpty()) {
             headNode = endNode = null;
             return re;
         }
-        headNode = headNode.next;
+        headNode = oldHead.next;
         endNode.next = headNode;
+
+        oldHead.next = null;
         return re;
     }
 
@@ -156,12 +163,13 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         Node<E> beforeIt = getNodeOf(index - 1);
         Node<E> it = beforeIt.next;
         beforeIt.next = it.next;
+        it.next = null;
 
         if (index == indexOfEndNode()) {
             endNode = beforeIt;
         }
-        sizeOfList--;
 
+        sizeOfList--;
         return it.content;
     }
 

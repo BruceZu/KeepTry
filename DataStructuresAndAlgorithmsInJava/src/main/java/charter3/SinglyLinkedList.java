@@ -128,11 +128,14 @@ public class SinglyLinkedList<E> implements MyLinkedList {
     public E deleteHead() {
         checkPositionIndex(0);
         E re = headNode.content;
-        headNode = headNode.next;
+        Node<E> oldHead= headNode;
+        headNode = oldHead.next;
         sizeOfList--;
         if (isEmpty()) {
             endNode = null;
         }
+
+        oldHead.next=null;
         return re;
     }
 
@@ -154,6 +157,7 @@ public class SinglyLinkedList<E> implements MyLinkedList {
         beforeIt.next = it.next;
         sizeOfList--;
 
+        it.next=null;
         return it.content;
     }
 
