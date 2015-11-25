@@ -192,7 +192,7 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
             return;
         }
         sizeOfList = 0;
-        endSentinel.next = endSentinel;
+        headSentinel.next = endSentinel;
         endSentinel.prev = headSentinel;
     }
 

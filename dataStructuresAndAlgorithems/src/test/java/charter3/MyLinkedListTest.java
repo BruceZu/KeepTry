@@ -14,7 +14,6 @@
 
 package charter3;
 
-import com.google.common.truth.Truth;
 import junit.runner.Version;
 import org.junit.After;
 import org.junit.Test;
@@ -26,13 +25,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
+import static com.google.common.truth.Truth.assertThat;
+
 @RunWith(Parameterized.class)
 public class MyLinkedListTest {
     private static Logger log = LoggerFactory.getLogger(EntiesTest.class);
 
     @Parameters(name = "{index}:  concrete linked list: {0} ")
     public static Iterable<MyLinkedList> data() {
-        return Arrays.asList(new MyLinkedList[]{new SinglyLinkedList(),
+        return Arrays.asList(new MyLinkedList[]{
+                        new SinglyLinkedList(),
                         new CircularlyLinkedList(),
                         new CircularlyLinkedList2(),
                         new DoublyLinkedList(),
@@ -79,79 +81,105 @@ public class MyLinkedListTest {
 
     @Test(timeout = 90000L, expected = Test.None.class)
     public void testEndNodeAfterDeleteHead() {
-        Truth.assertThat(list.size()).isEqualTo(0);
+        assertThat(list.size()).isEqualTo(0);
         list.add("head");
-        Truth.assertThat(list.deleteHead()).isEqualTo("head");
-        Truth.assertThat(list.size()).isEqualTo(0);
-        Truth.assertThat(list.getEnd()).isNull();
+        assertThat(list.deleteHead()).isEqualTo("head");
+        assertThat(list.size()).isEqualTo(0);
+        assertThat(list.getEnd()).isNull();
     }
 
     @Test(timeout = 90000L, expected = Test.None.class)
     public void testHeadNodeAfterDeleteEnd() {
         list.add("end");
-        Truth.assertThat(list.deleteEnd().equals("end"));
-        Truth.assertThat(list.getHead()).isNull();
+        assertThat(list.deleteEnd().equals("end"));
+        assertThat(list.getHead()).isNull();
     }
 
     @Test(timeout = 90000L, expected = Test.None.class)
-    public void test() {
-        list.add("head");
-        Truth.assertThat(list.getHead()).isEqualTo("head");
-        Truth.assertThat(list.getEnd()).isEqualTo("head");
-
-        Truth.assertThat(list.deleteHead()).isEqualTo("head");
-        list.appendToTheEnd("head");
-        Truth.assertThat(list.getHead()).isEqualTo("head");
-        Truth.assertThat(list.getEnd()).isEqualTo("head");
-
+    public void addTest() {
+        list.add("middle");
+        list.addAfter("afterMiddle", 0);
+        list.addBefore("head", 0);
         list.appendToTheEnd("end");
-        Truth.assertThat(list.getEnd()).isEqualTo("end");
-        Truth.assertThat(list.getHead()).isEqualTo("head");
-        Truth.assertThat(list.get(1)).isEqualTo("end");
-        Truth.assertThat(list.get(0)).isEqualTo("head");
+        assertThat(list.get(0)).isEqualTo("head");
+        assertThat(list.get(1)).isEqualTo("middle");
+        assertThat(list.get(2)).isEqualTo("afterMiddle");
+        assertThat(list.get(3)).isEqualTo("end");
 
-        list.addAfter("second", 0);
-        Truth.assertThat(list.get(0)).isEqualTo("head");
-        Truth.assertThat(list.get(1)).isEqualTo("second");
-        Truth.assertThat(list.get(2)).isEqualTo("end");
-
-        list.addBefore("third", 2);
-        Truth.assertThat(list.get(0)).isEqualTo("head");
-        Truth.assertThat(list.get(1)).isEqualTo("second");
-        Truth.assertThat(list.get(2)).isEqualTo("third");
-        Truth.assertThat(list.get(3)).isEqualTo("end");
-
-        Truth.assertThat(list.delete(1)).isEqualTo("second");
-        Truth.assertThat(list.delete(0)).isEqualTo("head");
+        list.clean();
+        list.appendToTheEnd("middle");
         list.add("head");
+        list.addAfter("end", 1);
+        list.addBefore("afterMiddle", 2);
+        assertThat(list.get(0)).isEqualTo("head");
+        assertThat(list.get(1)).isEqualTo("middle");
+        assertThat(list.get(2)).isEqualTo("afterMiddle");
+        assertThat(list.get(3)).isEqualTo("end");
+    }
 
-        Truth.assertThat(list.delete(2)).isEqualTo("end");
-        list.appendToTheEnd("end");
+    @Test(timeout = 90000L, expected = Test.None.class)
+    public void deleteTest() {
+        list.add("5");
+        list.add("4");
+        list.add("3");
+        list.add("2");
+        list.add("1");
+        list.add("0");
+        assertThat(list.size()).isEqualTo(6);
 
-        Truth.assertThat(list.get(0)).isEqualTo("head");
-        Truth.assertThat(list.get(1)).isEqualTo("third");
-        Truth.assertThat(list.get(2)).isEqualTo("end");
+        assertThat(list.delete(5)).isEqualTo("5");
+        assertThat(list.delete(0)).isEqualTo("0");
 
-        Truth.assertThat(list.updateHead("zero")).isEqualTo("head");
-        Truth.assertThat(list.updateEnd("last")).isEqualTo("end");
+        assertThat(list.get(0)).isEqualTo("1");
+        assertThat(list.get(1)).isEqualTo("2");
+        assertThat(list.get(2)).isEqualTo("3");
+        assertThat(list.get(3)).isEqualTo("4");
 
-        Truth.assertThat(list.get(0)).isEqualTo("zero");
-        Truth.assertThat(list.get(1)).isEqualTo("third");
-        Truth.assertThat(list.get(2)).isEqualTo("last");
+        assertThat(list.delete(2)).isEqualTo("3");
+        assertThat(list.deleteHead()).isEqualTo("1");
+        assertThat(list.deleteEnd()).isEqualTo("4");
+        assertThat(list.delete(0)).isEqualTo("2");
+    }
 
-        Truth.assertThat(list.deleteEnd()).isEqualTo("last");
-        Truth.assertThat(list.getEnd()).isEqualTo("third");
+    @Test(timeout = 90000L, expected = Test.None.class)
+    public void updateTest() {
+        list.add("4");
+        list.add("3");
+        list.add("2");
+        list.add("1");
+        list.add("0");
 
-        Truth.assertThat(list.deleteHead()).isEqualTo("zero");
-        Truth.assertThat(list.getEnd()).isEqualTo("third");
-        Truth.assertThat(list.getHead()).isEqualTo("third");
+        assertThat(list.update(0, "head")).isEqualTo("0");
+        assertThat(list.update(2, "middle")).isEqualTo("2");
+        assertThat(list.update(4, "end")).isEqualTo("4");
 
-        Truth.assertThat(list.update(0, "only you")).isEqualTo("third");
-        Truth.assertThat(list.getEnd()).isEqualTo("only you");
-        Truth.assertThat(list.getHead()).isEqualTo("only you");
+        assertThat(list.get(0)).isEqualTo("head");
+        assertThat(list.get(1)).isEqualTo("1");
+        assertThat(list.get(2)).isEqualTo("middle");
+        assertThat(list.get(3)).isEqualTo("3");
+        assertThat(list.get(4)).isEqualTo("end");
 
-        Truth.assertThat(list.updateHead(5)).isEqualTo("only you");
-        Truth.assertThat(list.getEnd()).isEqualTo(5);
-        Truth.assertThat(list.getHead()).isEqualTo(5);
+
+        assertThat(list.updateEnd("4")).isEqualTo("end");
+        assertThat(list.updateHead("0")).isEqualTo("head");
+
+        assertThat(list.get(0)).isEqualTo("0");
+        assertThat(list.get(1)).isEqualTo("1");
+        assertThat(list.get(2)).isEqualTo("middle");
+        assertThat(list.get(3)).isEqualTo("3");
+        assertThat(list.get(4)).isEqualTo("4");
+    }
+
+    @Test(timeout = 90000L, expected = Test.None.class)
+    public void getTest() {
+        list.add("4");
+        list.add("3");
+        list.add("2");
+        list.add("1");
+        list.add("0");
+
+        assertThat(list.getHead()).isEqualTo("0");
+        assertThat(list.getEnd()).isEqualTo("4");
+        assertThat(list.get(2)).isEqualTo("2");
     }
 }
