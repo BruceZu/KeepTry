@@ -19,9 +19,9 @@ public class FindPermutationInDocTest {
     private String[] given = {"snow", "is", "over"};
     private String[] docHaving = {"snow", "is", "over"};
     private String[] docHaving2 = {"snow", "snow", "is", "over"};
-    private String[] docHaving3 = {"find", "snow", "is", "over"};
-    private String[] docHaving4 = {"snow", "is", "over", "yes"};
-    private String[] docHaving5 = {"see", "snow", "is", "over", "right"};
+    private String[] docHaving3 = { "snow", "is", "over","over"};
+    private String[] docHaving4 = {"hi","snow", "is", "over", "yes"};
+
 
     @Test(timeout = 3000L, expected = Test.None.class)
     public void testHavePermutation() {
@@ -29,6 +29,5 @@ public class FindPermutationInDocTest {
         Assert.assertTrue(FindPermutationInDoc.hasPermutationIn(given, docHaving2));
         Assert.assertTrue(FindPermutationInDoc.hasPermutationIn(given, docHaving3));
         Assert.assertTrue(FindPermutationInDoc.hasPermutationIn(given, docHaving4));
-        Assert.assertTrue(FindPermutationInDoc.hasPermutationIn(given, docHaving5));
     }
 }
