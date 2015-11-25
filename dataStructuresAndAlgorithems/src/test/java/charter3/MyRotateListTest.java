@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package chart3;
+package charter3;
 
-import charter3.CircularlyLinkedList;
-import charter3.CircularlyLinkedList2;
-import charter3.MyRotateList;
 import com.google.common.truth.Truth;
 import org.junit.Test;
 import org.junit.runner.RunWith;

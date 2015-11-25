@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package chart3;
+package charter3;
 
 import com.google.common.truth.Truth;
 import org.junit.Test;
