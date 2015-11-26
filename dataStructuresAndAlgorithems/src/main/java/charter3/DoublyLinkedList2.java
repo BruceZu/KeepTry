@@ -198,11 +198,36 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
 
     @Override
     public MyLinkedList clone() {
-        return null;
+        DoublyLinkedList2 r = new DoublyLinkedList2();
+        Node<E> i = headSentinel.next;
+        while (i != endSentinel) {
+            r.appendToTheEnd(i.content);
+            i = i.next;
+        }
+        return r;
     }
 
     @Override
     public boolean equals(Object it) {
-        return false;
+        if (it == null) {
+            return false;
+        }
+        if (it == this) {
+            return true;
+        }
+        if (!(it instanceof DoublyLinkedList2) || this.size() != ((DoublyLinkedList2) it).size()) {
+            return false;
+        }
+
+        Node<E> i = this.headSentinel.next;
+        Node<E> j = ((DoublyLinkedList2<E>) it).headSentinel.next;
+        while (i != this.endSentinel) {
+            if (!i.content.equals(j.content)) {
+                return false;
+            }
+            i = i.next;
+            j = j.next;
+        }
+        return true;
     }
 }

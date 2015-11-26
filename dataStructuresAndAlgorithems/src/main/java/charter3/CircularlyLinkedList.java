@@ -53,11 +53,13 @@ public class CircularlyLinkedList<E> implements MyRotateList {
 
     @Override
     public MyLinkedList clone() {
+        //TODO
         return null;
     }
 
     @Override
     public boolean equals(Object it) {
+        //TODO
         return false;
     }
 

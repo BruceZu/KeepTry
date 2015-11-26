@@ -49,11 +49,13 @@ public class SinglyLinkedList<E> implements MyLinkedList {
 
     @Override
     public MyLinkedList clone() {
+        //TODO
         return null;
     }
 
     @Override
     public boolean equals(Object it) {
+        //TODO
         return false;
     }
 
