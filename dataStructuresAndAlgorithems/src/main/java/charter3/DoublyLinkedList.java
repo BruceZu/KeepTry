@@ -55,7 +55,7 @@ public class DoublyLinkedList<E> implements MyLinkedList {
     }
 
     @Override
-    public boolean equal(Object withit) {
+    public boolean equals(Object it) {
         return false;
     }
 

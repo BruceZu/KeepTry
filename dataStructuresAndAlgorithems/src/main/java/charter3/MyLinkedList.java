@@ -55,5 +55,5 @@ public interface MyLinkedList<E> {
 
     public MyLinkedList<E> clone();
 
-    public boolean equal(Object withit);
+    public boolean equals(Object withit);
 }

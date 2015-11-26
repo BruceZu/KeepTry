@@ -56,7 +56,7 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
     }
 
     @Override
-    public boolean equal(Object withit) {
+    public boolean equals(Object it) {
         return false;
     }
 

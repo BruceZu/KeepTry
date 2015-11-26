@@ -108,7 +108,6 @@ public class CrossRoadTrafficLight {
 
     private void start() throws InterruptedException {
 
-
         int keepTest = 0;
         while (keepTest++ < 10) {
             Thread.currentThread().sleep(500);
