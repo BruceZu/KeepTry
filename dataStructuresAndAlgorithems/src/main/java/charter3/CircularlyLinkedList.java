@@ -14,6 +14,9 @@
 
 package charter3;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+
 @Deprecated
 public class CircularlyLinkedList<E> implements MyRotateList {
     private class Node<E> {
@@ -49,18 +52,6 @@ public class CircularlyLinkedList<E> implements MyRotateList {
             throw new IndexOutOfBoundsException("Index is wrong ");
         }
         return positionIndex;
-    }
-
-    @Override
-    public MyLinkedList clone() {
-        //TODO
-        return null;
-    }
-
-    @Override
-    public boolean equals(Object it) {
-        //TODO
-        return false;
     }
 
     private Node<E> getNodeOf(int index) {
@@ -224,5 +215,118 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         }
         sizeOfList = 0;
         headNode = endNode = null;
+    }
+
+    @Override
+    public MyLinkedList clone() {
+        MyLinkedList r = new CircularlyLinkedList<E>();
+        Node<E> i = headNode;
+        if (size() == 0) {
+            return r;
+        }
+        while (i != endNode) {
+            E e = i.content;
+            E eClone;
+            if (e instanceof Cloneable) {
+                try {
+                    if (e instanceof Object[])
+                        eClone = (E) ((Object[]) e).clone();
+                    else if (e instanceof byte[])
+                        eClone = (E) ((byte[]) e).clone();
+                    else if (e instanceof short[])
+                        eClone = (E) ((short[]) e).clone();
+                    else if (e instanceof int[])
+                        eClone = (E) ((int[]) e).clone();
+                    else if (e instanceof long[])
+                        eClone = (E) ((long[]) e).clone();
+                    else if (e instanceof char[])
+                        eClone = (E) ((char[]) e).clone();
+                    else if (e instanceof float[])
+                        eClone = (E) ((float[]) e).clone();
+                    else if (e instanceof double[])
+                        eClone = (E) ((double[]) e).clone();
+                    else if (e instanceof boolean[])
+                        eClone = (E) ((boolean[]) e).clone();
+                    else
+                        eClone = (E) e.getClass().getDeclaredMethod("clone").invoke(e);
+                    r.appendToTheEnd(eClone);
+                } catch (NoSuchMethodException |
+                        IllegalAccessException |
+                        InvocationTargetException ex) {
+                    r.appendToTheEnd(e);
+                }
+            } else {
+                r.appendToTheEnd(e);
+            }
+            i = i.next;
+        }
+        r.appendToTheEnd(endNode.content);
+
+        return r;
+    }
+
+    @Override
+    public boolean equals(Object it) {
+        if (it == null) {
+            return false;
+        }
+        if (this == it) {
+            return true;
+        }
+        if (!(it instanceof CircularlyLinkedList) || ((CircularlyLinkedList) it).size() != this.size()) {
+            return false;
+        }
+        if (size() == ((CircularlyLinkedList) it).size() && size() == 0) {
+            return true;
+        }
+        Node<E> i = endNode;
+        Node<E> j = ((CircularlyLinkedList) it).endNode;
+        do {
+            E e1 = i.content;
+            E e2 = j.content;
+
+            if (e1 == e2) {
+                i = i.next;
+                j = j.next;
+                continue;
+            }
+            if (e1 == null) {
+                return false;
+            }
+
+            boolean eq;
+
+            if (e1 instanceof Object[] && e2 instanceof Object[])
+                eq = Arrays.deepEquals((Object[]) e1, (Object[]) e2);
+            else if (e1 instanceof byte[] && e2 instanceof byte[])
+                eq = Arrays.equals((byte[]) e1, (byte[]) e2);
+            else if (e1 instanceof short[] && e2 instanceof short[])
+                eq = Arrays.equals((short[]) e1, (short[]) e2);
+            else if (e1 instanceof int[] && e2 instanceof int[])
+                eq = Arrays.equals((int[]) e1, (int[]) e2);
+            else if (e1 instanceof long[] && e2 instanceof long[])
+                eq = Arrays.equals((long[]) e1, (long[]) e2);
+            else if (e1 instanceof char[] && e2 instanceof char[])
+                eq = Arrays.equals((char[]) e1, (char[]) e2);
+            else if (e1 instanceof float[] && e2 instanceof float[])
+                eq = Arrays.equals((float[]) e1, (float[]) e2);
+            else if (e1 instanceof double[] && e2 instanceof double[])
+                eq = Arrays.equals((double[]) e1, (double[]) e2);
+            else if (e1 instanceof boolean[] && e2 instanceof boolean[])
+                eq = Arrays.equals((boolean[]) e1, (boolean[]) e2);
+            else
+                eq = e1.equals(e2);
+
+            if (!eq)
+                return false;
+
+            if (size() == 1) {
+                break;
+            }
+
+            i = i.next;
+            j = j.next;
+        } while (i != endNode);
+        return true;
     }
 }

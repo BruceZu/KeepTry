@@ -16,6 +16,7 @@ package charter3;
 
 import junit.runner.Version;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -181,5 +182,58 @@ public class MyLinkedListTest {
         assertThat(list.getHead()).isEqualTo("0");
         assertThat(list.getEnd()).isEqualTo("4");
         assertThat(list.get(2)).isEqualTo("2");
+    }
+
+    @Test(timeout = 90000L, expected = Test.None.class)
+    public void equalsTest() {
+        Assert.assertFalse(list.equals(null));
+
+        Assert.assertTrue(list.size() == 0);
+        Assert.assertTrue(list.equals(list.clone()));
+
+        list.add("end");
+        Assert.assertTrue(list.size() == 1);
+        Assert.assertTrue(list.equals(list.clone()));
+
+        list.add(2);
+        list.add(new String[][]{{"NameA", "NameB"}, {"scoreA", "scoreB"}});
+        list.add(new boolean[]{true, false});
+        list.add(1);
+
+
+        Assert.assertFalse(list.equals(new SinglyLinkedList<String>()));
+
+        Assert.assertTrue(list.equals(list));
+        MyLinkedList clone = list.clone();
+        Assert.assertTrue(list.equals(clone));
+        Assert.assertTrue(clone.equals(list));
+
+        clone.updateHead("1");
+        Assert.assertNotEquals(list, clone);
+        clone.updateHead(1);
+        Assert.assertEquals(list, clone);
+
+        clone.updateHead(null);
+        Assert.assertNotEquals(list, clone);
+        clone.updateHead(1);
+        Assert.assertEquals(list, clone);
+
+        clone.updateEnd(3);
+        Assert.assertNotEquals(list, clone);
+        clone.updateEnd("end");
+        Assert.assertEquals(list, clone);
+
+        String[][] originalElement = (String[][]) clone.update(2, new String[][]{{"NameA", "NameB"}, {"scoreA", "scoreB"}});
+        Assert.assertEquals(list, clone);
+        clone.update(2, originalElement);
+        Assert.assertEquals(list, clone);
+
+        boolean[] oe = (boolean[]) clone.update(1, new boolean[]{true, false});
+        Assert.assertEquals(list, clone);
+        clone.update(1, oe);
+        Assert.assertEquals(list, clone);
+
+        clone.add("head");
+        Assert.assertNotEquals(list, clone);
     }
 }

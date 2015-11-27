@@ -14,7 +14,7 @@
 
 package charter3;
 
-public interface MyLinkedList<E> {
+public interface MyLinkedList<E> extends Cloneable {
 
     public boolean isEmpty();
 
@@ -54,6 +54,4 @@ public interface MyLinkedList<E> {
     public void clean();
 
     public MyLinkedList<E> clone();
-
-    public boolean equals(Object withit);
 }
