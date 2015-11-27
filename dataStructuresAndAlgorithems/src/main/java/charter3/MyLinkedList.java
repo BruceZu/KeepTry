@@ -25,13 +25,13 @@ public interface MyLinkedList<E> {
      *
      * @param newContent
      */
-    public void add(E newContent);
+    public MyLinkedList add(E newContent);
 
-    public void appendToTheEnd(E newContent);
+    public MyLinkedList appendToTheEnd(E newContent);
 
-    public void addBefore(E newContent, int index);
+    public MyLinkedList addBefore(E newContent, int index);
 
-    public void addAfter(E newContent, int index);
+    public MyLinkedList addAfter(E newContent, int index);
 
     public E deleteHead();
 

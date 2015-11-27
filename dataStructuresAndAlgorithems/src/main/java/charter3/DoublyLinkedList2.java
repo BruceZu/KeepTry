@@ -115,24 +115,28 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return sizeOfList == 1;
     }
 
-    public void add(Object newContent) {
+    public MyLinkedList add(Object newContent) {
         addBetween((E) newContent, headSentinel, headSentinel.next);
+        return this;
     }
 
-    public void appendToTheEnd(Object newContent) {
+    public DoublyLinkedList2 appendToTheEnd(Object newContent) {
         addBetween((E) newContent, endSentinel.prev, endSentinel);
+        return this;
     }
 
-    public void addBefore(Object newContent, int index) {
+    public DoublyLinkedList2 addBefore(Object newContent, int index) {
         checkPositionIndex(index);
         Node<E> i = getNodeOf(index);
         addBetween((E) newContent, i.prev, i);
+        return this;
     }
 
-    public void addAfter(Object newContent, int index) {
+    public DoublyLinkedList2 addAfter(Object newContent, int index) {
         checkPositionIndex(index);
         Node<E> i = getNodeOf(index);
         addBetween((E) newContent, i, i.next);
+        return this;
     }
 
     public E deleteHead() {

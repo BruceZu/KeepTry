@@ -94,58 +94,62 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         return sizeOfList == 1;
     }
 
-    public void add(Object newContent) {
+    public MyLinkedList add(Object newContent) {
         Node<E> newNode = new Node<E>((E) newContent, null, null);
         if (isEmpty()) {
             headNode = endNode = newNode;
             sizeOfList++;
-            return;
+            return this;
         }
 
         newNode.next = headNode;
         headNode = newNode;
         headNode.next.prev = headNode;
         sizeOfList++;
+        return this;
     }
 
-    public void appendToTheEnd(Object newContent) {
+    public MyLinkedList appendToTheEnd(Object newContent) {
         Node<E> newNode = new Node<E>((E) newContent, null, null);
         if (isEmpty()) {
             headNode = endNode = newNode;
             sizeOfList++;
-            return;
+            return this;
         }
 
         newNode.prev = endNode;
         endNode = newNode;
         endNode.prev.next = newNode;
         sizeOfList++;
+        return this;
     }
 
-    public void addBefore(Object newContent, int index) {
+    public MyLinkedList addBefore(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == 0) {
             add(newContent);
-            return;
+            return this;
         }
         Node<E> i = getNodeOf(index);
         Node<E> newNode = new Node<E>((E) newContent, i.prev, i);
         i.prev.next = newNode;
         i.prev = newNode;
         sizeOfList++;
+        return this;
     }
 
-    public void addAfter(Object newContent, int index) {
+    public MyLinkedList addAfter(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {
             appendToTheEnd(newContent);
-            return;
+            return this;
         }
         Node<E> i = getNodeOf(index);
         Node<E> newNode = new Node<E>((E) newContent, i, i.next);
         i.next.prev = newNode;
         i.next = newNode;
         sizeOfList++;
+        return this;
     }
 
     private E deleteTheOnlyOne() {

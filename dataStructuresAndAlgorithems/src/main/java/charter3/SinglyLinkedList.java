@@ -83,48 +83,52 @@ public class SinglyLinkedList<E> implements MyLinkedList {
     }
 
     @Override
-    public void add(Object newContent) {
+    public MyLinkedList add(Object newContent) {
         headNode = new Node<E>((E) newContent, headNode);
         if (isEmpty()) {
             endNode = headNode;
         }
         sizeOfList++;
+        return this;
     }
 
     @Override
-    public void appendToTheEnd(Object newContent) {
+    public MyLinkedList appendToTheEnd(Object newContent) {
         Node<E> newEnd = new Node<E>((E) newContent, null);
         if (isEmpty()) {
             headNode = endNode = newEnd;
             sizeOfList++;
-            return;
+            return this;
         }
 
         endNode.next = newEnd;
         endNode = newEnd;
         sizeOfList++;
+        return this;
     }
 
     @Override
-    public void addBefore(Object newContent, int index) {
+    public MyLinkedList addBefore(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == 0) {
             add(newContent);
-            return;
+            return this;
         }
         addAfter(newContent, index - 1);
+        return this;
     }
 
     @Override
-    public void addAfter(Object newContent, int index) {
+    public MyLinkedList addAfter(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {
             appendToTheEnd(newContent);
-            return;
+            return this;
         }
         Node<E> n = getNodeOf(index);
         n.next = new Node<E>((E) newContent, n.next);
         sizeOfList++;
+        return this;
     }
 
     public E deleteHead() {
