@@ -98,6 +98,7 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
     private E delete(int itsIndex, Node<E> it) {
         checkPositionIndex(itsIndex);
         deleteBetween(it.prev, it.next);
+        it.prev = it.next = null;
         return it.content;
     }
 

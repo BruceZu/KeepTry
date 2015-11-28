@@ -134,17 +134,21 @@ public class CircularlyLinkedList<E> implements MyRotateList {
 
     public E deleteHead() {
         checkPositionIndex(0);
-        Node<E> oldHead = headNode;
-        E re = oldHead.content;
-        sizeOfList--;
-        if (isEmpty()) {
+        Node<E> it = headNode;
+        E re = it.content;
+
+        if (hasOnlyOneElement()) {
             headNode = endNode = null;
+            it.next = null;
+
+            sizeOfList = 0;
             return re;
         }
-        headNode = oldHead.next;
-        endNode.next = headNode;
 
-        oldHead.next = null;
+        endNode.next = headNode = it.next;
+        it.next = null;
+
+        sizeOfList--;
         return re;
     }
 
