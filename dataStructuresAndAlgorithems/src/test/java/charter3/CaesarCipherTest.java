@@ -39,7 +39,6 @@ public class CaesarCipherTest {
     @Test(timeout = 10000L, expected = Test.None.class)
     public void testEncryptChar() {
 
-
         Truth.assertThat(CaesarCipher.encrypt("ABCDWXYZ")).isEqualTo("DEFGZABC");
         Truth.assertThat(CaesarCipher.encrypt("abcdwxyz")).isEqualTo("defgzabc");
         Truth.assertThat(CaesarCipher.encrypt(message)).isEqualTo(encrpt);
