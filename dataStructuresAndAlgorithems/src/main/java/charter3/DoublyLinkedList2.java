@@ -194,6 +194,41 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return getNodeOf(index).content;
     }
 
+    /**
+     * Finding the middle node with header and trailer sentinels by “link hopping,”
+     * and without relying on explicit knowledge of the size of the list.
+     * In the case of an even number of nodes, report the node slightly left of
+     * center as the “middle.”
+     *
+     * @return
+     */
+    @Deprecated
+    public E getMiddle() {
+        Node<E> l = headSentinel, r = endSentinel;
+        while (true) {
+            if (l.next == r) {
+                return l.content;
+            }
+            l = l.next;
+            if (l.next == r) {
+                return l.content;
+            }
+            r = r.prev;
+            if (l.next == r) {
+                return l.content;
+            }
+        }
+    }
+
+    public E getMiddle2() {
+        int size = size();
+        Node<E> iNode = headSentinel.next;
+        for (int i = 0; i < (size % 2 == 0 ? size / 2 - 1 : size / 2); i++) {
+            iNode = iNode.next;
+        }
+        return iNode.content;
+    }
+
     @Override
     public void clean() {
         if (size() == 0) {
