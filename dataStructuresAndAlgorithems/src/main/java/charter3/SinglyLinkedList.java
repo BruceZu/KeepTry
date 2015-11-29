@@ -18,7 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 //TODO:  support multi threads access concurrently.
-public class SinglyLinkedList<E> implements MyLinkedList {
+public class SinglyLinkedList<E> implements MyRotateList {
     private class Node<E> {
         private E content;
         private Node<E> next;
@@ -214,6 +214,13 @@ public class SinglyLinkedList<E> implements MyLinkedList {
     }
 
     @Override
+    public void rotate() {
+        if (size() > 1) {
+            appendToTheEnd(deleteHead());
+        }
+    }
+
+    @Override
     public void clean() {
         if (size() == 0) {
             return;
@@ -221,7 +228,6 @@ public class SinglyLinkedList<E> implements MyLinkedList {
         sizeOfList = 0;
         headNode = endNode = null;
     }
-
 
     @Override
     public MyLinkedList clone() {

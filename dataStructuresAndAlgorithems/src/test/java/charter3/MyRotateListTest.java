@@ -26,7 +26,11 @@ public class MyRotateListTest {
 
     @Parameterized.Parameters(name = "{index}: {0}")
     public static Iterable<MyRotateList> data() {
-        return Arrays.asList(new MyRotateList[]{new CircularlyLinkedList(), new CircularlyLinkedList2()});
+        return Arrays.asList(new MyRotateList[]{
+                new CircularlyLinkedList(),
+                new CircularlyLinkedList2(),
+                new SinglyLinkedList<>()
+        });
     }
 
     protected MyRotateList list;
