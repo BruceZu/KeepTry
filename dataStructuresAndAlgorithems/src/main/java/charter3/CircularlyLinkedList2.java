@@ -83,11 +83,6 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
         return sizeOfList;
     }
 
-    /**
-     * Assuming that we did not maintain size as an instance variable.
-     *
-     * @return
-     */
     @Deprecated
     public int size2() {
         if (endNode == null) {

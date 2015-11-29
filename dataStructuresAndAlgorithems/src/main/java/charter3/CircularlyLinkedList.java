@@ -85,6 +85,11 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         return sizeOfList;
     }
 
+    @Override
+    public int size2() {
+        return size();//TODO
+    }
+
     public MyLinkedList add(Object newContent) {
         headNode = new Node<E>((E) newContent, headNode);
         if (isEmpty()) {

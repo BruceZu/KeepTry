@@ -21,6 +21,13 @@ public interface MyLinkedList<E> extends Cloneable {
     public int size();
 
     /**
+     * Assuming that we did not maintain size as an instance variable.
+     * @return
+     */
+    @Deprecated
+    public int size2();
+
+    /**
      * Be Default, the Added one will be the head
      *
      * @param newContent

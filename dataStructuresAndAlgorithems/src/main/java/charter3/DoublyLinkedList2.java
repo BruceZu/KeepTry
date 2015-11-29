@@ -115,6 +115,17 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return sizeOfList;
     }
 
+    @Deprecated
+    public int size2() {
+        int size = 0;
+        Node<E> i = headSentinel;
+        while (i.next != endSentinel) {
+            size++;
+            i = i.next;
+        }
+        return size;
+    }
+
     public boolean hasOnlyOneElement() {
         return sizeOfList == 1;
     }

@@ -15,10 +15,34 @@
 package charter3.exercises;
 
 import charter3.CircularlyLinkedList2;
+import charter3.DoublyLinkedList2;
+import charter3.MyLinkedList;
+import charter3.SinglyLinkedList;
 import junit.framework.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-public class R310Test {
+import java.util.Arrays;
+
+@RunWith(Parameterized.class)
+public class R39R310R311Test {
+
+    @Parameterized.Parameters
+    public static Iterable<MyLinkedList> data() {
+        return Arrays.asList(new MyLinkedList[]{
+                        new SinglyLinkedList(),
+                        new CircularlyLinkedList2(),
+                        new DoublyLinkedList2()}
+        );
+    }
+
+    private MyLinkedList test;
+
+    public R39R310R311Test(MyLinkedList test){
+        this.test=test;
+    }
+
     @Test(timeout = 10000L, expected = Test.None.class)
     public void test() {
         CircularlyLinkedList2 test = new CircularlyLinkedList2();

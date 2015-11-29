@@ -185,6 +185,11 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         return it.content;
     }
 
+    @Override
+    public int size2() {
+        return size();//TODO
+    }
+
     public E delete(int index) {
         checkPositionIndex(index);
         if (index == 0) {
