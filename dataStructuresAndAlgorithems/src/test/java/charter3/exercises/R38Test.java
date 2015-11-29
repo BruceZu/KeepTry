@@ -15,8 +15,8 @@
 package charter3.exercises;
 
 import charter3.DoublyLinkedList2;
-import junit.framework.Assert;
 import org.junit.Test;
+import org.junit.Assert;
 
 public class R38Test<E> {
 

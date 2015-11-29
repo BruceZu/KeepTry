@@ -18,7 +18,7 @@ import charter3.CircularlyLinkedList2;
 import charter3.DoublyLinkedList2;
 import charter3.MyLinkedList;
 import charter3.SinglyLinkedList;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
