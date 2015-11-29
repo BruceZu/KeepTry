@@ -73,6 +73,24 @@ public class SinglyLinkedList<E> implements MyLinkedList {
         return sizeOfList;
     }
 
+    /**
+     * Assuming that we did not maintain size as an instance variable.
+     * @return
+     */
+    @Deprecated
+    public int size2() {
+        if (headNode == endNode && headNode == null) {
+            return 0;
+        }
+        int size = 1;
+        Node<E> i = headNode;
+        while (i != endNode) {
+            i = i.next;
+            size++;
+        }
+        return size;
+    }
+
     @Override
     public MyLinkedList add(Object newContent) {
         headNode = new Node<E>((E) newContent, headNode);
