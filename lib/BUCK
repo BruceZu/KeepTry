@@ -1,0 +1,133 @@
+prebuilt_jar(
+  name = 'guava',
+  binary_jar = ':guava__download_bin',
+  source_jar = ':guava__download_src',
+  visibility = ['PUBLIC']
+)
+
+genrule(
+  name = 'guava__download_bin',
+  srcs = ['guava-18.0.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'guava-18.0.jar'
+)
+
+genrule(
+  name = 'guava__download_src',
+  srcs = ['guava-18.0-sources.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'guava-18.0-sources.jar'
+)
+
+prebuilt_jar(
+  name = 'junit',
+  binary_jar = ':junit__download_bin',
+  source_jar = ':junit__download_src',
+  deps = [':hamcrest-core'],
+  visibility = ['PUBLIC']
+)
+
+genrule(
+  name = 'junit__download_bin',
+  srcs = ['junit-4.12.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'junit-4.12.jar'
+)
+
+genrule(
+  name = 'junit__download_src',
+  srcs = ['junit-4.12-sources.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'junit-4.12-sources.jar'
+)
+
+prebuilt_jar(
+  name = 'hamcrest-core',
+  binary_jar = ':hamcrest-core__download_bin',
+  source_jar = ':hamcrest-core__download_src',
+  visibility = ['//:junit']
+)
+
+genrule(
+  name = 'hamcrest-core__download_bin',
+  srcs = ['hamcrest-core-1.3.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'hamcrest-core-1.3.jar'
+)
+
+genrule(
+  name = 'hamcrest-core__download_src',
+  srcs = ['hamcrest-core-1.3-sources.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'hamcrest-core-1.3-sources.jar'
+)
+
+prebuilt_jar(
+  name = 'truth',
+  binary_jar = ':truth__download_bin',
+  source_jar = ':truth__download_src',
+  deps = [
+    ':guava',
+    ':junit'
+  ],
+  visibility = ['//dataStructuresAndAlgorithms:data_structures_and_algorithms_test']
+)
+
+genrule(
+  name = 'truth__download_bin',
+  srcs = ['truth-0.27.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'truth-0.27.jar'
+)
+
+genrule(
+  name = 'truth__download_src',
+  srcs = ['truth-0.27-sources.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'truth-0.27-sources.jar'
+)
+
+prebuilt_jar(
+  name = 'slf4j-simple',
+  binary_jar = ':slf4j-simple__download_bin',
+  source_jar = ':slf4j-simple__download_src',
+  deps = [
+    ':slf4j-api'
+  ],
+  visibility = ['PUBLIC']
+)
+
+genrule(
+  name = 'slf4j-simple__download_bin',
+  srcs = ['slf4j-1.7.13/slf4j-simple-1.7.13.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'slf4j-simple-1.7.13.jar'
+)
+
+genrule(
+  name = 'slf4j-simple__download_src',
+  srcs = ['slf4j-1.7.13/slf4j-simple-1.7.13-sources.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'slf4j-simple-1.7.13-sources.jar'
+)
+
+prebuilt_jar(
+  name = 'slf4j-api',
+  binary_jar = ':slf4j-api__download_bin',
+  source_jar = ':slf4j-api__download_src',
+  visibility = ['PUBLIC']
+)
+
+genrule(
+  name = 'slf4j-api__download_bin',
+  srcs = ['slf4j-1.7.13/slf4j-api-1.7.13.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'slf4j-api-1.7.13.jar'
+)
+
+genrule(
+  name = 'slf4j-api__download_src',
+  srcs = ['slf4j-1.7.13/slf4j-api-1.7.13-sources.jar'],
+  cmd = 'ln -s $SRCS $OUT',
+  out = 'slf4j-api-1.7.13-sources.jar'
+)

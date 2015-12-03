@@ -1,0 +1,13 @@
+[java]
+    src_roots = java, resources
+    extra_arguments =  -encoding, UTF-8
+
+[project]
+    ignore = .git
+
+[buildfile]
+    includes = //DEFS
+
+[cache]
+    mode = dir
+    dir = ~/.minorandminor/buck-cache/local

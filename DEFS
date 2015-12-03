@@ -1,0 +1,37 @@
+from __future__ import print_function
+
+_buck_genrule = genrule
+def genrule(*args, **kwargs):
+    print("genrule name: %s" % kwargs['name'])
+    _buck_genrule(*args, **kwargs)
+
+_buck_prebuilt_jar = prebuilt_jar
+def prebuilt_jar(*args, **kwargs):
+    print("prebuilt_jar name: %s" % kwargs['name'])
+    _buck_prebuilt_jar(*args, **kwargs)
+
+_buck_java_test = java_test
+def java_test(*args, **kwargs):
+    print("java_test name: %s" % kwargs['name'])
+    log_level = 'std_out_log_level'
+    if not log_level in kwargs:
+        kwargs[log_level] = 'INFO'
+    munge_args(kwargs)
+    _buck_java_test(*args, **kwargs)
+
+_buck_java_library = java_library
+def java_library(*args, **kwargs):
+    print("java_library name: %s" % kwargs['name'])
+    munge_args(kwargs)
+    _buck_java_library(*args, **kwargs)
+
+def munge_args(kwargs):
+    extra_args_name = 'extra_arguments'
+    if extra_args_name not in kwargs:
+        kwargs[extra_args_name] = []
+    extra_args_values = kwargs[extra_args_name]
+    for v in extra_args_values:
+        if v.startswith('-encoding'):
+            return
+    extra_args_values.extend(['-encoding', 'UTF-8'])
+    print("added -encoding")
