@@ -17,8 +17,10 @@ package charter3;
 import junit.runner.Version;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.slf4j.Logger;
@@ -28,6 +30,7 @@ import java.util.Arrays;
 
 import static com.google.common.truth.Truth.assertThat;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
 public class MyLinkedListTest {
     private static Logger log = LoggerFactory.getLogger(EntiesTest.class);
