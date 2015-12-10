@@ -1,13 +1,17 @@
 java_library(
   name = 'data_structures_and_algorithms',
   srcs = glob(['src/main/java/**/*.java']),
-  resources = ['src/main/resources/log4j.properties'],
+  resources = [
+    'src/main/resources/log4j.properties'
+  ],
   resources_root = 'src/main/resources',
   exported_deps = [
     '//lib:slf4j-simple',
     '//lib:slf4j-api'
   ],
-  visibility = ['//:data_structures_and_algorithms_test']
+  visibility = [
+    '//:data_structures_and_algorithms_test'
+  ]
 )
 
 java_test(
