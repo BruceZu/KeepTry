@@ -18,10 +18,7 @@ java_test(
   name = 'data_structures_and_algorithms_test',
   srcs = glob(['src/test/java/**/*.java']),
   deps = [
-    '//lib:junit',
     '//lib:truth',
-    '//lib:guava',
     ':data_structures_and_algorithms'
   ]
 )
-

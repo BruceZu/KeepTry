@@ -36,7 +36,7 @@ cook_prebuilt_jar(
 )
 
 cook_prebuilt_jar(
-  name = 'truth',
+  name = 'truth_lib',
   group_id = 'com.google.truth',
   artifact_id = 'truth',
   version = '0.27',
@@ -48,6 +48,20 @@ cook_prebuilt_jar(
   ],
   visibility = [
     '//dataStructuresAndAlgorithms:data_structures_and_algorithms_test'
+  ]
+)
+
+java_library(
+  name = 'truth',
+  srcs = [
+  ],
+  exported_deps = [
+    ':truth_lib',
+    ':guava',
+    ':junit'
+  ],
+  visibility = [
+    'PUBLIC'
   ]
 )
 
