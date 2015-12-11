@@ -10,4 +10,4 @@
 
 [cache]
     mode = dir
-    dir = ~/.minorandminor/buck-cache/local
+    dir = ~/.minorminor/buck-cache/local

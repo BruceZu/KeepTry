@@ -22,7 +22,7 @@ from shutil import copyfile, Error
 from util import make_sure_dir, is_integrated, path_of
 
 maven = 'http://repo1.maven.org/maven2/'
-MINOR_HOME = '~/.minorandminor'
+MINOR_HOME = '~/.minorminor'
 cached_path = path.join(MINOR_HOME, 'buck-cache', 'download-artifacts')
 map_of_sites = {'MAVEN': maven}
 
@@ -62,10 +62,10 @@ def download(url, to):
 
 def delete_wrong_file(file):
     try:
-        remove(cache_entry)
+        remove(file)
     except OSError as e:
-        if path.isfile(cache_entry):
-            print('error remove %s : %s' % (cache_entry, e), file=stderr)
+        if path.isfile(file):
+            print('error remove %s : %s' % (file, e), file=stderr)
             exit(1)
 
 
@@ -85,9 +85,9 @@ def hard_link(original, to):
     try:
         link(original, to)
     except OSError as e:
-        print('error link %s to %s, try copy file' % (cache_entry, args.o), file=stderr)
+        print('error link %s to %s, try copy file' % (original, to), file=stderr)
         try:
-            copyfile(cache_entry, args.o)
+            copyfile(original, to)
         except (IOError, Error) as e:
             print("error copy: %s" % e, file=stderr)
             exit(1)
