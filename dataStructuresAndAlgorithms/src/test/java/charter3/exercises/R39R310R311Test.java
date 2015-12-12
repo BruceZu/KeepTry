@@ -28,7 +28,7 @@ import java.util.Arrays;
 @RunWith(Parameterized.class)
 public class R39R310R311Test {
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "{index}:{0}")
     public static Iterable<MyLinkedList> data() {
         return Arrays.asList(new MyLinkedList[]{
                         new SinglyLinkedList(),
@@ -39,8 +39,8 @@ public class R39R310R311Test {
 
     private MyLinkedList test;
 
-    public R39R310R311Test(MyLinkedList test){
-        this.test=test;
+    public R39R310R311Test(MyLinkedList test) {
+        this.test = test;
     }
 
     @Test(timeout = 10000L, expected = Test.None.class)

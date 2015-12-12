@@ -216,11 +216,6 @@ public class MyLinkedListTest {
         clone.updateHead(1);
         Assert.assertEquals(list, clone);
 
-        clone.updateHead(null);
-        Assert.assertNotEquals(list, clone);
-        clone.updateHead(1);
-        Assert.assertEquals(list, clone);
-
         clone.updateEnd(3);
         Assert.assertNotEquals(list, clone);
         clone.updateEnd("end");

@@ -86,7 +86,7 @@ public class TicTacToe {
     private final int numberOfMarksInlineToWin;
     private int[][] board;
 
-    private int currentPlayer = O;//the first player will be O
+    private int currentPlayer = O; // The first player will be O
     private int currentMarkRowIndex;
     private int currentMarkColumnIndex;
 

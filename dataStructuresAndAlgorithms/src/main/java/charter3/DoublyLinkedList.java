@@ -17,6 +17,8 @@ package charter3;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+import static java.util.Objects.requireNonNull;
+
 //TODO:  support multi threads access concurrently.
 public class DoublyLinkedList<E> implements MyLinkedList {
     private class Node<E> {
@@ -86,6 +88,7 @@ public class DoublyLinkedList<E> implements MyLinkedList {
     }
 
     public MyLinkedList add(Object newContent) {
+        requireNonNull(newContent);
         Node<E> newNode = new Node<E>((E) newContent, null, null);
         if (isEmpty()) {
             headNode = endNode = newNode;
@@ -101,6 +104,7 @@ public class DoublyLinkedList<E> implements MyLinkedList {
     }
 
     public MyLinkedList appendToTheEnd(Object newContent) {
+        requireNonNull(newContent);
         Node<E> newNode = new Node<E>((E) newContent, null, null);
         if (isEmpty()) {
             headNode = endNode = newNode;
@@ -116,6 +120,7 @@ public class DoublyLinkedList<E> implements MyLinkedList {
     }
 
     public MyLinkedList addBefore(Object newContent, int index) {
+        requireNonNull(newContent);
         checkPositionIndex(index);
         if (index == 0) {
             add(newContent);
@@ -130,6 +135,7 @@ public class DoublyLinkedList<E> implements MyLinkedList {
     }
 
     public MyLinkedList addAfter(Object newContent, int index) {
+        requireNonNull(newContent);
         checkPositionIndex(index);
         if (index == indexOfEndNode()) {
             appendToTheEnd(newContent);
@@ -212,6 +218,7 @@ public class DoublyLinkedList<E> implements MyLinkedList {
     }
 
     public E update(int index, Object newContent) {
+        requireNonNull(newContent);
         Node<E> n = getNodeOf(index);
         E re = n.content;
         n.content = (E) newContent;
@@ -219,12 +226,14 @@ public class DoublyLinkedList<E> implements MyLinkedList {
     }
 
     public E updateHead(Object newContent) {
+        requireNonNull(newContent);
         E re = headNode.content;
         headNode.content = (E) newContent;
         return re;
     }
 
     public E updateEnd(Object newContent) {
+        requireNonNull(newContent);
         E re = endNode.content;
         endNode.content = (E) newContent;
         return re;

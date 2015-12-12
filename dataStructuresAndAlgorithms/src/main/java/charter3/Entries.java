@@ -76,7 +76,7 @@ public class Entries {
         }
         Entry re = entries[index];
         for (short j = index; j < currentMaxIndex; j++) {
-            entries[j] = entries[j + 1]; // j+1  , not ++j
+            entries[j] = entries[j + 1]; // Attention
         }
         entries[currentMaxIndex] = null;
         currentMaxIndex--;
