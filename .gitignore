@@ -3,8 +3,3 @@
 out/
 buck-out/
 .buckd/
-lib/**/*.tar
-lib/**/*.gz
-lib/**/*.zip
-lib/**/*.jar
-lib/slf4j-1.7.13/
