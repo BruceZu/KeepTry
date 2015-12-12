@@ -14,10 +14,11 @@
 
 package charter3;
 
+
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-
-import static java.util.Objects.requireNonNull;
 
 //TODO:  support multi threads access concurrently.
 public class DoublyLinkedList2<E> implements MyLinkedList {
@@ -82,9 +83,9 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return current;
     }
 
-    private void addBetween(E newContent, Node p, Node n) {
-        requireNonNull(newContent);
-        requireNonNull(n);
+    private void addBetween(@NotNull E newContent,
+                            @NotNull Node p,
+                            @NotNull Node n) {
         Node<E> it = new Node<E>(newContent);
         p.next = it;
         it.next = n;
@@ -93,15 +94,15 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         sizeOfList++;
     }
 
-    private void deleteBetween(Node p, Node n) {
-        requireNonNull(p);
-        requireNonNull(n);
+    private void deleteBetween(@NotNull Node p,
+                               @NotNull Node n) {
         p.next = n;
         n.prev = p;
         sizeOfList--;
     }
 
-    private E delete(int itsIndex, Node<E> it) {
+    private E delete(int itsIndex,
+                     @NotNull Node<E> it) {
         checkPositionIndex(itsIndex);
         deleteBetween(it.prev, it.next);
         it.prev = it.next = null;
@@ -136,28 +137,24 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return sizeOfList == 1;
     }
 
-    public MyLinkedList add(Object newContent) {
-        requireNonNull(newContent);
+    public MyLinkedList add(@NotNull Object newContent) {
         addBetween((E) newContent, headSentinel, headSentinel.next);
         return this;
     }
 
-    public DoublyLinkedList2 appendToTheEnd(Object newContent) {
-        requireNonNull(newContent);
+    public DoublyLinkedList2 appendToTheEnd(@NotNull Object newContent) {
         addBetween((E) newContent, endSentinel.prev, endSentinel);
         return this;
     }
 
-    public DoublyLinkedList2 addBefore(Object newContent, int index) {
-        requireNonNull(newContent);
+    public DoublyLinkedList2 addBefore(@NotNull Object newContent, int index) {
         checkPositionIndex(index);
         Node<E> i = getNodeOf(index);
         addBetween((E) newContent, i.prev, i);
         return this;
     }
 
-    public DoublyLinkedList2 addAfter(Object newContent, int index) {
-        requireNonNull(newContent);
+    public DoublyLinkedList2 addAfter(@NotNull Object newContent, int index) {
         checkPositionIndex(index);
         Node<E> i = getNodeOf(index);
         addBetween((E) newContent, i, i.next);
@@ -177,22 +174,20 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return delete(index, it);
     }
 
-    public E update(int index, Object newContent) {
-        requireNonNull(newContent);
+    public E update(int index, @NotNull Object newContent) {
         Node<E> n = getNodeOf(index);
         E re = n.content;
         n.content = (E) newContent;
         return re;
     }
 
-    public E updateHead(Object newContent) {
-        requireNonNull(newContent);
+    public E updateHead(@NotNull Object newContent) {
         E re = headSentinel.next.content;
         headSentinel.next.content = (E) newContent;
         return re;
     }
 
-    public E updateEnd(Object newContent) {
+    public E updateEnd(@NotNull Object newContent) {
         E re = endSentinel.prev.content;
         endSentinel.prev.content = (E) newContent;
         return re;

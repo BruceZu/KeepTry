@@ -9,6 +9,9 @@ java_library(
     '//lib:slf4j-simple',
     '//lib:slf4j-api'
   ],
+  deps = [
+    '//lib:annotations'
+  ],
   visibility = [
     '//:data_structures_and_algorithms_test'
   ]
