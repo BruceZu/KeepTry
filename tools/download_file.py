@@ -21,22 +21,30 @@ from subprocess import check_output, CalledProcessError
 from shutil import copyfile, Error
 from util import make_sure_dir, is_integrated, path_of
 
+
+npmjs = 'http://registry.npmjs.org/'
 maven = 'http://repo1.maven.org/maven2/'
 MINOR_HOME = '~/.minorminor'
 cached_path = path.join(MINOR_HOME, 'buck-cache', 'download-artifacts')
-map_of_sites = {'MAVEN': maven}
+map_of_sites = {'MAVEN': maven, 'NPMJS': npmjs}
 
 
-def cached_file(args):
-    if args.sha1:
-        h = args.sha1
+def cached_file(sha1, o, u, cache_path):
+    if sha1:
+        h = sha1
     else:
         h = sha1()
-        h.update(args.u.encode(encoding='base64'))
+        h.update(u.encode(encoding='base64'))
         h = h.hexdigest()
-    f = '%s-%s' % (path.basename(args.o), h)
-    return '/'.join([args.cache_path.rstrip('/'), f])
+    f = '%s-%s' % (path.basename(o), h)
+    return '/'.join([cache_path.rstrip('/'), f])
 
+
+def make_sure_deps(cache_entry, repo):
+    if repo == npmjs:
+        pass
+    else:
+        return cache_entry
 
 def map_to_web(alias):
     if alias in map_of_sites.keys():
@@ -44,8 +52,12 @@ def map_to_web(alias):
     return alias
 
 
+def get_url(repo, u):
+    return '/'.join([repo.rstrip('/'), u.lstrip('/')])
+
 def download(url, to):
     try:
+        print("download %s to %s" % (url, to), file=stderr)
         check_output(['curl',
                       '--proxy-anyauth',
                       '--create-dirs',
@@ -83,6 +95,7 @@ def check_dir_of(file):
 
 def hard_link(original, to):
     try:
+        print("link %s to %s" % (original, to), file=stderr)
         link(original, to)
     except OSError as e:
         print('error link %s to %s, try copy file' % (original, to), file=stderr)
@@ -93,52 +106,58 @@ def hard_link(original, to):
             exit(1)
 
 
-parser = ArgumentParser(prog='get jar',
-                        description='download and cache the jar, then create a hard link specified by \'-o\'.' +
-                                    ' Background: with the jar to create genrule used for prebuilt_jar.'
+def run():
+    parser = ArgumentParser(prog='get jar',
+                            description='download and cache the jar, then create a hard link specified by \'-o\'.' +
+                                        ' Background: with the jar to create genrule used for prebuilt_jar.'
+                            )
+    parser.add_argument('--repo',
+                        nargs='?',
+                        type=map_to_web,
+                        default=maven,
+                        help='web site from where to download (default: %s). Can be one of the key of %s' % (
+                            maven, str(map_of_sites)),
+                        metavar='web site'
                         )
-parser.add_argument('--repo',
-                    nargs='?',
-                    type=map_to_web,
-                    default=maven,
-                    help='web site from where to download (default: %s). Can be one of the key of %s' % (
-                        maven, str(map_of_sites)),
-                    metavar='web site'
-                    )
-parser.add_argument('--cache-path',
-                    nargs='?',
-                    type=path_of,
-                    default=path_of(cached_path),
-                    help='path to cached jar (default: %s) ' % cached_path,
-                    metavar='cached path'
-                    )
-required = parser.add_argument_group('required input')
-required.add_argument('-u',
-                      required=True,
-                      help='part of URL work with, not including the content of \'-w\'',
-                      metavar='tail of URL'
-                      )
-required.add_argument('-o',
-                      required=True,
-                      help='the local hard link name',
-                      metavar='file name'
-                      )
-parser.add_argument('--sha1',
-                    help='jar\'s SHA-1, with it to verify content integration',
-                    metavar='SHA-1'
-                    )
-args = parser.parse_args()
+    parser.add_argument('--cache-path',
+                        nargs='?',
+                        type=path_of,
+                        default=path_of(cached_path),
+                        help='path to cached jar (default: %s) ' % cached_path,
+                        metavar='cached path'
+                        )
+    required = parser.add_argument_group('required input')
+    required.add_argument('-u',
+                          required=True,
+                          help='part of URL work with, not including the content of \'-w\'',
+                          metavar='tail of URL'
+                          )
+    required.add_argument('-o',
+                          required=True,
+                          help='the local hard link name',
+                          metavar='file name'
+                          )
+    parser.add_argument('--sha1',
+                        help='jar\'s SHA-1, with it to verify content integration',
+                        metavar='SHA-1'
+                        )
+    args = parser.parse_args()
 
-cache_entry = cached_file(args)
-url = '/'.join([args.repo.rstrip('/'), args.u.lstrip('/')])
+    cache_entry = cached_file(args.sha1, args.o, args.u, args.cache_path)
 
-if not path.isfile(cache_entry):
-    download(url, cache_entry)
+    url = get_url(args.repo, args.u)
+    if not path.isfile(cache_entry):
+        download(url, cache_entry)
 
-if args.sha1 and is_integrated(cache_entry, args.sha1) is False:
-    print('error download %s' % url, file=stderr)
-    delete_wrong_file(cache_entry)
-    exit(1)
+    if args.sha1 and is_integrated(cache_entry, args.sha1) is False:
+        print('error download %s' % url, file=stderr)
+        delete_wrong_file(cache_entry)
+        exit(1)
+    cache_entry = make_sure_deps(cache_entry, args.repo)
+    check_dir_of(args.o)
+    hard_link(cache_entry, args.o)
+    return 0
 
-check_dir_of(args.o)
-hard_link(cache_entry, args.o)
+
+if __name__ == '__main__':
+    exit(run())
