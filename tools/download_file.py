@@ -21,11 +21,10 @@ from subprocess import check_output, CalledProcessError
 from shutil import copyfile, Error
 from util import make_sure_dir, is_integrated, path_of
 
-
 npmjs = 'http://registry.npmjs.org/'
 maven = 'http://repo1.maven.org/maven2/'
 MINOR_HOME = '~/.minorminor'
-cached_path = path.join(MINOR_HOME, 'buck-cache', 'download-artifacts')
+cached_path = path.join(MINOR_HOME, 'buck-cache', 'download-artifacts-jar')
 map_of_sites = {'MAVEN': maven, 'NPMJS': npmjs}
 
 
@@ -37,7 +36,7 @@ def cached_file(sha1, o, u, cache_path):
         h.update(u.encode(encoding='base64'))
         h = h.hexdigest()
     f = '%s-%s' % (path.basename(o), h)
-    return '/'.join([cache_path.rstrip('/'), f])
+    return path.join(cache_path.rstrip('/'), f)
 
 
 def make_sure_deps(cache_entry, repo):
@@ -45,6 +44,7 @@ def make_sure_deps(cache_entry, repo):
         pass
     else:
         return cache_entry
+
 
 def map_to_web(alias):
     if alias in map_of_sites.keys():
@@ -54,6 +54,7 @@ def map_to_web(alias):
 
 def get_url(repo, u):
     return '/'.join([repo.rstrip('/'), u.lstrip('/')])
+
 
 def download(url, to):
     try:
