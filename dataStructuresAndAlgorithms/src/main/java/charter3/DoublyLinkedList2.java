@@ -83,9 +83,9 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return current;
     }
 
-    private void addBetween(@NotNull E newContent,
-                            @NotNull Node p,
-                            @NotNull Node n) {
+    private void addBetween(@NotNull(value = "") E newContent,
+                            @NotNull(value = "") Node p,
+                            @NotNull(value = "") Node n) {
         Node<E> it = new Node<E>(newContent);
         p.next = it;
         it.next = n;
@@ -94,15 +94,15 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         sizeOfList++;
     }
 
-    private void deleteBetween(@NotNull Node p,
-                               @NotNull Node n) {
+    private void deleteBetween(@NotNull(value = "") Node p,
+                               @NotNull(value = "") Node n) {
         p.next = n;
         n.prev = p;
         sizeOfList--;
     }
 
     private E delete(int itsIndex,
-                     @NotNull Node<E> it) {
+                     @NotNull(value = "") Node<E> it) {
         checkPositionIndex(itsIndex);
         deleteBetween(it.prev, it.next);
         it.prev = it.next = null;
@@ -137,24 +137,24 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return sizeOfList == 1;
     }
 
-    public MyLinkedList add(@NotNull Object newContent) {
+    public MyLinkedList add(@NotNull(value = "") Object newContent) {
         addBetween((E) newContent, headSentinel, headSentinel.next);
         return this;
     }
 
-    public DoublyLinkedList2 appendToTheEnd(@NotNull Object newContent) {
+    public DoublyLinkedList2 appendToTheEnd(@NotNull(value = "") Object newContent) {
         addBetween((E) newContent, endSentinel.prev, endSentinel);
         return this;
     }
 
-    public DoublyLinkedList2 addBefore(@NotNull Object newContent, int index) {
+    public DoublyLinkedList2 addBefore(@NotNull(value = "") Object newContent, int index) {
         checkPositionIndex(index);
         Node<E> i = getNodeOf(index);
         addBetween((E) newContent, i.prev, i);
         return this;
     }
 
-    public DoublyLinkedList2 addAfter(@NotNull Object newContent, int index) {
+    public DoublyLinkedList2 addAfter(@NotNull(value = "") Object newContent, int index) {
         checkPositionIndex(index);
         Node<E> i = getNodeOf(index);
         addBetween((E) newContent, i, i.next);
@@ -174,20 +174,20 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return delete(index, it);
     }
 
-    public E update(int index, @NotNull Object newContent) {
+    public E update(int index, @NotNull(value = "") Object newContent) {
         Node<E> n = getNodeOf(index);
         E re = n.content;
         n.content = (E) newContent;
         return re;
     }
 
-    public E updateHead(@NotNull Object newContent) {
+    public E updateHead(@NotNull(value = "") Object newContent) {
         E re = headSentinel.next.content;
         headSentinel.next.content = (E) newContent;
         return re;
     }
 
-    public E updateEnd(@NotNull Object newContent) {
+    public E updateEnd(@NotNull(value = "") Object newContent) {
         E re = endSentinel.prev.content;
         endSentinel.prev.content = (E) newContent;
         return re;
