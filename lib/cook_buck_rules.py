@@ -12,6 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_defs('//tools/defs.py')
+
+
+def cook_genrule_npmjs(
+        name,
+        version,
+        sha1,
+        repo='NPMJS'):
+    file_name = '{0}-{1}'.format(name, version)
+    file = '.'.join([file_name, 'tgz'])
+    u = '/'.join([name, '-', file])
+    from os import path
+    cached_npmjs_path = path.join(MINOR_HOME, 'buck-cache', 'download-artifacts-npmjs')
+
+    cmd = ['$(exe //tools:download_file)',
+           '-o', '$OUT',
+           '--cache-path', cached_npmjs_path,
+           '--repo', repo,
+           '-u', u
+           ]
+    if sha1:
+        cmd.extend(['--sha1', sha1])
+
+    genrule(
+        name=name,
+        cmd=' '.join(cmd),
+        out=file,
+    )
+
+
 def cook_prebuilt_jar(
         name,
         group_id,

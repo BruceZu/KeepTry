@@ -18,14 +18,13 @@ from sys import stderr
 from os import path, makedirs
 from hashlib import sha1
 
-
 def make_sure_dir(d):
     if path.isdir(d):
         return
     try:
         makedirs(d)
     except  OSError as e:
-        if not path.ifdir(d):
+        if not path.isdir(d):
             raise e
 
 
@@ -47,8 +46,7 @@ def sha1_of(file):
 def is_integrated(file, sha1):
     h = sha1_of(file)
     if sha1 != h:
-        print('\n received SHA-1: %s' +
-              '\n expected SHA-1: %s' % (h, sha1), file=stderr)
+        print('\n received SHA-1: %s \n expected SHA-1: %s' % (h, sha1), file=stderr)
         return False
     return True
 
