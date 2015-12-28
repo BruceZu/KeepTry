@@ -5,10 +5,12 @@ def genrule(*args, **kwargs):
     print("genrule name: %s" % kwargs['name'])
     _buck_genrule(*args, **kwargs)
 
+
 _buck_prebuilt_jar = prebuilt_jar
 def prebuilt_jar(*args, **kwargs):
     print("prebuilt_jar name: %s" % kwargs['name'])
     _buck_prebuilt_jar(*args, **kwargs)
+
 
 _buck_java_test = java_test
 def java_test(*args, **kwargs):
@@ -19,11 +21,13 @@ def java_test(*args, **kwargs):
     munge_args(kwargs)
     _buck_java_test(*args, **kwargs)
 
+
 _buck_java_library = java_library
 def java_library(*args, **kwargs):
     print("java_library name: %s" % kwargs['name'])
     munge_args(kwargs)
     _buck_java_library(*args, **kwargs)
+
 
 def munge_args(kwargs):
     extra_args_name = 'extra_arguments'
