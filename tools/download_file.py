@@ -1,4 +1,4 @@
-# Copyright (C) 2015 The Android Open Source Project
+# Copyright (C) 2015 The Minorminor Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,35 +15,27 @@
 from __future__ import print_function
 
 from argparse import ArgumentParser
-from os import path, remove, link
-from sys import stderr, exit
-from subprocess import check_output, CalledProcessError
-from shutil import copyfile, Error
-from util import make_sure_dir, is_integrated, path_of
+import os
+import sys
+import shutil
+import __builtin__
+import hashlib
 
-npmjs = 'http://registry.npmjs.org/'
-maven = 'http://repo1.maven.org/maven2/'
-MINOR_HOME = '~/.minorminor'
-cached_path = path.join(MINOR_HOME, 'buck-cache', 'download-artifacts-jar')
-map_of_sites = {'MAVEN': maven, 'NPMJS': npmjs}
+import util
+import npmjs_defs
+
+map_of_sites = {'MAVEN': npmjs_defs.MAVEN, 'NPMJS': npmjs_defs.NPMJS}
 
 
 def cached_file(sha1, o, u, cache_path):
     if sha1:
         h = sha1
     else:
-        h = sha1()
-        h.update(u.encode(encoding='base64'))
-        h = h.hexdigest()
-    f = '%s-%s' % (path.basename(o), h)
-    return path.join(cache_path.rstrip('/'), f)
-
-
-def make_sure_deps(cache_entry, repo):
-    if repo == npmjs:
-        pass
-    else:
-        return cache_entry
+        hash = hashlib.sha1()
+        hash.update(u.encode(encoding='base64'))
+        h = hash.hexdigest()
+    f = '%s-%s' % (os.path.basename(o), h)
+    return os.path.join(cache_path.rstrip('/'), f)
 
 
 def map_to_web(alias):
@@ -52,79 +44,58 @@ def map_to_web(alias):
     return alias
 
 
-def get_url(repo, u):
-    return '/'.join([repo.rstrip('/'), u.lstrip('/')])
-
-
-def download(url, to):
-    try:
-        print("download %s to %s" % (url, to), file=stderr)
-        check_output(['curl',
-                      '--proxy-anyauth',
-                      '--create-dirs',
-                      '-f',
-                      '--silent',
-                      '--insecure',
-                      '-o', to,
-                      '--url', url
-                      ])
-    except CalledProcessError as e:
-        print('curl is failed to download %s :\n%s,\n%s' % (url, e.cmd, e.output), file=stderr)
-        exit(e.returncode)
-
-
 def delete_wrong_file(file):
     try:
-        remove(file)
-    except OSError as e:
-        if path.isfile(file):
-            print('error remove %s : %s' % (file, e), file=stderr)
-            exit(1)
+        os.remove(file)
+    except __builtin__.OSError as e:
+        if os.path.isfile(file):
+            print('error remove %s : %s' % (file, e), file=sys.stderr)
+            sys.exit(1)
 
 
 def check_dir_of(file):
     try:
-        d = path.dirname(file)
-        if path.isfile(file):
-            print("%s exists!\n" % d, file=stderr)
+        d = os.path.dirname(file)
+        if os.path.isfile(file):
+            print("%s exists!\n" % d, file=sys.stderr)
             return
-        make_sure_dir(d)
-    except OSError as e:
-        print('error create %s: %s %s %s' % (d, e.errno, e.strerror, e.filename), file=stderr)
-        exit(1)
+        util.make_sure_dir(d)
+    except __builtin__.OSError as e:
+        print('error create %s: %s %s %s' % (d, e.errno, e.strerror, e.filename), file=sys.stderr)
+        sys.exit(1)
 
 
 def hard_link(original, to):
     try:
-        print("link %s to %s" % (original, to), file=stderr)
-        link(original, to)
-    except OSError as e:
-        print('error link %s to %s, try copy file' % (original, to), file=stderr)
+        print("link %s to %s" % (original, to), file=sys.stderr)
+        os.link(original, to)
+    except __builtin__.OSError as e:
+        print('error link %s to %s, try copy file' % (original, to), file=sys.stderr)
         try:
-            copyfile(original, to)
-        except (IOError, Error) as e:
-            print("error copy: %s" % e, file=stderr)
-            exit(1)
+            shutil.copyfile(original, to)
+        except (__builtin__.IOError, shutil.Error) as e:
+            print("error copy: %s" % e, file=sys.stderr)
+            sys.exit(1)
 
 
 def run():
-    parser = ArgumentParser(prog='get jar',
+    parser = ArgumentParser(prog='download_file',
                             description='download and cache the jar, then create a hard link specified by \'-o\'.' +
                                         ' Background: with the jar to create genrule used for prebuilt_jar.'
                             )
     parser.add_argument('--repo',
                         nargs='?',
-                        type=map_to_web,
-                        default=maven,
+                        type=lambda alias: map_of_sites[alias] if alias in map_of_sites.keys() else alias,
+                        default=npmjs_defs.MAVEN,
                         help='web site from where to download (default: %s). Can be one of the key of %s' % (
-                            maven, str(map_of_sites)),
+                            npmjs_defs.MAVEN, __builtin__.str(map_of_sites)),
                         metavar='web site'
                         )
     parser.add_argument('--cache-path',
                         nargs='?',
-                        type=path_of,
-                        default=path_of(cached_path),
-                        help='path to cached jar (default: %s) ' % cached_path,
+                        type=util.path_of,
+                        default=util.path_of(npmjs_defs.CACHED_PATH),
+                        help='path to cached jar (default: %s) ' % npmjs_defs.CACHED_PATH,
                         metavar='cached path'
                         )
     required = parser.add_argument_group('required input')
@@ -146,19 +117,19 @@ def run():
 
     cache_entry = cached_file(args.sha1, args.o, args.u, args.cache_path)
 
-    url = get_url(args.repo, args.u)
-    if not path.isfile(cache_entry):
-        download(url, cache_entry)
+    url = npmjs_defs.get_url(args.repo, args.u)
+    if not os.path.isfile(cache_entry):
+        util.download(url, cache_entry)
 
-    if args.sha1 and is_integrated(cache_entry, args.sha1) is False:
-        print('error download %s' % url, file=stderr)
+    if args.sha1 and util.is_integrated(cache_entry, args.sha1) is False:
+        print('error download %s' % url, file=sys.stderr)
         delete_wrong_file(cache_entry)
-        exit(1)
-    cache_entry = make_sure_deps(cache_entry, args.repo)
+        sys.exit(1)
+    cache_entry = npmjs_defs.make_sure_deps(args.u, cache_entry, args.repo)
     check_dir_of(args.o)
     hard_link(cache_entry, args.o)
     return 0
 
 
 if __name__ == '__main__':
-    exit(run())
+    sys.exit(run())

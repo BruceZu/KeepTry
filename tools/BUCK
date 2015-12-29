@@ -2,6 +2,7 @@ python_binary(
   name = 'download_file',
   main = 'download_file.py',
   deps = [
+    ':npmjs_defs',
     ':util'
   ],
   visibility = [
@@ -14,5 +15,15 @@ python_library(
   srcs = [
     'util.py',
     '__init__.py'
+  ]
+)
+
+python_library(
+  name = 'npmjs_defs',
+  srcs = [
+    'npmjs_defs.py'
+  ],
+  deps = [
+    ':util'
   ]
 )

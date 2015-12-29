@@ -1,5 +1,5 @@
 include_defs(
-  '//lib/cook_prebuilt_jar.py'
+  '//lib/cook_buck_rules.py'
 )
 
 cook_prebuilt_jar(
@@ -93,4 +93,22 @@ cook_prebuilt_jar(
   version = '12.0',
   bin_sha1 = 'bbcf6448f6d40abe506e2c83b70a3e8bfd2b4539',
   src_sha1 = '4943118f12f706a8820f73529fcb8f5853bc0fed'
+)
+
+cook_genrule_npmjs(
+  name = 'bower',
+  version = '1.6.5',
+  sha1 = '59d457122a161e42cc1625bbab8179c214b7ac11',
+)
+
+cook_genrule_npmjs(
+  name = 'crisper',
+  version = '2.0.1',
+  sha1 = '2874a6cc9084b54ab2cd426fd91d8625821a1efc'
+)
+
+cook_genrule_npmjs(
+  name = 'vulcanize',
+  version = '1.14.0',
+  sha1 = '94da4765df53c0ce181ba4ce32330312825290b8'
 )

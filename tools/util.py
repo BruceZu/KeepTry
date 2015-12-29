@@ -1,4 +1,4 @@
-# Copyright (C) 2015 The Android Open Source Project
+# Copyright (C) 2015 The Minorminor Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,23 +14,28 @@
 
 from __future__ import print_function
 
-from sys import stderr
-from os import path, makedirs
-from hashlib import sha1
+import sys
+import os
+import hashlib
+import urllib
+import contextlib
+import subprocess
+import __builtin__
+
 
 def make_sure_dir(d):
-    if path.isdir(d):
+    if os.path.isdir(d):
         return
     try:
-        makedirs(d)
-    except  OSError as e:
-        if not path.isdir(d):
+        os.makedirs(d)
+    except __builtin__.OSError as e:
+        if not os.path.isdir(d):
             raise e
 
 
 def hash_of(file):
-    h = sha1()
-    with open(file, 'rb') as f:
+    h = hashlib.sha1()
+    with __builtin__.open(file, 'rb') as f:
         while True:
             buff = f.read(65536)
             if not buff:
@@ -46,12 +51,51 @@ def sha1_of(file):
 def is_integrated(file, sha1):
     h = sha1_of(file)
     if sha1 != h:
-        print('\n received SHA-1: %s \n expected SHA-1: %s' % (h, sha1), file=stderr)
+        print('\n received SHA-1: %s \n expected SHA-1: %s' % (h, sha1), file=sys.stderr)
         return False
     return True
 
 
 def path_of(userpath):
     if userpath.startswith('~/'):
-        return path.expanduser(userpath)
+        return os.path.expanduser(userpath)
     return userpath
+
+
+def sha1_of_file(filepath):
+    h = hashlib.sha1()
+    with __builtin__.open(filepath, 'rb') as f:
+        while True:
+            buf = f.read(65536)
+            if not buf:
+                break;
+            h.update(buf)
+    return h.hexdigest()
+
+
+def hash_of_url(url):
+    h = hashlib.sha1()
+    with contextlib.closing(urllib.urlopen(url)) as f:  # may be binary_file
+        while True:
+            data = f.read(4096)
+            if not data:
+                break
+            h.update(data)
+    return h.hexdigest()
+
+
+def download(url, to):
+    try:
+        print("\ndownload %s\n to %s\n" % (url, to), file=sys.stderr)
+        subprocess.check_output(['curl',
+                                 '--proxy-anyauth',
+                                 '--create-dirs',
+                                 '-f',
+                                 '--silent',
+                                 '--insecure',
+                                 '-o', to,
+                                 '--url', url
+                                 ])
+    except  subprocess.CalledProcessError as e:
+        print('\ncurl is failed to download %s :\n%s,\n%s' % (url, e.cmd, e.output), file=sys.stderr)
+        sys.exit(e.returncode)

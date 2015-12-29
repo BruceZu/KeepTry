@@ -1,4 +1,4 @@
-# Copyright (C) 2015 The Android Open Source Project
+# Copyright (C) 2015 The Minorminor Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_defs('//tools/defs.py')
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from tools.npmjs_defs import CACHED_NPMJS_PATH, npmjs_file_name, npmjs_url
 
 
 def cook_genrule_npmjs(
@@ -20,17 +24,11 @@ def cook_genrule_npmjs(
         version,
         sha1,
         repo='NPMJS'):
-    file_name = '{0}-{1}'.format(name, version)
-    file = '.'.join([file_name, 'tgz'])
-    u = '/'.join([name, '-', file])
-    from os import path
-    cached_npmjs_path = path.join(MINOR_HOME, 'buck-cache', 'download-artifacts-npmjs')
-
     cmd = ['$(exe //tools:download_file)',
            '-o', '$OUT',
-           '--cache-path', cached_npmjs_path,
+           '--cache-path', CACHED_NPMJS_PATH,
            '--repo', repo,
-           '-u', u
+           '-u', npmjs_url(name, version)
            ]
     if sha1:
         cmd.extend(['--sha1', sha1])
@@ -38,7 +36,7 @@ def cook_genrule_npmjs(
     genrule(
         name=name,
         cmd=' '.join(cmd),
-        out=file,
+        out=npmjs_file_name(name, version),
     )
 
 
