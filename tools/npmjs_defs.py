@@ -271,6 +271,7 @@ def make_sure_deps(url, cache_entry, repo):
             bundled_entry(deps, opened, repo, init_deps_dict(url), 1)
 
         with_deps = "%s-%s" % (cache_entry, "with_deps")
+        add_bundledDependency(os.path.join(opened, package_json))
         pack_npmjs(opened, with_deps)
         return with_deps
     return cache_entry
@@ -303,6 +304,14 @@ def show_npmjs_deps_of(package):
                     print('{0}{1}@{2}'.format(filter_npmjs_node_modules_path_of(till, dirpath),
                                               dir,
                                               get_npmjs_version(os.path.join(dirpath, dir))))
+
+
+def add_bundledDependency(file):
+    with __builtin__.open(file, 'r') as f:
+        data = json.loads(f.read())
+        data['bundledDependencies'] = data['dependencies'].keys()
+        with __builtin__.open(file, 'w') as f:
+            json.dump(data, f, indent=3)
 
 
 class Test_NPMJS_functions(unittest.TestCase):
