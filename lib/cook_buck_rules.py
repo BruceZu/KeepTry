@@ -19,6 +19,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tools.npmjs_defs import CACHED_NPMJS_PATH, npmjs_file_name, npmjs_url
 
 
+# The npmjs is with nested deps as the result created by `npm install --production` (npm@2.9.1)
 def cook_genrule_npmjs(
         name,
         version,

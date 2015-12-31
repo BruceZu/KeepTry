@@ -84,9 +84,10 @@ def hash_of_url(url):
     return h.hexdigest()
 
 
-def download(url, to):
+def download(url, to, verbose):
     try:
-        print("\ndownload %s\n to %s\n" % (url, to), file=sys.stderr)
+        if verbose:
+            print("\ndownload %s\n to %s\n" % (url, to), file=sys.stderr)
         subprocess.check_output(['curl',
                                  '--proxy-anyauth',
                                  '--create-dirs',

@@ -119,7 +119,7 @@ def run():
 
     url = npmjs_defs.get_url(args.repo, args.u)
     if not os.path.isfile(cache_entry):
-        util.download(url, cache_entry)
+        util.download(url, cache_entry, True)
 
     if args.sha1 and util.is_integrated(cache_entry, args.sha1) is False:
         print('error download %s' % url, file=sys.stderr)
