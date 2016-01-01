@@ -17,11 +17,13 @@ java_library(
   ]
 )
 
-java_test(
-  name = 'data_structures_and_algorithms_test',
-  srcs = glob(['src/test/java/**/*.java']),
-  deps = [
-    '//lib:truth',
-    ':data_structures_and_algorithms'
-  ]
-)
+TESTS = glob(['src/test/java/**/*.java'])
+for t in TESTS:
+  n = name = t[len('src/test/'):-len('.java')].replace('/','.')
+  java_test(
+    name = n,
+    deps = [
+      '//lib:truth',
+      ':data_structures_and_algorithms'
+    ]
+  )
