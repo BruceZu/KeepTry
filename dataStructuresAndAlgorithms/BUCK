@@ -11,9 +11,6 @@ java_library(
   ],
   deps = [
     '//lib:annotations'
-  ],
-  visibility = [
-    '//:data_structures_and_algorithms_test'
   ]
 )
 
@@ -22,6 +19,7 @@ for t in TESTS:
   n = name = t[len('src/test/'):-len('.java')].replace('/','.')
   java_test(
     name = n,
+    srcs = [t],
     deps = [
       '//lib:truth',
       ':data_structures_and_algorithms'
