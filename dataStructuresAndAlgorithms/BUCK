@@ -25,5 +25,6 @@ for t in TESTS:
     deps = [
       '//lib:truth',
       ':data_structures_and_algorithms'
-    ]
+    ],
+    vm_args = ['-Xmx256m', '-Dfile.encoding=UTF-8']
   )
