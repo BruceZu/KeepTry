@@ -35,7 +35,7 @@ import static com.google.common.truth.Truth.assertThat;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
 public class MyLinkedListTest {
-    private static Logger log = LoggerFactory.getLogger(EntiesTest.class);
+    private static Logger log = LoggerFactory.getLogger(MyLinkedListTest.class);
 
     @Parameters(name = "{index}:  concrete linked list: {0} ")
     public static Iterable<MyLinkedList> data() {
