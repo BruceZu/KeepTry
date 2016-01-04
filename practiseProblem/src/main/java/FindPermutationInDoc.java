@@ -13,7 +13,6 @@
 // limitations under the License.
 //
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +48,7 @@ public class FindPermutationInDoc {
         int index = 0;
 
         while (doc.length - index >= given.length) {
-            String[] checkPart = Arrays.copyOf(doc, given.length);
+            //String[] checkPart = Arrays.copyOf(doc, given.length);
             Map withMap = getMapOf(doc, index, index + given.length - 1);
             if (givenMap.equals(withMap)) {
                 return true;

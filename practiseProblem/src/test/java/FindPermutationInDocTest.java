@@ -17,11 +17,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class FindPermutationInDocTest {
-    private String[] given = {"snow", "is", "over"};
-    private String[] docHaving = {"snow", "is", "over"};
-    private String[] docHaving2 = {"snow", "snow", "is", "over"};
-    private String[] docHaving3 = { "snow", "is", "over","over"};
-    private String[] docHaving4 = {"hi","snow", "is", "over", "yes"};
+    private String[] given = {"snow", "fly", "fly"};
+    private String[] docHaving = {"snow", "fly", "fly"};
+    private String[] docHaving2 = {"snow", "snow", "fly", "fly"};
+    private String[] docHaving3 = {"snow", "fly", "fly", "fly"};
+    private String[] docHaving4 = {"hi", "snow", "fly", "fly", "yes"};
 
 
     @Test(timeout = 3000L, expected = Test.None.class)
