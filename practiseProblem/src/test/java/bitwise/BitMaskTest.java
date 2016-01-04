@@ -18,7 +18,7 @@ package bitwise;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class BitMask {
+public class BitMaskTest {
     //  Constants to hold bit masks for desired flags
     static final int flagAllOff = 0;  //         000...00000000 (empty mask)
     static final int flagbit1 = 1;    // 2^^0    000...00000001
