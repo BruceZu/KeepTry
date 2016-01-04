@@ -53,7 +53,7 @@ public class FindPermutationInDoc {
             if (givenMap.equals(withMap)) {
                 return true;
             }
-            index++;
+            index++; // Attention
         }
         return false;
     }
