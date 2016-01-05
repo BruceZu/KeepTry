@@ -17,9 +17,9 @@ package charter3.exercises;
 
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Random;
-import java.util.Set;
 
 /*
 Write a method, shuffle(A), that rearranges the elements of array A so that every
@@ -30,23 +30,18 @@ inclusive.
 public class C322 {
     static int[] shuffle(int[] a) {
         Random r = new Random();
+        LinkedHashSet oldIndexesOrder = new LinkedHashSet(a.length);
 
-        Set<Integer> checker = new HashSet(a.length);
-        int size = checker.size();
-        int[] oldIndexesOrder = new int[a.length];
-
-        while (size < a.length) {
-            int t = r.nextInt(a.length);
-            checker.add(t);
-            if (size != checker.size()) {
-                oldIndexesOrder[size] = t;
-                size = checker.size();
-            }
+        while (oldIndexesOrder.size() < a.length) {
+            oldIndexesOrder.add(r.nextInt(a.length));
         }
-
+        
         int[] re = new int[a.length];
-        for (int i = 0; i < a.length; i++) {
-            re[i] = a[oldIndexesOrder[i]];
+        int index = 0;
+
+        Iterator e = oldIndexesOrder.iterator();
+        while (e.hasNext()) {
+            re[index++] = a[(int) e.next()];
         }
         return re;
     }
