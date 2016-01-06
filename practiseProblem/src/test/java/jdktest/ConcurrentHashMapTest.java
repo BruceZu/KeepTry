@@ -15,11 +15,14 @@
 
 package jdktest;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ConcurrentHashMapTest {
@@ -31,43 +34,55 @@ public class ConcurrentHashMapTest {
         accounts.put("account3", new AtomicLong(0l));
     }
 
-    public void increaseIt() {
+    public void increaseIt(CountDownLatch start, CountDownLatch done) {
+        try {
+            start.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         for (int i = 0; i < 50; i++) {
             for (String acount : accounts.keySet()) {
-                //accounts.get(acount).getAndIncrement();
-                accounts.put(acount, new AtomicLong(accounts.get(acount).longValue()+1));
+                accounts.get(acount).getAndIncrement();
+                //accounts.put(acount, new AtomicLong(accounts.get(acount).longValue()+1));
             }
         }
+        done.countDown();
     }
 
-    public void test() {
+    public String test() {
+        final CountDownLatch start = new CountDownLatch(1);
+        final CountDownLatch done = new CountDownLatch(2);
         ExecutorService tpool = Executors.newFixedThreadPool(2);
         tpool.submit(new Runnable() {
             @Override
             public void run() {
-                increaseIt();
+                increaseIt(start, done);
             }
         });
         tpool.submit(new Runnable() {
             @Override
             public void run() {
-                increaseIt();
+                increaseIt(start, done);
             }
         });
+
+        start.countDown();
         try {
-            tpool.awaitTermination(1, TimeUnit.SECONDS);
+            done.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        tpool.shutdown();
-        System.out.println(accounts);
 
+        tpool.shutdown();
+        return accounts.toString();
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    @Test(timeout = 3000L, expected = Test.None.class)
+    public void testit() {
         int i = 0;
         while (i < 10) {
-            new ConcurrentHashMapTest().test();
+            Assert.assertEquals(new ConcurrentHashMapTest().test(), "{account3=100, account1=100, account2=100}");
             i++;
         }
     }
