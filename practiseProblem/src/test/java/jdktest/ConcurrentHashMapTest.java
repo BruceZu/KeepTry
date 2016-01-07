@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ConcurrentHashMapTest {
-    private Map<String, AtomicLong> accounts = new ConcurrentHashMap();
+    private Map<String, AtomicLong> accounts = new ConcurrentHashMap(6);
 
     public ConcurrentHashMapTest() {
         accounts.put("account1", new AtomicLong(0l));
@@ -43,8 +43,10 @@ public class ConcurrentHashMapTest {
 
         for (int i = 0; i < 50; i++) {
             for (String acount : accounts.keySet()) {
-                accounts.get(acount).getAndIncrement();
-                //accounts.put(acount, new AtomicLong(accounts.get(acount).longValue()+1));
+                //accounts.get(acount).getAndIncrement();
+                synchronized (acount){
+                    accounts.put(acount, new AtomicLong(accounts.get(acount).longValue() + 1));
+                }
             }
         }
         done.countDown();
@@ -79,7 +81,7 @@ public class ConcurrentHashMapTest {
     }
 
     @Test(timeout = 3000L, expected = Test.None.class)
-    public void testit() {
+    public void testConcurrentHashMap() {
         int i = 0;
         while (i < 10) {
             Assert.assertEquals(new ConcurrentHashMapTest().test(), "{account3=100, account1=100, account2=100}");
