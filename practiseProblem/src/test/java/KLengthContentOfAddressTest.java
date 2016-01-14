@@ -30,5 +30,16 @@ public class KLengthContentOfAddressTest {
                 "21322903MaryAveChalrottesville");
         Assert.assertEquals(KLengthContentOfAddress.getSubStr(32, address),
                 "21322903MaryAveChalrottesvilleVA");
+
+        Assert.assertEquals(KLengthContentOfAddress.getSubStr2(3, address),
+                "213");
+        Assert.assertEquals(KLengthContentOfAddress.getSubStr2(6, address),
+                "213229");
+        Assert.assertEquals(KLengthContentOfAddress.getSubStr2(10, address),
+                "21322903Ma");
+        Assert.assertEquals(KLengthContentOfAddress.getSubStr2(30, address),
+                "21322903MaryAveChalrottesville");
+        Assert.assertEquals(KLengthContentOfAddress.getSubStr2(32, address),
+                "21322903MaryAveChalrottesvilleVA");
     }
 }

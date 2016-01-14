@@ -13,7 +13,6 @@
 // limitations under the License.
 //
 
-import java.util.LinkedHashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +35,8 @@ Please do it in two passes.
  */
 public class KLengthContentOfAddress {
     static String getSubStr(int length, String from) {
+        // using Regex
         Matcher m = Pattern.compile("^(\\d+)\\D.*\\D(\\d+)$").matcher(from);
-        LinkedHashSet<String> numbers = new LinkedHashSet(2);
         StringBuilder result = new StringBuilder();
 
         m.find();
@@ -54,6 +53,43 @@ public class KLengthContentOfAddress {
 
         result.append(zipCode);
         String noNumber = from.substring(m.end(1), m.start(2));
+        String wordCharacterOnly = Pattern.compile("[^\\w]").matcher(noNumber).replaceAll("");
+
+        int numberLength = houseNumber.length() + zipCode.length();
+        assert length <= numberLength + wordCharacterOnly.length();
+        return result.append(wordCharacterOnly.substring(0, length - numberLength)).toString();
+    }
+
+    static String getSubStr2(int length, String from) {
+        // Not using Regex
+        String houseNumber = null, zipCode = null;
+        int found = 0;
+        for (int i = 0; i < from.length() && found < 2; i++) {
+            char ci = from.charAt(i);
+            if (houseNumber == null && ('0' > ci || ci > '9')) {
+                houseNumber = from.substring(0, i);
+                found++;
+            }
+            int j = from.length() - 1 - i;
+            char cj = from.charAt(j);
+            if (zipCode == null && ('0' > ci || ci > '9')) {
+                houseNumber = from.substring(j);
+                found++;
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+        if (length <= houseNumber.length()) {
+            return houseNumber.substring(0, length);
+        }
+
+        result.append(houseNumber);
+        if (length <= houseNumber.length() + zipCode.length()) {
+            return result.append(zipCode.substring(0, length = houseNumber.length())).toString();
+        }
+
+        result.append(zipCode);
+        String noNumber = from.substring(houseNumber.length(), from.length() - zipCode.length());
         String wordCharacterOnly = Pattern.compile("[^\\w]").matcher(noNumber).replaceAll("");
 
         int numberLength = houseNumber.length() + zipCode.length();
