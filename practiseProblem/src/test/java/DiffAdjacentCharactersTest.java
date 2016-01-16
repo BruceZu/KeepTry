@@ -17,7 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class DiffAdjacentCharactersTest {
-    @Test(timeout = 3000000l, expected = Test.None.class)
+    @Test(timeout = 3000l, expected = Test.None.class)
     public void test() {
         Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharactersOf("ab"), "ab");
         Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharactersOf("abc"), "abc");
@@ -32,17 +32,17 @@ public class DiffAdjacentCharactersTest {
         Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharactersOf("google"), "gogoel");
         Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharactersOf("elggoooo"), "ogogoeol");
 
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("ab"), "ab");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("abc"), "abc");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("aaa"), "None");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("aabb"), "abab");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("aaab"), "None");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("aaabb"), "ababa");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("aaaab"), "None");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("aaaabbc"), "ababaca");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("6666665555544441"), "4565656565641464");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("abbcccddddeeeeeeeeee"), "ebebededededeaececec");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("google"), "gogole");
-        Assert.assertEquals(new DiffAdjacentCharacters().diffAdjacentCharacters("elggoooo"), "olgogoeo");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("ab"), "ab");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("abc"), "abc");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("aaa"), "None");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("aabb"), "abab");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("aaab"), "None");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("aaabb"), "ababa");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("aaaab"), "None");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("aaaabbc"), "ababaca");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("6666665555544441"), "4565656565641464");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("abbcccddddeeeeeeeeee"), "ebebededededeaececec");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("google"), "gogole");
+        Assert.assertEquals(DiffAdjacentCharacters.diffAdjacentCharacters("elggoooo"), "olgogoeo");
     }
 }

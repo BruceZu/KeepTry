@@ -19,6 +19,7 @@ import utils.MapUtils;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -171,19 +172,24 @@ public class DiffAdjacentCharacters {
     }
 
 
-    private void swap(int i, int j, char[] arr) {
+    private static void swap(int i, int j, char[] arr) {
         char tmp = arr[j];
         arr[j] = arr[i];
         arr[i] = tmp;
     }
 
-    public String diffAdjacentCharacters(String inStr) {
-        if (inStr.length() <= 2 || !Pattern.compile("(\\w)\\1").matcher(inStr).find()) {
+    public static String diffAdjacentCharacters(String inStr) {
+        if (inStr.length() <= 2) {
             return inStr;
         }
+        Matcher m = Pattern.compile("(\\w)\\1").matcher(inStr);
+        if (!m.find()) {
+            return inStr;
+        }
+        int start = m.start(1);
         char[] in = inStr.toCharArray();
         int indexLastRepeatFromHead = -1;
-        for (int i = 1; i < in.length; i++) {
+        for (int i = Math.max(1, start); i < in.length; i++) {
             int indexFrom = -1;
             if (in[i] != in[i - 1]) {
                 continue;
