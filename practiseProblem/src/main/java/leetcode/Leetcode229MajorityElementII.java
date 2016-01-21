@@ -24,11 +24,11 @@ import java.util.List;
 // The algorithm should run in linear time and in O(1) space.
 
 public class Leetcode229MajorityElementII {
-    public static List<Integer> MajorityElementOf(int[] arr) {
+    public static List<Integer> MajorityElementOf(int[] nums) {
         int numb1 = 0, numb2 = 0;
         int time1 = 0, time2 = 0;
-        for (int i = 0; i < arr.length; i++) {
-            int n = arr[i];
+        for (int i = 0; i < nums.length; i++) {
+            int n = nums[i];
             if (time1 == 0) {
                 numb1 = n;
                 time1++;
@@ -52,8 +52,8 @@ public class Leetcode229MajorityElementII {
         }
 
         time1 = time2 = 0;
-        for (int j = 0; j < arr.length; j++) {
-            int n = arr[j];
+        for (int j = 0; j < nums.length; j++) {
+            int n = nums[j];
             if (n == numb1) {
                 time1++;
                 continue;
@@ -64,10 +64,10 @@ public class Leetcode229MajorityElementII {
         }
 
         List result = new ArrayList(2);
-        if (time1 > arr.length / 3) {
+        if (time1 > nums.length / 3) {
             result.add(numb1);
         }
-        if (time2 > arr.length / 3) {
+        if (time2 > nums.length / 3) {
             result.add(numb2);
         }
         return result;
