@@ -15,6 +15,7 @@
 
 package charter3;
 
+import charter3.exercises.C331;
 import junit.runner.Version;
 import org.junit.After;
 import org.junit.Assert;
@@ -43,7 +44,8 @@ public class MyLinkedListTest {
                         new CircularlyLinkedList(),
                         new CircularlyLinkedList2(),
                         new DoublyLinkedList(),
-                        new DoublyLinkedList2()
+                        new DoublyLinkedList2(),
+                        new C331()
                 }
         );
     }
