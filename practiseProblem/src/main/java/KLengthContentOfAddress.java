@@ -72,8 +72,8 @@ public class KLengthContentOfAddress {
             }
             int j = from.length() - 1 - i;
             char cj = from.charAt(j);
-            if (zipCode == null && ('0' > ci || ci > '9')) {
-                houseNumber = from.substring(j);
+            if (zipCode == null && ('0' > cj || cj > '9')) {
+                zipCode = from.substring(j + 1);
                 found++;
             }
         }

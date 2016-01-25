@@ -33,7 +33,7 @@ public class MapUtilsTest {
         }
         Map sortedByTimes = MapUtils.sortByValueInDescendingOrder(charToTimes);
         Assert.assertEquals(charToTimes.toString(), "{g=2, e=1, r=1, o=2, l=1}");
-        Assert.assertEquals(sortedByTimes.toString(), "{o=2, g=2, r=1, l=1, e=1}");
+        Assert.assertEquals(sortedByTimes.toString(), "{g=2, o=2, e=1, l=1, r=1}");
         Assert.assertEquals(sortedByTimes.containsKey('a'), false);
         Assert.assertEquals(sortedByTimes.get('a'), null);
         Assert.assertEquals(sortedByTimes.get('g'), 2);
