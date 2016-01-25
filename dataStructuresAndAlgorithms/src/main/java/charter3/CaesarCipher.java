@@ -31,8 +31,10 @@ public class CaesarCipher {
 
     private static final char[] ALPHABET = new char[ALPHABET_SIZE];
     private static final char[] alphabet = new char[ALPHABET_SIZE];
+
     private static final char[] ENCRYPTED_A = new char[ALPHABET_SIZE];
     private static final char[] encrypted_a = new char[ALPHABET_SIZE];
+
     private static final char[] DECRYPTED_A = new char[ALPHABET_SIZE];
     private static final char[] decrypted_a = new char[ALPHABET_SIZE];
     private static final int STEP = 3; //CaesarCipher
@@ -47,12 +49,12 @@ public class CaesarCipher {
         int index;
         char c;
 
-        for (c = 'A', index = 0; c <= 'Z'; c++) {
-            ALPHABET[index++] = c;
+        for (c = 'A', index = 0; c <= 'Z'; c++, index++) {
+            ALPHABET[index] = c;
         }
 
-        for (c = 'a', index = 0; c <= 'z'; c++) {
-            alphabet[index++] = c;
+        for (c = 'a', index = 0; c <= 'z'; c++, index++) {
+            alphabet[index] = c;
         }
 
         for (index = 0; index < ALPHABET_SIZE; index++) {
