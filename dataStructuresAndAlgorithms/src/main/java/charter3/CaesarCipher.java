@@ -141,7 +141,6 @@ public class CaesarCipher {
         return encryptedChar;
     }
 
-
     public static String encrypt(String plainText) {
         char[] charArray = plainText.toCharArray();
         for (int i = 0; i < charArray.length; i++) {
