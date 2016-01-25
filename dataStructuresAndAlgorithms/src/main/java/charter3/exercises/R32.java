@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 class R32 {
@@ -44,5 +45,6 @@ class R32 {
             log.info(String.format("The element on index %d is deleted: %s", index, Arrays.toString(array)));
         }
         log.info(String.format("Done %s", Arrays.toString(array)));
+        List l=null;
     }
 }

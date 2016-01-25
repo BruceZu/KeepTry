@@ -49,10 +49,10 @@ public class R39R310R311Test {
         CircularlyLinkedList2 test = new CircularlyLinkedList2();
         Assert.assertSame(test.size(), test.size2());
         Assert.assertSame(0, test.size2());
-        test.add("1");
+        test.addToTheHead("1");
         Assert.assertSame(test.size(), test.size2());
         Assert.assertSame(1, test.size2());
-        test.add("2");
+        test.addToTheHead("2");
         Assert.assertSame(test.size(), test.size2());
         Assert.assertSame(2, test.size2());
     }

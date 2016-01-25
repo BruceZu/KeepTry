@@ -138,7 +138,7 @@ public class DoublyLinkedList2<E> implements MyLinkedList {
         return sizeOfList == 1;
     }
 
-    public MyLinkedList add(@NotNull(value = "") Object newContent) {
+    public MyLinkedList addToTheHead(@NotNull(value = "") Object newContent) {
         addBetween((E) newContent, headSentinel, headSentinel.next);
         return this;
     }

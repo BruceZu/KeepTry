@@ -89,7 +89,7 @@ public class SinglyLinkedList<E> implements MyRotateList {
     }
 
     @Override
-    public MyLinkedList add(Object newContent) {
+    public MyLinkedList addToTheHead(Object newContent) {
         headNode = new Node<E>((E) newContent, headNode);
         if (isEmpty()) {
             endNode = headNode;
@@ -117,7 +117,7 @@ public class SinglyLinkedList<E> implements MyRotateList {
     public MyLinkedList addBefore(Object newContent, int index) {
         checkPositionIndex(index);
         if (index == 0) {
-            add(newContent);
+            addToTheHead(newContent);
             return this;
         }
         addAfter(newContent, index - 1);

@@ -88,7 +88,7 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         return sizeOfList == 1;
     }
 
-    public MyLinkedList add(Object newContent) {
+    public MyLinkedList addToTheHead(Object newContent) {
         requireNonNull(newContent);
         Node<E> newNode = new Node<E>((E) newContent, null, null);
         if (isEmpty()) {
@@ -124,7 +124,7 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         requireNonNull(newContent);
         checkPositionIndex(index);
         if (index == 0) {
-            add(newContent);
+            addToTheHead(newContent);
             return this;
         }
         Node<E> i = getNodeOf(index);

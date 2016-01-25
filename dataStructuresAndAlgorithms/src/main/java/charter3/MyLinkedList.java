@@ -33,7 +33,7 @@ public interface MyLinkedList<E> extends Cloneable {
      *
      * @param newContent
      */
-    public MyLinkedList add(E newContent);
+    public MyLinkedList addToTheHead(E newContent);
 
     public MyLinkedList appendToTheEnd(E newContent);
 

@@ -103,7 +103,7 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
         return size;
     }
 
-    public MyLinkedList add(Object newContent) {
+    public MyLinkedList addToTheHead(Object newContent) {
         requireNonNull(newContent);
         Node<E> newNode = new Node<E>((E) newContent, null);
         if (isEmpty()) {
@@ -121,7 +121,7 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
 
     public MyLinkedList appendToTheEnd(Object newContent) {
         requireNonNull(newContent);
-        add(newContent);
+        addToTheHead(newContent);
         endNode = endNode.next;
         return this;
     }
@@ -130,7 +130,7 @@ public class CircularlyLinkedList2<E> implements MyRotateList {
         requireNonNull(newContent);
         checkPositionIndex(index);
         if (index == 0) {
-            add(newContent);
+            addToTheHead(newContent);
             return this;
         }
         addAfter(newContent, index - 1);

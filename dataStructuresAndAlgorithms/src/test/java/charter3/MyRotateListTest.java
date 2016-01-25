@@ -42,7 +42,7 @@ public class MyRotateListTest {
 
     @Test(timeout = 90000L, expected = Test.None.class)
     public void testRotate() {
-        list.add("head");
+        list.addToTheHead("head");
         list.addAfter("second", 0);
         list.appendToTheEnd("end");
         Truth.assertThat(list.get(0)).isEqualTo("head");
