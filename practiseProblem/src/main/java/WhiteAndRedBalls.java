@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
   on the second time, get it out regardless of it's color.
 
   Find out the Probability that the last ball is a white ball
-
  */
 public class WhiteAndRedBalls {
     private static Logger log = LoggerFactory.getLogger(WhiteAndRedBalls.class);
