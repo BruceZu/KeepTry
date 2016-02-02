@@ -81,12 +81,10 @@ public class LeetCode {
         }
 
         double result = 1;
-        while (n > 0) {
+        for (; n >= 1; x *= x, n >>= 1) {
             if ((n & 1) == 1) {
                 result *= x;
             }
-            x *= x;
-            n >>= 1;
         }
         return negative ? 1 / result : result;
     }
