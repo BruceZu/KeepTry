@@ -24,7 +24,7 @@ public class Palindrome {
 
     private static boolean isValidPalindromeChar(char a) {
         // Assume the Palindrome content take account of word character only
-        // \w	A word character: [a-zA-Z0-9]
+        // \w a word character: [a-zA-Z0-9]
         return a != '_' && Pattern.compile("\\w").matcher(String.valueOf(a)).find();
     }
 

@@ -69,6 +69,8 @@ public class PalindromeTest {
                 .append("Never odd or even")
                 .append("Rise to vote, sir")
                 .append("You have no name, Manon Eva Huoy!")
+                .append("racecar")
+                .append("gohangasalamiimalasagnaho")
                 .append("588")
                 .append("313")
                 .append("191")
