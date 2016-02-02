@@ -23,8 +23,7 @@ import java.util.List;
  * finding both the minimumand maximum of n numbers
  * using fewer than 3n/2 comparisons
  */
-public class C442 {
-
+public class C442FindMinMax {
     public static int[] findMinimumAndMaximumOf(int[] numbers) {
         assert numbers.length >= 2;
         List<Integer> bigList = new ArrayList<>(numbers.length / 2);
