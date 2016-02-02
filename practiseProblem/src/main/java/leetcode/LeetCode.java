@@ -15,11 +15,9 @@
 
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LeetCode {
-    // Leetcode 27 Remove Element/ runtime beats 73.63% of java submissions.
+    // Leetcode 27 Remove Element
+    // runtime beats 73.63% of java submissions.
     public static int removeElement(int[] nums, int val) {
         int newIndex = 0;
         int i = 0;
@@ -90,7 +88,6 @@ public class LeetCode {
             x *= x;
             n >>= 1;
         }
-        List newone = new ArrayList(9);
         return negative ? 1 / result : result;
     }
 }
