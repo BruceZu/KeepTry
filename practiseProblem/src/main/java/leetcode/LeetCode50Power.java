@@ -15,23 +15,7 @@
 
 package leetcode;
 
-public class LeetCode {
-    // Leetcode 27 Remove Element
-    // runtime beats 73.63% of java submissions.
-    public static int removeElement(int[] nums, int val) {
-        int newIndex = 0;
-        int i = 0;
-        while (i < nums.length) {
-            int current = nums[i];
-            if (current != val) {
-                nums[newIndex++] = nums[i];
-            }
-            i++;
-        }
-        return newIndex;
-    }
-
-
+public class LeetCode50Power {
     // Leetcode 50 pow(x,n)
     // recursion
     // the total number of operations is O(logn)
