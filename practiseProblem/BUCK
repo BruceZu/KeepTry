@@ -18,6 +18,7 @@ for t in TESTS:
     srcs = [t],
     deps = [
       '//lib:truth',
+      '//lib:hamcrest-core',
       ':practise'
     ],
     vm_args = ['-Xmx256m', '-Dfile.encoding=UTF-8']
