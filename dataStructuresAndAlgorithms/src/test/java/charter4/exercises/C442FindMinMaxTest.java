@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 public class C442FindMinMaxTest {
 
-    @Test(timeout = 10000L, expected = Test.None.class)
+    @Test(timeout = 100L, expected = Test.None.class)
     public void test() {
         Assert.assertEquals(Arrays.toString(C442FindMinMax.findMinimumAndMaximumOf(new int[]{9, 3, 1, 6, 7, 4, 10})), "[10, 1]");
         Assert.assertEquals(Arrays.toString(C442FindMinMax.findMinimumAndMaximumOf(new int[]{9, 3, 2, 6, 1, 4})), "[9, 1]");
