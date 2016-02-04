@@ -1,0 +1,34 @@
+CHARTERS = [3, 4, 5]
+for n in CHARTERS:
+  C = 'charter%s' % n
+  CE = 'charter%s.exercises' % n
+  for name in [C, CE]:
+    g = '%s/src/main/java/**/*.java' % name
+    java_library(
+      name = name,
+      srcs = glob([g]),
+      resources = [
+        '%s/src/main/resources/log4j.properties' % name
+      ],
+      resources_root = '%s/src/main/resources' % name,
+      exported_deps = [
+        '//lib:slf4j-simple',
+        '//lib:slf4j-api'
+      ],
+      deps = [
+        '//lib:annotations'
+      ]
+    )
+    tg = '%s/src/test/java/**/*.java' % name
+    TESTS = glob([tg])
+    for t in TESTS:
+      n = t[len('%s/src/test/' % name):-len('.java')].replace('/','.')
+      java_test(
+        name = n,
+        srcs = [t],
+        deps = [
+          '//lib:truth',
+          ':%s' % name
+        ],
+        vm_args = ['-Xmx256m', '-Dfile.encoding=UTF-8']
+      )
