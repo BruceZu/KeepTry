@@ -10,13 +10,35 @@ java_library(
   ]
 )
 
-TESTS = glob(['src/test/java/**/*.java'])
+PKG = 'src/test/java/'
+NEED_HAMCREST = [PKG + c for c in [
+ 'ListAllSubSetsDisplayInNoDescendingOrderTests.java',
+ 'ParseBalancedParenthesesTests.java'
+]]
+
+TESTS = glob(
+  ['src/test/java/**/*.java'],
+  excludes = NEED_HAMCREST
+)
 for t in TESTS:
   n = name = t[len('src/test/'):-len('.java')].replace('/','.')
   java_test(
     name = n,
     srcs = [t],
     deps = [
+      '//lib:truth',
+      ':practise'
+    ],
+    vm_args = ['-Xmx256m', '-Dfile.encoding=UTF-8']
+  )
+
+for t in NEED_HAMCREST:
+  n = name = t[len('src/test/'):-len('.java')].replace('/','.')
+  java_test(
+    name = n,
+    srcs = [t],
+    deps = [
+      '//lib:hamcrest-core',
       '//lib:truth',
       ':practise'
     ],

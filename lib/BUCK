@@ -31,7 +31,9 @@ cook_prebuilt_jar(
   bin_sha1 = '42a25dc3219429f0e5d060061f71acb49bf010a0',
   src_sha1 = '1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b',
   visibility = [
-    '//lib:junit'
+    '//lib:junit',
+    '//practiseProblem:java.ListAllSubSetsDisplayInNoDescendingOrderTests',
+    '//practiseProblem:java.ParseBalancedParenthesesTests'
   ]
 )
 
