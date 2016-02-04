@@ -22,7 +22,7 @@ for n in CHARTERS:
     tg = '%s/src/test/java/**/*.java' % name
     TESTS = glob([tg])
     for t in TESTS:
-      n = t[len('%s/src/test/' % name):-len('.java')].replace('/','.')
+      n = t[len('%s/src/test/java/' % name):-len('.java')].replace('/','.')
       java_test(
         name = n,
         srcs = [t],
