@@ -13,8 +13,8 @@
 // limitations under the License.
 //
 
+import map.SortMapByValue;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import utils.MapUtils;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -105,7 +105,7 @@ public class DiffAdjacentCharacters {
             return "None";
         }
 
-        Map.Entry<Character, Integer>[] sortedArray = MapUtils.sortedArrayByValueInDescendingOrder(charToTimes);
+        Map.Entry<Character, Integer>[] sortedArray = SortMapByValue.sortedArrayByValueInDescendingOrder(charToTimes);
         Iterator<Iterable<Character>> charTimes = new RawData(sortedArray).iterator();
         Iterator<Character> one = null, afterOne = null;
         if (charTimes.hasNext()) {

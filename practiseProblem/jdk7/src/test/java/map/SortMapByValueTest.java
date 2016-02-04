@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package utils;
+package map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,9 +21,9 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapUtilsTest {
+public class SortMapByValueTest {
 
-    @Test(timeout = 3000l, expected = Test.None.class)
+    @Test(timeout = 30l, expected = Test.None.class)
     public void testSortByValueInDescendingOrder() {
         char[] arr = "googler".toCharArray();
         Map<Character, Integer> charToTimes = new HashMap();
@@ -31,7 +31,7 @@ public class MapUtilsTest {
             Integer times = charToTimes.get(arr[i]);
             charToTimes.put(arr[i], times == null ? 1 : times + 1);
         }
-        Map sortedByTimes = MapUtils.sortByValueInDescendingOrder(charToTimes);
+        Map sortedByTimes = SortMapByValue.sortByValueInDescendingOrder(charToTimes);
         Assert.assertEquals(charToTimes.toString(), "{g=2, e=1, r=1, o=2, l=1}");
         Assert.assertEquals(sortedByTimes.toString(), "{g=2, o=2, e=1, l=1, r=1}");
         Assert.assertEquals(sortedByTimes.containsKey('a'), false);

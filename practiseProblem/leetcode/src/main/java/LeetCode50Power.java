@@ -13,8 +13,6 @@
 // limitations under the License.
 //
 
-package leetcode;
-
 public class LeetCode50Power {
     // Leetcode 50 pow(x,n)
     // recursion

@@ -13,14 +13,14 @@
 // limitations under the License.
 //
 
-package utils;
+package map;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MapUtils {
+public class SortMapByValue {
     public static <K extends Comparable<? super K>, V extends Comparable<? super V>>
     Map sortByValueInDescendingOrder(final Map<K, V> map) {
         Map re = new TreeMap(new Comparator<K>() {

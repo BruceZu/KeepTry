@@ -1,6 +1,8 @@
+S = ['', 'jdk7/', 'leetcode/', 'lintcode/']
+srcs = [ p + 'src/main/java/**/*.java' for p in S]
 java_library(
   name = 'practise',
-  srcs = glob(['src/main/java/**/*.java']),
+  srcs = glob(srcs),
   exported_deps = [
     '//lib:slf4j-simple',
     '//lib:slf4j-api'
@@ -12,16 +14,14 @@ java_library(
 
 PKG = 'src/test/java/'
 NEED_HAMCREST = [PKG + c for c in [
- 'ListAllSubSetsDisplayInNoDescendingOrderTests.java',
  'ParseBalancedParenthesesTests.java'
 ]]
 
-TESTS = glob(
-  ['src/test/java/**/*.java'],
-  excludes = NEED_HAMCREST
-)
+
+t_srcs = [ p + 'src/test/java/**/*.java' for p in S]
+TESTS = glob(t_srcs, excludes = NEED_HAMCREST)
 for t in TESTS:
-  n = name = t[len('src/test/'):-len('.java')].replace('/','.')
+  n = t[t.index("src/test/java/") + len("src/test/java/") : -len(".java")].replace('/','.')
   java_test(
     name = n,
     srcs = [t],
@@ -33,7 +33,7 @@ for t in TESTS:
   )
 
 for t in NEED_HAMCREST:
-  n = name = t[len('src/test/'):-len('.java')].replace('/','.')
+  n = t[len('src/test/java/'):-len('.java')].replace('/','.')
   java_test(
     name = n,
     srcs = [t],

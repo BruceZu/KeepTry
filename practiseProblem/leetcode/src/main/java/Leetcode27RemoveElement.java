@@ -13,8 +13,6 @@
 // limitations under the License.
 //
 
-package leetcode;
-
 public class Leetcode27RemoveElement {
     // Leetcode 27 Remove Element
     // runtime beats 73.63% of java submissions.

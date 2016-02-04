@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package jdk7;
+package bitwise;
 
 public class BitOperation {
     /**

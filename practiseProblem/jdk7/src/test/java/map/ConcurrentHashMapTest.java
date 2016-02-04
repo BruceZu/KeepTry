@@ -12,74 +12,78 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
-package jdktest;
+package map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
-// HashSet implementation is not synchronized. If multiple threads access a hash map concurrently, and at least one of the threads
-// modifies the map structurally, it must be synchronized externally.
-public class HashSetTest {
-    private Set<Integer> accounts = Collections.newSetFromMap(new ConcurrentHashMap<Integer, Boolean>(10000));
-    // Collections.synchronizedSet(new HashSet<Integer>(10000));
+public class ConcurrentHashMapTest {
+    private Map<String, AtomicLong> accounts = new ConcurrentHashMap(6);
 
-    public void addElement(CountDownLatch startRun, CountDownLatch done, int init) {
+    public ConcurrentHashMapTest() {
+        accounts.put("account1", new AtomicLong(0l));
+        accounts.put("account2", new AtomicLong(0l));
+        accounts.put("account3", new AtomicLong(0l));
+    }
+
+    public void increaseIt(CountDownLatch start, CountDownLatch done) {
         try {
-            startRun.await();
+            start.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        for (int i = init; i < init + 5000; i++) {
-            // synchronized (accounts) {
-            accounts.add(i);
-            // }
+        for (int i = 0; i < 50; i++) {
+            for (String acount : accounts.keySet()) {
+                //accounts.get(acount).getAndIncrement();
+                synchronized (acount) {
+                    accounts.put(acount, new AtomicLong(accounts.get(acount).longValue() + 1));
+                }
+            }
         }
         done.countDown();
     }
 
-    public int test() {
-        final CountDownLatch startRun = new CountDownLatch(1);
+    public String test() {
+        final CountDownLatch start = new CountDownLatch(1);
         final CountDownLatch done = new CountDownLatch(2);
-        ExecutorService executors = Executors.newFixedThreadPool(2);
-        executors.submit(new Runnable() {
+        ExecutorService tpool = Executors.newFixedThreadPool(2);
+        tpool.submit(new Runnable() {
             @Override
             public void run() {
-                addElement(startRun, done, 0);
+                increaseIt(start, done);
             }
         });
-        executors.submit(new Runnable() {
+        tpool.submit(new Runnable() {
             @Override
             public void run() {
-                addElement(startRun, done, 5000);
+                increaseIt(start, done);
             }
         });
 
-        startRun.countDown();
-
+        start.countDown();
         try {
             done.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        executors.shutdown();
-        return accounts.size();
+        tpool.shutdown();
+        return accounts.toString();
     }
 
     @Test(timeout = 3000L, expected = Test.None.class)
-    public void testHashSetTest() {
+    public void testConcurrentHashMap() {
         int i = 0;
         while (i < 10) {
-            Assert.assertEquals(new HashSetTest().test(), 10000);
+            Assert.assertEquals(new ConcurrentHashMapTest().test(), "{account3=100, account1=100, account2=100}");
             i++;
         }
     }
