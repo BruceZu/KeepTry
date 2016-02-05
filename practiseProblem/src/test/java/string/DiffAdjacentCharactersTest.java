@@ -1,4 +1,4 @@
-//  Copyright 2016 The Minorminor Open Source Project
+package string;//  Copyright 2016 The Minorminor Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
 
 import org.junit.Assert;
 import org.junit.Test;
+import string.DiffAdjacentCharacters;
 
 public class DiffAdjacentCharactersTest {
     @Test(timeout = 3000l, expected = Test.None.class)

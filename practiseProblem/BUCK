@@ -1,5 +1,5 @@
-S = ['', 'jdk7/', 'leetcode/', 'lintcode/']
-srcs = [ p + 'src/main/java/**/*.java' for p in S]
+PKG = ['', 'jdk7/', 'leetcode/', 'lintcode/']
+srcs = [p + 'src/main/java/**/*.java' for p in PKG]
 java_library(
   name = 'practise',
   srcs = glob(srcs),
@@ -12,13 +12,12 @@ java_library(
   ]
 )
 
-PKG = 'src/test/java/'
-NEED_HAMCREST = [PKG + c for c in [
+PRE = 'src/test/java/'
+NEED_HAMCREST = [PRE + c for c in [
  'ParseBalancedParenthesesTests.java'
 ]]
 
-
-t_srcs = [ p + 'src/test/java/**/*.java' for p in S]
+t_srcs = [p + 'src/test/java/**/*.java' for p in PKG]
 TESTS = glob(t_srcs, excludes = NEED_HAMCREST)
 for t in TESTS:
   n = t[t.index("src/test/java/") + len("src/test/java/") : -len(".java")].replace('/','.')
