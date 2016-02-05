@@ -14,6 +14,11 @@
 //
 
 // rearranges an array of integer values so that all the even values appear before all the odd values.
+// it is same like C521
+// (C521 Given an unsorted array, A, of integers and an integer k, describe a recursive algorithm for rearranging
+// the elements in A so that all elements less than or equal to k come before any elements larger than k.
+// What is the running time of your algorithm on an array of n values?)
+
 public class C520OddAheadEvenArray {
     // recursive method, running time O(N)
     private static void rearranges(int[] array, int indexEven, int currentIndex) {
