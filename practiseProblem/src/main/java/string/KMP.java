@@ -13,15 +13,8 @@
 // limitations under the License.
 //
 
-import org.junit.Test;
+package string;
 
-public class C317Test {
-    @Test(timeout = 10L, expected = Test.None.class)
-    public void test() {
-        int[] test = new int[]{1, 2, 3, 4, 4};
-        org.junit.Assert.assertEquals(C317.getTheRepeatedInteger(test), 4);
-        test = new int[]{4, 4, 1, 2, 3,};
-        org.junit.Assert.assertEquals(C317.getTheRepeatedInteger(test), 4);
-    }
-
+// http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html
+public class KMP {
 }
