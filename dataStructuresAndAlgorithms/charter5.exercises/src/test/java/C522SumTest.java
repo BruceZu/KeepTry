@@ -19,11 +19,7 @@ import org.junit.Test;
 public class C522SumTest {
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
-        int[] r = C522Sum.find(new int[]{1, 9, 11, 21, 23}, 20);
-        Assert.assertEquals(r[0], 1);
-        Assert.assertEquals(r[1], 2);
-        r = C522Sum.find(new int[]{1, 9, 11, 21, 23}, 19);
-        Assert.assertEquals(r[0], -1);
-        Assert.assertEquals(r[1], -1);
+        Assert.assertEquals(C522Sum.twoSum(new int[]{3, 2, 4}, 6), true);
+        Assert.assertEquals(C522Sum.twoSum(new int[]{3, 2, 4}, 8), false);
     }
 }

@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package search;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class BinarySearchAndLoopSearch {
             }
         }
         int mid = (startIndex + endIndex) / 2;
-        if (mid == startIndex) { //
+        if (mid == startIndex) { // end recursion
             return false;
         }
 

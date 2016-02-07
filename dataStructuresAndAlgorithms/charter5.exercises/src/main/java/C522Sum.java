@@ -14,43 +14,45 @@
 //
 
 /*
-C-5.22 Suppose you are given an array, A, containing n distinct integers that are listed
+Suppose you are given an array, A, containing n distinct integers that are listed
 in increasing order. Given a number k, describe a recursive algorithm to find two
 integers in A that sum to k, if such a pair exists. What is the running time of your
 algorithm?
  */
 
 
+import java.util.Arrays;
+
 public class C522Sum {
-    private static void find(int[] indexes, int[] nums, long k) {
+    private static boolean find(int[] nums, long k, int[] ids) {
         // walk from both sides towards center.
         // index[0] keep left side index, index[1] keep right side index,
         // runtime O(N)
-        int l = indexes[0];
-        int r = indexes[1];
+        int l = ids[0];
+        int r = ids[1];
         if (l == r) {
-            indexes[0] = -1;
-            indexes[1] = -1;
-            return;
+            ids[0] = -1;
+            ids[1] = -1;
+            return false;
         }
         if (nums[l] + nums[r] == k) {
-            return;
-
+            ids[0]++;
+            ids[1]++;
+            return true;
         }
         if (nums[l] + nums[r] < k) {
-            indexes[0]++;
-            find(indexes, nums, k);
-            return;
+            ids[0]++;
+        } else {
+            ids[1]--;
         }
-        indexes[1]--;
-        find(indexes, nums, k);
+        return find(nums, k, ids);
     }
 
-    public static int[] find(int[] nums, int k) {
-        int[] r = new int[2];
-        r[0] = 0;
-        r[1] = nums.length - 1;
-        find(r, nums, k);
-        return r;
+    public static boolean twoSum(final int[] nums, int target) {
+        Arrays.sort(nums); //if the nums is not sorted, then sorted it firstly, thus the running time will be O(NlogN)
+        int[] ids = new int[2];
+        ids[0] = 0;
+        ids[1] = nums.length - 1;
+        return find(nums, target, ids);
     }
 }
