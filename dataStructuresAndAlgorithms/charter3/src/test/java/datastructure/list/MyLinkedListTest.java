@@ -40,14 +40,13 @@ public class MyLinkedListTest {
     @Parameters(name = "{index}:  concrete linked list: {0} ")
     public static Iterable<MyLinkedList> data() {
         return Arrays.asList(new MyLinkedList[]{
-                        new SinglyLinkedList(),
-                        new CircularlyLinkedList(),
-                        new CircularlyLinkedList2(),
-                        new DoublyLinkedList(),
-                        new DoublyLinkedList2(),
-                        new C331()
-                }
-        );
+                new SinglyLinkedList(),
+                new CircularlyLinkedList(),
+                new CircularlyLinkedList2(),
+                new DoublyLinkedList(),
+                new DoublyLinkedList2(),
+                new C331()
+        });
     }
 
     private MyLinkedList list;
