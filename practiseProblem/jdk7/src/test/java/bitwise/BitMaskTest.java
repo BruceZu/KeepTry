@@ -944,7 +944,7 @@ public class BitMaskTest {
             System.out.println(BitOperation.binaryFormat(s));
             t = s & 1 << N;
         }
-        
+
         // 2.
     }
 
