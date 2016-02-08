@@ -1,4 +1,4 @@
-//  Copyright 2016 The Minorminor Open Source Project
+//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +13,8 @@
 // limitations under the License.
 //
 
-package jdktest.bitwise;
+package bitwise;
 
-import jdk7.BitOperation;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -945,10 +944,8 @@ public class BitMaskTest {
             System.out.println(BitOperation.binaryFormat(s));
             t = s & 1 << N;
         }
-
-
+        
         // 2.
-
     }
 
     @Test(timeout = 3l, expected = org.junit.Test.None.class)
@@ -958,7 +955,5 @@ public class BitMaskTest {
         // http://stackoverflow.com/questions/20357104/subset-sum-of-k-elemnts-in-o2k-2-time
         // http://stackoverflow.com/questions/25455184/finding-k-elements-of-length-n-list-that-sum-to-less-than-t-in-onlogk-time
         // http://stackoverflow.com/questions/127704/algorithm-to-return-all-combinations-of-k-elements-from-n
-
-
     }
 }
