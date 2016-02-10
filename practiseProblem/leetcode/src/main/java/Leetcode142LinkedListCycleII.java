@@ -19,16 +19,6 @@
 // Follow up:
 // Can you solve it without using extra space?
 
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode(int x) {
-        val = x;
-        next = null;
-    }
-}
-
 public class Leetcode142LinkedListCycleII {
 
     // beats 20.26% of java submissions.
