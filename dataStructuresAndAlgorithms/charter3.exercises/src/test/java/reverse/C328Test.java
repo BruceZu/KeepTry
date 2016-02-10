@@ -15,13 +15,13 @@
 
 package reverse;
 
-        import org.junit.Assert;
-        import org.junit.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
-        import java.util.Arrays;
-        import java.util.Collections;
-        import java.util.LinkedList;
-        import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class C328Test {
 
@@ -36,5 +36,7 @@ public class C328Test {
         Collections.addAll(l, "A", "B", "C", "D");
         l = C328.reverse(l);
         Assert.assertEquals(Arrays.toString(l.toArray()), "[D, C, B, A, d, c, b, a]");
+        l = C328.reverse2(l);
+        Assert.assertEquals(Arrays.toString(l.toArray()), "[a, b, c, d, A, B, C, D]");
     }
 }

@@ -21,13 +21,23 @@ import java.util.List;
 Describe in detail an algorithm for reversing a singly linked list L using only a
 constant amount of additional space.
  */
-public class C328 {
-    public static List reverse(List l) {
+
+public class C328  {
+    public static <T> List<T> reverse(List<T> l) {
         int index = 1;
         int elements = l.size();
         for (int i = 1; i <= elements - 1; i++) {
             l.add(0, l.get(index));
             index = index + 2;
+        }
+        return l.subList(0, elements);
+    }
+    public static <T> List<T> reverse2(List<T> l) {
+        int index = 1;
+        int elements = l.size();
+        for (int i = 1; i <= elements - 1; i++) {
+            l.add(0, l.remove(index));
+            index = index + 1;
         }
         return l.subList(0, elements);
     }
