@@ -14,26 +14,50 @@ package reverse;//  Copyright 2016 The Sawdust Open Source Project
 //
 
 import datastructure.list.ListNode;
-import datastructure.list.ListRecursonImplementation;
+import datastructure.list.ListRecursionImplementation;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
+
+@RunWith(Parameterized.class)
 public class C525ReverseListTest {
+
+    @Parameterized.Parameters(name = "{index} is original data used to make a test list")
+    public static Iterable<int[]> data() {
+        return Arrays.asList(new int[][]{
+                {1, 2, 3, 4},
+                {},
+                {1, 2}});
+    }
+
+    private int[] originalData;
+
+    public C525ReverseListTest(int[] array) {
+        this.originalData = array;
+    }
 
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
-        int[] l = new int[]{1, 2, 3, 4};
-        ListNode test = new ListNode(l[0]);
-        for (int i = 1; i < l.length; i++) {
-            ListRecursonImplementation.insertRear(test, l[i]);
+        ListNode test;
+        if (originalData.length == 0) {
+            test = null;
+        } else {
+            test = new ListNode(originalData[0]);
+            for (int i = 1; i < originalData.length; i++) {
+                ListRecursionImplementation.insertRear(test, originalData[i]);
+            }
         }
-        Assert.assertEquals(ListRecursonImplementation.toString(test), "1 2 3 4 ");
+        Assert.assertEquals(Arrays.toString(ListRecursionImplementation.toArray(test)),
+                Arrays.toString(originalData));
 
         ListNode reversed = C525ReverseList.reverse(test);
-        Assert.assertEquals(ListRecursonImplementation.toString(reversed), "4 3 2 1 ");
-
         reversed = C525ReverseList.reverse2(reversed);
-        Assert.assertEquals(ListRecursonImplementation.toString(reversed), "1 2 3 4 ");
+
+        Assert.assertEquals(Arrays.toString(ListRecursionImplementation.toArray(reversed)),
+                Arrays.toString(originalData));
     }
 }
 
