@@ -15,6 +15,7 @@ package reverse;//  Copyright 2016 The Sawdust Open Source Project
 
 import datastructure.list.ListNode;
 import datastructure.list.ListRecursonImplementation;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class C525ReverseListTest {
@@ -26,15 +27,13 @@ public class C525ReverseListTest {
         for (int i = 1; i < l.length; i++) {
             ListRecursonImplementation.insertRear(test, l[i]);
         }
+        Assert.assertEquals(ListRecursonImplementation.toString(test), "1 2 3 4 ");
 
-        ListRecursonImplementation.print(test);
         ListNode reversed = C525ReverseList.reverse(test);
-        System.out.println("--");
-        ListRecursonImplementation.print(reversed);
+        Assert.assertEquals(ListRecursonImplementation.toString(reversed), "4 3 2 1 ");
 
         reversed = C525ReverseList.reverse2(reversed);
-        System.out.println("--");
-        ListRecursonImplementation.print(reversed);
+        Assert.assertEquals(ListRecursonImplementation.toString(reversed), "1 2 3 4 ");
     }
 }
 

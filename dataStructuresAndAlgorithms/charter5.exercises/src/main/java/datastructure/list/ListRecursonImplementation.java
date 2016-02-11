@@ -24,8 +24,18 @@ public class ListRecursonImplementation {
         if (node == null)
             return;
         else {
-            System.out.println(node.val);
+            System.out.print(node.val + ",");
             print(node.next);
+        }
+    }
+
+    public static String toString(ListNode node) {
+        if (node == null)
+            return "";
+        else {
+            StringBuffer r =new StringBuffer();
+            r.append(node.val).append(" ").append(toString(node.next));
+            return r.toString();
         }
     }
 
