@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package search.tree;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,20 +13,24 @@
 // limitations under the License.
 //
 
-import java.io.File;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class FileTreeRecursion {
-    // multiple recursion
-    public static long my_diskUsage(File root) {
-        if (root.isDirectory()) {
-            long total = 0;
-            for (String childname : root.list()) {
-                File child = new File(root, childname);
-                total += my_diskUsage(child);
-                System.out.println(total + "\t" + child);
-                return total;
-            }
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
+public class FileTreeRecursionTest {
+
+    @Test(timeout = 100L, expected = Test.None.class)
+    public void test() {
+        try {
+            List<File> r = new LinkedList<>();
+            FileTreeRecursion.find(new File("../").getCanonicalFile() , "BUCK", r);
+            Assert.assertEquals(r.get(0).getName(), "BUCK");
+        } catch (IOException e) {
+            //
         }
-        return root.length();
     }
 }
