@@ -16,7 +16,7 @@
 package datastructure.list;
 
 public class ListNode {
-    public int val;
+    public int val; // just let its type is int. it is easy to calcualte the sum() and addone()
     public ListNode next;
 
     public ListNode(int x) {
