@@ -23,7 +23,8 @@ return 1->2->2->4->3->5.
 
 public class Leetcode86PartitionList {
     public class Solution {
-        private ListNode[] process(ListNode node, int x, ListNode[] ts) {
+        // beats 5.06% of java submissions on Feb 10, 2016
+        private void process(ListNode node, int x, ListNode[] ts) {
             if (node != null) {
                 if (node.val < x) {
                     ts[0].next = node;
@@ -32,9 +33,8 @@ public class Leetcode86PartitionList {
                     ts[1].next = node;
                     ts[1] = ts[1].next;
                 }
-               return process(node.next, x, ts);
+               process(node.next, x, ts);
             }
-            return ts;
         }
 
         public ListNode partition(ListNode head, int x) {
@@ -44,14 +44,14 @@ public class Leetcode86PartitionList {
             ListNode bigsTail = bigsDumyHead;
 
             ListNode [] ts = new ListNode []{smalsTail,bigsTail};
-            ts= process( head, x, ts);
+            process( head, x, ts);
 
             ts[0].next = bigsDumyHead.next;
             ts[1].next = null; // note
             return smalsDumyHead.next;
         }
 
-        // beats 5.06% of java submissions.
+        // beats 5.06% of java submissions on Feb 10, 2016
         public ListNode partition2(ListNode head, int x) {
             ListNode smalsDumyHead = new ListNode(0);
             ListNode smalsTail = smalsDumyHead;
