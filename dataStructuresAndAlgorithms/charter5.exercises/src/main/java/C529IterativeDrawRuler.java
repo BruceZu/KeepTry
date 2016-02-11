@@ -45,6 +45,14 @@ public class C529IterativeDrawRuler {
 
     // loop implementation
     public static void drawRuler(int nInches, int majorLength) {
+        /**
+         Provide a nonrecursive implementation of the drawInterval method for the English
+         ruler project of Section 5.1.2. There should be precisely 2c −1 lines of
+         output if c represents the length of the center tick. If incrementing a counter from
+         0 to 2c−2, the number of dashes for each tick line should be exactly one more
+         than the number of consecutive 1’s at the end of the binary representation of the
+         counter.
+         */
         // To-do
     }
 }
