@@ -15,7 +15,7 @@
 
 package datastructure.list;
 
-public class ListRecursonImplementation {
+public class ListRecursionImplementation {
     // a list is:
     //  empty
     // or
@@ -29,14 +29,17 @@ public class ListRecursonImplementation {
         }
     }
 
-    public static String toString(ListNode node) {
-        if (node == null)
-            return "";
-        else {
-            StringBuffer r =new StringBuffer();
-            r.append(node.val).append(" ").append(toString(node.next));
-            return r.toString();
+    private static void toArray(ListNode node, int[] array, int index) {
+        if (node != null) {
+            array[index] = node.val;
+            toArray(node.next, array, index+1);
         }
+    }
+
+    public static int[] toArray(ListNode node) {
+        int[] r = new int[length(node)];
+        toArray(node, r, 0);
+        return r;
     }
 
     public static int length(ListNode l) {
