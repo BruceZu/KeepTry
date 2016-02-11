@@ -13,24 +13,22 @@ package search.tree;//  Copyright 2016 The Sawdust Open Source Project
 // limitations under the License.
 //
 
-import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
 public class FileTreeRecursionTest {
 
-    @Test(timeout = 100L, expected = Test.None.class)
+    @Test(timeout = 100000L, expected = Test.None.class)
     public void test() {
-        try {
-            List<File> r = new LinkedList<>();
-            FileTreeRecursion.find(new File("../").getCanonicalFile() , "BUCK", r);
-            Assert.assertEquals(r.get(0).getName(), "BUCK");
-        } catch (IOException e) {
-            //
-        }
+//        try {
+//            String find = "BUCK";
+//            File from = new File("./../");
+//            List<File> r = new LinkedList<>();
+//            FileTreeRecursion.find(from.getCanonicalFile(), find, r);
+//            for (File f : r) {
+//                System.out.println(f.getCanonicalPath());
+//            }
+//        } catch (IOException e) {
+//            //
+//        }
     }
 }
