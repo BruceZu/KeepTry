@@ -1,4 +1,4 @@
-CHARTERS = [3, 4, 5]
+CHARTERS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 for n in CHARTERS:
   C = 'charter%s' % n
   CE = 'charter%s.exercises' % n
@@ -8,7 +8,7 @@ for n in CHARTERS:
       name = name,
       srcs = glob([g]),
       resources = [
-        '%s/src/main/resources/log4j.properties' % name
+        'resources/log4j.properties'
       ],
       resources_root = '%s/src/main/resources' % name,
       exported_deps = [
