@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package reverse;
+package datastructure.list.reverse;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class C328Test {
+public class C328ReverseSinglyLinkedListTest {
 
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
@@ -34,9 +34,9 @@ public class C328Test {
             add("d");
         }};
         Collections.addAll(l, "A", "B", "C", "D");
-        l = C328.reverse(l);
+        l = C328ReverseSinglyLinkedList.reverse(l);
         Assert.assertEquals(Arrays.toString(l.toArray()), "[D, C, B, A, d, c, b, a]");
-        l = C328.reverse2(l);
+        l = C328ReverseSinglyLinkedList.reverse2(l);
         Assert.assertEquals(Arrays.toString(l.toArray()), "[a, b, c, d, A, B, C, D]");
     }
 }

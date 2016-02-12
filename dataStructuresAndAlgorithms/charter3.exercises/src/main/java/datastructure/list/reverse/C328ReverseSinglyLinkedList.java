@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package reverse;
+package datastructure.list.reverse;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ Describe in detail an algorithm for reversing a singly linked list L using only 
 constant amount of additional space.
  */
 
-public class C328  {
+public class C328ReverseSinglyLinkedList {
     public static <T> List<T> reverse(List<T> l) {
         int index = 1;
         int elements = l.size();
@@ -32,6 +32,7 @@ public class C328  {
         }
         return l.subList(0, elements);
     }
+
     public static <T> List<T> reverse2(List<T> l) {
         int index = 1;
         int elements = l.size();
