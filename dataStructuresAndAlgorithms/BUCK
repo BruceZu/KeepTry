@@ -1,3 +1,30 @@
+java_library(
+  name = 'pub',
+  srcs = glob(['src/main/java/**/*.java']),
+  resources = [
+    'resources/log4j.properties'
+  ],
+  resources_root = '.',
+  exported_deps = [
+    '//lib:slf4j-simple',
+    '//lib:slf4j-api'
+  ],
+  deps = []
+)
+
+TESTS = glob(['src/main/test/java/**/*.java'])
+for t in TESTS:
+  n = t[len('src/test/java/'):-len('.java')].replace('/','.')
+  java_test(
+    name = n,
+    srcs = [t],
+    deps = [
+      '//lib:truth',
+      ':pub'
+    ],
+    vm_args = ['-Xmx256m', '-Dfile.encoding=UTF-8']
+)
+
 CHARTERS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 for n in CHARTERS:
   C = 'charter%s' % n
@@ -10,13 +37,14 @@ for n in CHARTERS:
       resources = [
         'resources/log4j.properties'
       ],
-      resources_root = '%s/src/main/resources' % name,
+      resources_root = '.',
       exported_deps = [
         '//lib:slf4j-simple',
         '//lib:slf4j-api'
       ],
       deps = [
-        '//lib:annotations'
+        '//lib:annotations',
+        ':pub'
       ]
     )
     tg = '%s/src/test/java/**/*.java' % name
@@ -28,7 +56,8 @@ for n in CHARTERS:
         srcs = [t],
         deps = [
           '//lib:truth',
-          ':%s' % name
+          ':%s' % name,
+          ':pub'
         ],
         vm_args = ['-Xmx256m', '-Dfile.encoding=UTF-8']
       )
