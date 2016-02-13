@@ -30,7 +30,7 @@ public class IStackTest {
         });
     }
 
-    private IStack<Integer> s = new ArrayStack<>();
+    private IStack<Integer> s;
 
     public IStackTest(IStack<Integer> s) {
         this.s = s;
