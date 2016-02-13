@@ -15,6 +15,7 @@
 
 package datastructure.queue;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
@@ -106,5 +107,12 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
     @Override
     public int size() {
         return size;
+    }
+
+    public String toString() {
+        if (isEmpty()) {
+            return "";
+        }
+        return Arrays.toString(Arrays.copyOfRange(d, head, head + size));
     }
 }

@@ -15,6 +15,7 @@
 
 package datastructure.queue;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
@@ -22,8 +23,8 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
 
     private int capacity;
     private T[] d;
-    private int head = 0;
-    private int tail = 0;
+    private int head = -1;
+    private int tail = -1;
 
     public ArrayFIFOQueue() {
         capacity = DEFAULT_CAPACITY;
@@ -130,5 +131,12 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
             return 0;
         }
         return tail >= head ? tail - head + 1 : capacity - head + tail + 1;
+    }
+
+    public String toString() {
+        if (isEmpty()) {
+            return "";
+        }
+        return Arrays.toString(Arrays.copyOfRange(d, head, tail + 1));
     }
 }
