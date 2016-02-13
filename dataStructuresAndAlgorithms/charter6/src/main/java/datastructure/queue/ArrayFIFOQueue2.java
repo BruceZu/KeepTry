@@ -18,6 +18,8 @@ package datastructure.queue;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+// prohibit the insertion of null elements
+// capacity-restricted FIFO queue
 public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
     private static int DEFAULT_CAPACITY = 2 << 2;
 
