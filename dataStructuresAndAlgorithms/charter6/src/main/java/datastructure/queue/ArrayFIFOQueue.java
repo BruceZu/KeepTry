@@ -51,6 +51,9 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
         if (t == null) {
             throw new NullPointerException();
         }
+        if (size() == d.length) {
+            return false;
+        }
         int nextTailIndex = tail + 1;
         if (nextTailIndex == 0) {
             tail = 0;
@@ -60,17 +63,14 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
         }
 
         // wrap around.
-        if (nextTailIndex == capacity && d[0] == null) {
+        if (nextTailIndex == capacity) {
             tail = 0;
             d[0] = t;
             return true;
         }
 
-        if (d[nextTailIndex] == null) {
-            d[++tail] = t;
-            return true;
-        }
-        return false;
+        d[++tail] = t;
+        return true;
     }
 
     @Override
@@ -139,6 +139,11 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
         if (isEmpty()) {
             return "";
         }
-        return Arrays.toString(Arrays.copyOfRange(d, head, tail + 1));
+        if (tail >= head) {
+            return Arrays.toString(Arrays.copyOfRange(d, head, tail + 1));
+        }
+        return new StringBuilder()
+                .append(Arrays.toString(Arrays.copyOfRange(d, head, d.length)))
+                .append(Arrays.toString(Arrays.copyOfRange(d, 0, tail + 1))).toString();
     }
 }

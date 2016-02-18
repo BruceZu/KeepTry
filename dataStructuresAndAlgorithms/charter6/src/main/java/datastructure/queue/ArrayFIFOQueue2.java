@@ -115,6 +115,12 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
         if (isEmpty()) {
             return "";
         }
-        return Arrays.toString(Arrays.copyOfRange(d, head, head + size));
+        int tail = (head + size - 1) % d.length;
+        if (tail >= head) {
+            return Arrays.toString(Arrays.copyOfRange(d, head, tail + 1));
+        }
+        return new StringBuilder()
+                .append(Arrays.toString(Arrays.copyOfRange(d, head, d.length)))
+                .append(Arrays.toString(Arrays.copyOfRange(d, 0, tail + 1))).toString();
     }
 }
