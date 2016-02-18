@@ -19,13 +19,13 @@ import java.util.NoSuchElementException;
 
 public interface FIFOQueue<E> {
     /**
-     * @throws IllegalStateException if the element cannot be added at this
+     * @throws IllegalStateException if the element cannot be added at this queue
      * @throws NullPointerException  if the specified element is null
      */
     boolean add(E e);
 
     /**
-     * @return <tt>true</tt> if the element was added to this queue, else  <tt>false</tt>
+     * @return true if the element was added to this queue, else false
      * @throws NullPointerException if the specified element is null
      */
     boolean offer(E e);
@@ -37,9 +37,9 @@ public interface FIFOQueue<E> {
     E remove();
 
     /**
-     * Retrieves and removes the head of this queue,  or returns <tt>null</tt> if this queue is empty.
+     * Retrieves and removes the head of this queue,  or returns null if this queue is empty.
      *
-     * @return the head of this queue, or <tt>null</tt> if this queue is empty
+     * @return the head of this queue, or null if this queue is empty
      */
     E poll();
 
@@ -52,7 +52,7 @@ public interface FIFOQueue<E> {
     E element();
 
     /**
-     * @return the head of this queue, or <tt>null</tt> if this queue is empty
+     * @return the head of this queue, or null if this queue is empty
      */
     E peek();
 
