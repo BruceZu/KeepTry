@@ -1,0 +1,23 @@
+include_defs(
+    '//lib/cook_buck_rules.py'
+)
+
+cook_prebuilt_jar(
+    name='core',
+    group_id='org.apache.mina',
+    artifact_id='mina-core',
+    version='2.0.10',
+    bin_sha1='a1cb1136b104219d6238de886bf5a3ea4554eb58',
+    src_sha1='b70ff94ba379b4e825caca1af4ec83193fac4b10',
+    visibility=['//practiseProblem:net.SocketTest'],
+)
+
+cook_prebuilt_jar(
+    name='sshd',
+    group_id='org.apache.sshd',
+    artifact_id='sshd-core',
+    version='1.0.0',
+    bin_sha1='448ae95811a993575cc465e1c60ef741632b2ce8',
+    src_sha1='8a0b99459914fa03359ced027b4337a51c2db4f2',
+    deps=[':core'],
+)

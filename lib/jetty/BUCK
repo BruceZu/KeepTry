@@ -1,0 +1,109 @@
+include_defs(
+    '//lib/cook_buck_rules.py'
+)
+VERSION = '9.2.14.v20151106'
+GROUP_ID = 'org.eclipse.jetty'
+
+cook_prebuilt_jar(
+    name='util',
+    group_id=GROUP_ID,
+    artifact_id='jetty-util',
+    version=VERSION,
+    bin_sha1='0057e00b912ae0c35859ac81594a996007706a0b',
+    src_sha1='a8c89e0697fb2c9fe7459a879e240b31bcbf1103',
+)
+
+cook_prebuilt_jar(
+    name='io',
+    group_id=GROUP_ID,
+    artifact_id='jetty-io',
+    version=VERSION,
+    bin_sha1='dfa4137371a3f08769820138ca1a2184dacda267',
+    src_sha1='921faa101835cc984faa3dbd2c04fa6b6d04ec28',
+    deps=[
+        ':util'
+    ],
+)
+
+cook_prebuilt_jar(
+    name='continuation',
+    group_id=GROUP_ID,
+    artifact_id='jetty-continuation',
+    version=VERSION,
+    bin_sha1='8909d62fd7e28351e2da30de6fb4105539b949c0',
+    src_sha1='d35fe4d36f663b44b51b1ca10e5efd4297ffa0b5',
+)
+
+cook_prebuilt_jar(
+    name='http',
+    group_id=GROUP_ID,
+    artifact_id='jetty-http',
+    version=VERSION,
+    bin_sha1='699ad1f2fa6fb0717e1b308a8c9e1b8c69d81ef6',
+    src_sha1='3c313d706ef3536f626294244fe6a79f152bbbe4',
+    deps=[
+        ':io'
+    ],
+)
+
+cook_prebuilt_jar(
+    name='server',
+    group_id=GROUP_ID,
+    artifact_id='jetty-server',
+    version=VERSION,
+    bin_sha1='70b22c1353e884accf6300093362b25993dac0f5',
+    src_sha1='5ed9c66cb7dce7abb3738d686950baf19b2e65e1',
+    deps=[
+        ':continuation',
+        ':http',
+    ],
+    visibility=['//practiseProblem:net.SocketTest'],
+)
+
+cook_prebuilt_jar(
+    name='security',
+    group_id=GROUP_ID,
+    artifact_id='jetty-security',
+    version=VERSION,
+    bin_sha1='2d36974323fcb31e54745c1527b996990835db67',
+    src_sha1='64b02f48d7b2d2732ffbc6f605fd2bdd31916bf9',
+    deps=[
+        ':server'
+    ],
+)
+
+cook_prebuilt_jar(
+    name='servlet',
+    group_id=GROUP_ID,
+    artifact_id='jetty-servlet',
+    version=VERSION,
+    bin_sha1='3a2cd4d8351a38c5d60e0eee010fee11d87483ef',
+    src_sha1='88447c4c2920ec355bfbfd342b2f6aa3bbc015c3',
+    deps=[
+        ':security'
+    ],
+    visibility=['//practiseProblem:net.SocketTest'],
+)
+
+cook_prebuilt_jar(
+    name='servlets',
+    group_id=GROUP_ID,
+    artifact_id='jetty-servlets',
+    version=VERSION,
+    bin_sha1='a75c78a0ee544073457ca5ee9db20fdc6ed55225',
+    src_sha1='e9763c6a178a65514dd0ea9f749621a17d06f9f8',
+    visibility=['//practiseProblem:net.SocketTest'],
+)
+
+cook_prebuilt_jar(
+    name='jmx',
+    group_id=GROUP_ID,
+    artifact_id='jetty-jmx',
+    version=VERSION,
+    bin_sha1='617edc5e966b4149737811ef8b289cd94b831bab',
+    src_sha1='e85403bd5ca6e408d066d094f810c40af97995c0',
+    deps=[
+        ':continuation',
+        ':http',
+    ],
+)

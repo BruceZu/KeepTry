@@ -1,45 +1,92 @@
 PKG = ['', 'jdk7/', 'leetcode/', 'lintcode/']
+SRC_PRE = 'src/main/java'
+SRC_NEED_GUICE = ['jdk7/' + SRC_PRE + c for c in [
+    '/dependencyInjection/**/*.java',
+]]
+SRC_EXCLUDE = SRC_NEED_GUICE
 srcs = [p + 'src/main/java/**/*.java' for p in PKG]
 java_library(
-  name = 'practise',
-  srcs = glob(srcs),
-  exported_deps = [
-    '//lib:slf4j-simple',
-    '//lib:slf4j-api'
-  ],
-  deps = [
-    '//lib:annotations'
-  ]
+    name='practise',
+    srcs=glob(srcs, excludes=SRC_EXCLUDE),
+    exported_deps=[
+        '//lib:slf4j-simple',
+        '//lib:slf4j-api',
+    ],
+    deps=[
+        '//lib:annotations',
+    ]
+)
+
+java_library(
+    name='practise-need-guice',
+    srcs=glob(SRC_NEED_GUICE),
+    exported_deps=[
+        '//lib:slf4j-simple',
+        '//lib:slf4j-api'
+    ],
+    deps=[
+        '//lib:annotations',
+        '//lib/guice:guice',
+        '//lib/guice:guice-assistedinject',
+    ]
 )
 
 PRE = 'src/test/java/'
 NEED_HAMCREST = [PRE + c for c in [
- 'ParseBalancedParenthesesTests.java'
+    'ParseBalancedParenthesesTests.java',
 ]]
+NEED_HAMCREST_JDK7 = ['jdk7/' + PRE + c for c in [
+    'url/URLTest.java'
+]]
+NEED_HAMCREST = NEED_HAMCREST + NEED_HAMCREST_JDK7
+
+NEED_JETTY_MINA_JDK7 = ['jdk7/' + PRE + c for c in [
+    'net/SocketTest.java'
+]]
+EXCLUDE = NEED_HAMCREST + NEED_JETTY_MINA_JDK7
 
 t_srcs = [p + 'src/test/java/**/*.java' for p in PKG]
-TESTS = glob(t_srcs, excludes = NEED_HAMCREST)
+TESTS = glob(t_srcs, excludes=EXCLUDE)
 for t in TESTS:
-  n = t[t.index("src/test/java/") + len("src/test/java/") : -len(".java")].replace('/','.')
-  java_test(
-    name = n,
-    srcs = [t],
-    deps = [
-      '//lib:truth',
-      ':practise'
-    ],
-    vm_args = ['-Xmx256m', '-Dfile.encoding=UTF-8']
-  )
+    n = t[t.index("src/test/java/") + len("src/test/java/"): -len(".java")].replace('/', '.')
+    java_test(
+        name=n,
+        srcs=[t],
+        deps=[
+            '//lib:truth',
+            ':practise'
+        ],
+        vm_args=['-Xmx256m', '-Dfile.encoding=UTF-8']
+    )
 
 for t in NEED_HAMCREST:
-  n = t[len('src/test/java/'):-len('.java')].replace('/','.')
-  java_test(
-    name = n,
-    srcs = [t],
-    deps = [
-      '//lib:hamcrest-core',
-      '//lib:truth',
-      ':practise'
-    ],
-    vm_args = ['-Xmx256m', '-Dfile.encoding=UTF-8']
-  )
+    n = t[t.index("src/test/java/") + len("src/test/java/"): -len(".java")].replace('/', '.')
+    java_test(
+        name=n,
+        srcs=[t],
+        deps=[
+            '//lib:hamcrest-core',
+            '//lib:truth',
+            ':practise',
+        ],
+        vm_args=['-Xmx256m', '-Dfile.encoding=UTF-8']
+    )
+
+for t in NEED_JETTY_MINA_JDK7:
+    n = t[t.index("src/test/java/") + len("src/test/java/"): -len(".java")].replace('/', '.')
+    java_test(
+        name=n,
+        srcs=[t],
+        deps=[
+            '//lib/jetty:server',
+            '//lib/jetty:util',
+            '//lib/jetty:io',
+            '//lib:truth',
+            '//lib/mina:sshd',
+            '//lib:servlet-api-3_1',
+            '//lib/guice:guice',
+            '//lib/guice:guice-assistedinject',
+            ':practise'
+        ],
+        vm_args=['-Xmx256m', '-Dfile.encoding=UTF-8']
+    )
