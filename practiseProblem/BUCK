@@ -28,6 +28,7 @@ java_library(
         '//lib:annotations',
         '//lib/guice:guice',
         '//lib/guice:guice-assistedinject',
+        '//lib:truth',
     ]
 )
 
