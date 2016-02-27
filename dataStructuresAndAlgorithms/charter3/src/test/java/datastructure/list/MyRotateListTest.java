@@ -25,7 +25,7 @@ import java.util.Arrays;
 @RunWith(Parameterized.class)
 public class MyRotateListTest {
 
-    @Parameterized.Parameters(name = "{index}: {0}")
+    @Parameterized.Parameters(name = "test with {index}: {0}")
     public static Iterable<MyRotateList> data() {
         return Arrays.asList(new MyRotateList[]{
                 new CircularlyLinkedList(),

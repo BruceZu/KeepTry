@@ -25,7 +25,7 @@ import java.util.Arrays;
 @RunWith(Parameterized.class)
 public class C525ReverseListTest {
 
-    @Parameterized.Parameters(name = "{index} is original data used to make a test list")
+    @Parameterized.Parameters(name = "test {index}")
     public static Iterable<int[]> data() {
         return Arrays.asList(new int[][]{
                 {1, 2, 3, 4},

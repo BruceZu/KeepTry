@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 @RunWith(Parameterized.class)
 public class Leetcode1TwoSumTest {
-    @Parameterized.Parameters(name = "{index}: array is {0}, target and expected index i and j is {1}")
+    @Parameterized.Parameters(name = " test {index}")
     public static Iterable<int[][]> data() {
         return Arrays.asList(new int[][][]{
                 {{3, 2, 4}, {6, 2, 3}},

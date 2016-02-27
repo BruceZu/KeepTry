@@ -83,7 +83,7 @@ public class MyLinkedListTest {
         }
     };
 
-    @Parameters(name = "{index}:  concrete linked list: {0} ")
+    @Parameters(name = "test with {index} {0}")
     public static Iterable<MyLinkedList> data() {
         return Arrays.asList(new MyLinkedList[]{
                 new SinglyLinkedList(),

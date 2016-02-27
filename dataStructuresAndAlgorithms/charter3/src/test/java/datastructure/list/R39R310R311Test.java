@@ -25,7 +25,7 @@ import java.util.Arrays;
 @RunWith(Parameterized.class)
 public class R39R310R311Test {
 
-    @Parameterized.Parameters(name = "{index}:{0}")
+    @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<MyLinkedList> data() {
         return Arrays.asList(new MyLinkedList[]{
                         new SinglyLinkedList(),
