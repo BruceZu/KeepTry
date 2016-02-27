@@ -69,7 +69,7 @@ public class IStackTest {
         this.s = s;
     }
 
-    @Test(timeout = 1000L, expected = Test.None.class)
+    @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
         s.push(5);
         s.push(3);
