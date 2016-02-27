@@ -19,12 +19,19 @@ package datastructure.list;
 import junit.runner.Version;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +43,45 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(Parameterized.class)
 public class MyLinkedListTest {
     private static Logger log = LoggerFactory.getLogger(MyLinkedListTest.class);
+
+    @Rule
+    public MethodRule test3 = new MethodRule() {
+        @Override
+        public Statement apply(final Statement statement, final FrameworkMethod frameworkMethod, Object o) {
+            return new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    statement.evaluate();
+                }
+            };
+        }
+    };
+
+    @Rule
+    public TestRule test2 = new TestRule() {
+        @Override
+        public Statement apply(final Statement statement, final Description description) {
+            return new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    statement.evaluate();
+                }
+            };
+        }
+    };
+
+    @ClassRule
+    public static TestRule test = new TestRule() {
+        @Override
+        public Statement apply(final Statement statement, final Description description) {
+            return new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    statement.evaluate();
+                }
+            };
+        }
+    };
 
     @Parameters(name = "{index}:  concrete linked list: {0} ")
     public static Iterable<MyLinkedList> data() {
