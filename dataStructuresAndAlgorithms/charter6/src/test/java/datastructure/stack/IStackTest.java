@@ -13,6 +13,7 @@ package datastructure.stack;//  Copyright 2016 The Sawdust Open Source Project
 // limitations under the License.
 //  
 
+import datastructure.deque.ArrayIDeque;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +23,43 @@ import java.util.Arrays;
 
 @RunWith(Parameterized.class)
 public class IStackTest {
-    @Parameterized.Parameters(name = "{index} is IStack implementation {0}")
+    @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<IStack> data() {
         return Arrays.asList(new IStack[]{
-                new ArrayStack<>(),
-                new LinkedListStack<>()
+                new ArrayStack(),
+                new LinkedListStack(),
+                new IStack<Object>() {
+                    private ArrayIDeque<Object> deque = new ArrayIDeque();
+
+                    @Override
+                    public int size() {
+                        return deque.size();
+                    }
+
+                    @Override
+                    public boolean isEmpty() {
+                        return deque.isEmpty();
+                    }
+
+                    @Override
+                    public void push(Object e) {
+                        deque.addFirst(e);
+                    }
+
+                    @Override
+                    public Object peek() {
+                        return deque.peekFirst();
+                    }
+
+                    @Override
+                    public Object pop() {
+                        return deque.pollFirst();
+                    }
+
+                    public String toString() {
+                        return deque.toString();
+                    }
+                }
         });
     }
 
@@ -36,7 +69,7 @@ public class IStackTest {
         this.s = s;
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 1000L, expected = Test.None.class)
     public void test() {
         s.push(5);
         s.push(3);

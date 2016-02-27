@@ -15,6 +15,7 @@
 
 package datastructure.queue;
 
+import datastructure.deque.ArrayIDeque;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,11 +25,59 @@ import java.util.Arrays;
 
 @RunWith(Parameterized.class)
 public class FIFOQueueTest {
-    @Parameterized.Parameters(name = "{index} is FIFOQueue implementation {0}")
+    @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<FIFOQueue> data() {
         return Arrays.asList(new FIFOQueue[]{
                 new ArrayFIFOQueue<>(),
-                new ArrayFIFOQueue2<>()
+                new ArrayFIFOQueue2<>(),
+                new FIFOQueue() {
+                    private ArrayIDeque<Object> deque = new ArrayIDeque();
+
+                    @Override
+                    public boolean add(Object o) {
+                        deque.addLast(o);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean offer(Object o) {
+                        return deque.offerLast(o);
+                    }
+
+                    @Override
+                    public Object remove() {
+                        return deque.removeFirst();
+                    }
+
+                    @Override
+                    public Object poll() {
+                        return deque.pollFirst();
+                    }
+
+                    @Override
+                    public Object element() {
+                        return deque.getFirst();
+                    }
+
+                    @Override
+                    public Object peek() {
+                        return deque.peekFirst();
+                    }
+
+                    @Override
+                    public boolean isEmpty() {
+                        return deque.isEmpty();
+                    }
+
+                    @Override
+                    public int size() {
+                        return deque.size();
+                    }
+
+                    public String toString() {
+                        return deque.toString();
+                    }
+                }
         });
     }
 
