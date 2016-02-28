@@ -16,7 +16,7 @@ Python 2.7.11
 
 Have libs available and run all Junit tests
 ```
-$ buck test --all
+$ buck targets | xargs buck build && buck test --all
 ```
 
 Welcome ideas and commits.
