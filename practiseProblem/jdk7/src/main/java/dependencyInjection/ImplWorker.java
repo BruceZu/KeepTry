@@ -15,18 +15,6 @@
 
 package dependencyInjection;
 
-import com.google.inject.Inject;
-
-public class ServiceImpl implements Service {
-    private ImplWorker worker;
-
-    @Inject(optional = false)
-    public ServiceImpl(ImplWorker worker) {
-        this.worker = worker;
-    }
-
-    public void go() {
-        System.out.println("Service Impl");
-        worker.work();
-    }
+public interface ImplWorker {
+    void work();
 }

@@ -18,36 +18,73 @@ package dependencyInjection;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.PrivateModule;
 import com.google.inject.Scopes;
 import com.google.inject.internal.UniqueAnnotations;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import dependencyInjection.guice.LifeManager;
 import dependencyInjection.guice.Listener;
 
 import java.lang.annotation.Annotation;
 
 public class Client implements Listener {
-    private final Service service;
+    private final Service service1;
+    private final Service service2;
 
-    private void go() {
+    private void go1() {
         System.out.println("client end point");
-        service.go();
+        service1.go();
+
+    }
+
+    private void go2() {
+        System.out.println("client end point");
+        service2.go();
     }
 
     @Inject(optional = false)
-    public Client(Service service) {
-        this.service = service;
+    public Client(@Named("1") Service service1, @Named("2") Service service2) {
+        this.service1 = service1;
+        this.service2 = service2;
     }
 
     public static void main(String[] args) {
         LifeManager manager = new LifeManager();
-        manager.add(Guice.createInjector(new AbstractModule() {
+        manager.add(Guice.createInjector(new PrivateModule() {
             @Override
             protected void configure() {
-                bind(Service.class)
+                bind(Service.class).annotatedWith(Names.named("1"))
                         .to(ServiceImpl.class)
                         .in(Scopes.SINGLETON);
+                expose(Service.class).annotatedWith(Names.named("1"));
+                bind(ImplWorker.class).toInstance(new ImplWorker() {
+                    @Override
+                    public void work() {
+                        System.out.println("work 1 done");
+                    }
+                });
+            }
+        }, new PrivateModule() {
+            @Override
+            protected void configure() {
+                bind(Service.class).annotatedWith(Names.named("2"))
+                        .to(ServiceImpl.class)
+                        .in(Scopes.SINGLETON);
+                expose(Service.class).annotatedWith(Names.named("2"));
+
+                bind(ImplWorker.class).toInstance(new ImplWorker() {
+                    @Override
+                    public void work() {
+                        System.out.println("work 2 done");
+                    }
+                });
+            }
+        }, new AbstractModule() {
+            @Override
+            protected void configure() {
                 final Annotation id = UniqueAnnotations.create();
-                bind(Listener.class).annotatedWith(id).to(Client.class);
+                bind(Listener.class).annotatedWith(id).to(Client.class).asEagerSingleton();
             }
         }));
         manager.start();
@@ -55,7 +92,8 @@ public class Client implements Listener {
 
     @Override
     public void start() {
-        go();
+        go1();
+        go2();
     }
 
     @Override
