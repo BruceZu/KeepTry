@@ -15,11 +15,22 @@
 
 package datastructure.queue;
 
-public class ArrayCircularQueue extends ArrayFIFOQueue2 implements CircularQueue {
+public class ArrayCircularQueue<T> extends ArrayFIFOQueue2<T> implements CircularQueue<T> {
     @Override
     public void rotate() {
         if (size() != 0) {
-            offer(poll());
+            //offer(poll());
+            augmentImplementationRotate();
+        }
+    }
+
+    // R-6.15
+    public void augmentImplementationRotate() {
+        if (size() != 0) {
+            T r = d[head];
+            d[head] = null;
+            d[(head + size()) % d.length] = r;
+            head = (head + 1) % d.length;
         }
     }
 }

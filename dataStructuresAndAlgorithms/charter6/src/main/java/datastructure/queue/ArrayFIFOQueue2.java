@@ -24,8 +24,8 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
     private static int DEFAULT_CAPACITY = 2 << 2;
 
     private int capacity;
-    private T[] d;
-    private int head = 0;
+    protected T[] d;
+    protected int head = 0;
     private int size = 0;
 
     public ArrayFIFOQueue2() {
