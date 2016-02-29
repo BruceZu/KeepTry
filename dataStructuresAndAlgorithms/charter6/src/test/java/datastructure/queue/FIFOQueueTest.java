@@ -27,9 +27,10 @@ import java.util.Arrays;
 public class FIFOQueueTest {
     @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<FIFOQueue> data() {
-        return Arrays.asList(new FIFOQueue[]{
+        return Arrays.asList(new FIFOQueue[]{ // R-6.11
                 new ArrayFIFOQueue<>(),
                 new ArrayFIFOQueue2<>(),
+                new ArrayCircularQueue<>(),
                 new FIFOQueue() {
                     private ArrayIDeque<Object> deque = new ArrayIDeque();
 
@@ -111,5 +112,14 @@ public class FIFOQueueTest {
         q.offer(8);
         Assert.assertEquals(q.poll(), 9, 0);
         Assert.assertEquals(q.toString(), "[4, 6, 8]");
+        if (CircularQueue.class.isInstance(q)) {
+            // CircularQueue.class.isAssignableFrom(q.getClass())
+            try {
+                CircularQueue.class.getMethod("rotate").invoke(q);
+                Assert.assertEquals(q.toString(), "[6, 8, 4]");
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@ import java.util.Arrays;
 public class IStackTest {
     @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<IStack> data() {
-        return Arrays.asList(new IStack[]{
+        return Arrays.asList(new IStack[]{ // R-6.10
                 new ArrayStack(),
                 new LinkedListStack(),
                 new IStack<Object>() {
