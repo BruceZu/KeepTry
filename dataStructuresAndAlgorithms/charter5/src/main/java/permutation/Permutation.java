@@ -13,42 +13,108 @@ package permutation;//  Copyright 2016 The Sawdust Open Source Project
 // limitations under the License.
 //
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Permutation {
 
     // list all k or <=k size permutation of n unique elements.
     // n can be bigger than 64.
     // O(K^N) running time.
-    //  @param only  If true, only show permutations of permutationSize,
-    //               else also show permutations which size is less than permutationSize.
-    public static void my_permutationOf(List<Integer> uniqueList, int permutationSize, List<Integer> permutation, boolean only) {
-        if (permutation == null) {
-            assert 0 < permutationSize && permutationSize <= uniqueList.size();
-            permutation = new ArrayList<>(permutationSize);
-            if (!only) {
-                System.out.println(Arrays.toString(permutation.toArray()));
-            }
+    //
+    //      1  2  3
+    //   1  .
+    //   2     .
+    //   3         .
+    //
+    //      1  2  3
+    //   1  .
+    //   2        .
+    //   3     .
+    //
+    //      1  2  3
+    //   1     .
+    //   2  .
+    //   3        .
+    //
+    //      1  2  3
+    //   1        .
+    //   2  .
+    //   3     .
+    //
+    //      1  2  3
+    //   1     .
+    //   2        .
+    //   3  .
+    //
+    //      1  2  3
+    //   1        .
+    //   2     .
+    //   3  .
+
+
+    public static void permutation(List<Integer> l /* unique list */,
+                                   int pSize,
+                                   LinkedList<Integer> p, /* permutation */
+                                   boolean only /* only show permutations with pSize, or all cases with size <= pSize  */,
+                                   Set<List<Integer>> r /* result */) {
+        if (l == null) {
+            r = null;
+            return;
         }
-        if (permutationSize <= 64) {
-            // Todo using bitwise trick
+        if (l.size() == 0 || pSize == 0) {
+            return;
         }
-        for (int elment : uniqueList) {
-            if (permutation.contains(elment)) {
+        // init
+        if (p == null) {
+            assert 0 < pSize && pSize <= l.size();
+            p = new LinkedList<>();
+        }
+        // start
+        for (int e : l) {
+            if (p.contains(e)) {
                 continue;
             }
-            permutation.add(elment);
+            p.add(e);
             if (!only) {
-                System.out.println(Arrays.toString(permutation.toArray()));
-            } else if (permutation.size() == permutationSize) {
-                System.out.println(Arrays.toString(permutation.toArray()));
+                r.add((List<Integer>) p.clone());
+            } else if (p.size() == pSize) {
+                r.add((List<Integer>) p.clone());
             }
-            if (permutation.size() < permutationSize) {
-                my_permutationOf(uniqueList, permutationSize, permutation, only);
+            if (p.size() < pSize) {
+                permutation(l, pSize, p, only, r);
             }
-            permutation.remove(permutation.size() - 1);
+            p.remove(p.size() - 1);
         }
+    }
+
+    private static void print(Set<List<Integer>> result) {
+        for (List<Integer> i : result) {
+            System.out.println(Arrays.toString(i.toArray()));
+        }
+    }
+
+    public static void main(String[] args) {
+        Set<List<Integer>> result = new HashSet<>();
+        permutation(Arrays.asList(new Integer[]{1, 2, 3}), 2, null, false, result);
+        print(result);
+        System.out.println("---");
+
+        result = new HashSet<>();
+        permutation(Arrays.asList(new Integer[]{1, 2, 3}), 2, null, true, result);
+        print(result);
+        System.out.println("---");
+
+        result = new HashSet<>();
+        permutation(Arrays.asList(new Integer[]{1, 2, 3}), 3, null, true, result);
+        print(result);
+        System.out.println("---");
+
+        result = new HashSet<>();
+        permutation(Arrays.asList(new Integer[]{1}), 1, null, false, result);
+        print(result);
     }
 }
