@@ -142,8 +142,18 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
         if (tail >= head) {
             return Arrays.toString(Arrays.copyOfRange(d, head, tail + 1));
         }
-        return new StringBuilder()
-                .append(Arrays.toString(Arrays.copyOfRange(d, head, d.length)))
-                .append(Arrays.toString(Arrays.copyOfRange(d, 0, tail + 1))).toString();
+        T[] r = (T[]) new Object[size()];
+        System.arraycopy(d, head, r, 0, d.length - head);
+        System.arraycopy(d, 0, r, d.length - head, tail + 1);
+        return Arrays.toString(r);
+    }
+
+    public ArrayFIFOQueue<T> clone() {
+        ArrayFIFOQueue<T> r = new ArrayFIFOQueue();
+        r.head = this.head;
+        r.capacity = this.capacity;
+        r.tail = this.tail;
+        r.d = this.d.clone();
+        return r;
     }
 }
