@@ -31,7 +31,7 @@ public class ArrayStack<T> implements IStack<T> {
     }
 
     public ArrayStack() {
-        d = (T[]) (new Object[DEFAULT_CAPACITY]);
+        this(DEFAULT_CAPACITY);
     }
 
     @Override // run in O(1) time

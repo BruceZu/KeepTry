@@ -31,7 +31,7 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
     private int size = 0;
 
     public ArrayFIFOQueue2() {
-        d = (T[]) new Object[DEFAULT_CAPACITY];
+        this(DEFAULT_CAPACITY);
     }
 
     public ArrayFIFOQueue2(int capacity) {
