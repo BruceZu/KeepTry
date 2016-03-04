@@ -75,6 +75,10 @@ public class ArrayStack<T> implements IStack<T> {
         }
         T r = d[currentIndex];
         d[currentIndex--] = null; // dereference to help garbage collection
+        if (currentIndex < d.length / 4) {
+            //shrink
+
+        }
         return r;
     }
 

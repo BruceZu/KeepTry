@@ -100,6 +100,10 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
         size--;
 
         head = (head + 1) % d.length;
+        if (size < d.length / 4) {
+            //shrink half of current d's length
+
+        }
         return r;
     }
 

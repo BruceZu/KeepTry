@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ArrayIDeque<T> implements IDeque<T> {
-
     private static int DEFAULT_CAPACITY = 2 << 2;
 
     private T[] d;
@@ -30,7 +29,7 @@ public class ArrayIDeque<T> implements IDeque<T> {
     private int tail = 1;
 
     public ArrayIDeque() {
-        d = (T[]) new Object[DEFAULT_CAPACITY];
+        this(DEFAULT_CAPACITY);
     }
 
     public ArrayIDeque(int capacity) {
