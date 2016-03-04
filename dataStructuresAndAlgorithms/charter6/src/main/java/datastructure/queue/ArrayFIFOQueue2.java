@@ -22,8 +22,6 @@ import java.util.NoSuchElementException;
 // capacity-restricted FIFO queue
 public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-    private int increaseBy = 128;
-
     private static int DEFAULT_CAPACITY = 2 << 2;
 
     protected T[] d;
@@ -36,7 +34,6 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
 
     public ArrayFIFOQueue2(int capacity) {
         d = (T[]) new Object[capacity];
-        increaseBy = (capacity >> 1) + 1;
     }
 
     @Override
@@ -56,7 +53,7 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
             if (d.length == MAX_ARRAY_SIZE) {
                 return false;
             }
-            int newLength = d.length + increaseBy;
+            int newLength = d.length + (d.length >> 1) + 1;
             if (newLength < 0) {
                 return false;
             }

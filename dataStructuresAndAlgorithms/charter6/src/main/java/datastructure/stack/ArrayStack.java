@@ -21,13 +21,11 @@ public class ArrayStack<T> implements IStack<T> {
     //Some VMs reserve some header words in an array.
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
     private static int DEFAULT_CAPACITY = 2 << 8;
-    private int increaseBy = 128;
     private T[] d;
     private int currentIndex = -1;
 
     public ArrayStack(int capacity) {
         d = (T[]) (new Object[capacity]);
-        increaseBy = (capacity >> 1) + 1;
     }
 
     public ArrayStack() {
@@ -50,7 +48,7 @@ public class ArrayStack<T> implements IStack<T> {
             if (d.length == MAX_ARRAY_SIZE) {
                 throw new OutOfMemoryError("Stack is full");
             }
-            int newLength = d.length + increaseBy;
+            int newLength = d.length + (d.length >> 1) + 1;
             if (newLength < 0) {
                 throw new OutOfMemoryError("Stack is full");
             }
