@@ -25,18 +25,15 @@ public class ArrayIDeque<T> implements IDeque<T> {
 
     private static int DEFAULT_CAPACITY = 2 << 2;
 
-    private int capacity;
     private T[] d;
-    private int head = -1;
-    private int tail = -1;
+    private int head = 1;
+    private int tail = 1;
 
     public ArrayIDeque() {
-        capacity = DEFAULT_CAPACITY;
         d = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayIDeque(int capacity) {
-        this.capacity = capacity;
         d = (T[]) new Object[capacity];
     }
 
@@ -55,22 +52,12 @@ public class ArrayIDeque<T> implements IDeque<T> {
         if (size() == d.length) {
             return false;
         }
-        int nextTailIndex = tail + 1;
-        if (nextTailIndex == 0) {
-            tail = 0;
-            head = 0;
-            d[0] = t;
+        if (size() == 0) {
+            d[head] = t;
             return true;
         }
-
-        // wrap around.
-        if (nextTailIndex == capacity) {
-            tail = 0;
-            d[0] = t;
-            return true;
-        }
-
-        d[++tail] = t;
+        tail = (tail + 1) % d.length;
+        d[tail] = t;
         return true;
     }
 
@@ -92,17 +79,10 @@ public class ArrayIDeque<T> implements IDeque<T> {
         d[head] = null;
 
         if (head == tail) {
-            head = -1;
-            tail = -1;
             return r;
         }
 
-        if (head + 1 == capacity) {
-            head = 0;
-            return r;
-        }
-
-        head++;
+        head = (head + 1) % d.length;
         return r;
     }
 
@@ -126,15 +106,15 @@ public class ArrayIDeque<T> implements IDeque<T> {
 
     @Override
     public boolean isEmpty() {
-        return head == -1;
+        return head == tail && d[head] == null;
     }
 
     @Override
     public int size() {
-        if (head == -1) {
+        if (isEmpty()) {
             return 0;
         }
-        return tail >= head ? tail - head + 1 : capacity - head + tail + 1;
+        return tail >= head ? tail - head + 1 : d.length - head + tail + 1;
     }
 
     public String toString() {
@@ -166,21 +146,12 @@ public class ArrayIDeque<T> implements IDeque<T> {
         if (size() == d.length) {
             return false;
         }
-        if (head == -1) {
-            head = 0;
-            tail = 0;
-            d[0] = t;
-            return true;
-        }
 
-        // wrap around
-        if (head - 1 == -1) {
-            head = d.length - 1;
+        if (isEmpty()) {
             d[head] = t;
             return true;
         }
-
-        head--;
+        head = head == 0 ? d.length - 1 : head - 1;
         d[head] = t;
         return true;
     }
@@ -201,19 +172,10 @@ public class ArrayIDeque<T> implements IDeque<T> {
         }
         T r = d[tail];
         d[tail] = null;
-
         if (head == tail) {
-            head = -1;
-            tail = -1;
             return r;
         }
-
-        if (tail == 0) {
-            tail = d.length - 1;
-            return r;
-        }
-
-        tail--;
+        tail = tail == 0 ? d.length - 1 : tail - 1;
         return r;
     }
 
@@ -260,20 +222,13 @@ public class ArrayIDeque<T> implements IDeque<T> {
                 if (isEmpty()) {
                     return false;
                 }
-                int nextIndex = currentIndex + 1;
-                if (nextIndex == d.length) {
-                    nextIndex = 0;
-                }
-                return !(d[nextIndex] == null);
+                return !(d[(currentIndex + 1) % d.length] == null);
             }
 
             @Override
             public T next() {
                 if (hasNext()) {
-                    currentIndex++;
-                    if (currentIndex == d.length) {
-                        currentIndex = 0;
-                    }
+                    currentIndex = (currentIndex + 1) % d.length;
                     return d[currentIndex];
                 }
                 throw new NoSuchElementException();
@@ -297,21 +252,13 @@ public class ArrayIDeque<T> implements IDeque<T> {
                 if (isEmpty()) {
                     return false;
                 }
-
-                int next = currentIndex - 1;
-                if (next == -1) {
-                    next = d.length - 1;
-                }
-                return !(d[next] == null);
+                return !(d[currentIndex == 0 ? d.length - 1 : currentIndex - 1] == null);
             }
 
             @Override
             public T next() {
                 if (hasNext()) {
-                    currentIndex--;
-                    if (currentIndex == -1) {
-                        currentIndex = d.length;
-                    }
+                    currentIndex = currentIndex == 0 ? d.length - 1 : currentIndex - 1;
                     return d[currentIndex];
                 }
                 throw new NoSuchElementException();

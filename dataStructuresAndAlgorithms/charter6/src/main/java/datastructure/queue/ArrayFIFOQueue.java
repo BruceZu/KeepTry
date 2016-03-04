@@ -23,18 +23,18 @@ import java.util.NoSuchElementException;
 public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
     private static int DEFAULT_CAPACITY = 2 << 2;
 
-    private int capacity;
+
     private T[] d;
-    private int head = -1;
-    private int tail = -1;
+    // the initial position: can be any place in d ,only make sure
+    // the head and tail are same
+    private int head = 1;
+    private int tail = 1;
 
     public ArrayFIFOQueue() {
-        capacity = DEFAULT_CAPACITY;
         d = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayFIFOQueue(int capacity) {
-        this.capacity = capacity;
         d = (T[]) new Object[capacity];
     }
 
@@ -54,22 +54,12 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
         if (size() == d.length) {
             return false;
         }
-        int nextTailIndex = tail + 1;
-        if (nextTailIndex == 0) {
-            tail = 0;
-            head = 0;
-            d[0] = t;
+        if (size() == 0) {
+            d[head] = t;
             return true;
         }
-
-        // wrap around.
-        if (nextTailIndex == capacity) {
-            tail = 0;
-            d[0] = t;
-            return true;
-        }
-
-        d[++tail] = t;
+        tail = (tail + 1) % d.length;
+        d[tail] = t;
         return true;
     }
 
@@ -89,19 +79,11 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
         }
         T r = d[head];
         d[head] = null;
-
         if (head == tail) {
-            head = -1;
-            tail = -1;
             return r;
         }
 
-        if (head + 1 == capacity) {
-            head = 0;
-            return r;
-        }
-
-        head++;
+        head = (head + 1) % d.length;
         return r;
     }
 
@@ -124,15 +106,15 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
 
     @Override
     public boolean isEmpty() {
-        return head == -1;
+        return head == tail && d[head] == null;
     }
 
     @Override
     public int size() {
-        if (head == -1) {
+        if (isEmpty()) {
             return 0;
         }
-        return tail >= head ? tail - head + 1 : capacity - head + tail + 1;
+        return tail >= head ? tail - head + 1 : d.length - head + tail + 1;
     }
 
     public String toString() {
@@ -151,7 +133,6 @@ public class ArrayFIFOQueue<T> implements FIFOQueue<T> {
     public ArrayFIFOQueue<T> clone() {
         ArrayFIFOQueue<T> r = new ArrayFIFOQueue();
         r.head = this.head;
-        r.capacity = this.capacity;
         r.tail = this.tail;
         r.d = this.d.clone();
         return r;
