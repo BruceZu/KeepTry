@@ -26,7 +26,8 @@ public class IStackTest {
     @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<IStack> data() {
         return Arrays.asList(new IStack[]{ // R-6.10
-                new ArrayStack(),
+                new ArrayStack(2),
+                new LeakyStack(3),
                 new LinkedListStack(),
                 new IStack<Object>() {
                     private ArrayIDeque<Object> deque = new ArrayIDeque();
@@ -91,6 +92,20 @@ public class IStackTest {
         s.push(6);
         Assert.assertEquals(s.toString(), "[6, 9, 7]");
         s.push(8);
-        Assert.assertEquals(s.pop(), 8, 0);
+
+        if (s instanceof LeakyStack) {
+            Assert.assertEquals(s.toString(), "[8, 6, 9]");
+            s.push(1);
+            s.push(2);
+            s.push(3);
+            Assert.assertEquals(s.toString(), "[3, 2, 1]");
+        } else {
+            Assert.assertEquals(s.toString(), "[8, 6, 9, 7]");
+            s.push(1);
+            s.push(2);
+            s.push(3);
+            Assert.assertEquals(s.toString(), "[3, 2, 1, 8, 6, 9, 7]");
+        }
+        Assert.assertEquals(s.pop(), 3, 0);
     }
 }
