@@ -27,7 +27,7 @@ public class ArrayStack<T> implements IStack<T> {
 
     public ArrayStack(int capacity) {
         d = (T[]) (new Object[capacity]);
-        increaseBy = capacity >> 1; // ?
+        increaseBy = (capacity >> 1) + 1;
     }
 
     public ArrayStack() {
@@ -47,14 +47,17 @@ public class ArrayStack<T> implements IStack<T> {
     @Override  // run in O(1) time
     public void push(T e) {
         if (size() + 1 > d.length) {
+            if (d.length == MAX_ARRAY_SIZE) {
+                throw new OutOfMemoryError("Stack is full");
+            }
             int newLength = d.length + increaseBy;
             if (newLength < 0) {
                 throw new OutOfMemoryError("Stack is full");
             }
-            if (newLength > MAX_ARRAY_SIZE) {
-                newLength = Integer.MAX_VALUE;
+            if (newLength >= MAX_ARRAY_SIZE) {
+                newLength = MAX_ARRAY_SIZE;
             }
-            Arrays.copyOf(d, newLength);
+            d = Arrays.copyOf(d, newLength);
         }
         d[++currentIndex] = (T) e;
     }

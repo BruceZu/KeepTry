@@ -26,7 +26,7 @@ public class IStackTest {
     @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<IStack> data() {
         return Arrays.asList(new IStack[]{ // R-6.10
-                new ArrayStack(2),
+                new ArrayStack(1),
                 new LeakyStack(3),
                 new LinkedListStack(),
                 new IStack<Object>() {
