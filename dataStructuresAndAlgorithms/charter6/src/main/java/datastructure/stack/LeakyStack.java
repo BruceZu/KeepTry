@@ -29,7 +29,7 @@ public class LeakyStack<T> implements IStack<T> {
     }
 
     public LeakyStack() {
-        d = (T[]) new Object[8];
+        this(8); // default 8
     }
 
     @Override  // run in O(1) time
