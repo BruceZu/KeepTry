@@ -141,7 +141,7 @@ public class SocketTest {
         // without this line the port number is automatically allocated from an ephemeral port range by
         // the native method
         // Net.localPort()
-        httpServerConnector.setPort(8080);
+        httpServerConnector.setPort(9090);
 
         ServerConnector httpsServerConnector =
                 new ServerConnector(httpd,
@@ -167,7 +167,7 @@ public class SocketTest {
                     @Singleton
                     @SshListenAddresses
                     public List<SocketAddress> getListenAddresses() {
-                        return Arrays.asList(new SocketAddress[]{new InetSocketAddress(29418)});
+                        return Arrays.asList(new SocketAddress[]{new InetSocketAddress(29488)});
                     }
                 }
 
@@ -178,8 +178,8 @@ public class SocketTest {
     public void portTest() throws ClassNotFoundException, IOException, Exception {
 
         // 1 server socket
-        ServerSocket socketServer1 = new ServerSocket(8080, 0, InetAddress.getLoopbackAddress());
-        Assert.assertEquals(socketServer1.getLocalPort(), 8080);
+        ServerSocket socketServer1 = new ServerSocket(9090, 0, InetAddress.getLoopbackAddress());
+        Assert.assertEquals(socketServer1.getLocalPort(), 9090);
 
         // the port number is automatically allocated from an ephemeral port range
         // by native method
@@ -192,14 +192,14 @@ public class SocketTest {
 
         // by native method
         // AbstractPlainSocketImpl.socketConnect()
-        Socket clientSocket = new Socket("127.0.0.1", 8080);
+        Socket clientSocket = new Socket("127.0.0.1", 9090);
         Assert.assertNotEquals(clientSocket.getLocalPort(), -1);
-        Assert.assertEquals(clientSocket.getPort(), 8080); // connect to 8080
+        Assert.assertEquals(clientSocket.getPort(), 9090); // connect to 9090
 
         Socket clientSocket2 = new Socket();
         clientSocket2.bind(new InetSocketAddress("localhost", 4445));
-        clientSocket2.connect(new InetSocketAddress("127.0.0.1", 8080));
-        Assert.assertEquals(clientSocket2.getPort(), 8080);
+        clientSocket2.connect(new InetSocketAddress("127.0.0.1", 9090));
+        Assert.assertEquals(clientSocket2.getPort(), 9090);
         Assert.assertEquals(clientSocket2.getLocalPort(), 4445);
 
         // 3 Jetty httpd
@@ -210,7 +210,7 @@ public class SocketTest {
         if (con instanceof ServerConnector) {
             ServerConnector serverCon = (ServerConnector) con;
             String host = serverCon.getHost();
-            Assert.assertEquals(serverCon.getLocalPort(), 8080);
+            Assert.assertEquals(serverCon.getLocalPort(), 9090);
         }
         // 4 sshd
         // http://mina.apache.org/sshd-project/embedding_ssh.html
@@ -220,7 +220,7 @@ public class SocketTest {
         sshdServer.start();
         Assert.assertEquals(((InetSocketAddress) sshdServer.getIoAcceptor().getBoundAddresses().iterator().next())
                         .getPort(),
-                29418);
+                29488);
 
         // sshd case 2
         SshServer sshdServer2 = SshServer.setUpDefaultServer();
