@@ -21,21 +21,22 @@ import java.util.NoSuchElementException;
 // prohibit the insertion of null elements
 // capacity-restricted FIFO queue
 public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
+    private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+    private int increaseBy = 128;
+
     private static int DEFAULT_CAPACITY = 2 << 2;
 
-    private int capacity;
     protected T[] d;
     protected int head = 0; // the init position can be any position of d
     private int size = 0;
 
     public ArrayFIFOQueue2() {
-        capacity = DEFAULT_CAPACITY;
         d = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayFIFOQueue2(int capacity) {
-        this.capacity = capacity;
         d = (T[]) new Object[capacity];
+        increaseBy = (capacity >> 1) + 1;
     }
 
     @Override
@@ -52,8 +53,29 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
             throw new NullPointerException();
         }
         if (size == d.length) {
-            return false;
+            if (d.length == MAX_ARRAY_SIZE) {
+                return false;
+            }
+            int newLength = d.length + increaseBy;
+            if (newLength < 0) {
+                return false;
+            }
+            if (newLength >= MAX_ARRAY_SIZE) {
+                newLength = MAX_ARRAY_SIZE;
+            }
+
+            if (head == 0) {
+                d = Arrays.copyOf(d, newLength);
+            } else {
+                T[] r = (T[]) new Object[newLength];
+                System.arraycopy(d, head, r, 0, d.length - head);
+                System.arraycopy(d, 0, r, d.length - head, head);
+                d = r;
+                head = 0; // caution
+            }
         }
+
+
         d[(head + size) % d.length] = t;
         size++;
         return true;
@@ -128,7 +150,6 @@ public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
     public ArrayFIFOQueue2<T> clone() {
         ArrayFIFOQueue2<T> r = new ArrayFIFOQueue2();
         r.head = this.head;
-        r.capacity = this.capacity;
         r.size = this.size;
         r.d = this.d.clone();
         return r;

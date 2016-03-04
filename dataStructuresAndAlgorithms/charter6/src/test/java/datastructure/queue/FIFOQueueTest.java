@@ -29,7 +29,7 @@ public class FIFOQueueTest {
     public static Iterable<FIFOQueue> data() {
         return Arrays.asList(new FIFOQueue[]{ // R-6.11
                 new ArrayFIFOQueue<>(),
-                new ArrayFIFOQueue2<>(),
+                new ArrayFIFOQueue2<>(1),
                 new ArrayCircularQueue<>(),
                 new FIFOQueue() {
                     private ArrayIDeque<Object> deque = new ArrayIDeque();
