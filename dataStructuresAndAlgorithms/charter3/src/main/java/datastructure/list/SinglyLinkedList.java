@@ -21,43 +21,43 @@ import java.util.Arrays;
 //TODO:  support multi threads access concurrently.
 public class SinglyLinkedList<E> implements MyRotateList {
     private class Node<E> {
-        private E content;
+        private E e;
         private Node<E> next;
 
-        private Node(E content, Node<E> next) {
-            this.content = content;
+        private Node(E e, Node<E> next) {
+            this.e = e;
             this.next = next;
         }
     }
 
-    private Node<E> headNode;
-    private Node<E> endNode;
-    private int sizeOfList;
+    private Node<E> head;
+    private Node<E> end;
+    private int size;
 
-    private int indexOfEndNode() {
+    private int endIndex() {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
         }
-        return sizeOfList - 1;
+        return size - 1;
     }
 
     private int checkPositionIndex(int positionIndex) {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
         }
-        if (positionIndex < 0 || indexOfEndNode() < positionIndex) {
+        if (positionIndex < 0 || endIndex() < positionIndex) {
             throw new IndexOutOfBoundsException("Index is wrong ");
         }
         return positionIndex;
     }
 
-    private Node<E> getNodeOf(int index) {
+    private Node<E> nodeOf(int index) {
         checkPositionIndex(index);
-        if (index == indexOfEndNode()) {
-            return endNode;
+        if (index == endIndex()) {
+            return end;
         }
 
-        Node<E> current = headNode;
+        Node<E> current = head;
         int i = 0;
         while (i != index) {
             current = current.next;
@@ -67,21 +67,21 @@ public class SinglyLinkedList<E> implements MyRotateList {
     }
 
     public boolean isEmpty() {
-        return sizeOfList == 0;
+        return size == 0;
     }
 
     public int size() {
-        return sizeOfList;
+        return size;
     }
 
     @Deprecated
     public int size2() {
-        if (headNode == endNode && headNode == null) {
+        if (head == end && head == null) {
             return 0;
         }
         int size = 1;
-        Node<E> i = headNode;
-        while (i != endNode) {
+        Node<E> i = head;
+        while (i != end) {
             i = i.next;
             size++;
         }
@@ -89,62 +89,62 @@ public class SinglyLinkedList<E> implements MyRotateList {
     }
 
     @Override
-    public MyLinkedList addToTheHead(Object newContent) {
-        headNode = new Node<E>((E) newContent, headNode);
+    public MyLinkedList addBeforeHead(Object e) {
+        head = new Node<E>((E) e, head);
         if (isEmpty()) {
-            endNode = headNode;
+            end = head;
         }
-        sizeOfList++;
+        size++;
         return this;
     }
 
     @Override
-    public MyLinkedList appendToTheEnd(Object newContent) {
-        Node<E> newEnd = new Node<E>((E) newContent, null);
+    public MyLinkedList appendAfterEnd(Object e) {
+        Node<E> newEnd = new Node<E>((E) e, null);
         if (isEmpty()) {
-            headNode = endNode = newEnd;
-            sizeOfList++;
+            head = end = newEnd;
+            size++;
             return this;
         }
 
-        endNode.next = newEnd;
-        endNode = newEnd;
-        sizeOfList++;
+        end.next = newEnd;
+        end = newEnd;
+        size++;
         return this;
     }
 
     @Override
-    public MyLinkedList addBefore(Object newContent, int index) {
+    public MyLinkedList addBefore(Object e, int index) {
         checkPositionIndex(index);
         if (index == 0) {
-            addToTheHead(newContent);
+            addBeforeHead(e);
             return this;
         }
-        addAfter(newContent, index - 1);
+        addAfter(e, index - 1);
         return this;
     }
 
     @Override
-    public MyLinkedList addAfter(Object newContent, int index) {
+    public MyLinkedList addAfter(Object e, int index) {
         checkPositionIndex(index);
-        if (index == indexOfEndNode()) {
-            appendToTheEnd(newContent);
+        if (index == endIndex()) {
+            appendAfterEnd(e);
             return this;
         }
-        Node<E> n = getNodeOf(index);
-        n.next = new Node<E>((E) newContent, n.next);
-        sizeOfList++;
+        Node<E> n = nodeOf(index);
+        n.next = new Node<E>((E) e, n.next);
+        size++;
         return this;
     }
 
     public E deleteHead() {
         checkPositionIndex(0);
-        E re = headNode.content;
-        Node<E> oldHead = headNode;
-        headNode = oldHead.next;
-        sizeOfList--;
+        E re = head.e;
+        Node<E> oldHead = head;
+        head = oldHead.next;
+        size--;
         if (isEmpty()) {
-            endNode = null;
+            end = null;
         }
 
         oldHead.next = null;
@@ -152,7 +152,7 @@ public class SinglyLinkedList<E> implements MyRotateList {
     }
 
     public E deleteEnd() {
-        return delete(indexOfEndNode());
+        return delete(endIndex());
     }
 
     public E delete(int index) {
@@ -160,38 +160,38 @@ public class SinglyLinkedList<E> implements MyRotateList {
         if (index == 0) {
             return deleteHead();
         }
-        Node<E> beforeIt = getNodeOf(index - 1);
-        if (index == indexOfEndNode()) {
-            endNode = beforeIt;
+        Node<E> beforeIt = nodeOf(index - 1);
+        if (index == endIndex()) {
+            end = beforeIt;
         }
 
         Node<E> it = beforeIt.next;
         beforeIt.next = it.next;
-        sizeOfList--;
+        size--;
 
         it.next = null;
-        return it.content;
+        return it.e;
     }
 
     @Override
-    public E update(int index, Object newContent) {
-        Node<E> n = getNodeOf(index);
-        E re = n.content;
-        n.content = (E) newContent;
+    public E update(int index, Object e) {
+        Node<E> n = nodeOf(index);
+        E re = n.e;
+        n.e = (E) e;
         return re;
     }
 
     @Override
-    public E updateHead(Object newContent) {
-        E re = headNode.content;
-        headNode.content = (E) newContent;
+    public E updateHead(Object e) {
+        E re = head.e;
+        head.e = (E) e;
         return re;
     }
 
     @Override
-    public E updateEnd(Object newContent) {
-        E re = endNode.content;
-        endNode.content = (E) newContent;
+    public E updateEnd(Object e) {
+        E re = end.e;
+        end.e = (E) e;
         return re;
     }
 
@@ -199,25 +199,25 @@ public class SinglyLinkedList<E> implements MyRotateList {
         if (isEmpty()) {
             return null;
         }
-        return headNode.content;
+        return head.e;
     }
 
     public E getEnd() {
         if (isEmpty()) {
             return null;
         }
-        return endNode.content;
+        return end.e;
     }
 
     public E get(int index) {
         checkPositionIndex(index);
-        return getNodeOf(index).content;
+        return nodeOf(index).e;
     }
 
     @Override
     public void rotate() {
         if (size() > 1) {
-            appendToTheEnd(deleteHead());
+            appendAfterEnd(deleteHead());
         }
     }
 
@@ -226,16 +226,16 @@ public class SinglyLinkedList<E> implements MyRotateList {
         if (size() == 0) {
             return;
         }
-        sizeOfList = 0;
-        headNode = endNode = null;
+        size = 0;
+        head = end = null;
     }
 
     @Override
     public MyLinkedList clone() {
         MyLinkedList r = new SinglyLinkedList<E>();
-        Node<E> i = headNode;
+        Node<E> i = head;
         while (i != null) {
-            E e = i.content;
+            E e = i.e;
             E eClone;
             if (e instanceof Cloneable) {
                 try {
@@ -259,14 +259,14 @@ public class SinglyLinkedList<E> implements MyRotateList {
                         eClone = (E) ((boolean[]) e).clone();
                     else
                         eClone = (E) e.getClass().getDeclaredMethod("clone").invoke(e);
-                    r.appendToTheEnd(eClone);
+                    r.appendAfterEnd(eClone);
                 } catch (NoSuchMethodException |
                         IllegalAccessException |
                         InvocationTargetException ex) {
-                    r.appendToTheEnd(e);
+                    r.appendAfterEnd(e);
                 }
             } else {
-                r.appendToTheEnd(e);
+                r.appendAfterEnd(e);
             }
             i = i.next;
         }
@@ -287,11 +287,11 @@ public class SinglyLinkedList<E> implements MyRotateList {
         if (size() == ((SinglyLinkedList) it).size() && size() == 0) {
             return true;
         }
-        Node<E> i = headNode;
-        Node<E> j = ((SinglyLinkedList) it).headNode;
+        Node<E> i = head;
+        Node<E> j = ((SinglyLinkedList) it).head;
         while (i != null) {
-            E e1 = i.content;
-            E e2 = j.content;
+            E e1 = i.e;
+            E e2 = j.e;
 
             if (e1 == e2) {
                 i = i.next;

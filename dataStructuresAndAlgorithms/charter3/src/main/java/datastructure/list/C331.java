@@ -20,175 +20,175 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
-// DoublyLinkedList class using only one sentinel node.
+// DoublyLinkedList class using only one s node.
 public class C331<E> implements MyLinkedList {
     private class Node<E> {
-        private E content;
-        private Node<E> prev;
-        private Node<E> next;
+        private E e;
+        private Node<E> p;
+        private Node<E> n;
 
-        private Node(E content, Node<E> prev, Node<E> next) {
-            this.content = content;
-            this.prev = prev;
-            this.next = next;
+        private Node(E e, Node<E> p, Node<E> n) {
+            this.e = e;
+            this.p = p;
+            this.n = n;
         }
 
-        private Node(E content) {
-            this.content = content;
+        private Node(E e) {
+            this.e = e;
         }
 
         private Node() {
         }
     }
 
-    private final Node<E> sentinel = new Node<E>();
-    private int sizeOfList;
+    private final Node<E> s /*sentinel*/ = new Node<E>();
+    private int size;
 
-    private int indexOfEndNode() {
+    private int endNodeIndex() {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
         }
-        return sizeOfList - 1;
+        return size - 1;
     }
 
     private int checkPositionIndex(int positionIndex) {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
         }
-        if (positionIndex < 0 || indexOfEndNode() < positionIndex) {
+        if (positionIndex < 0 || endNodeIndex() < positionIndex) {
             throw new IndexOutOfBoundsException("Index is wrong ");
         }
         return positionIndex;
     }
 
-    private Node<E> getNodeOf(int index) {
+    private Node<E> nodeOf(int index) {
         checkPositionIndex(index);
         Node<E> current;
         if (index < size() / 2) {
             int i = 0;
-            current = sentinel.next;
+            current = s.n;
             while (i != index) {
-                current = current.next;
+                current = current.n;
                 i++;
             }
             return current;
         }
-        int i = indexOfEndNode();
-        current = sentinel.prev;
+        int i = endNodeIndex();
+        current = s.p;
         while (i != index) {
-            current = current.prev;
+            current = current.p;
             i--;
         }
         return current;
     }
 
-    private void addBetween(@NotNull(value = "") E newContent,
+    private void addBetween(@NotNull(value = "") E e,
                             @NotNull(value = "") Node p,
                             @NotNull(value = "") Node n) {
-        Node<E> it = new Node<E>(newContent);
-        p.next = it;
-        it.next = n;
-        n.prev = it;
-        it.prev = p;
-        sizeOfList++;
+        Node<E> it = new Node<E>(e);
+        p.n = it;
+        it.n = n;
+        n.p = it;
+        it.p = p;
+        size++;
     }
 
     private void deleteBetween(@NotNull(value = "") Node p,
                                @NotNull(value = "") Node n) {
-        p.next = n;
-        n.prev = p;
-        sizeOfList--;
+        p.n = n;
+        n.p = p;
+        size--;
     }
 
     private E delete(int itsIndex,
                      @NotNull(value = "") Node<E> it) {
         checkPositionIndex(itsIndex);
-        deleteBetween(it.prev, it.next);
-        it.prev = it.next = null;
-        return it.content;
+        deleteBetween(it.p, it.n);
+        it.p = it.n = null;
+        return it.e;
     }
 
     public C331() {
-        sentinel.next = sentinel;
-        sentinel.prev = sentinel;
+        s.n = s;
+        s.p = s;
     }
 
     public boolean isEmpty() {
-        return sizeOfList == 0;
+        return size == 0;
     }
 
     public int size() {
-        return sizeOfList;
+        return size;
     }
 
     @Deprecated
     public int size2() {
         int size = 0;
-        Node<E> i = sentinel;
-        while (i.next != sentinel) {
+        Node<E> i = s;
+        while (i.n != s) {
             size++;
-            i = i.next;
+            i = i.n;
         }
         return size;
     }
 
     public boolean hasOnlyOneElement() {
-        return sizeOfList == 1;
+        return size == 1;
     }
 
-    public MyLinkedList addToTheHead(@NotNull(value = "") Object newContent) {
-        addBetween((E) newContent, sentinel, sentinel.next);
+    public MyLinkedList addBeforeHead(@NotNull(value = "") Object e) {
+        addBetween((E) e, s, s.n);
         return this;
     }
 
-    public C331 appendToTheEnd(@NotNull(value = "") Object newContent) {
-        addBetween((E) newContent, sentinel.prev, sentinel);
+    public C331 appendAfterEnd(@NotNull(value = "") Object e) {
+        addBetween((E) e, s.p, s);
         return this;
     }
 
-    public C331 addBefore(@NotNull(value = "") Object newContent, int index) {
+    public C331 addBefore(@NotNull(value = "") Object e, int index) {
         checkPositionIndex(index);
-        Node<E> i = getNodeOf(index);
-        addBetween((E) newContent, i.prev, i);
+        Node<E> i = nodeOf(index);
+        addBetween((E) e, i.p, i);
         return this;
     }
 
-    public C331 addAfter(@NotNull(value = "") Object newContent, int index) {
+    public C331 addAfter(@NotNull(value = "") Object e, int index) {
         checkPositionIndex(index);
-        Node<E> i = getNodeOf(index);
-        addBetween((E) newContent, i, i.next);
+        Node<E> i = nodeOf(index);
+        addBetween((E) e, i, i.n);
         return this;
     }
 
     public E deleteHead() {
-        return delete(0, sentinel.next);
+        return delete(0, s.n);
     }
 
     public E deleteEnd() {
-        return delete(indexOfEndNode(), sentinel.prev);
+        return delete(endNodeIndex(), s.p);
     }
 
     public E delete(int index) {
-        Node<E> it = getNodeOf(index);
+        Node<E> it = nodeOf(index);
         return delete(index, it);
     }
 
-    public E update(int index, @NotNull(value = "") Object newContent) {
-        Node<E> n = getNodeOf(index);
-        E re = n.content;
-        n.content = (E) newContent;
+    public E update(int index, @NotNull(value = "") Object e) {
+        Node<E> n = nodeOf(index);
+        E re = n.e;
+        n.e = (E) e;
         return re;
     }
 
-    public E updateHead(@NotNull(value = "") Object newContent) {
-        E re = sentinel.next.content;
-        sentinel.next.content = (E) newContent;
+    public E updateHead(@NotNull(value = "") Object e) {
+        E re = s.n.e;
+        s.n.e = (E) e;
         return re;
     }
 
-    public E updateEnd(@NotNull(value = "") Object newContent) {
-        E re = sentinel.prev.content;
-        sentinel.prev.content = (E) newContent;
+    public E updateEnd(@NotNull(value = "") Object e) {
+        E re = s.p.e;
+        s.p.e = (E) e;
         return re;
     }
 
@@ -196,23 +196,23 @@ public class C331<E> implements MyLinkedList {
         if (isEmpty()) {
             return null;
         }
-        return sentinel.next.content;
+        return s.n.e;
     }
 
     public E getEnd() {
         if (isEmpty()) {
             return null;
         }
-        return sentinel.prev.content;
+        return s.p.e;
     }
 
     public E get(int index) {
         checkPositionIndex(index);
-        return getNodeOf(index).content;
+        return nodeOf(index).e;
     }
 
     /**
-     * Finding the middle node with header and trailer sentinels by “link hopping,”
+     * Finding the middle node with header and trailer ss by “link hopping,”
      * and without relying on explicit knowledge of the size of the list.
      * In the case of an even number of nodes, report the node slightly left of
      * center as the “middle.”
@@ -220,30 +220,30 @@ public class C331<E> implements MyLinkedList {
      * @return
      */
     @Deprecated
-    public E getMiddle() {
-        Node<E> l = sentinel, r = sentinel;
+    public E middleOf() {
+        Node<E> l = s, r = s;
         while (true) {
-            if (l.next == r) {
-                return l.content;
+            if (l.n == r) {
+                return l.e;
             }
-            l = l.next;
-            if (l.next == r) {
-                return l.content;
+            l = l.n;
+            if (l.n == r) {
+                return l.e;
             }
-            r = r.prev;
-            if (l.next == r) {
-                return l.content;
+            r = r.p;
+            if (l.n == r) {
+                return l.e;
             }
         }
     }
 
-    public E getMiddle2() {
+    public E middleOf2() {
         int size = size();
-        Node<E> iNode = sentinel.next;
+        Node<E> iNode = s.n;
         for (int i = 0; i < (size % 2 == 0 ? size / 2 - 1 : size / 2); i++) {
-            iNode = iNode.next;
+            iNode = iNode.n;
         }
-        return iNode.content;
+        return iNode.e;
     }
 
     @Override
@@ -251,17 +251,17 @@ public class C331<E> implements MyLinkedList {
         if (size() == 0) {
             return;
         }
-        sizeOfList = 0;
-        sentinel.next = sentinel;
-        sentinel.prev = sentinel;
+        size = 0;
+        s.n = s;
+        s.p = s;
     }
 
     @Override
     public MyLinkedList clone() {
         C331 r = new C331();
-        Node<E> i = sentinel.next;
-        while (i != sentinel) {
-            E e = i.content;
+        Node<E> i = s.n;
+        while (i != s) {
+            E e = i.e;
             E eClone;
             if (e instanceof Cloneable) {
                 try {
@@ -285,16 +285,16 @@ public class C331<E> implements MyLinkedList {
                         eClone = (E) ((boolean[]) e).clone();
                     else
                         eClone = (E) e.getClass().getDeclaredMethod("clone").invoke(e);
-                    r.appendToTheEnd(eClone);
+                    r.appendAfterEnd(eClone);
                 } catch (NoSuchMethodException |
                         IllegalAccessException |
                         InvocationTargetException ex) {
-                    r.appendToTheEnd(e);
+                    r.appendAfterEnd(e);
                 }
             } else {
-                r.appendToTheEnd(e);
+                r.appendAfterEnd(e);
             }
-            i = i.next;
+            i = i.n;
         }
         return r;
     }
@@ -313,15 +313,15 @@ public class C331<E> implements MyLinkedList {
         if (size() == ((C331) it).size() && size() == 0) {
             return true;
         }
-        Node<E> i = this.sentinel.next;
-        Node<E> j = ((C331<E>) it).sentinel.next;
-        while (i != this.sentinel) {
-            E e1 = i.content;
-            E e2 = j.content;
+        Node<E> i = this.s.n;
+        Node<E> j = ((C331<E>) it).s.n;
+        while (i != this.s) {
+            E e1 = i.e;
+            E e2 = j.e;
 
             if (e1 == e2) {
-                i = i.next;
-                j = j.next;
+                i = i.n;
+                j = j.n;
                 continue;
             }
             if (e1 == null) {
@@ -353,8 +353,8 @@ public class C331<E> implements MyLinkedList {
 
             if (!eq)
                 return false;
-            i = i.next;
-            j = j.next;
+            i = i.n;
+            j = j.n;
         }
         return true;
     }

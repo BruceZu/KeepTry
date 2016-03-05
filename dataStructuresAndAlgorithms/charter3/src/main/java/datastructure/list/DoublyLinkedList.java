@@ -23,137 +23,137 @@ import static java.util.Objects.requireNonNull;
 //TODO:  support multi threads access concurrently.
 public class DoublyLinkedList<E> implements MyLinkedList {
     private class Node<E> {
-        private E content;
-        private Node<E> prev;
-        private Node<E> next;
+        private E e;
+        private Node<E> p;
+        private Node<E> n;
 
-        private Node(E content, Node<E> prev, Node<E> next) {
-            this.content = content;
-            this.prev = prev;
-            this.next = next;
+        private Node(E e, Node<E> p, Node<E> n) {
+            this.e = e;
+            this.p = p;
+            this.n = n;
         }
     }
 
-    private Node<E> endNode;
-    private Node<E> headNode;
-    private int sizeOfList;
+    private Node<E> end;
+    private Node<E> h;
+    private int size;
 
-    private int indexOfEndNode() {
+    private int endNodeIndex() {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
         }
-        return sizeOfList - 1;
+        return size - 1;
     }
 
     private int checkPositionIndex(int positionIndex) {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
         }
-        if (positionIndex < 0 || indexOfEndNode() < positionIndex) {
+        if (positionIndex < 0 || endNodeIndex() < positionIndex) {
             throw new IndexOutOfBoundsException("Index is wrong ");
         }
         return positionIndex;
     }
 
-    private Node<E> getNodeOf(int index) {
+    private Node<E> nodeOf(int index) {
         checkPositionIndex(index);
         Node<E> current;
         if (index < size() / 2) {
             int i = 0;
-            current = headNode;
+            current = h;
             while (i != index) {
-                current = current.next;
+                current = current.n;
                 i++;
             }
             return current;
         }
-        int i = indexOfEndNode();
-        current = endNode;
+        int i = endNodeIndex();
+        current = end;
         while (i != index) {
-            current = current.prev;
+            current = current.p;
             i--;
         }
         return current;
     }
 
     public boolean isEmpty() {
-        return sizeOfList == 0;
+        return size == 0;
     }
 
     public int size() {
-        return sizeOfList;
+        return size;
     }
 
     public boolean hasOnlyOneElement() {
-        return sizeOfList == 1;
+        return size == 1;
     }
 
-    public MyLinkedList addToTheHead(Object newContent) {
-        requireNonNull(newContent);
-        Node<E> newNode = new Node<E>((E) newContent, null, null);
+    public MyLinkedList addBeforeHead(Object e) {
+        requireNonNull(e);
+        Node<E> newNode = new Node<E>((E) e, null, null);
         if (isEmpty()) {
-            headNode = endNode = newNode;
-            sizeOfList++;
+            h = end = newNode;
+            size++;
             return this;
         }
 
-        newNode.next = headNode;
-        headNode = newNode;
-        headNode.next.prev = headNode;
-        sizeOfList++;
+        newNode.n = h;
+        h = newNode;
+        h.n.p = h;
+        size++;
         return this;
     }
 
-    public MyLinkedList appendToTheEnd(Object newContent) {
-        requireNonNull(newContent);
-        Node<E> newNode = new Node<E>((E) newContent, null, null);
+    public MyLinkedList appendAfterEnd(Object e) {
+        requireNonNull(e);
+        Node<E> newNode = new Node<E>((E) e, null, null);
         if (isEmpty()) {
-            headNode = endNode = newNode;
-            sizeOfList++;
+            h = end = newNode;
+            size++;
             return this;
         }
 
-        newNode.prev = endNode;
-        endNode = newNode;
-        endNode.prev.next = newNode;
-        sizeOfList++;
+        newNode.p = end;
+        end = newNode;
+        end.p.n = newNode;
+        size++;
         return this;
     }
 
-    public MyLinkedList addBefore(Object newContent, int index) {
-        requireNonNull(newContent);
+    public MyLinkedList addBefore(Object e, int index) {
+        requireNonNull(e);
         checkPositionIndex(index);
         if (index == 0) {
-            addToTheHead(newContent);
+            addBeforeHead(e);
             return this;
         }
-        Node<E> i = getNodeOf(index);
-        Node<E> newNode = new Node<E>((E) newContent, i.prev, i);
-        i.prev.next = newNode;
-        i.prev = newNode;
-        sizeOfList++;
+        Node<E> i = nodeOf(index);
+        Node<E> newNode = new Node<E>((E) e, i.p, i);
+        i.p.n = newNode;
+        i.p = newNode;
+        size++;
         return this;
     }
 
-    public MyLinkedList addAfter(Object newContent, int index) {
-        requireNonNull(newContent);
+    public MyLinkedList addAfter(Object e, int index) {
+        requireNonNull(e);
         checkPositionIndex(index);
-        if (index == indexOfEndNode()) {
-            appendToTheEnd(newContent);
+        if (index == endNodeIndex()) {
+            appendAfterEnd(e);
             return this;
         }
-        Node<E> i = getNodeOf(index);
-        Node<E> newNode = new Node<E>((E) newContent, i, i.next);
-        i.next.prev = newNode;
-        i.next = newNode;
-        sizeOfList++;
+        Node<E> i = nodeOf(index);
+        Node<E> newNode = new Node<E>((E) e, i, i.n);
+        i.n.p = newNode;
+        i.n = newNode;
+        size++;
         return this;
     }
 
     private E deleteTheOnlyOne() {
-        E re = headNode.content;
-        headNode = endNode = null;
-        sizeOfList = 0;
+        E re = h.e;
+        h = end = null;
+        size = 0;
         return re;
     }
 
@@ -163,33 +163,33 @@ public class DoublyLinkedList<E> implements MyLinkedList {
             return deleteTheOnlyOne();
         }
         Node<E> pre = null;
-        Node<E> it = headNode;
-        Node<E> next = it.next;
+        Node<E> it = h;
+        Node<E> n = it.n;
 
-        headNode = next;
+        h = n;
 
-        next.prev = pre;
-        it.next = null;
-        sizeOfList--;
-        return it.content;
+        n.p = pre;
+        it.n = null;
+        size--;
+        return it.e;
     }
 
     public E deleteEnd() {
-        checkPositionIndex(indexOfEndNode());
+        checkPositionIndex(endNodeIndex());
         if (hasOnlyOneElement()) {
             return deleteTheOnlyOne();
         }
 
-        Node<E> pre = endNode.prev;
-        Node<E> it = endNode;
-        Node<E> next = null;
+        Node<E> pre = end.p;
+        Node<E> it = end;
+        Node<E> n = null;
 
-        endNode = pre;
+        end = pre;
 
-        pre.next = next;
-        it.prev = null;
-        sizeOfList--;
-        return it.content;
+        pre.n = n;
+        it.p = null;
+        size--;
+        return it.e;
     }
 
     @Override
@@ -202,41 +202,41 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         if (index == 0) {
             return deleteHead();
         }
-        if (index == indexOfEndNode()) {
+        if (index == endNodeIndex()) {
             return deleteEnd();
         }
 
-        Node<E> pre = getNodeOf(index - 1);
-        Node<E> it = pre.next;
-        Node<E> next = it.next;
+        Node<E> pre = nodeOf(index - 1);
+        Node<E> it = pre.n;
+        Node<E> n = it.n;
 
-        pre.next = next;
-        next.prev = pre;
-        it.next = it.prev = null;
+        pre.n = n;
+        n.p = pre;
+        it.n = it.p = null;
 
-        sizeOfList--;
-        return it.content;
+        size--;
+        return it.e;
     }
 
-    public E update(int index, Object newContent) {
-        requireNonNull(newContent);
-        Node<E> n = getNodeOf(index);
-        E re = n.content;
-        n.content = (E) newContent;
+    public E update(int index, Object e) {
+        requireNonNull(e);
+        Node<E> n = nodeOf(index);
+        E re = n.e;
+        n.e = (E) e;
         return re;
     }
 
-    public E updateHead(Object newContent) {
-        requireNonNull(newContent);
-        E re = headNode.content;
-        headNode.content = (E) newContent;
+    public E updateHead(Object e) {
+        requireNonNull(e);
+        E re = h.e;
+        h.e = (E) e;
         return re;
     }
 
-    public E updateEnd(Object newContent) {
-        requireNonNull(newContent);
-        E re = endNode.content;
-        endNode.content = (E) newContent;
+    public E updateEnd(Object e) {
+        requireNonNull(e);
+        E re = end.e;
+        end.e = (E) e;
         return re;
     }
 
@@ -244,19 +244,19 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         if (isEmpty()) {
             return null;
         }
-        return headNode.content;
+        return h.e;
     }
 
     public E getEnd() {
         if (isEmpty()) {
             return null;
         }
-        return endNode.content;
+        return end.e;
     }
 
     public E get(int index) {
         checkPositionIndex(index);
-        return getNodeOf(index).content;
+        return nodeOf(index).e;
     }
 
     @Override
@@ -264,16 +264,16 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         if (size() == 0) {
             return;
         }
-        sizeOfList = 0;
-        endNode = headNode = null;
+        size = 0;
+        end = h = null;
     }
 
     @Override
     public MyLinkedList clone() {
         MyLinkedList r = new DoublyLinkedList<E>();
-        Node<E> i = headNode;
+        Node<E> i = h;
         while (i != null) {
-            E e = i.content;
+            E e = i.e;
             E eClone;
             if (e instanceof Cloneable) {
                 try {
@@ -297,16 +297,16 @@ public class DoublyLinkedList<E> implements MyLinkedList {
                         eClone = (E) ((boolean[]) e).clone();
                     else
                         eClone = (E) e.getClass().getDeclaredMethod("clone").invoke(e);
-                    r.appendToTheEnd(eClone);
+                    r.appendAfterEnd(eClone);
                 } catch (NoSuchMethodException |
                         IllegalAccessException |
                         InvocationTargetException ex) {
-                    r.appendToTheEnd(e);
+                    r.appendAfterEnd(e);
                 }
             } else {
-                r.appendToTheEnd(e);
+                r.appendAfterEnd(e);
             }
-            i = i.next;
+            i = i.n;
         }
         return r;
     }
@@ -325,15 +325,15 @@ public class DoublyLinkedList<E> implements MyLinkedList {
         if (size() == ((DoublyLinkedList) it).size() && size() == 0) {
             return true;
         }
-        Node<E> i = headNode;
-        Node<E> j = ((DoublyLinkedList) it).headNode;
+        Node<E> i = h;
+        Node<E> j = ((DoublyLinkedList) it).h;
         while (i != null) {
-            E e1 = i.content;
-            E e2 = j.content;
+            E e1 = i.e;
+            E e2 = j.e;
 
             if (e1 == e2) {
-                i = i.next;
-                j = j.next;
+                i = i.n;
+                j = j.n;
                 continue;
             }
             if (e1 == null) {
@@ -365,8 +365,8 @@ public class DoublyLinkedList<E> implements MyLinkedList {
 
             if (!eq)
                 return false;
-            i = i.next;
-            j = j.next;
+            i = i.n;
+            j = j.n;
         }
         return true;
     }

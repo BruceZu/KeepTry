@@ -25,19 +25,19 @@ public class R38Test<E> {
         DoublyLinkedList2 test = new DoublyLinkedList2();
         Assert.assertSame(test.getMiddle(), null);
         Assert.assertSame(test.getMiddle2(), null);
-        test.addToTheHead("5");
+        test.addBeforeHead("5");
         Assert.assertSame(test.getMiddle(), "5");
         Assert.assertSame(test.getMiddle2(), "5");
-        test.addToTheHead("4");
+        test.addBeforeHead("4");
         Assert.assertSame(test.getMiddle(), "4");
         Assert.assertSame(test.getMiddle2(), "4");
-        test.addToTheHead("3");
+        test.addBeforeHead("3");
         Assert.assertSame(test.getMiddle(), "4");
         Assert.assertSame(test.getMiddle2(), "4");
-        test.addToTheHead("2");
+        test.addBeforeHead("2");
         Assert.assertSame(test.getMiddle(), "3");
         Assert.assertSame(test.getMiddle2(), "3");
-        test.addToTheHead("1");
+        test.addBeforeHead("1");
         Assert.assertSame(test.getMiddle(), "3");
         Assert.assertSame(test.getMiddle2(), "3");
 

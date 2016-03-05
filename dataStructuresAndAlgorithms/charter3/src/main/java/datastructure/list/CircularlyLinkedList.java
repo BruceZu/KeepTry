@@ -23,47 +23,47 @@ import static java.util.Objects.requireNonNull;
 @Deprecated
 public class CircularlyLinkedList<E> implements MyRotateList {
     private class Node<E> {
-        private E content;
+        private E e;
         private Node<E> next;
 
-        private Node(E content, Node<E> next) {
-            this.content = content;
+        private Node(E e, Node<E> next) {
+            this.e = e;
             this.next = next;
         }
     }
 
-    private Node<E> headNode;
-    private Node<E> endNode;
-    private int sizeOfList;
+    private Node<E> head;
+    private Node<E> end;
+    private int size;
 
-    private int indexOfEndNode() {
+    private int endIndex() {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
         }
-        return sizeOfList - 1;
+        return size - 1;
     }
 
-    private boolean hasOnlyOneElement() {
-        return sizeOfList == 1;
+    private boolean isOnlyOneNode() {
+        return size == 1;
     }
 
     private int checkPositionIndex(int positionIndex) {
         if (isEmpty()) {
             throw new IndexOutOfBoundsException("This list is empty");
         }
-        if (positionIndex < 0 || indexOfEndNode() < positionIndex) {
+        if (positionIndex < 0 || endIndex() < positionIndex) {
             throw new IndexOutOfBoundsException("Index is wrong ");
         }
         return positionIndex;
     }
 
-    private Node<E> getNodeOf(int index) {
+    private Node<E> nodeOf(int index) {
         checkPositionIndex(index);
-        if (index == indexOfEndNode()) {
-            return endNode;
+        if (index == endIndex()) {
+            return end;
         }
 
-        Node<E> current = headNode;
+        Node<E> current = head;
         int i = 0;
         while (i != index) {
             current = current.next;
@@ -75,17 +75,17 @@ public class CircularlyLinkedList<E> implements MyRotateList {
     @Override
     public void rotate() {
         if (size() > 1) {
-            headNode = headNode.next;
-            endNode = endNode.next;
+            head = head.next;
+            end = end.next;
         }
     }
 
     public boolean isEmpty() {
-        return sizeOfList == 0;
+        return size == 0;
     }
 
     public int size() {
-        return sizeOfList;
+        return size;
     }
 
     @Override
@@ -93,30 +93,30 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         return size();//TODO
     }
 
-    public MyLinkedList addToTheHead(Object newContent) {
+    public MyLinkedList addBeforeHead(Object newContent) {
         requireNonNull(newContent);
-        headNode = new Node<E>((E) newContent, headNode);
+        head = new Node<E>((E) newContent, head);
         if (isEmpty()) {
-            endNode = headNode;
+            end = head;
         }
 
-        sizeOfList++;
-        endNode.next = headNode;
+        size++;
+        end.next = head;
         return this;
     }
 
-    public MyLinkedList appendToTheEnd(Object newContent) {
+    public MyLinkedList appendAfterEnd(Object newContent) {
         requireNonNull(newContent);
-        Node<E> newEnd = new Node<E>((E) newContent, headNode);
+        Node<E> newEnd = new Node<E>((E) newContent, head);
         if (isEmpty()) {
-            headNode = endNode = newEnd;
+            head = end = newEnd;
             newEnd.next = newEnd;
-            sizeOfList++;
+            size++;
             return this;
         }
-        endNode.next = newEnd;
-        endNode = newEnd;
-        sizeOfList++;
+        end.next = newEnd;
+        end = newEnd;
+        size++;
         return this;
     }
 
@@ -124,7 +124,7 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         requireNonNull(newContent);
         checkPositionIndex(index);
         if (index == 0) {
-            addToTheHead(newContent);
+            addBeforeHead(newContent);
             return this;
         }
         addAfter(newContent, index - 1);
@@ -134,38 +134,38 @@ public class CircularlyLinkedList<E> implements MyRotateList {
     public MyLinkedList addAfter(Object newContent, int index) {
         requireNonNull(newContent);
         checkPositionIndex(index);
-        if (index == indexOfEndNode()) {
-            appendToTheEnd(newContent);
+        if (index == endIndex()) {
+            appendAfterEnd(newContent);
             return this;
         }
-        Node<E> n = getNodeOf(index);
+        Node<E> n = nodeOf(index);
         n.next = new Node<E>((E) newContent, n.next);
-        sizeOfList++;
+        size++;
         return this;
     }
 
     public E deleteHead() {
         checkPositionIndex(0);
-        Node<E> it = headNode;
-        E re = it.content;
+        Node<E> it = head;
+        E re = it.e;
 
-        if (hasOnlyOneElement()) {
-            headNode = endNode = null;
+        if (isOnlyOneNode()) {
+            head = end = null;
             it.next = null;
 
-            sizeOfList = 0;
+            size = 0;
             return re;
         }
 
-        endNode.next = headNode = it.next;
+        end.next = head = it.next;
         it.next = null;
 
-        sizeOfList--;
+        size--;
         return re;
     }
 
     public E deleteEnd() {
-        return delete(indexOfEndNode());
+        return delete(endIndex());
     }
 
     public E delete(int index) {
@@ -173,38 +173,38 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         if (index == 0) {
             return deleteHead();
         }
-        Node<E> beforeIt = getNodeOf(index - 1);
+        Node<E> beforeIt = nodeOf(index - 1);
         Node<E> it = beforeIt.next;
         beforeIt.next = it.next;
         it.next = null;
 
-        if (index == indexOfEndNode()) {
-            endNode = beforeIt;
+        if (index == endIndex()) {
+            end = beforeIt;
         }
 
-        sizeOfList--;
-        return it.content;
+        size--;
+        return it.e;
     }
 
     public E update(int index, Object newContent) {
         requireNonNull(newContent);
-        Node<E> n = getNodeOf(index);
-        E re = n.content;
-        n.content = (E) newContent;
+        Node<E> n = nodeOf(index);
+        E re = n.e;
+        n.e = (E) newContent;
         return re;
     }
 
     public E updateHead(Object newContent) {
         requireNonNull(newContent);
-        E re = headNode.content;
-        headNode.content = (E) newContent;
+        E re = head.e;
+        head.e = (E) newContent;
         return re;
     }
 
     public E updateEnd(Object newContent) {
         requireNonNull(newContent);
-        E re = endNode.content;
-        endNode.content = (E) newContent;
+        E re = end.e;
+        end.e = (E) newContent;
         return re;
     }
 
@@ -212,19 +212,19 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         if (isEmpty()) {
             return null;
         }
-        return headNode.content;
+        return head.e;
     }
 
     public E getEnd() {
         if (isEmpty()) {
             return null;
         }
-        return endNode.content;
+        return end.e;
     }
 
     public E get(int index) {
         checkPositionIndex(index);
-        return getNodeOf(index).content;
+        return nodeOf(index).e;
     }
 
     @Override
@@ -232,19 +232,19 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         if (size() == 0) {
             return;
         }
-        sizeOfList = 0;
-        headNode = endNode = null;
+        size = 0;
+        head = end = null;
     }
 
     @Override
     public MyLinkedList clone() {
         MyLinkedList r = new CircularlyLinkedList<E>();
-        Node<E> i = headNode;
+        Node<E> i = head;
         if (size() == 0) {
             return r;
         }
-        while (i != endNode) {
-            E e = i.content;
+        while (i != end) {
+            E e = i.e;
             E eClone;
             if (e instanceof Cloneable) {
                 try {
@@ -268,18 +268,18 @@ public class CircularlyLinkedList<E> implements MyRotateList {
                         eClone = (E) ((boolean[]) e).clone();
                     else
                         eClone = (E) e.getClass().getDeclaredMethod("clone").invoke(e);
-                    r.appendToTheEnd(eClone);
+                    r.appendAfterEnd(eClone);
                 } catch (NoSuchMethodException |
                         IllegalAccessException |
                         InvocationTargetException ex) {
-                    r.appendToTheEnd(e);
+                    r.appendAfterEnd(e);
                 }
             } else {
-                r.appendToTheEnd(e);
+                r.appendAfterEnd(e);
             }
             i = i.next;
         }
-        r.appendToTheEnd(endNode.content);
+        r.appendAfterEnd(end.e);
 
         return r;
     }
@@ -298,11 +298,11 @@ public class CircularlyLinkedList<E> implements MyRotateList {
         if (size() == ((CircularlyLinkedList) it).size() && size() == 0) {
             return true;
         }
-        Node<E> i = endNode;
-        Node<E> j = ((CircularlyLinkedList) it).endNode;
+        Node<E> i = end;
+        Node<E> j = ((CircularlyLinkedList) it).end;
         do {
-            E e1 = i.content;
-            E e2 = j.content;
+            E e1 = i.e;
+            E e2 = j.e;
 
             if (e1 == e2) {
                 i = i.next;
@@ -345,7 +345,7 @@ public class CircularlyLinkedList<E> implements MyRotateList {
 
             i = i.next;
             j = j.next;
-        } while (i != endNode);
+        } while (i != end);
         return true;
     }
 }

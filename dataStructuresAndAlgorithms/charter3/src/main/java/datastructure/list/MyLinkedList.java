@@ -34,9 +34,9 @@ public interface MyLinkedList<E> extends Cloneable {
      *
      * @param newContent
      */
-    public MyLinkedList addToTheHead(E newContent);
+    public MyLinkedList addBeforeHead(E newContent);
 
-    public MyLinkedList appendToTheEnd(E newContent);
+    public MyLinkedList appendAfterEnd(E newContent);
 
     public MyLinkedList addBefore(E newContent, int index);
 

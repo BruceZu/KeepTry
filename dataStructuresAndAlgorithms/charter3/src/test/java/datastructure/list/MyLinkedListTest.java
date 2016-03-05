@@ -134,7 +134,7 @@ public class MyLinkedListTest {
     @Test(timeout = 20L, expected = Test.None.class)
     public void testEndNodeAfterDeleteHead() {
         assertThat(list.size()).isEqualTo(0);
-        list.addToTheHead("head");
+        list.addBeforeHead("head");
         assertThat(list.deleteHead()).isEqualTo("head");
         assertThat(list.size()).isEqualTo(0);
         assertThat(list.getEnd()).isNull();
@@ -142,25 +142,25 @@ public class MyLinkedListTest {
 
     @Test(timeout = 20L, expected = Test.None.class)
     public void testHeadNodeAfterDeleteEnd() {
-        list.addToTheHead("end");
+        list.addBeforeHead("end");
         assertThat(list.deleteEnd().equals("end"));
         assertThat(list.getHead()).isNull();
     }
 
     @Test(timeout = 20L, expected = Test.None.class)
     public void addTest() {
-        list.addToTheHead("middle");
+        list.addBeforeHead("middle");
         list.addAfter("afterMiddle", 0);
         list.addBefore("head", 0);
-        list.appendToTheEnd("end");
+        list.appendAfterEnd("end");
         assertThat(list.get(0)).isEqualTo("head");
         assertThat(list.get(1)).isEqualTo("middle");
         assertThat(list.get(2)).isEqualTo("afterMiddle");
         assertThat(list.get(3)).isEqualTo("end");
 
         list.clean();
-        list.appendToTheEnd("middle");
-        list.addToTheHead("head");
+        list.appendAfterEnd("middle");
+        list.addBeforeHead("head");
         list.addAfter("end", 1);
         list.addBefore("afterMiddle", 2);
         assertThat(list.get(0)).isEqualTo("head");
@@ -171,12 +171,12 @@ public class MyLinkedListTest {
 
     @Test(timeout = 20L, expected = Test.None.class)
     public void deleteTest() {
-        list.addToTheHead("5");
-        list.addToTheHead("4");
-        list.addToTheHead("3");
-        list.addToTheHead("2");
-        list.addToTheHead("1");
-        list.addToTheHead("0");
+        list.addBeforeHead("5");
+        list.addBeforeHead("4");
+        list.addBeforeHead("3");
+        list.addBeforeHead("2");
+        list.addBeforeHead("1");
+        list.addBeforeHead("0");
         assertThat(list.size()).isEqualTo(6);
 
         assertThat(list.delete(5)).isEqualTo("5");
@@ -195,11 +195,11 @@ public class MyLinkedListTest {
 
     @Test(timeout = 20L, expected = Test.None.class)
     public void updateTest() {
-        list.addToTheHead("4");
-        list.addToTheHead("3");
-        list.addToTheHead("2");
-        list.addToTheHead("1");
-        list.addToTheHead("0");
+        list.addBeforeHead("4");
+        list.addBeforeHead("3");
+        list.addBeforeHead("2");
+        list.addBeforeHead("1");
+        list.addBeforeHead("0");
 
         assertThat(list.update(0, "head")).isEqualTo("0");
         assertThat(list.update(2, "middle")).isEqualTo("2");
@@ -224,11 +224,11 @@ public class MyLinkedListTest {
 
     @Test(timeout = 20L, expected = Test.None.class)
     public void getTest() {
-        list.addToTheHead("4");
-        list.addToTheHead("3");
-        list.addToTheHead("2");
-        list.addToTheHead("1");
-        list.addToTheHead("0");
+        list.addBeforeHead("4");
+        list.addBeforeHead("3");
+        list.addBeforeHead("2");
+        list.addBeforeHead("1");
+        list.addBeforeHead("0");
 
         assertThat(list.getHead()).isEqualTo("0");
         assertThat(list.getEnd()).isEqualTo("4");
@@ -242,14 +242,14 @@ public class MyLinkedListTest {
         Assert.assertTrue(list.size() == 0);
         Assert.assertTrue(list.equals(list.clone()));
 
-        list.addToTheHead("end");
+        list.addBeforeHead("end");
         Assert.assertTrue(list.size() == 1);
         Assert.assertTrue(list.equals(list.clone()));
 
-        list.addToTheHead(2);
-        list.addToTheHead(new String[][]{{"NameA", "NameB"}, {"scoreA", "scoreB"}});
-        list.addToTheHead(new boolean[]{true, false});
-        list.addToTheHead(1);
+        list.addBeforeHead(2);
+        list.addBeforeHead(new String[][]{{"NameA", "NameB"}, {"scoreA", "scoreB"}});
+        list.addBeforeHead(new boolean[]{true, false});
+        list.addBeforeHead(1);
 
 
         Assert.assertFalse(list.equals(new SinglyLinkedList<String>()));
@@ -279,7 +279,7 @@ public class MyLinkedListTest {
         clone.update(1, oe);
         Assert.assertEquals(list, clone);
 
-        clone.addToTheHead("head");
+        clone.addBeforeHead("head");
         Assert.assertNotEquals(list, clone);
     }
 }
