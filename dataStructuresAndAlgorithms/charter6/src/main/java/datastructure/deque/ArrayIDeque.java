@@ -18,6 +18,7 @@ package datastructure.deque;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -27,6 +28,7 @@ public class ArrayIDeque<T> implements IDeque<T> {
     private T[] d;
     private int head = 1;
     private int tail = 1;
+    private int modCount;
 
     public ArrayIDeque() {
         this(DEFAULT_CAPACITY);
@@ -53,10 +55,12 @@ public class ArrayIDeque<T> implements IDeque<T> {
         }
         if (size() == 0) {
             d[head] = t;
+            modCount++;
             return true;
         }
         tail = (tail + 1) % d.length;
         d[tail] = t;
+        modCount++;
         return true;
     }
 
@@ -78,10 +82,12 @@ public class ArrayIDeque<T> implements IDeque<T> {
         d[head] = null;
 
         if (head == tail) {
+            modCount++;
             return r;
         }
 
         head = (head + 1) % d.length;
+        modCount++;
         return r;
     }
 
@@ -148,10 +154,12 @@ public class ArrayIDeque<T> implements IDeque<T> {
 
         if (isEmpty()) {
             d[head] = t;
+            modCount++;
             return true;
         }
         head = head == 0 ? d.length - 1 : head - 1;
         d[head] = t;
+        modCount++;
         return true;
     }
 
@@ -172,9 +180,11 @@ public class ArrayIDeque<T> implements IDeque<T> {
         T r = d[tail];
         d[tail] = null;
         if (head == tail) {
+            modCount++;
             return r;
         }
         tail = tail == 0 ? d.length - 1 : tail - 1;
+        modCount++;
         return r;
     }
 
@@ -215,18 +225,26 @@ public class ArrayIDeque<T> implements IDeque<T> {
         return new Iterator<T>() {
             // no threads security implementation
             private int currentIndex = head - 1;
+            private int expectedModCount = modCount;
+
+            private void checkForComodification() {
+                if (modCount != expectedModCount)
+                    throw new ConcurrentModificationException();
+            }
 
             @Override
             public boolean hasNext() {
                 if (isEmpty()) {
                     return false;
                 }
+                checkForComodification();
                 return !(d[(currentIndex + 1) % d.length] == null);
             }
 
             @Override
             public T next() {
                 if (hasNext()) {
+                    checkForComodification();
                     currentIndex = (currentIndex + 1) % d.length;
                     return d[currentIndex];
                 }
@@ -245,18 +263,26 @@ public class ArrayIDeque<T> implements IDeque<T> {
         return new Iterator<T>() {
             // no threads security implementation
             private int currentIndex = tail + 1;
+            private int expectedModCount = modCount;
+
+            private void checkForComodification() {
+                if (modCount != expectedModCount)
+                    throw new ConcurrentModificationException();
+            }
 
             @Override
             public boolean hasNext() {
                 if (isEmpty()) {
                     return false;
                 }
+                checkForComodification();
                 return !(d[currentIndex == 0 ? d.length - 1 : currentIndex - 1] == null);
             }
 
             @Override
             public T next() {
                 if (hasNext()) {
+                    checkForComodification();
                     currentIndex = currentIndex == 0 ? d.length - 1 : currentIndex - 1;
                     return d[currentIndex];
                 }
