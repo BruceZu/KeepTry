@@ -224,7 +224,7 @@ public class ArrayIDeque<T> implements IDeque<T> {
         }
         return new Iterator<T>() {
             // no threads security implementation
-            private int currentIndex = head - 1;
+            private int currentIndex = head;
             private int expectedModCount = modCount;
 
             private void checkForComodification() {
@@ -238,15 +238,16 @@ public class ArrayIDeque<T> implements IDeque<T> {
                     return false;
                 }
                 checkForComodification();
-                return !(d[(currentIndex + 1) % d.length] == null);
+                return !(d[currentIndex] == null);
             }
 
             @Override
             public T next() {
                 if (hasNext()) {
                     checkForComodification();
+                    T r = d[currentIndex];
                     currentIndex = (currentIndex + 1) % d.length;
-                    return d[currentIndex];
+                    return r;
                 }
                 throw new NoSuchElementException();
             }
@@ -262,7 +263,7 @@ public class ArrayIDeque<T> implements IDeque<T> {
     public Iterator<T> descendingIterator() {
         return new Iterator<T>() {
             // no threads security implementation
-            private int currentIndex = tail + 1;
+            private int currentIndex = tail;
             private int expectedModCount = modCount;
 
             private void checkForComodification() {
@@ -276,15 +277,16 @@ public class ArrayIDeque<T> implements IDeque<T> {
                     return false;
                 }
                 checkForComodification();
-                return !(d[currentIndex == 0 ? d.length - 1 : currentIndex - 1] == null);
+                return !(d[currentIndex] == null);
             }
 
             @Override
             public T next() {
                 if (hasNext()) {
                     checkForComodification();
+                    T r = d[currentIndex];
                     currentIndex = currentIndex == 0 ? d.length - 1 : currentIndex - 1;
-                    return d[currentIndex];
+                    return r;
                 }
                 throw new NoSuchElementException();
             }
