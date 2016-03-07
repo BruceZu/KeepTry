@@ -13,8 +13,9 @@ package reverse;//  Copyright 2016 The Sawdust Open Source Project
 // limitations under the License.
 //
 
-import datastructure.list.ListNode;
-import datastructure.list.ListRecursionImplementation;
+import list.ListNode;
+import list.ListRecursion;
+import list.reverse.C525ReverseList;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,16 +48,16 @@ public class C525ReverseListTest {
         } else {
             test = new ListNode(originalData[0]);
             for (int i = 1; i < originalData.length; i++) {
-                ListRecursionImplementation.insertRear(test, originalData[i]);
+                ListRecursion.insertRear(test, originalData[i]);
             }
         }
-        Assert.assertEquals(Arrays.toString(ListRecursionImplementation.toArray(test)),
+        Assert.assertEquals(Arrays.toString(ListRecursion.toArray(test)),
                 Arrays.toString(originalData));
 
         ListNode reversed = C525ReverseList.reverse(test);
         reversed = C525ReverseList.reverse2(reversed);
 
-        Assert.assertEquals(Arrays.toString(ListRecursionImplementation.toArray(reversed)),
+        Assert.assertEquals(Arrays.toString(ListRecursion.toArray(reversed)),
                 Arrays.toString(originalData));
     }
 }

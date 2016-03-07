@@ -13,8 +13,8 @@
 // limitations under the License.
 //
 
-import datastructure.stack.ArrayStack;
-import datastructure.stack.IStack;
+import stack.ArrayStack;
+import stack.IStack;
 
 public class ValidDelimiters {
     private static String OPENING = "{[(<";
