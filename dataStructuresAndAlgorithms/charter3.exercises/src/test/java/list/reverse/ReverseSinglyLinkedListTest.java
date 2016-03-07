@@ -13,15 +13,31 @@
 // limitations under the License.
 //
 
+package list.reverse;
+
+import org.junit.Assert;
 import org.junit.Test;
 
-public class C317Test {
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+// C328
+public class ReverseSinglyLinkedListTest {
+
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
-        int[] test = new int[]{1, 2, 3, 4, 4};
-        org.junit.Assert.assertEquals(C317.getTheRepeatedInteger(test), 4);
-        test = new int[]{4, 4, 1, 2, 3,};
-        org.junit.Assert.assertEquals(C317.getTheRepeatedInteger(test), 4);
+        List l = new LinkedList() {{
+            add("a");
+            add("b");
+            add("c");
+            add("d");
+        }};
+        Collections.addAll(l, "A", "B", "C", "D");
+        l = C328ReverseSinglyLinkedList.reverse(l);
+        Assert.assertEquals(Arrays.toString(l.toArray()), "[D, C, B, A, d, c, b, a]");
+        l = C328ReverseSinglyLinkedList.reverse2(l);
+        Assert.assertEquals(Arrays.toString(l.toArray()), "[a, b, c, d, A, B, C, D]");
     }
-
 }

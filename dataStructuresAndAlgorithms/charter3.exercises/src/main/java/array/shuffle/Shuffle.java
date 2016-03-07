@@ -26,7 +26,7 @@ possible ordering is equally likely. You may rely on the nextInt(n) method of
 the java.util.Random class, which returns a random number between 0 and n−1
 inclusive.
  */
-public class C322 {
+public class Shuffle {
     static int[] shuffle(int[] a) {
         Random r = new Random();
         LinkedHashSet oldIndexesOrder = new LinkedHashSet(a.length);

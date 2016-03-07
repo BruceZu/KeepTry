@@ -91,7 +91,7 @@ public class MyLinkedListTest {
                 new CircularlyLinkedList2(),
                 new DoublyLinkedList(),
                 new DoublyLinkedList2(),
-                new C331()
+                new DoublyLinkedListWithOneSentinel()
         });
     }
 

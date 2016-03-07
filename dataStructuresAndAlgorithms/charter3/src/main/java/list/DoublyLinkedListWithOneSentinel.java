@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
-// DoublyLinkedList class using only one s node.
-public class C331<E> implements MyLinkedList {
+// DoublyLinkedListWithOneSentinel DoublyLinkedList class using only one sentinel node.
+public class DoublyLinkedListWithOneSentinel<E> implements MyLinkedList {
     private class Node<E> {
         private E e;
         private Node<E> p;
@@ -41,7 +41,7 @@ public class C331<E> implements MyLinkedList {
         }
     }
 
-    private final Node<E> s /*sentinel*/ = new Node<E>();
+    private final Node<E> s /* sentinel */ = new Node<E>();
     private int size;
 
     private int endNodeIndex() {
@@ -108,7 +108,7 @@ public class C331<E> implements MyLinkedList {
         return it.e;
     }
 
-    public C331() {
+    public DoublyLinkedListWithOneSentinel() {
         s.n = s;
         s.p = s;
     }
@@ -141,19 +141,19 @@ public class C331<E> implements MyLinkedList {
         return this;
     }
 
-    public C331 appendAfterEnd(@NotNull(value = "") Object e) {
+    public DoublyLinkedListWithOneSentinel appendAfterEnd(@NotNull(value = "") Object e) {
         addBetween((E) e, s.p, s);
         return this;
     }
 
-    public C331 addBefore(@NotNull(value = "") Object e, int index) {
+    public DoublyLinkedListWithOneSentinel addBefore(@NotNull(value = "") Object e, int index) {
         checkPositionIndex(index);
         Node<E> i = nodeOf(index);
         addBetween((E) e, i.p, i);
         return this;
     }
 
-    public C331 addAfter(@NotNull(value = "") Object e, int index) {
+    public DoublyLinkedListWithOneSentinel addAfter(@NotNull(value = "") Object e, int index) {
         checkPositionIndex(index);
         Node<E> i = nodeOf(index);
         addBetween((E) e, i, i.n);
@@ -258,7 +258,7 @@ public class C331<E> implements MyLinkedList {
 
     @Override
     public MyLinkedList clone() {
-        C331 r = new C331();
+        DoublyLinkedListWithOneSentinel r = new DoublyLinkedListWithOneSentinel();
         Node<E> i = s.n;
         while (i != s) {
             E e = i.e;
@@ -307,14 +307,14 @@ public class C331<E> implements MyLinkedList {
         if (it == this) {
             return true;
         }
-        if (!(it instanceof C331) || this.size() != ((C331) it).size()) {
+        if (!(it instanceof DoublyLinkedListWithOneSentinel) || this.size() != ((DoublyLinkedListWithOneSentinel) it).size()) {
             return false;
         }
-        if (size() == ((C331) it).size() && size() == 0) {
+        if (size() == ((DoublyLinkedListWithOneSentinel) it).size() && size() == 0) {
             return true;
         }
         Node<E> i = this.s.n;
-        Node<E> j = ((C331<E>) it).s.n;
+        Node<E> j = ((DoublyLinkedListWithOneSentinel<E>) it).s.n;
         while (i != this.s) {
             E e1 = i.e;
             E e2 = j.e;

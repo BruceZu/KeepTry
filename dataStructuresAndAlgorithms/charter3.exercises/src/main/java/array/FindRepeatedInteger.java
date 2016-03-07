@@ -13,6 +13,7 @@
 // limitations under the License.
 //
 
+package array;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,8 +22,18 @@ import java.util.Set;
  * of which is repeated. Describe an algorithm for finding the integer in A that is
  * repeated.
  */
-public class C317 {
+public class FindRepeatedInteger {
     public static int getTheRepeatedInteger(int[] array) {
+        Set set = new HashSet(array.length - 1);
+        for (int i = 0; i < array.length; i++) {
+            if (set.contains(array[i])) {
+                return array[i];
+            }
+            set.add(array[i]);
+        }
+        return 0;
+    }
+    public static int getTheRepeatedInteger2(int[] array) {
         Set set = new HashSet(array.length - 1);
         for (int i = 0; i < array.length; i++) {
             if (set.contains(array[i])) {
