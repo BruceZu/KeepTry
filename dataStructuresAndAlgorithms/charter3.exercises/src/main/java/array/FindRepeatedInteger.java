@@ -14,6 +14,7 @@
 //
 
 package array;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,14 +34,14 @@ public class FindRepeatedInteger {
         }
         return 0;
     }
+
     public static int getTheRepeatedInteger2(int[] array) {
-        Set set = new HashSet(array.length - 1);
-        for (int i = 0; i < array.length; i++) {
-            if (set.contains(array[i])) {
-                return array[i];
-            }
-            set.add(array[i]);
+        int sum = array[0];
+        int s = 0;
+        for (int i = 1; i < array.length; i++) {
+            sum += array[i];
+            s += i;
         }
-        return 0;
+        return sum - s;
     }
 }

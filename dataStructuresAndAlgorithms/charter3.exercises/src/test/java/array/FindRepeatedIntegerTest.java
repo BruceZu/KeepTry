@@ -14,14 +14,17 @@ package array;//  Copyright 2016 The Sawdust Open Source Project
 //
 
 import org.junit.Test;
+import  static  org.junit.Assert.assertEquals;
 
-public class C317Test {
+public class FindRepeatedIntegerTest {
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
         int[] test = new int[]{1, 2, 3, 4, 4};
-        org.junit.Assert.assertEquals(FindRepeatedInteger.getTheRepeatedInteger(test), 4);
+        assertEquals(FindRepeatedInteger.getTheRepeatedInteger(test), 4);
+        assertEquals(FindRepeatedInteger.getTheRepeatedInteger2(test), 4);
         test = new int[]{4, 4, 1, 2, 3,};
-        org.junit.Assert.assertEquals(FindRepeatedInteger.getTheRepeatedInteger(test), 4);
+        assertEquals(FindRepeatedInteger.getTheRepeatedInteger(test), 4);
+        assertEquals(FindRepeatedInteger.getTheRepeatedInteger2(test), 4);
     }
 
 }
