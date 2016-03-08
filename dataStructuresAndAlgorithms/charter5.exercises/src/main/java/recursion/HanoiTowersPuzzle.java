@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package recursion;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,8 @@
    The puzzle is to move all the disks from peg A to peg C,
    moving one disk at a time, so that we never place a larger disk on top of a smaller one.
  */
-public class C516HanoiTowersPuzzle {
+// C516
+public class HanoiTowersPuzzle {
     public static void move(int n, String from, String to, String by) {
         if (n == 2) {
             System.out.println(String.format("move %d from %s to %s", 1, from, by));

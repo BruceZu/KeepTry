@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package set;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
  * The three-way set disjointness problem is to determine if the intersection of the three
  * sets is empty, namely, that there is no element x such that x ∈ A, x ∈ B, and x ∈ C.
  */
-public class C435ThreeWaySetDisjointness {
+// C435
+public class ThreeWaySetDisjointness {
  // To-do
 }

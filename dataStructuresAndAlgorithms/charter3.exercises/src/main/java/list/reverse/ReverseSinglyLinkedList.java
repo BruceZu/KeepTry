@@ -18,11 +18,11 @@ package list.reverse;
 import java.util.List;
 
 /*
-Describe in detail an algorithm for reversing a singly linked list L using only a
+C328 Describe in detail an algorithm for reversing a singly linked list L using only a
 constant amount of additional space.
  */
 
-public class C328ReverseSinglyLinkedList {
+public class ReverseSinglyLinkedList {
     public static <T> List<T> reverse(List<T> l) {
         int index = 1;
         int elements = l.size();

@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package array;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-public class C522SumTest {
+public class TwoSumTest {
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
-        Assert.assertEquals(C522Sum.twoSum(new int[]{3, 2, 4}, 6), true);
-        Assert.assertEquals(C522Sum.twoSum(new int[]{3, 2, 4}, 8), false);
+        Assert.assertEquals(TwoSum.twoSum(new int[]{3, 2, 4}, 6), true);
+        Assert.assertEquals(TwoSum.twoSum(new int[]{3, 2, 4}, 8), false);
     }
 }

@@ -18,16 +18,16 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class C520OddAheadEvenArrayTest {
+public class OddAheadEvenArrayTest {
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
         int[] test = new int[]{2, 6, 8, 1, 3, 4, 5, 6, 7, 8, 12, 1, 22, 9, 9, 9};
         int[] expected = new int[]{1, 3, 5, 7, 1, 9, 9, 9, 2, 8, 12, 6, 22, 4, 8, 6};
-        C520OddAheadEvenArray.rearranges(test);
+        OddAheadEvenArray.rearranges(test);
         Assert.assertEquals(Arrays.equals(test, expected), true);
 
         test = new int[]{2, 6, 8, 1, 3, 4, 5, 6, 7, 8, 12, 1, 22, 9, 9, 9};
-        C520OddAheadEvenArray.rearranges2(test);
+        OddAheadEvenArray.rearranges2(test);
         Assert.assertEquals(Arrays.equals(test, expected), true);
     }
 }

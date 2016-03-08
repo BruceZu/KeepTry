@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package array;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class C442FindMinMaxTest {
+// C442
+public class FindMinMaxTest {
 
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
-        Assert.assertEquals(Arrays.toString(C442FindMinMax.findMinimumAndMaximumOf(new int[]{9, 3, 1, 6, 7, 4, 10})), "[10, 1]");
-        Assert.assertEquals(Arrays.toString(C442FindMinMax.findMinimumAndMaximumOf(new int[]{9, 3, 2, 6, 1, 4})), "[9, 1]");
+        Assert.assertEquals(Arrays.toString(FindMinMax.findMinimumAndMaximumOf(new int[]{9, 3, 1, 6, 7, 4, 10})), "[10, 1]");
+        Assert.assertEquals(Arrays.toString(FindMinMax.findMinimumAndMaximumOf(new int[]{9, 3, 2, 6, 1, 4})), "[9, 1]");
     }
 }

@@ -13,7 +13,8 @@
 // limitations under the License.
 //
 
-public class C529IterativeDrawRuler {
+// C529
+public class IterativeDrawRuler {
     private static void my_drawLine(int tickLength) {
         for (int j = 0; j < tickLength; j++)
             System.out.print("-");

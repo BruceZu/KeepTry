@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package array;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * C442
  * finding both the minimumand maximum of n numbers
  * using fewer than 3n/2 comparisons
  */
-public class C442FindMinMax {
+public class FindMinMax {
     public static int[] findMinimumAndMaximumOf(int[] numbers) {
         assert numbers.length >= 2;
         List<Integer> bigList = new ArrayList<>(numbers.length / 2);

@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package array;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 /*
- Describe a recursive algorithm that will check if an array A of integers contains
+ C523 Describe a recursive algorithm that will check if an array A of integers contains
  an integer A[i] that is the sum of two integers that appear earlier in A, that is,
  such that A[i] = A[ j] + A[k] for j,k < i.
 
  change it question to return the first pair of A[i],A[j] and A[k] if it is found.
  */
 
-public class C523Sum {
+public class TwoSum2 {
     // running time of the worst case is O(N^2)
     private static void findSum(Object[] nums, long k, int[] ids/* indexes*/) {
         // walk from both sides towards center

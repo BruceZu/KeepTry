@@ -1,4 +1,4 @@
-package reverse;//  Copyright 2016 The Sawdust Open Source Project
+package list.reverse;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@ package reverse;//  Copyright 2016 The Sawdust Open Source Project
 
 import list.ListNode;
 import list.ListRecursion;
-import list.reverse.C525ReverseList;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

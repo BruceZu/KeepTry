@@ -35,9 +35,9 @@ public class ReverseSinglyLinkedListTest {
             add("d");
         }};
         Collections.addAll(l, "A", "B", "C", "D");
-        l = C328ReverseSinglyLinkedList.reverse(l);
+        l = ReverseSinglyLinkedList.reverse(l);
         Assert.assertEquals(Arrays.toString(l.toArray()), "[D, C, B, A, d, c, b, a]");
-        l = C328ReverseSinglyLinkedList.reverse2(l);
+        l = ReverseSinglyLinkedList.reverse2(l);
         Assert.assertEquals(Arrays.toString(l.toArray()), "[a, b, c, d, A, B, C, D]");
     }
 }

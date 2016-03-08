@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package array;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@
  *   QuickSort is O(n2)  they are probably talking about its worst case complexity.
  *
  */
-public class C436TheTenLargestElements {
+//  C436
+public class TheTenLargestElements {
  // To-do
 }

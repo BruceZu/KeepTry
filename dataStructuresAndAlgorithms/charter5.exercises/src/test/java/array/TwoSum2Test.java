@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+package array;//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 
 @RunWith(Parameterized.class)
-public class C523SumTest {
+public class TwoSum2Test {
 
     @Parameterized.Parameters(name = "{index}: array is {0}, k and expected index i and j is {1}")
     public static Iterable<int[][]> data() {
@@ -37,7 +37,7 @@ public class C523SumTest {
     private int k;
     private int i, j;
 
-    public C523SumTest(int[] array, int[] targetAndExpectedResult) {
+    public TwoSum2Test(int[] array, int[] targetAndExpectedResult) {
         this.array = array;
         this.k = targetAndExpectedResult[0];
         this.i = targetAndExpectedResult[1];
@@ -46,17 +46,17 @@ public class C523SumTest {
 
     @Test(timeout = 10L, expected = Test.None.class)
     public void test() {
-        int[] result = C523Sum.check(array);
+        int[] result = TwoSum2.check(array);
         Assert.assertEquals(result[2], k);
         Assert.assertEquals(result[0], i);
         Assert.assertEquals(result[1], j);
 
-        result = C523Sum.check2(array);
+        result = TwoSum2.check2(array);
         Assert.assertEquals(result[2], k);
         Assert.assertEquals(result[0], i);
         Assert.assertEquals(result[1], j);
 
-        result = C523Sum.check3(array);
+        result = TwoSum2.check3(array);
         Assert.assertEquals(result[2], k);
         Assert.assertEquals(result[0], i);
         Assert.assertEquals(result[1], j);
