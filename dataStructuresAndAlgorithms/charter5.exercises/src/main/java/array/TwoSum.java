@@ -1,4 +1,4 @@
-package array;//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,15 +13,16 @@ package array;//  Copyright 2016 The Sawdust Open Source Project
 // limitations under the License.
 //
 
+package array;
+
+import java.util.Arrays;
+
 /*
 Suppose you are given an array, A, containing n distinct integers that are listed
 in increasing order. Given a number k, describe a recursive algorithm to find two
 integers in A that sum to k, if such a pair exists. What is the running time of your
 algorithm?
  */
-
-
-import java.util.Arrays;
 
 // C522 Suppose you are given an array, A, containing n distinct integers that are listed
 // in increasing order. Given a number k, describe a recursive algorithm to find two

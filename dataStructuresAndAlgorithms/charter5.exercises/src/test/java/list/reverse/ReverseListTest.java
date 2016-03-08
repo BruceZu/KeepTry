@@ -1,4 +1,4 @@
-package list.reverse;//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@ package list.reverse;//  Copyright 2016 The Sawdust Open Source Project
 // limitations under the License.
 //
 
+package list.reverse;
+
 import list.ListNode;
 import list.ListRecursion;
 import org.junit.Assert;
@@ -23,7 +25,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 
 @RunWith(Parameterized.class)
-public class C525ReverseListTest {
+public class ReverseListTest {
 
     @Parameterized.Parameters(name = "test {index}")
     public static Iterable<int[]> data() {
@@ -35,7 +37,7 @@ public class C525ReverseListTest {
 
     private int[] originalData;
 
-    public C525ReverseListTest(int[] array) {
+    public ReverseListTest(int[] array) {
         this.originalData = array;
     }
 

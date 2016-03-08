@@ -1,4 +1,4 @@
-package stack;//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@ package stack;//  Copyright 2016 The Sawdust Open Source Project
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+
+package stack;
 
 public interface IStack<T> {
     int size();

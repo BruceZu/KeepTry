@@ -1,4 +1,4 @@
-package set;//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,10 +13,12 @@ package set;//  Copyright 2016 The Sawdust Open Source Project
 // limitations under the License.
 //
 
+package set;
+
 /**
  * Assuming it is possible to sort n numbers in O(nlogn) time, show that it is possible
  * to solve the three-way set disjointness problem in O(nlogn) time.
- *
+ * <p/>
  * Suppose we are given three sets, A, B, andC, stored in three different integer arrays.
  * We will assume that no individual set contains duplicate values, but that there may be
  * some numbers that are in two or three of the sets.
@@ -25,5 +27,5 @@ package set;//  Copyright 2016 The Sawdust Open Source Project
  */
 // C435
 public class ThreeWaySetDisjointness {
- // To-do
+    // To-do
 }

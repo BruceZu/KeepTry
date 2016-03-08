@@ -1,4 +1,4 @@
-package array;//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +13,11 @@ package array;//  Copyright 2016 The Sawdust Open Source Project
 // limitations under the License.
 //
 
+package array;
+
 import org.junit.Test;
-import  static  org.junit.Assert.assertEquals;
+
+import static org.junit.Assert.assertEquals;
 
 public class FindRepeatedIntegerTest {
     @Test(timeout = 10L, expected = Test.None.class)
