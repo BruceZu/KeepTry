@@ -24,68 +24,69 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-class TestTreeNode<T> implements TreeNode<T> {
-    T e;
-    TreeNode<T> p;
-    private List<TreeNode<T>> children;
-
-    public TestTreeNode(T e) {
-        this.e = e;
-    }
-
-    @Override
-    public void setElement(T e) {
-        this.e = e;
-    }
-
-    @Override
-    public void setParent(TreeNode p) {
-        this.p = p;
-    }
-
-    @Override
-    public TreeNode<T> getParent() {
-        return p;
-    }
-
-    @Override
-    public void setChildren(List<TreeNode<T>> children) {
-        this.children = children;
-    }
-
-    @Override
-    public Iterable<TreeNode<T>> getChildren() {
-        return children;
-    }
-
-    @Override
-    public int childrenSize() {
-        return children.size();
-    }
-}
 
 public class TreeTest {
+    private class TestTreeNodeImplement<T> implements TreeNode<T> {
+        private T e;
+        private TreeNode<T> p;
+        private List<TreeNode<T>> children;
+
+        public TestTreeNodeImplement(T e) {
+            this.e = e;
+        }
+
+        @Override
+        public void setElement(T e) {
+            this.e = e;
+        }
+
+        @Override
+        public void setParent(TreeNode p) {
+            this.p = p;
+        }
+
+        @Override
+        public TreeNode<T> getParent() {
+            return p;
+        }
+
+        @Override
+        public void setChildren(List<TreeNode<T>> children) {
+            this.children = children;
+        }
+
+        @Override
+        public Iterable<TreeNode<T>> getChildren() {
+            return children;
+        }
+
+        @Override
+        public int childrenSize() {
+            return children.size();
+        }
+    }
+
     private TreeNode root;
 
     @Before
     public void data() {
 
-        root = new TestTreeNode(1);
+        root = new TestTreeNodeImplement(1);
 
-        TreeNode n2 = new TestTreeNode(2);
-        TreeNode n3 = new TestTreeNode(3);
+        TreeNode n2 = new TestTreeNodeImplement(2);
+        TreeNode n3 = new TestTreeNodeImplement(3);
 
-        TreeNode n4 = new TestTreeNode(4);
-        TreeNode n5 = new TestTreeNode(5);
+        TreeNode n4 = new TestTreeNodeImplement(4);
+        TreeNode n5 = new TestTreeNodeImplement(5);
 
-        TreeNode n6 = new TestTreeNode(6);
-        TreeNode n7 = new TestTreeNode(7);
+        TreeNode n6 = new TestTreeNodeImplement(6);
+        TreeNode n7 = new TestTreeNodeImplement(7);
 
-        TreeNode n8 = new TestTreeNode(8);
-        TreeNode n9 = new TestTreeNode(9);
+        TreeNode n8 = new TestTreeNodeImplement(8);
+        TreeNode n9 = new TestTreeNodeImplement(9);
 
-        TreeNode n10 = new TestTreeNode(10);
-        TreeNode n11 = new TestTreeNode(11);
+        TreeNode n10 = new TestTreeNodeImplement(10);
+        TreeNode n11 = new TestTreeNodeImplement(11);
         //
         root.setChildren(Arrays.asList(new TreeNode[]{n2, n3}));
         n3.setChildren(Arrays.asList(new TreeNode[]{n4, n5}));
