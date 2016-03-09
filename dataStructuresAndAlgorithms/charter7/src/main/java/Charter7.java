@@ -21,19 +21,20 @@ public class Charter7 {
     //
     //                       Interfaces        |           Properties                   |   Storage
     // Class                 Queue, Deque, List|  Capacity Limit, Thread-Safe, Blocking |  Array, Linked List
-    //
+    //--------------------------------------------------------------------------------------------------------
     // ArrayBlockingQueue    X      -       -      X(Circularly)    X            X           X         -
     //
     // LinkedBlockingQueue   X      -       -      X                X            X           -         X
     //
     // ConcurrentLinkedQueue X      -       -      -                X            -           -         X
-    //
+    //--------------------------------------------------------------------------------------------------------
     // ArrayDeque            X      X       -      -                -            -           X         -
     //
     // LinkedBlockingDeque   X      X       -      x                X            X           -         X
     //
     // ConcurrentLinkedDeque X      X       -      -                X            -           -         X
-    //
+    //--------------------------------------------------------------------------------------------------------
     // ArrayList             -      -       X      -                -            -           X         -
     // LinkedList            X      X       X      -                -            -           -         X
+
 }
