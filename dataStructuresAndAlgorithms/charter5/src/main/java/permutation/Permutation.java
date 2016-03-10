@@ -101,22 +101,22 @@ public class Permutation {
 
     public static void main(String[] args) {
         Set<List<Integer>> result = new HashSet<>();
-        permutation(Arrays.asList(new Integer[]{1, 2, 3}), 2, null, false, result);
+        permutation(Arrays.asList(1, 2, 3), 2, null, false, result);
         print(result);
         System.out.println("---");
 
         result = new HashSet<>();
-        permutation(Arrays.asList(new Integer[]{1, 2, 3}), 2, null, true, result);
+        permutation(Arrays.asList(1, 2, 3), 2, null, true, result);
         print(result);
         System.out.println("---");
 
         result = new HashSet<>();
-        permutation(Arrays.asList(new Integer[]{1, 2, 3}), 3, null, true, result);
+        permutation(Arrays.asList(1, 2, 3), 3, null, true, result);
         print(result);
         System.out.println("---");
 
         result = new HashSet<>();
-        permutation(Arrays.asList(new Integer[]{1}), 1, null, false, result);
+        permutation(Arrays.asList(1), 1, null, false, result);
         print(result);
     }
 }

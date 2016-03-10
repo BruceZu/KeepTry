@@ -85,14 +85,14 @@ public class MyLinkedListTest {
 
     @Parameters(name = "test with {index} {0}")
     public static Iterable<MyLinkedList> data() {
-        return Arrays.asList(new MyLinkedList[]{
+        return Arrays.asList(
                 new SinglyLinkedList(),
                 new CircularlyLinkedList(),
                 new CircularlyLinkedList2(),
                 new DoublyLinkedList(),
                 new DoublyLinkedList2(),
                 new DoublyLinkedListWithOneSentinel()
-        });
+        );
     }
 
     private MyLinkedList list;

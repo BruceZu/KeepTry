@@ -16,10 +16,6 @@
 package list;
 
 import com.google.common.truth.Truth;
-import list.CircularlyLinkedList;
-import list.CircularlyLinkedList2;
-import list.MyRotateList;
-import list.SinglyLinkedList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -31,11 +27,11 @@ public class MyRotateListTest {
 
     @Parameterized.Parameters(name = "test with {index}: {0}")
     public static Iterable<MyRotateList> data() {
-        return Arrays.asList(new MyRotateList[]{
+        return Arrays.asList(
                 new CircularlyLinkedList(),
                 new CircularlyLinkedList2(),
                 new SinglyLinkedList<>()
-        });
+        );
     }
 
     protected MyRotateList list;

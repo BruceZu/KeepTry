@@ -15,10 +15,6 @@
 
 package list;
 
-import list.CircularlyLinkedList2;
-import list.DoublyLinkedList2;
-import list.MyLinkedList;
-import list.SinglyLinkedList;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,11 +27,10 @@ public class R39R310R311Test {
 
     @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<MyLinkedList> data() {
-        return Arrays.asList(new MyLinkedList[]{
-                        new SinglyLinkedList(),
-                        new CircularlyLinkedList2(),
-                        new DoublyLinkedList2()}
-        );
+        return Arrays.asList(
+                new SinglyLinkedList(),
+                new CircularlyLinkedList2(),
+                new DoublyLinkedList2());
     }
 
     private MyLinkedList test;

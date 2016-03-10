@@ -167,7 +167,7 @@ public class SocketTest {
                     @Singleton
                     @SshListenAddresses
                     public List<SocketAddress> getListenAddresses() {
-                        return Arrays.asList(new SocketAddress[]{new InetSocketAddress(29488)});
+                        return Arrays.<SocketAddress>asList(new InetSocketAddress(29488));
                     }
                 }
 

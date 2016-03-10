@@ -27,7 +27,7 @@ import java.util.Arrays;
 public class FIFOQueueTest {
     @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<FIFOQueue> data() {
-        return Arrays.asList(new FIFOQueue[]{ // R-6.11
+        return Arrays.asList( // R-6.11
                 new ArrayFIFOQueue<>(),
                 new ArrayFIFOQueue2<>(1),
                 new ArrayCircularQueue<>(),
@@ -78,8 +78,7 @@ public class FIFOQueueTest {
                     public String toString() {
                         return deque.toString();
                     }
-                }
-        });
+                });
     }
 
     private FIFOQueue<Integer> q;

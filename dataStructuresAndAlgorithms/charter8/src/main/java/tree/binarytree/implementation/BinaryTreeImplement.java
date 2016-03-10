@@ -143,8 +143,4 @@ public class BinaryTreeImplement extends AbstractBinaryTree {
     public Iterable Nodes() {
         throw new UnsupportedOperationException();
     }
-
-    public static void main(String[] args) {
-
-    }
 }
