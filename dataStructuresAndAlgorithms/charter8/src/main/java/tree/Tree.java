@@ -24,22 +24,22 @@ import java.util.Iterator;
 // Define a tree recursively:
 // Tree is either empty or
 // consists of a node root, and a (possibly empty) set of subtrees.
-public interface Tree<T> extends Iterable<T> {
-    public boolean isLeaf(TreeNode<T> n);
+public interface Tree<T extends TreeNode<T, E>, E> extends Iterable<T> {
+    boolean isLeaf(T n);
 
-    public int depth(TreeNode<T> n);
+    int depth(T n);
 
-    public int height();
+    int height();
 
-    public <T> int height(TreeNode<T> root);
+    int height(T root);
 
-    public TreeNode<T> root();
+    T root();
 
-    public int size();
+    int size();
 
-    public Iterator<T> iterator();
+    Iterator<T> iterator();
 
-    public Iterable<TreeNode<T>> Nodes();
+    Iterable<T> Nodes();
 
     // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/TreeTraverser.html
     //

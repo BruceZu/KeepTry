@@ -13,15 +13,12 @@
 // limitations under the License.
 //
 
-package tree;
+package tree.binarytree;
 
-public interface TreeNode<SELF extends TreeNode<SELF, E>, E> {
+import tree.TreeNode;
 
-    E getElement();
+public interface BinaryTreeNode<T extends BinaryTreeNode<T, E>, E> extends TreeNode<T, E> {
+    T getLeft();
 
-    SELF getParent();
-
-    int childrenSize(); // direct children
-
-    Iterable<SELF> getChildren(); // direct children
+    T getRight();
 }

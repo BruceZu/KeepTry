@@ -13,19 +13,23 @@
 // limitations under the License.
 //
 
-package tree;
+package tree.binarytree;
 
-public abstract class AbstractBinaryTree<T>
-        extends AbstractTree<T>
-        implements BinaryTree<T> {
-    public TreeNode<T> sibling(TreeNode<T> n) {
-        TreeNode<T> p = n.getParent();
+import tree.AbstractTree;
+
+public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
+        extends AbstractTree<T, E>
+        implements BinaryTree<T, E> {
+
+    @Override
+    public T sibling(T n) {
+        T p = n.getParent();
         if (p == null) {
             return null;
         }
-        if (n == left(p)) {
-            return right(p);
+        if (n == p.getLeft()) {
+            return p.getRight();
         }
-        return left(p);
+        return p.getLeft();
     }
 }

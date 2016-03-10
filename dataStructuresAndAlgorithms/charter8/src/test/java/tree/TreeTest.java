@@ -17,6 +17,8 @@ package tree;
 
 import org.junit.Before;
 import org.junit.Test;
+import tree.binarytree.BinaryTreeNode;
+import tree.binarytree.implementation.BinaryTreeImplement;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -26,73 +28,77 @@ import static org.junit.Assert.assertEquals;
 
 
 public class TreeTest {
-    private class TestTreeNodeImplement<T> implements TreeNode<T> {
-        private T e;
-        private TreeNode<T> p;
-        private List<TreeNode<T>> children;
+    private static class TestTreeNodeImplement<T extends TreeNode<T, E>, E>
+            implements TreeNode<T, E> {
+        private E e;
+        private T p;
+        private List<T> children;
 
-        public TestTreeNodeImplement(T e) {
+        private void setElement(E e) {
             this.e = e;
         }
 
-        @Override
-        public void setElement(T e) {
-            this.e = e;
-        }
-
-        @Override
-        public void setParent(TreeNode p) {
+        private void setParent(T p) {
             this.p = p;
         }
 
+        public TestTreeNodeImplement(E e) {
+            this.e = e;
+        }
+
         @Override
-        public TreeNode<T> getParent() {
+        public E getElement() {
+            return e;
+        }
+
+        @Override
+        public T getParent() {
             return p;
-        }
-
-        @Override
-        public void setChildren(List<TreeNode<T>> children) {
-            this.children = children;
-        }
-
-        @Override
-        public Iterable<TreeNode<T>> getChildren() {
-            return children;
         }
 
         @Override
         public int childrenSize() {
             return children.size();
         }
+
+        @Override
+        public Iterable<T> getChildren() {
+            return children;
+        }
+
+
+        public void setChildren(List<T> children) {
+            this.children = children;
+        }
     }
 
-    private TreeNode root;
+    private TestTreeNodeImplement root;
 
     @Before
     public void data() {
 
         root = new TestTreeNodeImplement(1);
 
-        TreeNode n2 = new TestTreeNodeImplement(2);
-        TreeNode n3 = new TestTreeNodeImplement(3);
+        TreeNode n2 = new TestTreeNodeImplement("2");
+        TestTreeNodeImplement n3 = new TestTreeNodeImplement(Boolean.TRUE);
 
-        TreeNode n4 = new TestTreeNodeImplement(4);
-        TreeNode n5 = new TestTreeNodeImplement(5);
+        TreeNode n4 = new TestTreeNodeImplement('4');
+        TestTreeNodeImplement n5 = new TestTreeNodeImplement(5d);
 
-        TreeNode n6 = new TestTreeNodeImplement(6);
+        TestTreeNodeImplement n6 = new TestTreeNodeImplement(6);
         TreeNode n7 = new TestTreeNodeImplement(7);
 
-        TreeNode n8 = new TestTreeNodeImplement(8);
+        TestTreeNodeImplement n8 = new TestTreeNodeImplement(8);
         TreeNode n9 = new TestTreeNodeImplement(9);
 
         TreeNode n10 = new TestTreeNodeImplement(10);
         TreeNode n11 = new TestTreeNodeImplement(11);
         //
-        root.setChildren(Arrays.asList(new TreeNode[]{n2, n3}));
-        n3.setChildren(Arrays.asList(new TreeNode[]{n4, n5}));
-        n5.setChildren(Arrays.asList(new TreeNode[]{n6, n7}));
-        n6.setChildren(Arrays.asList(new TreeNode[]{n8, n9, n10}));
-        n8.setChildren(Arrays.asList(new TreeNode[]{n11}));
+        root.setChildren(Arrays.asList(n2, n3));
+        n3.setChildren(Arrays.asList(n4, n5));
+        n5.setChildren(Arrays.asList(n6, n7));
+        n6.setChildren(Arrays.asList(n8, n9, n10));
+        n8.setChildren(Arrays.asList(n11));
 
         //               1
         //              /  \
@@ -113,7 +119,7 @@ public class TreeTest {
     public void testHeight() {
         Tree t = new AbstractTree() {
             @Override
-            public TreeNode<Integer> root() {
+            public TreeNode root() {
                 return root;
             }
 
@@ -136,5 +142,14 @@ public class TreeTest {
         assertEquals(h, 5);
         h = t.height(t.root());
         assertEquals(h, 5);
+
+        BinaryTreeImplement bt = new BinaryTreeImplement();
+        BinaryTreeNode r = bt.createRoot("root");
+        BinaryTreeNode l = bt.createLeftFor(r, "left");
+        BinaryTreeNode l2 = bt.createLeftFor(l, "left");
+        BinaryTreeNode l3 = bt.createLeftFor(l2, "left");
+        assertEquals(bt.size(), 4);
+        assertEquals(bt.height(), 3);
+        assertEquals(bt.height(r), 3);
     }
 }

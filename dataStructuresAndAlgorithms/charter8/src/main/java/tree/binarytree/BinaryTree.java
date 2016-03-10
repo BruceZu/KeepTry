@@ -13,7 +13,9 @@
 // limitations under the License.
 //
 
-package tree;
+package tree.binarytree;
+
+import tree.Tree;
 
 // A binary tree is an ordered tree
 // Let T be a nonempty binary tree, and
@@ -47,10 +49,12 @@ package tree;
 // a nonempty proper binary tree T:
 //           nE = nI +1.
 //
-public interface BinaryTree<T> extends Tree<T> {
-    TreeNode<T> left(TreeNode<T> n);
+public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E> {
+    T sibling(T n);
 
-    TreeNode<T> right(TreeNode<T> n);
+    T createLeftFor(T n, E e);
 
-    TreeNode<T> sibling(TreeNode<T> n);
+    T createRightFor(T n, E e);
+
+    T createRoot(E e);
 }

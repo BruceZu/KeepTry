@@ -15,12 +15,12 @@
 
 package tree;
 
-public abstract class AbstractTree<T> implements Tree<T> {
+public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<T, E> {
 
-    private int childrenMaxDepth(TreeNode<T> n, int ancs /* number of ancestors */) {
+    private int childrenMaxDepth(T n, int ancs /* number of ancestors */) {
 
         int maxChildDepth = 0;
-        for (TreeNode<T> c : n.getChildren()) {
+        for (T c : n.<E>getChildren()) {
             if (!isLeaf(c)) {
                 maxChildDepth = Math.max(maxChildDepth, childrenMaxDepth(c, ancs + 1));
             }
@@ -30,7 +30,8 @@ public abstract class AbstractTree<T> implements Tree<T> {
         return maxChildDepth == 0 ? ancs : maxChildDepth;
     }
 
-    public boolean isLeaf(TreeNode n) {
+    @Override
+    public boolean isLeaf(T n) {
         return n.getChildren() == null || n.childrenSize() == 0;
     }
 
@@ -38,8 +39,9 @@ public abstract class AbstractTree<T> implements Tree<T> {
     //  - if the tree is empty or a leaf: 0
     //  - the maximum of the depth of its nodes
     // O(N)
+    @Override
     public int height() {
-        TreeNode r = root();
+        T r = root();
         if (r == null || isLeaf(r)) {
             return 0;
         }
@@ -51,12 +53,12 @@ public abstract class AbstractTree<T> implements Tree<T> {
     //   - else: 1 + max(the height of subtrees).
     // O(N)
     @Override
-    public <T> int height(TreeNode<T> n) {
+    public int height(T n) {
         if (n == null || isLeaf(n)) {
             return 0;
         }
         int subTreeHeight = 0;
-        for (TreeNode<T> c : n.getChildren()) {
+        for (T c : n.<E>getChildren()) {
             if (!isLeaf(c)) {
                 subTreeHeight = Math.max(subTreeHeight, height(c));
             }
@@ -66,7 +68,8 @@ public abstract class AbstractTree<T> implements Tree<T> {
     }
 
     // The depth of a node: the number of ancestors of node, other than node itself.
-    public int depth(TreeNode n) {
+    @Override
+    public int depth(T n) {
         if (n.getParent() == null) {
             return 0;
         }
