@@ -17,6 +17,7 @@ package tree.binarytree.implementation;
 
 import tree.TreeNode;
 import tree.binarytree.AbstractBinaryTree;
+import tree.binarytree.BinaryTree;
 import tree.binarytree.BinaryTreeNode;
 
 import java.util.ArrayList;
@@ -101,6 +102,12 @@ public class BinaryTreeImplement extends AbstractBinaryTree {
     private BinaryTreeNode root;
     private int size;
 
+    private void valid(BinaryTreeNode n) {
+        if (n.getParent() == n) {
+            throw new IllegalArgumentException("This node is no longer in the tree");
+        }
+    }
+
     @Override
     public BinaryTreeNode createRoot(Object e) {
         this.root = new BinaryTreeNodeImplement(e);
@@ -110,18 +117,106 @@ public class BinaryTreeImplement extends AbstractBinaryTree {
 
     @Override
     public BinaryTreeNode createLeftFor(BinaryTreeNode n, Object o) {
+        valid(n);
+        if (n.getLeft() != null) {
+            throw new IllegalArgumentException("n already has a left child");
+        }
         BinaryTreeNode left = new BinaryTreeNodeImplement(o);
-        size++;
         ((BinaryTreeNodeImplement) n).setLeft(left);
+        ((BinaryTreeNodeImplement) left).setParent(n);
+        size++;
         return left;
     }
 
     @Override
     public BinaryTreeNode createRightFor(BinaryTreeNode n, Object o) {
+        valid(n);
+        if (n.getRight() != null) {
+            throw new IllegalArgumentException("n already has a right child");
+        }
         BinaryTreeNode right = new BinaryTreeNodeImplement(o);
-        size++;
         ((BinaryTreeNodeImplement) n).setLeft(right);
+        ((BinaryTreeNodeImplement) right).setParent(n);
+        size++;
         return right;
+    }
+
+    @Override
+    public void attachLeftFor(BinaryTreeNode n, BinaryTree tree) {
+        valid(n);
+        if (n.getLeft() != null) {
+            throw new IllegalArgumentException("n already has a left child");
+        }
+
+        BinaryTreeNodeImplement r = (BinaryTreeNodeImplement) tree.root();
+        if (r != null) {
+            r.setParent(n);
+            ((BinaryTreeNodeImplement) n).setLeft(r);
+            ((BinaryTreeNodeImplement) r).setParent(n);
+            size += tree.size();
+            tree.clean();
+        }
+    }
+
+    @Override
+    public void attachRightFor(BinaryTreeNode n, BinaryTree tree) {
+        valid(n);
+        if (n.getRight() != null) {
+            throw new IllegalArgumentException("n already has a right child");
+        }
+
+        BinaryTreeNodeImplement r = (BinaryTreeNodeImplement) tree.root();
+        if (r != null) {
+            r.setParent(n);
+            ((BinaryTreeNodeImplement) n).setRight(r);
+            ((BinaryTreeNodeImplement) r).setParent(n);
+            size += tree.size();
+            tree.clean();
+        }
+    }
+
+    private void gc(BinaryTreeNode n) {
+        BinaryTreeNodeImplement bn = ((BinaryTreeNodeImplement) n);
+        bn.setRight(null);
+        bn.setLeft(null);
+        bn.setElement(null);
+        bn.setParent(n);
+        size--;
+    }
+
+    @Override
+    public void remove(BinaryTreeNode n) {
+        valid(n);
+        if ( n.childrenSize() == 2) {
+            throw new IllegalArgumentException(" n has two children");
+        }
+
+        // re-link
+        BinaryTreeNodeImplement p = (BinaryTreeNodeImplement) n.getParent();
+        BinaryTreeNode child = n.getLeft() == null ? n.getRight() : n.getLeft();
+
+        if (child != null) {
+            ((BinaryTreeNodeImplement) child).setParent(p);
+        }
+
+        if (n == root) {
+            root = child;
+        } else {
+            if (p.getLeft() == n) {
+                p.setLeft(child);
+            } else {
+                p.setRight(child);
+            }
+        }
+
+        gc(n);
+        return;
+    }
+
+    @Override
+    public void clean() {
+        root = null;
+        size = 0;
     }
 
     @Override

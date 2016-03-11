@@ -137,6 +137,11 @@ public class TreeTest {
             public Iterable<TreeNode> Nodes() {
                 throw new UnsupportedOperationException();
             }
+
+            @Override
+            public void clean() {
+                throw new UnsupportedOperationException();
+            }
         };
         int h = t.height();
         assertEquals(h, 5);
@@ -146,10 +151,33 @@ public class TreeTest {
         BinaryTreeImplement bt = new BinaryTreeImplement();
         BinaryTreeNode r = bt.createRoot("root");
         BinaryTreeNode l = bt.createLeftFor(r, "left");
-        BinaryTreeNode l2 = bt.createLeftFor(l, "left");
-        BinaryTreeNode l3 = bt.createLeftFor(l2, "left");
-        assertEquals(bt.size(), 4);
+        BinaryTreeNode l2 = bt.createLeftFor(l, "left2");
+        BinaryTreeNode l3 = bt.createLeftFor(l2, "left3");
+        BinaryTreeNode r3 = bt.createRightFor(l2, "right3");
+        //          r
+        //       l
+        //    l2
+        // l3   r3
+        //
+        assertEquals(bt.size(), 5);
         assertEquals(bt.height(), 3);
         assertEquals(bt.height(r), 3);
+
+        bt.remove(l3);
+        assertEquals(bt.height(), 3);
+        assertEquals(bt.height(r), 3);
+        bt.remove(l2);
+        assertEquals(bt.height(), 2);
+        assertEquals(bt.height(r), 2);
+        bt.remove(r3);
+        assertEquals(bt.height(), 1);
+        assertEquals(bt.height(r), 1);
+        bt.remove(l);
+        assertEquals(bt.height(), 0);
+        assertEquals(bt.height(r), 0);
+        bt.remove(r);
+        assertEquals(bt.height(), 0);
+        assertEquals(bt.height(r), 0);
+        assertEquals(bt.root(), null);
     }
 }

@@ -50,11 +50,17 @@ import tree.Tree;
 //           nE = nI +1.
 //
 public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E> {
-    T sibling(T n);
+    T createRoot(E e);
 
     T createLeftFor(T n, E e);
 
     T createRightFor(T n, E e);
 
-    T createRoot(E e);
+    void attachLeftFor(T n, BinaryTree<? extends BinaryTreeNode<T, E>, E> tree);
+
+    void attachRightFor(T n, BinaryTree<? extends BinaryTreeNode<T, E>, E> tree);
+
+    T sibling(T n);
+
+    void remove(T n); // remove the node with only one child
 }

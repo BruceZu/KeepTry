@@ -41,6 +41,8 @@ public interface Tree<T extends TreeNode<T, E>, E> extends Iterable<T> {
 
     Iterable<T> Nodes();
 
+    void clean();
+
     // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/TreeTraverser.html
     //
     //          h
