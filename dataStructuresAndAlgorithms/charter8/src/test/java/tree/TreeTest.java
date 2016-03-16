@@ -17,7 +17,9 @@ package tree;
 
 import org.junit.Before;
 import org.junit.Test;
+import tree.binarytree.BinaryTree;
 import tree.binarytree.BinaryTreeNode;
+import tree.binarytree.implementation.ArrayBasedBinaryTreeImplement;
 import tree.binarytree.implementation.BinaryTreeImplement;
 
 import java.util.Arrays;
@@ -147,18 +149,23 @@ public class TreeTest {
         assertEquals(h, 5);
         h = t.height(t.root());
         assertEquals(h, 5);
+    }
 
-        BinaryTreeImplement bt = new BinaryTreeImplement();
-        BinaryTreeNode r = bt.createRoot("root");
-        BinaryTreeNode l = bt.createLeftFor(r, "left");
-        BinaryTreeNode l2 = bt.createLeftFor(l, "left2");
-        BinaryTreeNode l3 = bt.createLeftFor(l2, "left3");
-        BinaryTreeNode r3 = bt.createRightFor(l2, "right3");
+    @Test(timeout = 10l, expected = Test.None.class)
+    public void testHeightWithBinaryTree() {
         //          r
         //       l
         //    l2
         // l3   r3
         //
+
+        BinaryTree bt = new BinaryTreeImplement();
+        BinaryTreeNode<? extends BinaryTreeNode, String> r = bt.createRoot("root");
+        BinaryTreeNode<? extends BinaryTreeNode, String> l = bt.createLeftFor(r, "left");
+        BinaryTreeNode<? extends BinaryTreeNode, String> l2 = bt.createLeftFor(l, "left2");
+        BinaryTreeNode<? extends BinaryTreeNode, String> l3 = bt.createLeftFor(l2, "left3");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r3 = bt.createRightFor(l2, "right3");
+
         assertEquals(bt.size(), 5);
         assertEquals(bt.height(), 3);
         assertEquals(bt.height(r), 3);
@@ -179,5 +186,32 @@ public class TreeTest {
         assertEquals(bt.height(), 0);
         assertEquals(bt.height(r), 0);
         assertEquals(bt.root(), null);
+
+        ArrayBasedBinaryTreeImplement abt = new ArrayBasedBinaryTreeImplement();
+        r = abt.createRoot("root");
+        l = abt.createLeftFor(r, "left");
+        l2 = abt.createLeftFor(l, "left2");
+        l3 = abt.createLeftFor(l2, "left3");
+        r3 = abt.createRightFor(l2, "right3");
+        assertEquals(abt.size(), 5);
+        assertEquals(abt.height(), 3);
+        assertEquals(abt.height(r), 3);
+
+        abt.remove(l3);
+        assertEquals(abt.height(), 3);
+        assertEquals(abt.height(r), 3);
+        abt.remove(l2);
+        assertEquals(abt.height(), 2);
+        assertEquals(abt.height(r), 2);
+        abt.remove(r3);
+        assertEquals(abt.height(), 1);
+        assertEquals(abt.height(r), 1);
+        abt.remove(l);
+        assertEquals(abt.height(), 0);
+        assertEquals(abt.height(r), 0);
+        abt.remove(r);
+        assertEquals(abt.height(), 0);
+        assertEquals(abt.height(r), 0);
+        assertEquals(abt.root(), null);
     }
 }
