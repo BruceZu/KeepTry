@@ -13,6 +13,8 @@
 // limitations under the License.
 //
 
+package array;
+
 // https://leetcode.com/problems/remove-element/
 public class Leetcode27RemoveElement {
     // Leetcode 27 Remove Element

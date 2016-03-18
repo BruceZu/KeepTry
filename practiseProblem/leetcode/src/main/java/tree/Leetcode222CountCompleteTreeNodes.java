@@ -13,12 +13,22 @@
 // limitations under the License.
 //
 
-class ListNode {
-    int val;
-    ListNode next;
+package tree;
 
-    ListNode(int x) {
-        val = x;
-        next = null;
+/**
+ * 222. Count Complete Tree Nodes
+ *
+ * Given a complete binary tree, count the number of nodes.
+ *
+ * Definition of a complete binary tree from Wikipedia:
+ * In a complete binary tree every level, except possibly the last,
+ * is completely filled, and all nodes in the last level are as far left as possible.
+ * It can have between 1 and 2h nodes inclusive at the last level h.
+ */
+
+public class Leetcode222CountCompleteTreeNodes {
+// https://leetcode.com/discuss/89514/fast-java-solution-52mm-beating-98-57%25
+    public int countNodes(TreeNode root) {
+        return 0;
     }
 }
