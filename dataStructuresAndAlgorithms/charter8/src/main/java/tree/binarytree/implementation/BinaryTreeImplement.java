@@ -132,7 +132,7 @@ public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends Abst
             throw new IllegalArgumentException("n already has a right child");
         }
         BinaryTreeNodeImplement right = new BinaryTreeNodeImplement(o);
-        ((BinaryTreeNodeImplement) n).setLeft(right);
+        ((BinaryTreeNodeImplement) n).setRight(right);
         right.setParent((BinaryTreeNodeImplement) n);
         size++;
         return (T) right;
