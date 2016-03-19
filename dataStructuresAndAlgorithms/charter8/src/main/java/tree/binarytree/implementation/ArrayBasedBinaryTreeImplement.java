@@ -145,7 +145,7 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> ex
             NodeImplement bn = ((NodeImplement) node);
             bn.array[bn.index] = null; // old tree
 
-            // update itself
+            // update itself, 'postorder traversal'
             bn.index = i;
             bn.array = (NodeImplement[]) a;
 

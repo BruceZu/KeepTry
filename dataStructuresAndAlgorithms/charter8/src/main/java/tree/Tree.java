@@ -24,6 +24,10 @@ import java.util.Iterator;
 // Define a tree recursively:
 // Tree is either empty or
 // consists of a node root, and a (possibly empty) set of subtrees.
+//
+// breadth-first traversal:
+//    visit all the positions at depth d before we visit the positions at depth d+1.
+//
 public interface Tree<T extends TreeNode<T, E>, E> extends Iterable<T> {
     boolean isLeaf(T n);
 
@@ -42,6 +46,8 @@ public interface Tree<T extends TreeNode<T, E>, E> extends Iterable<T> {
     Iterable<T> Nodes();
 
     void clean();
+
+    void breadthFirstPrint();
 
     // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/TreeTraverser.html
     //

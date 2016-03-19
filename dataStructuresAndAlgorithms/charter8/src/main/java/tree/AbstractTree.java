@@ -15,6 +15,10 @@
 
 package tree;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<T, E> {
 
     private int childrenMaxDepth(T n, int ancs /* number of ancestors */) {
@@ -74,5 +78,56 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
             return 0;
         }
         return 1 + depth(n.getParent());
+    }
+
+    private void breadthFirstPrint(Queue<T> cs /*children*/) {
+        T n = cs.poll();
+        if (n == null) {
+            return;
+        }
+        System.out.println(n.getElement().toString());
+        Iterator<T> ite = n.getChildren().iterator();
+        while (ite.hasNext()) {
+            cs.offer(ite.next());
+        }
+        breadthFirstPrint(cs);
+    }
+
+    public void breadthFirstPrint2() {
+        int size = size();
+        if (size() == 0) {
+            return;
+        }
+        Queue<T> children = new LinkedList();
+        // or use a array with size length, and 2 cursors.
+        children.add(root());
+        breadthFirstPrint(children);
+    }
+
+    private void breadthFirstPrint(Object[] cs /* children */,
+                                   int p /* printCursor */,
+                                   int in /* index for next node */) {
+        if (p == size()) { // decide by p not by n == null, different with queue.
+            return;
+        }
+
+        T n = (T) cs[p++];
+        System.out.println(n.getElement().toString());
+        Iterator<T> ite = n.getChildren().iterator();
+        while (ite.hasNext()) {
+            cs[in++] = ite.next();
+        }
+        breadthFirstPrint(cs, p, in);
+    }
+
+    @Override
+    public void breadthFirstPrint() {
+        int size = size();
+        if (size() == 0) {
+            return;
+        }
+        Object[] children = new Object[size];
+        children[0] = root();
+        breadthFirstPrint(children, 0, 1);
     }
 }

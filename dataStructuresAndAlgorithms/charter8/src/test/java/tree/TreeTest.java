@@ -28,14 +28,12 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-
 public class TreeTest {
     private static class TestTreeNodeImplement<T extends TreeNode<T, E>, E>
             implements TreeNode<T, E> {
         private E e;
         private T p;
         private List<T> children;
-
         private void setElement(E e) {
             this.e = e;
         }
@@ -165,7 +163,7 @@ public class TreeTest {
         BinaryTreeNode<? extends BinaryTreeNode, String> l2 = bt.createLeftFor(l, "left2");
         BinaryTreeNode<? extends BinaryTreeNode, String> l3 = bt.createLeftFor(l2, "left3");
         BinaryTreeNode<? extends BinaryTreeNode, String> r3 = bt.createRightFor(l2, "right3");
-
+        bt.breadthFirstPrint();
         assertEquals(bt.size(), 5);
         assertEquals(bt.height(), 3);
         assertEquals(bt.height(r), 3);
@@ -193,6 +191,7 @@ public class TreeTest {
         l2 = abt.createLeftFor(l, "left2");
         l3 = abt.createLeftFor(l2, "left3");
         r3 = abt.createRightFor(l2, "right3");
+        abt.breadthFirstPrint();
         assertEquals(abt.size(), 5);
         assertEquals(abt.height(), 3);
         assertEquals(abt.height(r), 3);
