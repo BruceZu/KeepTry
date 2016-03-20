@@ -104,30 +104,43 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
         breadthFirstPrint(children);
     }
 
-    private void breadthFirstPrint(Object[] cs /* children */,
-                                   int p /* printCursor */,
-                                   int in /* index for next node */) {
-        if (p == size()) { // decide by p not by n == null, different with queue.
-            return;
-        }
-
-        T n = (T) cs[p++];
-        System.out.println(n.getElement().toString());
-        Iterator<T> ite = n.getChildren().iterator();
-        while (ite.hasNext()) {
-            cs[in++] = ite.next();
-        }
-        breadthFirstPrint(cs, p, in);
-    }
-
     @Override
-    public void breadthFirstPrint() {
-        int size = size();
-        if (size() == 0) {
-            return;
-        }
-        Object[] children = new Object[size];
-        children[0] = root();
-        breadthFirstPrint(children, 0, 1);
+    public Iterator<T> iteratorBreadthFirstOrder() {
+        return new Iterator<T>() {
+            // todo: fail fast
+            private Object[] children;
+            private int cursor;
+            private int insertIndex;
+
+            private Iterator<T> init() {
+                int size = size();
+
+                children = new Object[size];
+                children[0] = root();
+                cursor = -1;
+                insertIndex = 1;
+                return this;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return size() != 0 && cursor != size() - 1; // check by size
+            }
+
+            @Override
+            public T next() {
+                T r = (T) children[++cursor];
+                Iterator<T> ite = r.getChildren().iterator();
+                while (ite.hasNext()) {
+                    children[insertIndex++] = ite.next();
+                }
+                return r;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        }.init();
     }
 }

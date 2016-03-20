@@ -49,8 +49,6 @@ public interface Tree<T extends TreeNode<T, E>, E> {
 
     void clean();
 
-    void breadthFirstPrint();
-
     // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/TreeTraverser.html
     //
     //          h
