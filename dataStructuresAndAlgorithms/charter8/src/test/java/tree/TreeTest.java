@@ -157,74 +157,94 @@ public class TreeTest {
 
     @Test(timeout = 10l, expected = Test.None.class)
     public void testHeightWithBinaryTree() {
-        //          r
-        //       l
-        //    l2
-        // l3   r3
-        //
+        //           r
+        //        l    1
+        //     l2    2   3
+        //   l3
+        //l4  r4
 
         BinaryTree bt = new BinaryTreeImplement();
         BinaryTreeNode<? extends BinaryTreeNode, String> r = bt.createRoot("root");
         BinaryTreeNode<? extends BinaryTreeNode, String> l = bt.createLeftFor(r, "left");
         BinaryTreeNode<? extends BinaryTreeNode, String> l2 = bt.createLeftFor(l, "left2");
         BinaryTreeNode<? extends BinaryTreeNode, String> l3 = bt.createLeftFor(l2, "left3");
-        BinaryTreeNode<? extends BinaryTreeNode, String> r3 = bt.createRightFor(l2, "right3");
+        BinaryTreeNode<? extends BinaryTreeNode, String> l4 = bt.createLeftFor(l3, "left4");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r4 = bt.createRightFor(l3, "right4");
+
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> one = bt.createRightFor(r, "1");
+        BinaryTreeNode<? extends BinaryTreeNode, String> two = bt.createLeftFor(one, "2");
+        BinaryTreeNode<? extends BinaryTreeNode, String> three = bt.createRightFor(one, "3");
+
         Iterator<? extends TreeNode> ite = bt.iteratorBreadthFirstOrder();
         while (ite.hasNext()) {
-            System.out.print(String.format("%s ",ite.next().getElement().toString()));
+            System.out.print(String.format("%s ", ite.next().getElement().toString()));
         }
         System.out.println();
 
-        assertEquals(bt.size(), 5);
-        assertEquals(bt.height(), 3);
-        assertEquals(bt.height(r), 3);
+        assertEquals(bt.size(), 9);
+        assertEquals(bt.height(), 4);
+        assertEquals(bt.height(r), 4);
 
-        bt.remove(l3);
+        bt.remove(l2);
         assertEquals(bt.height(), 3);
         assertEquals(bt.height(r), 3);
-        bt.remove(l2);
+        bt.remove(l);
         assertEquals(bt.height(), 2);
         assertEquals(bt.height(r), 2);
-        bt.remove(r3);
-        assertEquals(bt.height(), 1);
-        assertEquals(bt.height(r), 1);
-        bt.remove(l);
+
+        bt.remove(r4);
+        bt.remove(l4);
+        bt.remove(l3);
+        assertEquals(bt.height(), 2);
+        assertEquals(bt.height(r), 2);
+        bt.remove(three);
+        bt.remove(two);
+        bt.remove(one);
         assertEquals(bt.height(), 0);
         assertEquals(bt.height(r), 0);
         bt.remove(r);
-        assertEquals(bt.height(), 0);
-        assertEquals(bt.height(r), 0);
         assertEquals(bt.root(), null);
 
-        ArrayBasedBinaryTreeImplement abt = new ArrayBasedBinaryTreeImplement();
+        //--
+        BinaryTree abt = new ArrayBasedBinaryTreeImplement();
         r = abt.createRoot("root");
         l = abt.createLeftFor(r, "left");
         l2 = abt.createLeftFor(l, "left2");
         l3 = abt.createLeftFor(l2, "left3");
-        r3 = abt.createRightFor(l2, "right3");
+        l4 = abt.createLeftFor(l3, "left4");
+        r4 = abt.createRightFor(l3, "right4");
+
+        one = abt.createRightFor(r, "1");
+        two = abt.createLeftFor(one, "2");
+        three = abt.createRightFor(one, "3");
+
         ite = abt.iteratorBreadthFirstOrder();
         while (ite.hasNext()) {
             System.out.print(String.format("%s ", ite.next().getElement().toString()));
         }
-        assertEquals(abt.size(), 5);
-        assertEquals(abt.height(), 3);
-        assertEquals(abt.height(r), 3);
+        assertEquals(abt.size(), 9);
+        assertEquals(abt.height(), 4);
+        assertEquals(abt.height(r), 4);
 
-        abt.remove(l3);
+        abt.remove(l2);
         assertEquals(abt.height(), 3);
         assertEquals(abt.height(r), 3);
-        abt.remove(l2);
+        abt.remove(l);
         assertEquals(abt.height(), 2);
         assertEquals(abt.height(r), 2);
-        abt.remove(r3);
-        assertEquals(abt.height(), 1);
-        assertEquals(abt.height(r), 1);
-        abt.remove(l);
+
+        abt.remove(r4);
+        abt.remove(l4);
+        abt.remove(l3);
+        assertEquals(abt.height(), 2);
+        assertEquals(abt.height(r), 2);
+        abt.remove(three);
+        abt.remove(two);
+        abt.remove(one);
         assertEquals(abt.height(), 0);
         assertEquals(abt.height(r), 0);
         abt.remove(r);
-        assertEquals(abt.height(), 0);
-        assertEquals(abt.height(r), 0);
         assertEquals(abt.root(), null);
     }
 }
