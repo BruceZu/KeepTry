@@ -171,8 +171,10 @@ public class TreeTest {
         BinaryTreeNode<? extends BinaryTreeNode, String> r3 = bt.createRightFor(l2, "right3");
         Iterator<? extends TreeNode> ite = bt.iteratorBreadthFirstOrder();
         while (ite.hasNext()) {
-            System.out.println(ite.next().getElement().toString());
+            System.out.print(String.format("%s ",ite.next().getElement().toString()));
         }
+        System.out.println();
+
         assertEquals(bt.size(), 5);
         assertEquals(bt.height(), 3);
         assertEquals(bt.height(r), 3);
@@ -202,7 +204,7 @@ public class TreeTest {
         r3 = abt.createRightFor(l2, "right3");
         ite = abt.iteratorBreadthFirstOrder();
         while (ite.hasNext()) {
-            System.out.println(ite.next().getElement().toString());
+            System.out.print(String.format("%s ", ite.next().getElement().toString()));
         }
         assertEquals(abt.size(), 5);
         assertEquals(abt.height(), 3);
