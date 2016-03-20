@@ -127,4 +127,14 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
             }
         }.init();
     }
+
+    @Override
+    public Iterator<T> iteratorPreOrder() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Iterator<T> iteratorPostOrder() {
+        throw new UnsupportedOperationException();
+    }
 }

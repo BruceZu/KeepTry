@@ -17,6 +17,8 @@ package tree.binarytree;
 
 import tree.AbstractTree;
 
+import java.util.Iterator;
+
 public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         extends AbstractTree<T, E>
         implements BinaryTree<T, E> {
@@ -31,5 +33,10 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
             return p.getRight();
         }
         return p.getLeft();
+    }
+
+    @Override
+    public Iterator<T> iteratorInOrder() {
+        throw new UnsupportedOperationException();
     }
 }

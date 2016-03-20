@@ -244,14 +244,4 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
     public int size() {
         return size;
     }
-
-    @Override
-    public Iterator<T> iteratorPreOrder() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Iterator<T> iteratorPostOrder() {
-        throw new UnsupportedOperationException();
-    }
 }
