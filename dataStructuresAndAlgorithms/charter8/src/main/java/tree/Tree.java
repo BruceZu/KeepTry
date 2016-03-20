@@ -28,7 +28,7 @@ import java.util.Iterator;
 // breadth-first traversal:
 //    visit all the positions at depth d before we visit the positions at depth d+1.
 //
-public interface Tree<T extends TreeNode<T, E>, E> extends Iterable<T> {
+public interface Tree<T extends TreeNode<T, E>, E> {
     boolean isLeaf(T n);
 
     int depth(T n);
@@ -41,9 +41,11 @@ public interface Tree<T extends TreeNode<T, E>, E> extends Iterable<T> {
 
     int size();
 
-    Iterator<T> iterator();
+    Iterator<T> iteratorPreOrder();
 
-    Iterable<T> Nodes();
+    Iterator<T> iteratorPostOrder();
+
+    Iterator<T> iteratorBreadthFirstOrder();
 
     void clean();
 

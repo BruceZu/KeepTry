@@ -34,6 +34,7 @@ public class TreeTest {
         private E e;
         private T p;
         private List<T> children;
+
         private void setElement(E e) {
             this.e = e;
         }
@@ -129,12 +130,17 @@ public class TreeTest {
             }
 
             @Override
-            public Iterator iterator() {
+            public Iterator iteratorPreOrder() {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public Iterable<TreeNode> Nodes() {
+            public Iterator iteratorPostOrder() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public Iterator iteratorBreadthFirstOrder() {
                 throw new UnsupportedOperationException();
             }
 

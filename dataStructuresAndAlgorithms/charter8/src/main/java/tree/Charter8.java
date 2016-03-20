@@ -24,13 +24,6 @@ public class Charter8 {
 //   java.util.TreeSet
 //   java.util.TreeMap
 
-// - How to implement iterator? snap-shot or real time, if later how to keep next status?
-//  (maintenance
-//    a path
-//    + size()
-//    + using a List or Array to keep children and their order
-//    + optional index of children)
-
 // What is the Force or Power of tree?
 
 

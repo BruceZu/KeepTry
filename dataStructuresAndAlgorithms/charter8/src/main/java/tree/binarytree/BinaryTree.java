@@ -17,6 +17,8 @@ package tree.binarytree;
 
 import tree.Tree;
 
+import java.util.Iterator;
+
 // A binary tree is an ordered tree
 // Let T be a nonempty binary tree, and
 //
@@ -61,6 +63,8 @@ public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E
     void attachRightFor(T n, BinaryTree<? extends BinaryTreeNode<T, E>, E> tree);
 
     T sibling(T n);
+
+    Iterator<T> iteratorInOrder();
 
     void remove(T n); // remove the node with only one child
 }

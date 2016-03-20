@@ -172,6 +172,11 @@ public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends Abst
         }
     }
 
+    @Override
+    public Iterator<T> iteratorInOrder() {
+        throw new UnsupportedOperationException();
+    }
+
     private void gc(T n) {
         BinaryTreeNodeImplement bn = ((BinaryTreeNodeImplement) n);
         bn.setRight(null);
@@ -227,12 +232,12 @@ public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends Abst
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<T> iteratorPreOrder() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Iterable<T> Nodes() {
+    public Iterator<T> iteratorPostOrder() {
         throw new UnsupportedOperationException();
     }
 }

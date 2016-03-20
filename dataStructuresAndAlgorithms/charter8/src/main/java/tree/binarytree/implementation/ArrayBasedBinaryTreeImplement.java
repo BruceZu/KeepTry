@@ -25,7 +25,9 @@ import java.util.List;
 
 // Its space is fine for 'heaps'
 // its fine for read operation
-public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends AbstractBinaryTree<T, E> {
+public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
+        extends AbstractBinaryTree<T, E> {
+
     private static class NodeImplement<N extends NodeImplement<N, E>, E>
             implements BinaryTreeNode<N, E> {
         private E e;
@@ -184,6 +186,11 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> ex
         tree.clean();
     }
 
+    @Override
+    public Iterator<T> iteratorInOrder() {
+        throw new UnsupportedOperationException();
+    }
+
 
     private void innerMove(T node, int i /* new index*/) {
         if (node != null) {
@@ -239,12 +246,12 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> ex
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<T> iteratorPreOrder() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Iterable Nodes() {
+    public Iterator<T> iteratorPostOrder() {
         throw new UnsupportedOperationException();
     }
 }
