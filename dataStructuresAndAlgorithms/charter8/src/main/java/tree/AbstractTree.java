@@ -16,8 +16,6 @@
 package tree;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<T, E> {
 
@@ -80,30 +78,6 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
         return 1 + depth(n.getParent());
     }
 
-    private void breadthFirstPrint(Queue<T> cs /*children*/) {
-        T n = cs.poll();
-        if (n == null) {
-            return;
-        }
-        System.out.println(n.getElement().toString());
-        Iterator<T> ite = n.getChildren().iterator();
-        while (ite.hasNext()) {
-            cs.offer(ite.next());
-        }
-        breadthFirstPrint(cs);
-    }
-
-    public void breadthFirstPrint2() {
-        int size = size();
-        if (size() == 0) {
-            return;
-        }
-        Queue<T> children = new LinkedList();
-        // or use a array with size length, and 2 cursors.
-        children.add(root());
-        breadthFirstPrint(children);
-    }
-
     @Override
     public Iterator<T> iteratorBreadthFirstOrder() {
         return new Iterator<T>() {
@@ -112,6 +86,9 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
             private int cursor;
             private int insertIndex;
 
+            // or using a queue without cast class type. Easy and heavy.
+            // private Queue<T> cs;
+
             private Iterator<T> init() {
                 int size = size();
 
@@ -119,20 +96,27 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
                 children[0] = root();
                 cursor = -1;
                 insertIndex = 1;
+
+                // cs = new LinkedList();
+                // cs.offer(root());
                 return this;
             }
 
             @Override
             public boolean hasNext() {
-                return size() != 0 && cursor != size() - 1; // check by size
+                return size() != 0
+                        && cursor != size() - 1; // check by size
+                // && cs.peek() != null;
             }
 
             @Override
             public T next() {
                 T r = (T) children[++cursor];
+                // cs.poll();
                 Iterator<T> ite = r.getChildren().iterator();
                 while (ite.hasNext()) {
                     children[insertIndex++] = ite.next();
+                    // cs.offer(ite.next());
                 }
                 return r;
             }
