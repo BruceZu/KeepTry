@@ -25,21 +25,20 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
 
     @Override
     public T sibling(T n) {
-        T p = n.getParent();
-        if (p == null) {
+        if (n == root()) {
             return null;
         }
-        if (n == p.getLeft()) {
-            return p.getRight();
-        }
-        return p.getLeft();
+        T p = n.getParent();
+        T l = p.getLeft();
+        return n == l ? p.getRight() : l;
     }
 
     /**
      * Only son: parent have only one child left or right.<p>
      * Last son: parent have 2 children, this is the right.<p>
      * Means: we all brothers are done.
-     * @param i  i is node except root
+     *
+     * @param i i is node except root
      */
     private boolean isOnlyOrLastChild(T i) {
         T p = i.getParent();
@@ -60,6 +59,9 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
      */
     @Override
     public Iterator<T> iteratorInOrder() {
+        if (size() == 0) {
+            return null;
+        }
         // todo: fail fast
         return new Iterator<T>() {
             private T next;
@@ -142,6 +144,9 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
 
     @Override
     public Iterator<T> iteratorPreOrder() {
+        if (size() == 0) {
+            return null;
+        }
         return new Iterator<T>() {
             private T next;
 
@@ -209,6 +214,9 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
 
     @Override
     public Iterator<T> iteratorPostOrder() {
+        if (size() == 0) {
+            return null;
+        }
         return new Iterator<T>() {
             private T next;
 
