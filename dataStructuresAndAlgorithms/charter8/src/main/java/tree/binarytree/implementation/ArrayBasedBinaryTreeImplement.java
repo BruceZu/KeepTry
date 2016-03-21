@@ -102,6 +102,10 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
         }
     }
 
+    /**
+     * Factory method pattern, allowing us to later subclass our tree in order to use
+     * a specialized node type
+     */
     @Override
     public NodeImplement createRoot(Object e) {
         NodeImplement r = new NodeImplement(e, array, 0);

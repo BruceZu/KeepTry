@@ -64,6 +64,23 @@ public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E
 
     T sibling(T n);
 
+    /**
+     * An important application of the inorder traversal algorithm arises when we store an
+     * ordered sequence of elements in a binary tree, defining a structure we call a binary
+     * search tree.<p>
+     *
+     * Let S be a set whose unique elements have an order relation. For
+     * example, S could be a set of integers.<p>
+     *
+     * A binary search tree for S is a proper binary tree T such that,
+     * for each internal position p of T:
+     * <p>
+     * • Position p stores an element of S, denoted as e(p).<p>
+     * • Elements stored in the left subtree of p (if any) are less than e(p).<p>
+     * • Elements stored in the right subtree of p (if any) are greater than e(p).
+     *
+     * @return
+     */
     Iterator<T> iteratorInOrder();
 
     void remove(T n); // remove the node with only one child

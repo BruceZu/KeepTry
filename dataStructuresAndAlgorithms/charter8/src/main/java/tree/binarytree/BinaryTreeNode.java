@@ -17,6 +17,13 @@ package tree.binarytree;
 
 import tree.TreeNode;
 
+/**
+ * A binary tree is proper if each node has either
+ * zero or two children.<p>
+ * Some people also refer to such trees as being full binary trees.<p>
+ * Thus, in a proper binary tree, every internal node has exactly two children.<p>
+ * A binary tree that is not proper is improper.
+ */
 public interface BinaryTreeNode<T extends BinaryTreeNode<T, E>, E> extends TreeNode<T, E> {
     T getLeft();
 

@@ -35,6 +35,17 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         return p.getLeft();
     }
 
+    /**
+     * The inorder traversal visits p after all the positions in the left subtree of
+     * p and before all the positions in the right subtree of p.
+     *
+     * Algorithm inorder(p):
+     *   if p has a left child lc then
+     *     inorder(lc) { recursively traverse the left subtree of p }
+     *   perform the “visit” action for position p
+     *   if p has a right child rc then
+     *     inorder(rc) { recursively traverse the right subtree of p }
+     */
     @Override
     public Iterator<T> iteratorInOrder() {
         // todo: fail fast

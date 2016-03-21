@@ -78,6 +78,24 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
         return 1 + depth(n.getParent());
     }
 
+    /**
+     * Traverse a tree so that we visit all the positions at depth d
+     * before we visit the positions at depth d+1. Such an algorithm
+     * is known as a breadth-first traversal.
+     *
+     * application in game: a computer may be unable to explore a
+     * complete game tree in a limited amount of time.
+     *
+     * Algorithm breadthfirst() with a queue:
+     * Initialize queue Q to contain root( )
+     * while Q not empty do
+     *   p = Q.dequeue( ) { p is the oldest entry in the queue }
+     *   perform the “visit” action for position p
+     *   for each child c in children(p) do
+     *     Q.enqueue(c) { add p’s children to the end of the queue for later visits }
+     *
+     * running time is O(n)
+     */
     @Override
     public Iterator<T> iteratorBreadthFirstOrder() {
         return new Iterator<T>() {
@@ -128,11 +146,24 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
         }.init();
     }
 
+    /**
+     * Algorithm preorder(p):
+     *   perform the “visit” action for position p { this happens before any recursion }
+     *   for each child c in children(p) do
+     *   preorder(c) { recursively traverse the subtree rooted at c }
+     */
     @Override
     public Iterator<T> iteratorPreOrder() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Algorithm postorder(p):
+     *   for each child c in children(p) do
+     *   postorder(c) { recursively traverse the subtree rooted at c }
+     *   perform the “visit” action for position p { this happens after any recursion }
+     *
+     */
     @Override
     public Iterator<T> iteratorPostOrder() {
         throw new UnsupportedOperationException();
