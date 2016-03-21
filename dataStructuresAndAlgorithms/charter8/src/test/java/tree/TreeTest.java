@@ -168,6 +168,7 @@ public class TreeTest {
         // l4  r4    c2   b2
         //           /    \
         //          b3    c3
+        //
 
         BinaryTree bt = new BinaryTreeImplement();
         BinaryTreeNode<? extends BinaryTreeNode, String> r = bt.createRoot("r");
@@ -190,7 +191,7 @@ public class TreeTest {
         BinaryTreeNode<? extends BinaryTreeNode, String> b3 = bt.createLeftFor(c2, "b3");
         BinaryTreeNode<? extends BinaryTreeNode, String> c3 = bt.createRightFor(b2, "c3");
 
-        // test iteratorBreadthFirstOrder(), iteratorInOrder()
+        // test iteratorBreadthFirstOrder(), iteratorInOrder(), iteratorPreOrder()
         Iterator<? extends TreeNode> ite = bt.iteratorBreadthFirstOrder();
         StringBuilder out = new StringBuilder();
         while (ite.hasNext()) {
@@ -204,6 +205,13 @@ public class TreeTest {
             out.append(String.format("%s, ", ite.next().getElement().toString()));
         }
         assertEquals(out.toString(), "l4, l3, r4, l2, l, b, b3, c2, a, b2, c3, c, r, 2, 1, 3, ");
+
+        ite = bt.iteratorPreOrder();
+        out = new StringBuilder();
+        while (ite.hasNext()) {
+            out.append(String.format("%s, ", ite.next().getElement().toString()));
+        }
+        assertEquals(out.toString(), "r, l, l2, l3, l4, r4, a, b, c2, b3, c, b2, c3, 1, 2, 3, ");
 
         // test height() and remove()
         assertEquals(bt.size(), 16);
@@ -259,7 +267,7 @@ public class TreeTest {
         b3 = abt.createLeftFor(c2, "b3");
         c3 = abt.createRightFor(b2, "c3");
 
-        // test iteratorBreadthFirstOrder(), iteratorInOrder()
+        // test iteratorBreadthFirstOrder(), iteratorInOrder(), iteratorPreOrder()
         ite = abt.iteratorBreadthFirstOrder();
         out = new StringBuilder();
         while (ite.hasNext()) {
@@ -273,6 +281,13 @@ public class TreeTest {
             out.append(String.format("%s, ", ite.next().getElement().toString()));
         }
         assertEquals(out.toString(), "l4, l3, r4, l2, l, b, b3, c2, a, b2, c3, c, r, 2, 1, 3, ");
+
+        ite = abt.iteratorPreOrder();
+        out = new StringBuilder();
+        while (ite.hasNext()) {
+            out.append(String.format("%s, ", ite.next().getElement().toString()));
+        }
+        assertEquals(out.toString(), "r, l, l2, l3, l4, r4, a, b, c2, b3, c, b2, c3, 1, 2, 3, ");
 
         // test height() and remove()
         assertEquals(abt.size(), 16);

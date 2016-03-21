@@ -38,13 +38,13 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
     /**
      * The inorder traversal visits p after all the positions in the left subtree of
      * p and before all the positions in the right subtree of p.
-     *
+     * <p/>
      * Algorithm inorder(p):
-     *   if p has a left child lc then
-     *     inorder(lc) { recursively traverse the left subtree of p }
-     *   perform the “visit” action for position p
-     *   if p has a right child rc then
-     *     inorder(rc) { recursively traverse the right subtree of p }
+     * if p has a left child lc then
+     * inorder(lc) { recursively traverse the left subtree of p }
+     * perform the “visit” action for position p
+     * if p has a right child rc then
+     * inorder(rc) { recursively traverse the right subtree of p }
      */
     @Override
     public Iterator<T> iteratorInOrder() {
@@ -104,6 +104,63 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
             private Iterator<T> init() {
                 next = firstLeftNodeWithoutLeftChildIn(root());
                 return this;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return next != null;
+            }
+
+            @Override
+            public T next() {
+                T r = next;
+                next = next(next);
+                return r;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        }.init();
+    }
+
+    @Override
+    public Iterator<T> iteratorPreOrder() {
+        return new Iterator<T>() {
+            private T next;
+
+            private Iterator<T> init() {
+                next = root();
+                return this;
+            }
+
+            /**
+             * If this is the last children of parent
+             * then recursive to find parent's next brother
+             * return:
+             * @param i
+             * @return next brother in order. null when go to root, end all.
+             */
+            private T nextBrother(T i) {
+                if (i == root()) {
+                    return null;
+                }
+                T p = i.getParent();
+                T r = p.getRight();
+                if (r == null || i == r) {
+                    return nextBrother(p);
+                }
+                return r;
+            }
+
+            private T next(T i) {
+                if (isLeaf(i)) {
+                    return nextBrother(i);
+                }
+                // has children
+                T l = i.getLeft();
+                return l == null ? i.getRight() : l;
             }
 
             @Override

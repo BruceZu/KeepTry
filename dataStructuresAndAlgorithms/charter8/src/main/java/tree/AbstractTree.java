@@ -154,6 +154,7 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
      */
     @Override
     public Iterator<T> iteratorPreOrder() {
+        // take care when the children are not unique
         throw new UnsupportedOperationException();
     }
 
@@ -166,6 +167,7 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
      */
     @Override
     public Iterator<T> iteratorPostOrder() {
+        // take care when the children are not unique
         throw new UnsupportedOperationException();
     }
 }
