@@ -36,6 +36,18 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
     }
 
     /**
+     * Only son: parent have only one child left or right.<p>
+     * Last son: parent have 2 children, this is the right.<p>
+     * Means: we all brothers are done.
+     * @param i  i is node except root
+     */
+    private boolean isOnlyOrLastChild(T i) {
+        T p = i.getParent();
+        T r = p.getRight();
+        return r == null || i == r;
+    }
+
+    /**
      * The inorder traversal visits p after all the positions in the left subtree of
      * p and before all the positions in the right subtree of p.
      * <p/>
@@ -51,19 +63,6 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         // todo: fail fast
         return new Iterator<T>() {
             private T next;
-
-            /**
-             * In right subtree recursively traverse down
-             * to find the fist left node without left child
-             * @param n
-             * @return
-             */
-            private T firstLeftNodeWithoutLeftChildIn(T n /* rightSubTree*/) {
-                if (n.getLeft() == null) {
-                    return n;
-                }
-                return firstLeftNodeWithoutLeftChildIn(n.getLeft());
-            }
 
             /**
              * Recursively traverse up to find the first parent not visited yet.
@@ -88,8 +87,24 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
             }
 
             /**
-             * If node is leaf or node only have left child, according to the inorder, next step is go up,
-             * else node have right child, according to the inorder, next step is step down on right.
+             * In right subtree recursively traverse down
+             * to find the fist left node without left child
+             *
+             * @param n
+             * @return
+             */
+            private T firstLeftNodeWithoutLeftChildIn(T n /* rightSubTree*/) {
+                if (n.getLeft() == null) {
+                    return n;
+                }
+                return firstLeftNodeWithoutLeftChildIn(n.getLeft());
+            }
+
+            /**
+             * According to the inorder.
+             * Start from the left first node (is leaf or node without left)
+             * If node is leaf or node only have left child, next step is go up,
+             * else node have right child, next step is step down on right.
              * @param node
              * @return if not found return null to end all
              */
@@ -146,14 +161,24 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
                 if (i == root()) {
                     return null;
                 }
-                T p = i.getParent();
-                T r = p.getRight();
-                if (r == null || i == r) {
-                    return nextBrother(p);
+                if (isOnlyOrLastChild(i)) {
+                    return nextBrother(i.getParent());
                 }
-                return r;
+                return i.getParent().getRight();
             }
 
+            /**
+             * According to preorder.
+             * Start from root. then children from in order from left to right.
+             *
+             * If this is leaf, next step is next brother, if this is the last child of parent,
+             * recursively go to parent's next brother till reach root.
+             *
+             * Else this node have children, go down to children.
+             *
+             * @param i
+             * @return
+             */
             private T next(T i) {
                 if (isLeaf(i)) {
                     return nextBrother(i);
@@ -161,6 +186,60 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
                 // has children
                 T l = i.getLeft();
                 return l == null ? i.getRight() : l;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return next != null;
+            }
+
+            @Override
+            public T next() {
+                T r = next;
+                next = next(next);
+                return r;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        }.init();
+    }
+
+    @Override
+    public Iterator<T> iteratorPostOrder() {
+        return new Iterator<T>() {
+            private T next;
+
+            private T startLeafOf(T n /*subTree*/) {
+                if (n.childrenSize() == 0) {
+                    return n;
+                }
+                T c = n.getLeft();
+                return startLeafOf(c == null ? n.getRight() : c);
+            }
+
+            private Iterator<T> init() {
+                next = startLeafOf(root());
+                return this;
+            }
+
+            /**
+             * According to postorder.
+             * Start from leaf.
+             * If all brothers are done, next step is parent
+             * Else continue next brother.
+             * @param i
+             * @return
+             */
+            private T next(T i) {
+                if (i == root() || isOnlyOrLastChild(i)) {
+                    // up
+                    return i.getParent();
+                }
+                // continue next brother
+                return startLeafOf(i.getParent().getRight());
             }
 
             @Override
