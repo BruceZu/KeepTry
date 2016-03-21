@@ -20,7 +20,6 @@ import tree.binarytree.BinaryTree;
 import tree.binarytree.BinaryTreeNode;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends AbstractBinaryTree<T, E> {
@@ -170,11 +169,6 @@ public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends Abst
             size += tree.size();
             tree.clean();
         }
-    }
-
-    @Override
-    public Iterator<T> iteratorInOrder() {
-        throw new UnsupportedOperationException();
     }
 
     private void gc(T n) {

@@ -20,7 +20,6 @@ import tree.binarytree.BinaryTree;
 import tree.binarytree.BinaryTreeNode;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 // Its space is fine for 'heaps'
@@ -185,12 +184,6 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
         size += tree.size();
         tree.clean();
     }
-
-    @Override
-    public Iterator<T> iteratorInOrder() {
-        throw new UnsupportedOperationException();
-    }
-
 
     private void innerMove(T node, int i /* new index*/) {
         if (node != null) {
