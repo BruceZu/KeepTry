@@ -204,13 +204,10 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
     //@Override
     public void parentheticStringRepresentation2(T n, StringBuilder r) {
         r.append(n.getElement());
-        if (this.isLeaf(n)) {
-            if (isNotLastChild(n)) {
-                r.append(", ");
-            } else {
-                r.append("");
-            }
-        } else {
+        if (this.isLeaf(n) && isNotLastChild(n)) {
+            r.append(", ");
+        }
+        if (!this.isLeaf(n)) {
             r.append(" ");
         }
 
@@ -223,13 +220,11 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
 
             if (isNotLastChild(n)) {
                 r.append(", ");
-            } else {
-                r.append("");
             }
         }
-
     }
 
+    // O(N)
     @Override
     public void parentheticStringRepresentation(T n, StringBuilder r) {
         r.append(n.getElement());
