@@ -43,6 +43,8 @@ public interface Tree<T extends TreeNode<T, E>, E> {
 
     Iterator<T> iteratorPreOrder();
 
+    void printPreOrder(T root, int ind /* Start indentation */, String ln /* Label start number */);
+
     Iterator<T> iteratorPostOrder();
 
     Iterator<T> iteratorBreadthFirstOrder();

@@ -82,18 +82,18 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
      * Traverse a tree so that we visit all the positions at depth d
      * before we visit the positions at depth d+1. Such an algorithm
      * is known as a breadth-first traversal.
-     *
+     * <p/>
      * application in game: a computer may be unable to explore a
      * complete game tree in a limited amount of time.
-     *
+     * <p/>
      * Algorithm breadthfirst() with a queue:
      * Initialize queue Q to contain root( )
      * while Q not empty do
-     *   p = Q.dequeue( ) { p is the oldest entry in the queue }
-     *   perform the “visit” action for position p
-     *   for each child c in children(p) do
-     *     Q.enqueue(c) { add p’s children to the end of the queue for later visits }
-     *
+     * p = Q.dequeue( ) { p is the oldest entry in the queue }
+     * perform the “visit” action for position p
+     * for each child c in children(p) do
+     * Q.enqueue(c) { add p’s children to the end of the queue for later visits }
+     * <p/>
      * running time is O(n)
      */
     @Override
@@ -148,9 +148,9 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
 
     /**
      * Algorithm preorder(p):
-     *   perform the “visit” action for position p { this happens before any recursion }
-     *   for each child c in children(p) do
-     *   preorder(c) { recursively traverse the subtree rooted at c }
+     * perform the “visit” action for position p { this happens before any recursion }
+     * for each child c in children(p) do
+     * preorder(c) { recursively traverse the subtree rooted at c }
      */
     @Override
     public Iterator<T> iteratorPreOrder() {
@@ -160,14 +160,28 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
 
     /**
      * Algorithm postorder(p):
-     *   for each child c in children(p) do
-     *   postorder(c) { recursively traverse the subtree rooted at c }
-     *   perform the “visit” action for position p { this happens after any recursion }
-     *
+     * for each child c in children(p) do
+     * postorder(c) { recursively traverse the subtree rooted at c }
+     * perform the “visit” action for position p { this happens after any recursion }
      */
     @Override
     public Iterator<T> iteratorPostOrder() {
         // take care when the children are not unique
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void printPreOrder(T root, int ind, String ln) {
+        for (int i = 0; i < ind; i++) {
+            System.out.print(" ");
+        }
+        if (ln == "0") {
+            ln = " ";
+        }
+        System.out.println(String.format("%s %s", ln, root.getElement().toString()));
+        int i = 1;
+        for (T c : root.getChildren()) {
+            printPreOrder(c, ind + 1, (ln == " " ? ln + " " : ln + ".") + i++);
+        }
     }
 }
