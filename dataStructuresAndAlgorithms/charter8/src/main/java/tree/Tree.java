@@ -25,8 +25,17 @@ import java.util.Iterator;
 // Tree is either empty or
 // consists of a node root, and a (possibly empty) set of subtrees.
 //
+//The parenthetic string representation P(T) of tree T is recursively defined.
+// If T consists of a single node p, then P(T) = p.getElement( ).
+// Otherwise, it is defined recursively as,
+//        P(T) = p.getElement( )+"("+P(T1)+", "+ ··· +", "+P(Tk)+")"
+//
+// where p is the root of T and T1,T2, . . . ,Tk are the subtrees rooted at the children
+// of p, which are given in order if T is an ordered tree.
+// using “+” here to denote string concatenation.
+//
 // breadth-first traversal:
-//    visit all the positions at depth d before we visit the positions at depth d+1.
+//    visit all the nodes at depth d before we visit the nodes at depth d+1.
 //
 public interface Tree<T extends TreeNode<T, E>, E> {
     boolean isLeaf(T n);
@@ -44,6 +53,8 @@ public interface Tree<T extends TreeNode<T, E>, E> {
     Iterator<T> iteratorPreOrder();
 
     void printPreOrder(T root, int ind /* Start indentation */, String ln /* Label start number */);
+
+    void parentheticStringRepresentation(T root, StringBuilder result);
 
     Iterator<T> iteratorPostOrder();
 

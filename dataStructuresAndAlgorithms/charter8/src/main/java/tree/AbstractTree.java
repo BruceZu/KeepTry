@@ -163,6 +163,8 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
      * for each child c in children(p) do
      * postorder(c) { recursively traverse the subtree rooted at c }
      * perform the “visit” action for position p { this happens after any recursion }
+     * <p/>
+     * Application: calculate some thing.
      */
     @Override
     public Iterator<T> iteratorPostOrder() {
@@ -182,6 +184,18 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
         int i = 1;
         for (T c : root.getChildren()) {
             printPreOrder(c, ind + 1, (ln == " " ? ln + " " : ln + ".") + i++);
+        }
+    }
+
+    @Override
+    public void parentheticStringRepresentation(T n, StringBuilder r) {
+        r.append(n.getElement().toString()).append(" ");
+        if (n.childrenSize() != 0) {
+            r.append("(");
+            for (T c : n.getChildren()) {
+                parentheticStringRepresentation(c, r);
+            }
+            r.append(") ");
         }
     }
 }
