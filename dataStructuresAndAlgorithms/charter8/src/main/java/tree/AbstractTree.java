@@ -187,15 +187,40 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
         }
     }
 
+    /**
+     * Assume parent have more than one children
+     * and check if n is not the last one.
+     *
+     * @param n
+     * @return
+     */
+    private boolean isNotLastChild(T n) {
+        T p = n.getParent();
+        return n != root()
+                && p.childrenSize() != 1
+                && p.getChildren().get(p.childrenSize() - 1) != n;
+    }
+
     @Override
     public void parentheticStringRepresentation(T n, StringBuilder r) {
-        r.append(n.getElement().toString()).append(" ");
+        r.append(n.getElement().toString());
+        if (this.isLeaf(n) && isNotLastChild(n)) {
+            r.append(", ");
+        } else {
+            r.append(" ");
+        }
         if (n.childrenSize() != 0) {
             r.append("(");
             for (T c : n.getChildren()) {
                 parentheticStringRepresentation(c, r);
             }
-            r.append(") ");
+            r.append(")");
+
+            if (isNotLastChild(n)) {
+                r.append(", ");
+            } else {
+                r.append("");
+            }
         }
     }
 }

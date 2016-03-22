@@ -83,7 +83,7 @@ public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends Abst
         }
 
         @Override
-        public Iterable<N> getChildren() {
+        public List<N> getChildren() {
             List<N> cs = new ArrayList<>(2);
             if (left != null) {
                 cs.add(left);

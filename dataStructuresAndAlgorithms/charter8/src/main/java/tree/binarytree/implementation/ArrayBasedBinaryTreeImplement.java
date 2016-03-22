@@ -79,7 +79,7 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
         }
 
         @Override
-        public Iterable<N> getChildren() {
+        public List<N> getChildren() {
             List<N> cs = new ArrayList<>(2);
             N l = getLeft();
             if (l != null) {

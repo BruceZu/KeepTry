@@ -15,6 +15,9 @@
 
 package tree;
 
+
+import java.util.List;
+
 public interface TreeNode<SELF extends TreeNode<SELF, E>, E> {
 
     E getElement();
@@ -23,5 +26,5 @@ public interface TreeNode<SELF extends TreeNode<SELF, E>, E> {
 
     int childrenSize(); // direct children
 
-    Iterable<SELF> getChildren(); // direct children
+    List<SELF> getChildren(); // direct children
 }
