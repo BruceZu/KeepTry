@@ -19,7 +19,7 @@ Have libs available and run all Junit tests
 $ buck targets | xargs buck build && buck test --all
 ```
 
-Welcome ideas, comments and commits.
+Welcome ideas, comments and commits. No contribution is too small.
 
 WebChat  : brucezu
 
