@@ -268,4 +268,42 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
             }
         }.init();
     }
+
+    private void allocate(T n /* start from root */,
+                          E[][] out,
+                          int[] maxLengthOfValues,
+                          int y, int[] x) {
+        T left = n.getLeft();
+        if (left != null) {
+            allocate(left, out, maxLengthOfValues, y + 1, x);
+        }
+        E v = n.getElement();
+        out[y][x[0]++] = v;
+
+        T right = n.getRight();
+        maxLengthOfValues[0] = Math.max(maxLengthOfValues[0], v.toString().length());
+        if (right != null) {
+            allocate(right, out, maxLengthOfValues, y + 1, x);
+        }
+    }
+
+    public void drawing() {
+        int high = height();
+        int width = (int) Math.pow(2, height());
+        E[][] XYCoordinates = (E[][]) new Object[high + 1][width];
+        int[] maxLengthOfValues = new int[1];
+        allocate(root(), XYCoordinates, maxLengthOfValues, 0, new int[1]);
+        for (int y = 0; y <= high; y++) {
+            for (int x = 0; x < width; x++) {
+                System.out.print(" ");
+                E v = XYCoordinates[y][x];
+                if (v == null) {
+                    System.out.print(String.format("%" + maxLengthOfValues[0] + "s", " "));
+                } else {
+                    System.out.print(String.format("%" + maxLengthOfValues[0] + "s", v));
+                }
+            }
+            System.out.println(" ");
+        }
+    }
 }

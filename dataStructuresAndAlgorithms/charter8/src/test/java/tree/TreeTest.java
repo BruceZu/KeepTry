@@ -154,7 +154,7 @@ public class TreeTest {
         assertEquals(h, 5);
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 30l, expected = Test.None.class)
     public void testBinaryTree() {
         BinaryTree bt = new BinaryTreeImplement();
         BinaryTreeNode<? extends BinaryTreeNode, String> r = bt.createRoot("r");
@@ -250,6 +250,7 @@ public class TreeTest {
         StringBuilder re = new StringBuilder();
         bt.parentheticStringRepresentation(bt.root(), re);
         assertEquals(re.toString(), "r (l (l2 (l3 (l4, r4)), a (b (c2 (b3)), c (b2 (c3)))), 1 (2, 3 (4, 5)))");
+        // bt.drawing();
 
         //                 r
         //              /    \

@@ -78,10 +78,10 @@ public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E
      * • Position p stores an element of S, denoted as e(p).<p>
      * • Elements stored in the left subtree of p (if any) are less than e(p).<p>
      * • Elements stored in the right subtree of p (if any) are greater than e(p).
-     *
-     * @return
      */
     Iterator<T> iteratorInOrder();
+
+    void drawing();
 
     void remove(T n); // remove the node with only one child
 }
