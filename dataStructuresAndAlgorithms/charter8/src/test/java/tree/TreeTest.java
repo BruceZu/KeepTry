@@ -203,6 +203,80 @@ public class TreeTest {
         b3 = abt.createLeftFor(c2, "b3");
         c3 = abt.createRightFor(b2, "c3");
         excuteBinaryTree(abt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
+
+        BinaryTree bt2 = new BinaryTreeImplement();
+        BinaryTreeNode<? extends BinaryTreeNode, String> root = bt2.createRoot("-");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> l1 = bt2.createLeftFor(root, "/");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r1 = bt2.createRightFor(root, "+");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> dl2 = bt2.createLeftFor(l1, "x");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r2 = bt2.createRightFor(l1, "+");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> dl3 = bt2.createLeftFor(r1, "x");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r3 = bt2.createRightFor(r1, "6");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> dl4 = bt2.createLeftFor(dl2, "+");
+        BinaryTreeNode<? extends BinaryTreeNode, String> dr4 = bt2.createRightFor(dl2, "3");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> l5 = bt2.createLeftFor(r2, "-");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r5 = bt2.createRightFor(r2, "2");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> l6 = bt2.createLeftFor(dl3, "3");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r6 = bt2.createRightFor(dl3, "-");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> l7 = bt2.createLeftFor(dl4, "3");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r7 = bt2.createRightFor(dl4, "1");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> l8 = bt2.createLeftFor(l5, "9");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r8 = bt2.createRightFor(l5, "5");
+
+        BinaryTreeNode<? extends BinaryTreeNode, String> l9 = bt2.createLeftFor(r6, "7");
+        BinaryTreeNode<? extends BinaryTreeNode, String> r9 = bt2.createRightFor(r6, "4");
+        excuteBinaryTreeArithmeticExpression(bt2);
+
+        BinaryTree abt2 = new ArrayBasedBinaryTreeImplement();
+        root = abt2.createRoot("-");
+
+        l1 = abt2.createLeftFor(root, "/");
+        r1 = abt2.createRightFor(root, "+");
+
+        dl2 = abt2.createLeftFor(l1, "x");
+        r2 = abt2.createRightFor(l1, "+");
+
+        dl3 = abt2.createLeftFor(r1, "x");
+        r3 = abt2.createRightFor(r1, "6");
+
+        dl4 = abt2.createLeftFor(dl2, "+");
+        dr4 = abt2.createRightFor(dl2, "3");
+
+        l5 = abt2.createLeftFor(r2, "-");
+        r5 = abt2.createRightFor(r2, "2");
+
+        l6 = abt2.createLeftFor(dl3, "3");
+        r6 = abt2.createRightFor(dl3, "-");
+
+        l7 = abt2.createLeftFor(dl4, "3");
+        r7 = abt2.createRightFor(dl4, "1");
+
+        l8 = abt2.createLeftFor(l5, "9");
+        r8 = abt2.createRightFor(l5, "5");
+
+        l9 = abt2.createLeftFor(r6, "7");
+        r9 = abt2.createRightFor(r6, "4");
+        excuteBinaryTreeArithmeticExpression(abt2);
+    }
+
+    private void excuteBinaryTreeArithmeticExpression(BinaryTree bt) {
+        // bt.drawing();
+        List<String> result = new ArrayList<>(bt.size() * 2);
+        bt.eulerTourTraversalArithmeticExpression((BinaryTreeNode) bt.root(), result);
+
+        StringBuilder re = new StringBuilder();
+        for (String v : result) {
+            re.append(v);
+        }
+        assertEquals(re.toString(), "((((3+1)x3)/((9-5)+2))-((3x(7-4))+6))");
     }
 
     private void excuteBinaryTree(BinaryTree bt,
@@ -224,6 +298,7 @@ public class TreeTest {
                                   BinaryTreeNode<? extends BinaryTreeNode, String> c2,
                                   BinaryTreeNode<? extends BinaryTreeNode, String> b3,
                                   BinaryTreeNode<? extends BinaryTreeNode, String> c3) {
+        // bt.drawing();
 
         // test iteratorBreadthFirstOrder(), iteratorInOrder(), iteratorPreOrder(), iteratorPostOrder()
         Iterator<? extends TreeNode> ite = bt.iteratorBreadthFirstOrder();
@@ -253,12 +328,20 @@ public class TreeTest {
         assertEquals(re.toString(), "r (l (l2 (l3 (l4, r4)), a (b (c2 (b3)), c (b2 (c3)))), 1 (2, 3 (4, 5)))");
 
         List<BinaryTreeNode<? extends BinaryTreeNode, String>> result = new ArrayList<>(bt.size());
-        bt.eulerTourTraversal(r, result);
+        bt.eulerTourTraversal(r, result, true);
         re = new StringBuilder();
         for (BinaryTreeNode n : result) {
             re.append(String.format("%s, ", n.getElement()));
         }
         assertEquals(re.toString(), "r, l, l2, l3, l4, l3, r4, l3, l2, l, a, b, c2, b3, c2, b, a, c, b2, c3, b2, c, a, l, r, 1, 2, 1, 3, 4, 3, 5, 3, 1, r, ");
+
+        result = new ArrayList<>(bt.size());
+        bt.eulerTourTraversal(r, result, false);
+        re = new StringBuilder();
+        for (BinaryTreeNode n : result) {
+            re.append(String.format("%s, ", n.getElement()));
+        }
+        assertEquals(re.toString(), "r, l, l2, l3, l4, r4, l3, l2, a, b, c2, b3, c2, b, c, b2, c3, b2, c, a, l, 1, 2, 3, 4, 5, 3, 1, r, ");
 
         //                 r
         //              /    \

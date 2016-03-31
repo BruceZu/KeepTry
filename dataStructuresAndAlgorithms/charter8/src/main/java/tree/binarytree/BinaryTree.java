@@ -65,7 +65,38 @@ public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E
 
     T sibling(T n);
 
-    void eulerTourTraversal(T root, List<T> result);
+    /**
+     * “walk” around T, viewing the edges of T as  being “walls” that we always keep to our left.
+     * walk is O(n), for a tree with n nodes, because it progresses exactly two times along
+     * each of the n−1 edges of the tree—once going downward along the edge, and later going
+     * upward along the edge.
+     * walk passes to the left then the right of a node, In between the “pre visit” and “post visit”
+     * of a given node will be a recursive tour of each of its subtrees.
+     */
+    // Algorithm eulerTour(T, n):
+    //
+    //   perform the “pre visit” action for node n
+    //
+    //   for each child c in T.children(p) do
+    //          eulerTour(T, c) { recursively tour the subtree rooted at c }
+    //
+    //   perform the “post visit” action for node n
+    //
+    //
+    // For the case of a binary tree, we can customize the algorithm to include an explicit “in visit” action:
+    // Algorithm eulerTourBinary(T, n):
+    //
+    //    perform the “pre visit” action for node n
+    //
+    //    if p has a left child lc then eulerTourBinary(T, lc) { recursively tour the left subtree of n }
+    //    perform the “in visit” action for node n
+    //    if p has a right child rc then eulerTourBinary(T, rc) { recursively tour the right subtree of n }
+    //
+    //    perform the “post visit” action for node n
+
+    void eulerTourTraversal(T root, List<T> result, boolean withInVisit);
+
+    void eulerTourTraversalArithmeticExpression(T root, List<String> result);
 
     /**
      * An important application of the inorder traversal algorithm arises when we store an

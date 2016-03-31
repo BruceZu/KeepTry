@@ -288,10 +288,13 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         }
     }
 
+    /**
+     * in-order
+     */
     @Override
     public void drawing() {
         int high = height();
-        int width = (int) Math.pow(2, height());
+        int width = size();
         E[][] XYCoordinates = (E[][]) new Object[high + 1][width];
         int[] maxLengthOfValues = new int[1];
         allocate(root(), XYCoordinates, maxLengthOfValues, 0, new int[1]);
@@ -317,33 +320,68 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         return p.childrenSize() == 1 || n == p.getRight();
     }
 
-    private void upToParentWhereIAmLeft(T n, List<T> result) {
-        // add parent
+    private void upToParentWhereIAmLeft(T n, List<T> result, boolean withInVisit) {
         T p = n.getParent();
         if (p != null) { // n is not root
-            result.add(p);
 
             // decide continue up or not by
             if (isLastChild(n)) {
-                upToParentWhereIAmLeft(p, result);
+                result.add(p);
+                upToParentWhereIAmLeft(p, result, withInVisit);
+            } else if (withInVisit) {
+                result.add(p);
             }
         }
     }
 
     @Override
-    public void eulerTourTraversal(T n, List<T> result) {
+    public void eulerTourTraversal(T n, List<T> result, boolean withInVisit) {
         result.add(n);
         if (!isLeaf(n)) {
             // pre-order
             T left = n.getLeft();
             T right = n.getRight();
             if (left != null) {
-                eulerTourTraversal(left, result);
+                eulerTourTraversal(left, result, withInVisit);
             }
             if (right != null) {
-                eulerTourTraversal(right, result);
+                eulerTourTraversal(right, result, withInVisit);
+            }
+        } else if (withInVisit || isLastChild(n)) {
+            upToParentWhereIAmLeft(n, result, withInVisit);
+        }
+    }
+
+
+    private void upToParentWhereIAmLeft(T n, List<String> result) {
+        T p = n.getParent();
+        if (p != null) { // n is not root
+            // decide continue up or not by
+            if (isLastChild(n)) {
+                result.add(")");
+                upToParentWhereIAmLeft(p, result);
+            }else{
+                result.add(p.getElement().toString());
+            }
+        }
+    }
+
+    @Override
+    public void eulerTourTraversalArithmeticExpression(T n, List<String> result) {
+
+        if (!isLeaf(n)) {
+            result.add("(");
+            // pre-order
+            T left = n.getLeft();
+            T right = n.getRight();
+            if (left != null) {
+                eulerTourTraversalArithmeticExpression(left, result);
+            }
+            if (right != null) {
+                eulerTourTraversalArithmeticExpression(right, result);
             }
         } else {
+            result.add(n.getElement().toString());
             upToParentWhereIAmLeft(n, result);
         }
     }
