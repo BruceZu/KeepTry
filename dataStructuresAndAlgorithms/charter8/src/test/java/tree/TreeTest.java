@@ -178,8 +178,8 @@ public class TreeTest {
         BinaryTreeNode<? extends BinaryTreeNode, String> c2 = bt.createRightFor(b, "c2");
         BinaryTreeNode<? extends BinaryTreeNode, String> b3 = bt.createLeftFor(c2, "b3");
         BinaryTreeNode<? extends BinaryTreeNode, String> c3 = bt.createRightFor(b2, "c3");
-
-        excuteBinaryTree(bt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
+        excuteBinaryTree(bt);
+        excuteBinaryTreeHeightAndRemove(bt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
 
         BinaryTree abt = new ArrayBasedBinaryTreeImplement();
         r = abt.createRoot("r");
@@ -202,7 +202,8 @@ public class TreeTest {
         c2 = abt.createRightFor(b, "c2");
         b3 = abt.createLeftFor(c2, "b3");
         c3 = abt.createRightFor(b2, "c3");
-        excuteBinaryTree(abt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
+        excuteBinaryTree(abt);
+        excuteBinaryTreeHeightAndRemove(abt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
 
         BinaryTree bt2 = new BinaryTreeImplement();
         BinaryTreeNode<? extends BinaryTreeNode, String> root = bt2.createRoot("-");
@@ -279,25 +280,7 @@ public class TreeTest {
         assertEquals(re.toString(), "((((3+1)x3)/((9-5)+2))-((3x(7-4))+6))");
     }
 
-    private void excuteBinaryTree(BinaryTree bt,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> r,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> l,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> l2,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> l3,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> l4,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> r4,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> one,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> two,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> three,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> four,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> five,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> a,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> b,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> c,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> b2,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> c2,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> b3,
-                                  BinaryTreeNode<? extends BinaryTreeNode, String> c3) {
+    private void excuteBinaryTree(BinaryTree bt) {
         // bt.drawing();
 
         // test iteratorBreadthFirstOrder(), iteratorInOrder(), iteratorPreOrder(), iteratorPostOrder()
@@ -328,7 +311,7 @@ public class TreeTest {
         assertEquals(re.toString(), "r (l (l2 (l3 (l4, r4)), a (b (c2 (b3)), c (b2 (c3)))), 1 (2, 3 (4, 5)))");
 
         List<BinaryTreeNode<? extends BinaryTreeNode, String>> result = new ArrayList<>(bt.size());
-        bt.eulerTourTraversal(r, result, true);
+        bt.eulerTourTraversal((BinaryTreeNode) bt.root(), result, true);
         re = new StringBuilder();
         for (BinaryTreeNode n : result) {
             re.append(String.format("%s, ", n.getElement()));
@@ -336,7 +319,7 @@ public class TreeTest {
         assertEquals(re.toString(), "r, l, l2, l3, l4, l3, r4, l3, l2, l, a, b, c2, b3, c2, b, a, c, b2, c3, b2, c, a, l, r, 1, 2, 1, 3, 4, 3, 5, 3, 1, r, ");
 
         result = new ArrayList<>(bt.size());
-        bt.eulerTourTraversal(r, result, false);
+        bt.eulerTourTraversal((BinaryTreeNode) bt.root(), result, false);
         re = new StringBuilder();
         for (BinaryTreeNode n : result) {
             re.append(String.format("%s, ", n.getElement()));
@@ -362,8 +345,27 @@ public class TreeTest {
             out.append(String.format("%s, ", ite.next().getElement().toString()));
         }
         assertEquals(out.toString(), "l4, r4, l3, l2, b3, c2, b, c3, b2, c, a, l, 2, 4, 5, 3, 1, r, ");
+    }
 
-        // test height() and remove()
+    private void excuteBinaryTreeHeightAndRemove(BinaryTree bt,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> r,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> l,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> l2,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> l3,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> l4,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> r4,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> one,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> two,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> three,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> four,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> five,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> a,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> b,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> c,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> b2,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> c2,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> b3,
+                                                 BinaryTreeNode<? extends BinaryTreeNode, String> c3) {
         assertEquals(bt.size(), 18);
         assertEquals(bt.height(), 5);
         assertEquals(bt.height(r), 5);
