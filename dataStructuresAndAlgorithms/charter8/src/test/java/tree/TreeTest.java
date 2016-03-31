@@ -22,6 +22,7 @@ import tree.binarytree.BinaryTreeNode;
 import tree.binarytree.implementation.ArrayBasedBinaryTreeImplement;
 import tree.binarytree.implementation.BinaryTreeImplement;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -246,11 +247,18 @@ public class TreeTest {
         }
         assertEquals(out.toString(), "r, l, l2, l3, l4, r4, a, b, c2, b3, c, b2, c3, 1, 2, 3, 4, 5, ");
 
-        // test parentheticStringRepresentation()
+        // test parentheticStringRepresentation(), eulerTourTraversal()
         StringBuilder re = new StringBuilder();
         bt.parentheticStringRepresentation(bt.root(), re);
         assertEquals(re.toString(), "r (l (l2 (l3 (l4, r4)), a (b (c2 (b3)), c (b2 (c3)))), 1 (2, 3 (4, 5)))");
-        // bt.drawing();
+
+        List<BinaryTreeNode<? extends BinaryTreeNode, String>> result = new ArrayList<>(bt.size());
+        bt.eulerTourTraversal(r, result);
+        re = new StringBuilder();
+        for (BinaryTreeNode n : result) {
+            re.append(String.format("%s, ", n.getElement()));
+        }
+        assertEquals(re.toString(), "r, l, l2, l3, l4, l3, r4, l3, l2, l, a, b, c2, b3, c2, b, a, c, b2, c3, b2, c, a, l, r, 1, 2, 1, 3, 4, 3, 5, 3, 1, r, ");
 
         //                 r
         //              /    \

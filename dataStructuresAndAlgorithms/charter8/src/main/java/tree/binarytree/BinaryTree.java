@@ -18,6 +18,7 @@ package tree.binarytree;
 import tree.Tree;
 
 import java.util.Iterator;
+import java.util.List;
 
 // A binary tree is an ordered tree
 // Let T be a nonempty binary tree, and
@@ -64,6 +65,8 @@ public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E
 
     T sibling(T n);
 
+    void eulerTourTraversal(T root, List<T> result);
+
     /**
      * An important application of the inorder traversal algorithm arises when we store an
      * ordered sequence of elements in a binary tree, defining a structure we call a binary
@@ -82,6 +85,8 @@ public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E
     Iterator<T> iteratorInOrder();
 
     void drawing();
+
+    BinaryTree toBST(List sortedList);
 
     void remove(T n); // remove the node with only one child
 }

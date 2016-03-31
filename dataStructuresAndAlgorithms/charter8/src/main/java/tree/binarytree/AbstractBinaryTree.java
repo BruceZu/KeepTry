@@ -18,6 +18,7 @@ package tree.binarytree;
 import tree.AbstractTree;
 
 import java.util.Iterator;
+import java.util.List;
 
 public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         extends AbstractTree<T, E>
@@ -287,6 +288,7 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         }
     }
 
+    @Override
     public void drawing() {
         int high = height();
         int width = (int) Math.pow(2, height());
@@ -298,12 +300,51 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
                 System.out.print(" ");
                 E v = XYCoordinates[y][x];
                 if (v == null) {
-                    System.out.print(String.format("%" + maxLengthOfValues[0] + "s", " "));
+                    System.out.format("%" + maxLengthOfValues[0] + "s", " ");
                 } else {
-                    System.out.print(String.format("%" + maxLengthOfValues[0] + "s", v));
+                    System.out.format("%" + maxLengthOfValues[0] + "s", v);
                 }
             }
             System.out.println(" ");
+        }
+    }
+
+    private boolean isLastChild(T n) {
+        T p = n.getParent();
+        if (p == null) {
+            return true;
+        }
+        return p.childrenSize() == 1 || n == p.getRight();
+    }
+
+    private void upToParentWhereIAmLeft(T n, List<T> result) {
+        // add parent
+        T p = n.getParent();
+        if (p != null) { // n is not root
+            result.add(p);
+
+            // decide continue up or not by
+            if (isLastChild(n)) {
+                upToParentWhereIAmLeft(p, result);
+            }
+        }
+    }
+
+    @Override
+    public void eulerTourTraversal(T n, List<T> result) {
+        result.add(n);
+        if (!isLeaf(n)) {
+            // pre-order
+            T left = n.getLeft();
+            T right = n.getRight();
+            if (left != null) {
+                eulerTourTraversal(left, result);
+            }
+            if (right != null) {
+                eulerTourTraversal(right, result);
+            }
+        } else {
+            upToParentWhereIAmLeft(n, result);
         }
     }
 }
