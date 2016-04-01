@@ -276,15 +276,30 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
                           int y, int[] x) {
         T left = n.getLeft();
         if (left != null) {
-            allocate(left, out, maxLengthOfValues, y + 1, x);
+            allocate(left, out, maxLengthOfValues, y + 2, x);
         }
         E v = n.getElement();
-        out[y][x[0]++] = v;
-
+        out[y][x[0]] = v;
+        if (n != root()) {
+            if (n.getParent().getLeft() == n) {
+                if (isLeaf(n) || out[y - 1][x[0] + 1] != null) {
+                    out[y - 1][x[0]] = (E) "/";
+                } else {
+                    out[y - 1][x[0] + 1] = (E) "/";
+                }
+            } else {
+                if (isLeaf(n) || out[y - 1][x[0] - 1] != null) {
+                    out[y - 1][x[0]] = (E) "\\";
+                } else {
+                    out[y - 1][x[0] - 1] = (E) "\\";
+                }
+            }
+        }
+        x[0]++;
         T right = n.getRight();
         maxLengthOfValues[0] = Math.max(maxLengthOfValues[0], v.toString().length());
         if (right != null) {
-            allocate(right, out, maxLengthOfValues, y + 1, x);
+            allocate(right, out, maxLengthOfValues, y + 2, x);
         }
     }
 
@@ -293,12 +308,13 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
      */
     @Override
     public void drawing() {
-        int high = height();
+        int high = 2 * height() + 1;
         int width = size();
-        E[][] XYCoordinates = (E[][]) new Object[high + 1][width];
+        E[][] XYCoordinates = (E[][]) new Object[high][width];
         int[] maxLengthOfValues = new int[1];
         allocate(root(), XYCoordinates, maxLengthOfValues, 0, new int[1]);
-        for (int y = 0; y <= high; y++) {
+        System.out.println("------------------------------------------------------");
+        for (int y = 0; y < high; y++) {
             for (int x = 0; x < width; x++) {
                 System.out.print(" ");
                 E v = XYCoordinates[y][x];
@@ -360,7 +376,7 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
             if (isLastChild(n)) {
                 result.add(")");
                 upToParentWhereIAmLeft(p, result);
-            }else{
+            } else {
                 result.add(p.getElement().toString());
             }
         }
