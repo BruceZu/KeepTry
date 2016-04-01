@@ -158,7 +158,6 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
         }
     }
 
-
     @Override
     public void attachLeftFor(T n, BinaryTree<? extends BinaryTreeNode<T, E>, E> tree) {
 

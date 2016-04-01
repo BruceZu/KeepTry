@@ -157,6 +157,11 @@ public class TreeTest {
 
     @Test(timeout = 60l, expected = Test.None.class)
     public void testBinaryTree() {
+        BinaryTree bst1 = new BinaryTreeImplement();
+        bst1.toBST(Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15));
+        //bst1.drawing();
+        BinaryTree bst2 = new ArrayBasedBinaryTreeImplement();
+
         BinaryTree bt = new BinaryTreeImplement();
         BinaryTreeNode<? extends BinaryTreeNode, String> r = bt.createRoot("r");
         BinaryTreeNode<? extends BinaryTreeNode, String> l = bt.createLeftFor(r, "l");

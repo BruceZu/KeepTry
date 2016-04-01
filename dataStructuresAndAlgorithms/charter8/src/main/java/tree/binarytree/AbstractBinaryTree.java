@@ -401,4 +401,46 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
             upToParentWhereIAmLeft(n, result);
         }
     }
+
+    /**
+     * @param arr          from it to produce binary search tree
+     * @param from         valid index bounder from, include.
+     * @param to           valid index bounder to, include.
+     * @param root         for it to create left or right child by the middle element of arr
+     * @param isCreateLeft  true to create left for root, else create right for root.
+     */
+    private void toBST(E[] arr, int from, int to, T root, boolean isCreateLeft) {
+        int mid = (from + to) / 2;
+        T newRoot;
+        if (isCreateLeft) {
+            newRoot = createLeftFor(root, arr[mid]);
+        } else {
+            newRoot = createRightFor(root, arr[mid]);
+        }
+
+        if (mid - 1 >= from) {
+            toBST(arr, from, mid - 1, newRoot, true);
+        }
+        if (mid + 1 <= to) {
+            toBST(arr, mid + 1, to, newRoot, false);
+        }
+    }
+
+    @Override
+    public BinaryTree toBST(List<E> sortedList) {
+        clean();
+        E[] arr = (E[]) sortedList.toArray();
+        int from = 0;
+        int to = arr.length - 1;
+        int mid = (from + to) / 2;
+        T root = createRoot(arr[mid]);
+
+        if (mid - 1 >= from) {
+            toBST(arr, from, mid - 1, root, true);
+        }
+        if (mid + 1 <= to) {
+            toBST(arr, mid + 1, to, root, false);
+        }
+        return this;
+    }
 }

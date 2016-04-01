@@ -117,7 +117,7 @@ public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E
 
     void drawing();
 
-    BinaryTree toBST(List sortedList);
+    BinaryTree toBST(List<E> sortedList);
 
     void remove(T n); // remove the node with only one child
 }
