@@ -40,6 +40,8 @@ import java.util.Iterator;
 public interface Tree<T extends TreeNode<T, E>, E> {
     boolean isLeaf(T n);
 
+    int leaves();
+
     int depth(T n);
 
     int height();

@@ -16,6 +16,7 @@
 package tree;
 
 import java.util.Iterator;
+import java.util.List;
 
 public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<T, E> {
 
@@ -239,5 +240,30 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
             }
             r.append(")");
         }
+    }
+
+    private void leaves(T n, int[] r /* result */) {
+        if (n.childrenSize() == 0) {
+            r[0]++;
+            return;
+        }
+        List<T> cs = n.getChildren();
+        for (T c : cs) {
+            leaves(c, r);
+        }
+    }
+
+    @Override
+    public int leaves() {
+        T root = root();
+        if (root == null) {
+            return 0;
+        }
+        if (isLeaf(root)) {
+            return 1;
+        }
+        int[] r = new int[1];
+        leaves(root, r);
+        return r[0];
     }
 }

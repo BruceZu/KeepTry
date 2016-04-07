@@ -342,7 +342,7 @@ public class TreeTest {
         //           /    \
         //          b3    c3
         //
-
+        assertEquals(bt.leaves(), 7);
         ite = bt.iteratorPostOrder();
         out = new StringBuilder();
         while (ite.hasNext()) {
