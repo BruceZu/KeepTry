@@ -183,8 +183,8 @@ public class TreeTest {
         BinaryTreeNode<? extends BinaryTreeNode, String> c2 = bt.createRightFor(b, "c2");
         BinaryTreeNode<? extends BinaryTreeNode, String> b3 = bt.createLeftFor(c2, "b3");
         BinaryTreeNode<? extends BinaryTreeNode, String> c3 = bt.createRightFor(b2, "c3");
-        excuteBinaryTree(bt);
-        excuteBinaryTreeHeightAndRemove(bt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
+        excuteBinaryTreeTest(bt);
+        excuteBinaryTreeHeightAndRemoveTest(bt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
 
         BinaryTree abt = new ArrayBasedBinaryTreeImplement();
         r = abt.createRoot("r");
@@ -208,8 +208,8 @@ public class TreeTest {
         b3 = abt.createLeftFor(c2, "b3");
         c3 = abt.createRightFor(b2, "c3");
         // abt.drawing();
-        excuteBinaryTree(abt);
-        excuteBinaryTreeHeightAndRemove(abt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
+        excuteBinaryTreeTest(abt);
+        excuteBinaryTreeHeightAndRemoveTest(abt, r, l, l2, l3, l4, r4, one, two, three, four, five, a, b, c, b2, c2, b3, c3);
 
         BinaryTree bt2 = new BinaryTreeImplement();
         BinaryTreeNode<? extends BinaryTreeNode, String> root = bt2.createRoot("-");
@@ -240,7 +240,7 @@ public class TreeTest {
 
         BinaryTreeNode<? extends BinaryTreeNode, String> l9 = bt2.createLeftFor(r6, "7");
         BinaryTreeNode<? extends BinaryTreeNode, String> r9 = bt2.createRightFor(r6, "4");
-        excuteBinaryTreeArithmeticExpression(bt2);
+        excuteBinaryTreeArithmeticExpressionTest(bt2);
 
         BinaryTree abt2 = new ArrayBasedBinaryTreeImplement();
         root = abt2.createRoot("-");
@@ -272,10 +272,10 @@ public class TreeTest {
         l9 = abt2.createLeftFor(r6, "7");
         r9 = abt2.createRightFor(r6, "4");
         // abt2.drawing();
-        excuteBinaryTreeArithmeticExpression(abt2);
+        excuteBinaryTreeArithmeticExpressionTest(abt2);
     }
 
-    private void excuteBinaryTreeArithmeticExpression(BinaryTree bt) {
+    private void excuteBinaryTreeArithmeticExpressionTest(BinaryTree bt) {
         List<String> result = new ArrayList<>(bt.size() * 2);
         bt.eulerTourTraversalArithmeticExpression((BinaryTreeNode) bt.root(), result);
 
@@ -286,7 +286,7 @@ public class TreeTest {
         assertEquals(re.toString(), "((((3+1)x3)/((9-5)+2))-((3x(7-4))+6))");
     }
 
-    private void excuteBinaryTree(BinaryTree bt) {
+    private void excuteBinaryTreeTest(BinaryTree bt) {
         // test iteratorBreadthFirstOrder(), iteratorInOrder(), iteratorPreOrder(), iteratorPostOrder()
         Iterator<? extends TreeNode> ite = bt.iteratorBreadthFirstOrder();
         StringBuilder out = new StringBuilder();
@@ -351,7 +351,7 @@ public class TreeTest {
         assertEquals(out.toString(), "l4, r4, l3, l2, b3, c2, b, c3, b2, c, a, l, 2, 4, 5, 3, 1, r, ");
     }
 
-    private void excuteBinaryTreeHeightAndRemove(BinaryTree bt,
+    private void excuteBinaryTreeHeightAndRemoveTest(BinaryTree bt,
                                                  BinaryTreeNode<? extends BinaryTreeNode, String> r,
                                                  BinaryTreeNode<? extends BinaryTreeNode, String> l,
                                                  BinaryTreeNode<? extends BinaryTreeNode, String> l2,
