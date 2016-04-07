@@ -48,6 +48,20 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
             return e;
         }
 
+        /**
+         * For every node n of T, let f (n) be the integer defined as follows.
+         * • If n is the root of T, then f (n) = 0.
+         * • If n is the  left child of n q, then f (n) = 2 f (q)+1.
+         * • If n is the right child of n q, then f (n) = 2 f (q)+2.
+         *
+         *   f (p) ≤ 2^n−2.
+         *
+         * <p/>
+         * The numbering function f is known as a level numbering of the n in a
+         * binary tree T, for it numbers the n on each level of T in increasing order
+         * from left to right.
+         */
+
         @Override
         public N getLeft() {
             return array[2 * index + 1];
@@ -93,7 +107,9 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
         }
     }
 
-    private NodeImplement[] array = new NodeImplement[100]; // Todo: increase automatically
+    // Todo: increase automatically
+    // for a given tree with n nodes, f (p) ≤ 2^n−2, and the size of array can be 2^n-2
+    private NodeImplement[] array = new NodeImplement[100];
     private int size;
 
     private void valid(BinaryTreeNode n) {
