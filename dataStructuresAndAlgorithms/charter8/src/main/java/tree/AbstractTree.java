@@ -19,17 +19,22 @@ import java.util.Iterator;
 
 public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<T, E> {
 
-    private int childrenMaxDepth(T n, int ancs /* number of ancestors */) {
+    /**
+     * @param n
+     * @param dd default depth or the depth for leaf children of n
+     * @return max depth of n's children
+     */
+    private int childrenMaxDepth(T n, int dd) {
 
         int maxChildDepth = 0;
         for (T c : n.<E>getChildren()) {
             if (!isLeaf(c)) {
-                maxChildDepth = Math.max(maxChildDepth, childrenMaxDepth(c, ancs + 1));
+                maxChildDepth = Math.max(maxChildDepth, childrenMaxDepth(c, dd + 1));
             }
             // skip leaf as it is not the child with max depth
         }
 
-        return maxChildDepth == 0 ? ancs : maxChildDepth;
+        return maxChildDepth == 0 ? dd : maxChildDepth;
     }
 
     @Override
@@ -190,9 +195,6 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
     /**
      * Assume parent have more than one children
      * and check if n is not the last one.
-     *
-     * @param n
-     * @return
      */
     private boolean isNotLastChild(T n) {
         T p = n.getParent();
