@@ -50,7 +50,15 @@ import java.util.List;
 //        4. log(n+1)−1 ≤ h ≤ (n−1)/2
 //
 // a nonempty proper binary tree T:
+//
 //           nE = nI +1.
+//
+// Define the internal path length, I(T), of a tree T to be the sum of the depths of
+// all the internal positions in T. Likewise, define the external path length, E(T),
+// of a tree T to be the sum of the depths of all the external positions in T. Show
+// that if T is a proper binary tree with n positions, then
+//
+//          E(T) = I(T)+n−1.
 //
 public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E> {
     T createRoot(E e);
