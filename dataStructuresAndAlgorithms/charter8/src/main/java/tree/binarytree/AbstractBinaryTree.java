@@ -368,7 +368,6 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         }
     }
 
-
     private void upToParentWhereIAmLeft(T n, List<String> result) {
         T p = n.getParent();
         if (p != null) { // n is not root
@@ -384,7 +383,6 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
 
     @Override
     public void eulerTourTraversalArithmeticExpression(T n, List<String> result) {
-
         if (!isLeaf(n)) {
             result.add("(");
             // pre-order
