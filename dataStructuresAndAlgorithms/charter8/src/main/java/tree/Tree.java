@@ -37,6 +37,8 @@ import java.util.Iterator;
 // breadth-first traversal:
 //    visit all the nodes at depth d before we visit the nodes at depth d+1.
 //
+// The 'path length' of a tree T is the sum of the depths of all nodes in T.
+//
 public interface Tree<T extends TreeNode<T, E>, E> {
     boolean isLeaf(T n);
 
