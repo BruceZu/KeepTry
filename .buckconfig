@@ -7,10 +7,6 @@
     ignore = .git, eclipse-out/
     parallel_parsing = true
 
-[cache]
-    mode = dir
-    dir = buck-out/cache
-
 [buildfile]
     includes = //DEFS
 
