@@ -9,7 +9,7 @@ cook_prebuilt_jar(
     version='8.0.24',
     bin_sha1='5d9e2e895e3111622720157d0aa540066d5fce3a',
     src_sha1='6f35835c560f437714a6cfa2087627c6630249f9',
-    visibility=['//practiseProblem:net.SocketTest'],
+    visibility=['//vivid-hi:net.SocketTest'],
 )
 
 cook_prebuilt_jar(
@@ -43,9 +43,9 @@ cook_prebuilt_jar(
     src_sha1='1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b',
     visibility=[
         '//lib:junit',
-        '//practiseProblem:ParseBalancedParenthesesTests',
-        '//practiseProblem:url.URLTest',
-        '//practiseProblem:net.SocketTest',
+        '//vivid-hi:ParseBalancedParenthesesTests',
+        '//vivid-hi:url.URLTest',
+        '//vivid-hi:net.SocketTest',
     ]
 )
 
