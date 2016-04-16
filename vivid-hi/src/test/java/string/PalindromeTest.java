@@ -15,12 +15,11 @@
 
 package string;import org.junit.Assert;
 import org.junit.Test;
-import string.Palindrome;
 
 import java.text.Collator;
 
 public class PalindromeTest {
-    @Test(timeout = 3000L, expected = Test.None.class)
+    @Test(timeout = 4000L, expected = Test.None.class)
     public void testPalindrome() {
         StringBuffer b = new StringBuffer()
                 .append("A man, a plan, a canal, Panama!")
