@@ -30,7 +30,7 @@ import java.util.HashMap;
  * Hide Similar Problems (H) Longest Substring with At Most Two Distinct Characters
  */
 
-public class LengthOfLongestSubstringKDistinct340 {
+public class LC340LengthOfLongestSubstringKDistinct {
 
     public int lengthOfLongestSubstringKDistinct(String s, int k) {
         int startIndex = 0;
@@ -58,7 +58,7 @@ public class LengthOfLongestSubstringKDistinct340 {
     }
 
     public static void main(String[] args) {
-        System.out.println(new LengthOfLongestSubstringKDistinct340().lengthOfLongestSubstringKDistinct("eceba", 2));
+        System.out.println(new LC340LengthOfLongestSubstringKDistinct().lengthOfLongestSubstringKDistinct("eceba", 2));
     }
 
     public int lengthOfLongestSubstringKDistinct2(String s, int k) {

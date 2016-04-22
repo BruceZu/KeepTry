@@ -44,7 +44,7 @@ interface NestedInteger {
     List<NestedInteger> getList();
 }
 
-public class NestedListWeightSum339 {
+public class LC339NestedListWeightSum {
     private int sumOf(List<NestedInteger> nestedList, int deep) {
         int r = 0;
         for (int i = 0; i < nestedList.size(); i++) {
