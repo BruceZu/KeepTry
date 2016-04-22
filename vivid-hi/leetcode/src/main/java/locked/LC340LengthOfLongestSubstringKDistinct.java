@@ -18,15 +18,15 @@ package locked;
 import java.util.HashMap;
 
 /**
- * https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
+ * https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/<p/>
  * Given a string, find the length of the longest substring T that contains at most k distinct characters.
  * <p/>
  * For example, Given s = “eceba” and k = 2,
  * <p/>
  * T is "ece" which its length is 3.
  * <p/>
- * Hide Company Tags Google
- * Hide Tags Hash Table String
+ * Hide Company Tags Google<p/>
+ * Hide Tags Hash Table String<p/>
  * Hide Similar Problems (H) Longest Substring with At Most Two Distinct Characters
  */
 

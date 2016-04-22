@@ -15,9 +15,20 @@
 
 package locked;
 
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
+    }
+}
 /**
  * 333. Largest BST Subtree
+ * <p/>
  * https://leetcode.com/problems/largest-bst-subtree/
+ * <p/>
  * Given a binary tree, find the largest subtree which is a Binary Search Tree (BST), where largest means subtree with largest number of nodes in it.
  * <p/>
  * Note:
@@ -39,21 +50,6 @@ package locked;
  * Hide Company Tags Microsoft
  * Hide Tags Tree
  */
-
-/**
- * Definition for a binary tree node.
- */
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode(int x) {
-        val = x;
-    }
-}
-
 public class LC333LargestBSTSubtree {
     int r = 0;
 

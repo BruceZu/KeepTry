@@ -17,20 +17,6 @@ package locked;
 
 import java.util.List;
 
-/**
- * https://leetcode.com/problems/nested-list-weight-sum/
- * Given a nested list of integers, return the sum of all integers in the list weighted by their depth.
- * Each element is either an integer, or a list -- whose elements may also be integers or other lists.
- * Example 1:
- * Given the list [[1,1],2,[1,1]], return 10. (four 1's at depth 2, one 2 at depth 1)
- * Example 2:
- * Given the list [1,[4,[6]]], return 27. (one 1 at depth 1, one 4 at depth 2, and one 6 at depth 3; 1 + 4*2 + 6*3 = 27)
- * <p/>
- * Hide Company Tags LinkedIn
- * Hide Tags Depth-first Search
- */
-
-
 interface NestedInteger {
     // @return true if this NestedInteger holds a single integer, rather than a nested list.
     boolean isInteger();
@@ -43,7 +29,18 @@ interface NestedInteger {
     // Return null if this NestedInteger holds a single integer
     List<NestedInteger> getList();
 }
-
+/**
+ * https://leetcode.com/problems/nested-list-weight-sum/  <p/>
+ * Given a nested list of integers, return the sum of all integers in the list weighted by their depth.
+ * Each element is either an integer, or a list -- whose elements may also be integers or other lists.  <p/>
+ * Example 1: <p/>
+ * Given the list [[1,1],2,[1,1]], return 10. (four 1's at depth 2, one 2 at depth 1)<p/>
+ * Example 2:<p/>
+ * Given the list [1,[4,[6]]], return 27. (one 1 at depth 1, one 4 at depth 2, and one 6 at depth 3; 1 + 4*2 + 6*3 = 27)
+ * <p/>
+ * Hide Company Tags LinkedIn<p/>
+ * Hide Tags Depth-first Search
+ */
 public class LC339NestedListWeightSum {
     private int sumOf(List<NestedInteger> nestedList, int deep) {
         int r = 0;
