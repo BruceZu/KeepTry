@@ -13,7 +13,9 @@
 // limitations under the License.
 //
 
-package string;import map.SortMapByValue;
+package string;
+
+import map.SortMapByValue;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
