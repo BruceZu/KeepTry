@@ -57,10 +57,6 @@ public class LC340LengthOfLongestSubstringKDistinct {
         return length;
     }
 
-    public static void main(String[] args) {
-        System.out.println(new LC340LengthOfLongestSubstringKDistinct().lengthOfLongestSubstringKDistinct("eceba", 2));
-    }
-
     public int lengthOfLongestSubstringKDistinct2(String s, int k) {
         // ASCII printable code chart  [32 - 126]
         // new int [256] do not affect while in this case
