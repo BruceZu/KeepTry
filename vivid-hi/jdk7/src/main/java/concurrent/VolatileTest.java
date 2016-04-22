@@ -28,6 +28,10 @@ public class VolatileTest {
         v++; // not atomic operation
     }
 
+    public void myName() {
+        System.out.println("This is "+VolatileTest.class.getName());
+    }
+
     public synchronized void syncincrease() {
         a++; // with 'syncronized' to make sure atomic operation
     }
