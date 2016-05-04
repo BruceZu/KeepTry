@@ -17,18 +17,7 @@ package locked;
 
 import java.util.List;
 
-interface NestedInteger {
-    // @return true if this NestedInteger holds a single integer, rather than a nested list.
-    boolean isInteger();
 
-    // @return the single integer that this NestedInteger holds, if it holds a single integer.
-    // Return null if this NestedInteger holds a nested list
-    Integer getInteger();
-
-    // @return the nested list that this NestedInteger holds, if it holds a nested list
-    // Return null if this NestedInteger holds a single integer
-    List<NestedInteger> getList();
-}
 /**
  * https://leetcode.com/problems/nested-list-weight-sum/  <p/>
  * Given a nested list of integers, return the sum of all integers in the list weighted by their depth.
@@ -42,6 +31,19 @@ interface NestedInteger {
  * Hide Tags Depth-first Search
  */
 public class LC339NestedListWeightSum {
+    interface NestedInteger {
+        // @return true if this NestedInteger holds a single integer, rather than a nested list.
+        boolean isInteger();
+
+        // @return the single integer that this NestedInteger holds, if it holds a single integer.
+        // Return null if this NestedInteger holds a nested list
+        Integer getInteger();
+
+        // @return the nested list that this NestedInteger holds, if it holds a nested list
+        // Return null if this NestedInteger holds a single integer
+        List<NestedInteger> getList();
+    }
+
     private int sumOf(List<NestedInteger> nestedList, int deep) {
         int r = 0;
         for (int i = 0; i < nestedList.size(); i++) {

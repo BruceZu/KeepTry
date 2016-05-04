@@ -15,15 +15,7 @@
 
 package locked;
 
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
 
-    TreeNode(int x) {
-        val = x;
-    }
-}
 /**
  * 333. Largest BST Subtree
  * <p/>
@@ -51,6 +43,15 @@ class TreeNode {
  * Hide Tags Tree
  */
 public class LC333LargestBSTSubtree {
+    class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int x) {
+            val = x;
+        }
+    }
     int r = 0;
 
     /**
