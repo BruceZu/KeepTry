@@ -27,6 +27,8 @@ class TreeNode {
 
 // not find the fast way yet.
 public class Leetcode124BinaryTreeMaximumPathSum {
+    // same case is http://www.cnblogs.com/kaituorensheng/p/3555151.html
+
     private static int max = Integer.MIN_VALUE;
 
     public static int maxPathSum(TreeNode root) {
