@@ -1,0 +1,428 @@
+
+Bruce Zu's Resume
+=================
+
+:Gerrit: https://www.gerritcodereview.com/about.md
+:Linkedin: https://www.linkedin.com/in/bruce-zu-98b82018
+:Facebook: https://www.facebook.com/bruce.zu
+:Github: https://github.com/BruceZu
+
+I am an open source contributor of {Gerrit}[Google Gerrit Code Review].
+
+[small Gray]#Temple city, Greater Los Angeles Area, CA 91780 +
+(626) 747-6721 +
+zu.bruce.china@gmail.com +
+My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
+
+'''
+=== *EMPLOYMENT*
+
+
+==== Sony Mobile — Senior Software Engineer
+
+[small Gray]#_Sep 2011 -  Apr 2015_# +
+
+* 140 + commits contribution to Gerrit Code Review community including bugfixes and new features. +
+* Support developer, CM user and Git AM to resolve daily *Gerrit/Git/Repo* related issues. +
+
+[small Gray]#_Nov 2010 - Sep 2011_# +
+
+* Maintenance *Jenkins* servers, Jenkins plugins, Jenkins jobs and Jenkins slave machines. +
+* Support developers and CM users. +
+* Develop Gerrit-trigger-plugin. +
+
+==== Canon — DBA & Senior Software Engineer
+
+[small Gray]#_Apr 2007 - Mar 2010_# +
+
+* *DB2* and *MS SQL Server* performance tuning, backup & restore. +
+* Developed a tool using Java RMI and IBM MQ API to sync data between Web applications and Data center. +
+
+==== CS&S — Software Engineer
+
+[small Gray]#_Mar 2003 - Feb 2007_# +
+
+Using *Oracle 9i, Weblogic 8, Struts 1, JDK 1.4,* and *Java EE(AWT, Swing, JSP, Servlet, JDBC, +
+Session bean, message bean, JMS)*, with other members I design and develop:
+
+* _Taxes Payment System_ of China Guangdong province. +
+* _Social Insurance Payment System_ of China Guangdong province. +
+
+==== Cernet — Intern
+
+[small Gray]#_Mar 2002 - Dec 2002_# +
+I develop E-payment system's admin module from the web side to server side using +
+*J2EE(JSP, Servlet, JDBC, EJB), oracle 9i, Redhat Linux, JBoss 3.0, ClearCase, ClearQuest*
+
+'''
+=== *EDUCATION*
+
+[small Gray]#_Sep 2000 - Mar 2003_# +
+University of Science and Technology Beijing - Master +
+
+'''
+=== *SKILLS*
+
+*Gerrit, Git, Jenkins +
+RESTful, OOP +
+Java, Bash, Python, SQL +
+Java EE +
+GWT, Struts +
+Guice, Guaua +
+Oracle, DB2, MS SQL Server +
+Open source software development*
+
+[cols="4", options="header"]
+|===
+|
+|Start touch Year
+|End touch Year
+|Total Years
+
+|Java(1.4~7)/Java EE
+|2002
+|now
+|15
+
+|HTML/CSS/JavaScript
+|2002
+|now
+|2
+
+|Google Guice
+|2010
+|now
+|6
+
+|Google Guaua
+|2010
+|now
+|6
+
+|Google GWT
+|2010
+|now
+|6
+
+|RESTful API
+|2014
+|now
+|3
+
+|Facebook BUCK
+|2014
+|now
+|3
+
+|Maven
+|2010
+|2013
+|3
+
+|Git/Gerrit/Jenkins
+|2010
+|now
+|6
+
+|Red Hat Linux/Ubuntu/Mac
+|2007
+|now
+|10
+
+|Agile,Sprint, Scrum
+|2010
+|2015
+|6
+
+|Oracle 8i/9i
+|2002
+|2007
+|6
+
+|DB2/Microsoft SQL Server
+|2007
+|2010
+|3
+
+|PostgreSQL
+|2010
+|now
+|5
+
+|UML
+|2003
+|2004
+|2
+
+|Weblogic
+|2003
+|2004
+|2
+
+|Tomcat
+|2002
+|2015
+|2
+
+|JBoss
+|2002
+|2002
+|1
+
+|WebSphere Application Server
+|2007
+|2010
+|3
+
+|===
+
+'''
+=== *Ability*
+
+* I am an independent quick learner especially on Java technologies. I was assigned to develop Gerrit and Jenkins plugin when I had never heard of their name at the very beginning. But I could shift output shortly without help as its pure Java based software. +
+* Positive team spirit and interpersonal skills. +
+* Excellent attention to detail, troubleshooting and analytical skills. +
+
+'''
+=== *LANGUAGES*
+
+English, Mandarin.
+
+'''
+==== [big blue]#Common Q & A#
+
+. Need `H1B` or `green card` application `sponsorship` ? +
+No, I got EAD and SSN in April 2016 and is now in the process of applying green card
+
+. Can you `relocate`? +
+Yes. I am willing to relocate to any other cities in CA.
+
+
+.[big red]#EMPLOYMENT DETAIL#
+****
+****
+
+
+[NOTE]
+====
+[small Gray]#(You can skip the following content if you think above information is enough for you)#
+====
+
+==== Sony Mobile
+
+[small Green]#_Sep 2011 -  Apr 2015_# +
+
+.Job Title
+
+Senior Software Engineer.
+
+.Job Function
+
+Gerrit Code Review master. +
+Develop new features and bugfix. +
+Fix issues of Gerrit server with Git Admin team and CM team. +
+
+.System introduce
+:gerrit-case: https://gerrit.googlesource.com/homepage/+/md-pages/docs/ShowCases.md
+
+Gerrit Code Review::
+Gerrit is a web-based code review tool built on top of the *Git* version control system (JGit). +
+It is used by {gerrit-case}[Google Android, ChromiumOS, Eclipse ...] +
+It is a pure Java based distributed system. +
+
+* Gerrit provide access via:
+.. Web page: It use *GWT* as web side framework, use *CodeMirror* to show the `git diff` result on web.
+A new UI is in building using *Polymer*. +
+.. RESTful API. +
+.. SSH Command line using *Apache MINA*. +
+* It has notification function: Hook, Stream-event and E-mail. +
+* Gerrit store data in
+.. *Git* repositories. +
+.. DB. Gerrit does not use *Hibernate*, instead it supports 9 types DB via its open source tiny *ORM* library, +
+e.g. Oracle, MySQL,  H2, PostgreSQL, DB2 . But Gerrit will end DB support and will store all data into `Git notes`, +
+this is a step towards implementing open-source version multi-master feature.  +
+* Gerrit cache result in server side memory, disk and client side via browser. +
+* Gerrit build second index using *Lucene*. +
+* Gerrit has replication function, now is a plugin, to enable master-slave mode. Multi-master is under building +
+* Gerrit use *Google Guice*, not *Spring*. as Dependency injection framework +
+* Gerrit support developing Gerrit plugin
+* Gerrit using *BUCK* to build source code, running Junit test, package and release war file. Its faster that *Maven*. +
+* Gerrit provide `init` command to do every initial work and run Gerrit automatically.
+* Gerrit has tons of framework .......
+
+
+The Sony Mobile Gerrit server::
+
+It runs in Tomcat web container behind the Apache web server. +
+It is master-slave mode, On master server, and average 7 slave servers * 3 sites. +
+Sony Mobile use PostgreSQL and its replication feature. That means each Gerrit slave server also has a PostgreSQL DB. +
+On each site, The Gerrit slave servers are located behind balance servers which balance the requests from local +
+developers and local Jenkins servers.
+
+
+.Achievements
+
+Daily support CM user and Git Admin on issues related to Gerrit, Apache, Tomcat. +
+Try new Gerrit plugins in Test Environment. +
+I contributed 140+ commits to Gerrit open source community: +
+
+Features like :::
+- [*] Create project (From web side to server side, including command line and REST API) +
+- [*] Add file comment to a patch (From web side to server side) +
+- [*] Accept email address automatically in development mode +
+- [*] Add branch specified label +
+- [*] Add some system configuration options. +
+- [*] Add reviewers by LDAP group +
+
+Bugfixes and improvement commits covering the following fields :::
+- [*] Suggesting and watching projects +
+- [*] Lucene reindex +
+- [*] Command line API +
+- [*] Guice related issue +
+- [*] Email notification. +
+
+:My-contribution: https://gerrit-review.googlesource.com/#/q/author:bruce.zu
+Details: {My-contribution}[ my commits] contributed to Gerrit community.
+
+
+[small Green]#_No 2010 ~ Sep 2011_# +
+
+.Job Function
+
+Jenkins master.
+
+.Job Title
+
+Staff Engineer
+
+.Achievements
+
+Maintenance Jenkins slave machines :::
+- [*] Setup configure new Jenkins slave. +
+- [*] Manage Jenkins slave in groups, allocate slave groups to Jenkins jobs, Adjust slave groups from time to time. +
+- [*] Monitor slaves' status and fix slaves' issue to keep them available. +
+Maintenance Jenkins jobs :::
+- [*] Manage jobs in groups, +
+- [*] Abstract general job configure templates. +
+- [*] Help users to fix issues of Jenkins jobs. +
+Maintenance Jenkins Server :::
+- [*] Evaluate Jenkins new version and Jenkins plugins. +
+- [*] Upgrade Jenkins and Jenkins plugins +
+- [*] Develop Jenkins plugin: Gerrit-trigger-plugin +
+
+==== Canon China
+
+[small Green]#_Apr 2007 - Mar 2010_# +
+
+.Job Title
+
+Senior Software Engineer
+
+.Job Function
+
+Supervisor all local web applications.
+
+.System introduce
+In Cannon China there are some local applications build using Java EE,  +
+e.g. e-order, e-bank, e-parts and so on. These web applications using DB2 or MS SQL Server. +
+They need exchange data with systems build using AS400 and DB2. +
+
+.Achievements
+- [*] Improve performance of SQL statement, e.g. I ever tuning a query SQL statement to reduce the response time from 2 minutes to 5 seconds against
+MS SQL Server. +
+- [*] Setup MS SQL Server database backup maintenance plan and carried it out. +
+- [*] Fix issues of DB2 backup to tape and documents tutorial for team. +
+- [*] Develop and maintenance a tool implemented by Java RMI and IBM MQ API to sync data between Web applications and systems build using AS400 and DB2 when business happen online. +
+- [*] With outsources software engineers design and develop inner office portal web site. +
+
+==== CS & S
+
+[small Green]#_Mar 2003 - Feb 2007_# +
+
+.Job Title
+Software Engineer +
+
+.Job Function
+With other members develop 2 systems for China Guangdong province.
+
+- Taxes collection application.
+- Social insurance collection application.
+
+
+.System introduce
+
+Taxes Payment Application ::
+
+The number of GDP and people of Guandong province is greater than that of Taiwan. +
+It is the first application in China providing local tax services for the whole province with one data center (Oracle RAC) and one central application server (Weblogic cluster). +
+The number of this application’s online users, concurrent users is very big. It is also a big data. +
+It is multi-layers system implemented in browser/server mode and client/server mode. +
+User can access it via telephone, browser and client side application. +
+It connects with other system of banks and many other government departments. +
+
+
+
+.Achievements
+
+A core module of this application provide features like calculating the number of tax and print +
+every tickets for users. +
+I design and coding features from GUI side to server side. like +
+
+- [*] Calculating the number of tax +
+- [*] Print cash receipt +
+- [*] Print General-purpose Tax Payment Certificate. +
+
+The design work, e.g. write user case, draw sequence diagram, class diagram with *Rational Rose*.  +
+I use *JBuilder Oracle 9i, Weblogic 8, Struts 1, JDK 1.4, and Java EE(Swing, JSP, Servlet, JDBC, +
+Session bean, Message bean)* +
+
+.System introduce
+
+Social Insurance Payment Application ::
+Its idea is to collect 5 kind social insurance of employee forcefully from the employer together with tax. +
+The technology used by this system is basically same as Taxes Payment Application.  +
+Some functions is implemented by refactoring existing functions of Taxes collection application. +
+
+.Achievements
+- [*] Write out system requirement with end user. Make clear the boundary of system, +
+- [*] Comb out the business data flow, draw out business data module using *Rational Rose*,  +
+- [*] Create out physical data module, DB scheme using *PowerBuilder* 9 +
+- [*] Divided system into modules. +
+- [*] ETL work. with others we compare the schema between old system and new system,  +
+table by table, create mapping relation, then write procedure and function using *PL/SQL*.
+
+
+==== Cernet — Intern
+[small Green]#_Mar 2002 - Dec 2002_# +
+
+.Job Title
+
+Software Engineer
+
+.Job Function
+
+With others code E_Payment system.
+
+.System introduce
+
+E_Payment system::
+It is ike Paypal to provide payment service used by Cernet web site.
+The system use a framework which mocked the Sun pet store.
+
+.Achievements
+- [*] I developed E-payment system's admin module from the web side to server side, +
+using *JavaScript, JSP, Servlet, JDBC, Session bean, Entity Bean, Message Bean*. +
+Develop environment is *JBuilder, JBoss 3, Oracle 8i and 9i, ClearCase, ClearQuest*. +
+Features includes: register new user, assign authority to user by user group. +
+- [*] common lib: Define DTD, a Document Type Definition, and coding the parser to parse a given *XML* according the DTD with DOM. +
+- [*] common lib: Wrap *Log4j* to make it easy to handle. +
+- [*] I also learn InstallShield and used it to package program for other teams. +
+
+
+
+
+
+
+
+
+
