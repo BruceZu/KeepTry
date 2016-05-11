@@ -1,0 +1,206 @@
+
+.[big red]#EMPLOYMENT DETAIL#
+****
+****
+
+==== Sony Mobile
+
+[small Green]#_Sep 2011 -  Apr 2015_# +
+
+.Job Title
+
+Senior Software Engineer
+
+.Job Function
+I was a member of global Gerrt development team supporting Git Admin team, CM team and developers by delivering new features
+and bugfixes.
+
+.Application introduce
+:gerrit-case: https://gerrit.googlesource.com/homepage/+/md-pages/docs/ShowCases.md
+
+Gerrit Code Review::
+
+ * Gerrit provides access via browser, RESTful API and SSH Command line. Gerrit uses *GWT* as web framework, uses *CodeMirror* to show the `git diff` result on web.
+A new UI is under building using *Polymer*. Gerrit replaced nearly all *GWT RPC* implementation with its own *RESTful API*.
+The SSH Command line features are build with *Apache MINA*'s sub project *Apache SSHD*. +
+ * Gerrit notification function: Hook, Stream-event and E-mail. +
+ * Gerrit stores data in *Git* repositories and SQL database. Gerrit does not use *Hibernate*, instead it supports 9 kinds of SQL database by its own open source tiny *ORM* library which is build
+ using *ObjectWeb ASM 3*, *H2* and *ANTLR 3*.
+e.g. Oracle, MySQL,  H2, PostgreSQL, DB2. But Gerrit is moving the data stored in DB into `Git notes`.
+This is a step towards implementing open-source version of multi-master feature.  +
+* Gerrit caches search result in memory, disk of server side and client side via browser. +
+* Gerrit builds second index using *Lucene* and *Protocol Buffers*. +
+* Gerrit provides search function, the grammar is built using *Antlr 3*. +
+* Gerrit has replication function, now is a plugin, to enable master-slave mode. Multi-master is under building. +
+* Gerrit uses *Google Guice*, not *Spring*, as dependency injection framework. +
+* Gerrit supports developing Gerrit plugin. +
+* Gerrit uses *BUCK* to build source code, run Junit test, package release file (war). BUCK runs faster that *Maven*. +
+* Gerrit provides `init` command to do every initial works and startup Gerrit automatically.
+* Gerrit has tons of framework .......
+
+The Sony Mobile Gerrit server::
+
+Gerrit server runs in Tomcat web container behind a Apache web server. +
+Gerrit server is master-slave mode, one master server and on average 7 slave servers * 3 sites. +
+Sony Mobile Gerrit server uses PostgreSQL which has replication features. Each Gerrit slave server has a PostgreSQL database. +
+On each site, The Gerrit slave servers are located behind balance servers which balance the requests from local developers and local Jenkins servers.
+
+
+.Achievements
+
+Develop :::
+Some features, e.g. :
+
+- [*] Create project (ssh command and RESTful API) +
+- [*] Add file comment to a patch +
+- [*] Enable branch specified label +
+- [*] Add reviewers in batch by LDAP group +
+- [*] Add new system configuration options +
+- [*] Enable register email registered automatically +
+
+
+:My-contribution: https://gerrit-review.googlesource.com/#/q/author:bruce.zu
+:::
+Details: {My-contribution}[ my commits] contributed to Gerrit community.
+
+Daily support :::
+
+- [*] Tackled issues related to Gerrit, Apache, Tomcat with CM user and Git Admin  +
+- [*] Tried new Gerrit version and Gerrit plugins in Test Environment +
+
+[small Green]#_No 2010 ~ Sep 2011_# +
+
+.Job Function
+
+Jenkins master
+
+.Job Title
+
+Staff Engineer
+
+.Application introduce
+
+Sony mobile has few Jenkins servers in each site with hundreds of slave machines for developers, CM teams.
+
+.Achievements
+
+Admin Jenkins Server
+
+- [*]  Evaluated/Upgraded Jenkins new version and Jenkins plugins +
+- [*]  Setup and configured new Jenkins slaves. Allocated slave groups to Jenkins jobs, Tuned slave groups +
+- [*]  Monitored Jenkins server/jobs/slaves and tackled issues +
+
+Develop
+
+- [*] Took part in developing Jenkins plugin: Gerrit-trigger-plugin +
+
+==== Canon China
+
+[small Green]#_Apr 2007 - Mar 2010_# +
+
+.Job Title
+
+Senior Software Engineer
+
+.Job Function
+
+supervise all local web applications
+
+.Application introduce
+
+Cannon China local applications ::
+Web applications, e.g. e-order, e-bank, e-parts .... They are built using Java EE, DB2 or MS SQL Server.
+Their databases need exchange data with core applications which is built using AS400 and DB2.
+
+.Achievements
+
+DBA
+
+- [*] Tuned SQL statement of web applications, e.g. reduced the running time of some SQL statements to be less than 5 seconds from 2+ minutes. +
+- [*] Setup MS SQL Server database backup plan and carried it out. +
+- [*] Tacked day-to-day issues of DB2 backup to tape and wrote tutorial. +
+
+Develop:
+
+- [*] Designed, developed, tested, deployed and maintained a real-time application used to sync data between web applications and core applications. +
+
+==== China Software & Service
+
+[small Green]#_Mar 2003 - Feb 2007_# +
+
+.Job Title
+Software Engineer +
+
+.Job Function
+With other members developed 2 web applications for Guangdong Province China .
+
+- Centralized Taxes Payment Application.
+- Social Insurance Payment Application.
+
+.Application introduce
+
+Centralized Taxes Payment Application ::
+
+The application provides local tax services for the whole province. It is a large-scale distributed Java EE based web application built using
+Oracle RAC Weblogic cluster. The number of GDP and people of Guandong Province is greater than that of Taiwan.
+The numbers of this application’s online users and concurrent users are very big. It is also a big data application.
+Its is multi-tier, browser/server mode and client/server mode architecture.
+User can access it via telephone, browser and client side application.
+It also communicate with other applications of banks and other government departments.
+
+
+.Achievements
+
+- [*] Design and coding features like online payment and printing cash receipt, General-purpose Tax Payment Certificate. +
+
+.Application introduce
+
+Social Insurance Payment Application ::
+This application is used to collect 5 kinds of social insurance fee from employer for their employee.
+It force the employer to pay these social insurance together with the local taxes +
+
+I was in charge of system requirement and system design. +
+
+.Achievements
+
+- Design:
+
+- [*] Wrote out system requirement with end user. Made clear the boundary of system, wrote out user cases. +
+- [*] Combed out the business data flow, draw out business data module.  +
+- [*] Created physical data module, DB scheme. +
+- [*] Divided system into sub modules. +
+
+- ETL:
+
+- [*] Took part in ETL work between old application DB and new application DB. +
+
+
+==== Cernet — Intern
+[small Green]#_Mar 2002 - Dec 2002_# +
+
+.Job Title
+
+Software Engineer
+
+.Job Function
+
+Took part in developing E_Payment web application
+
+.Application introduce
+
+E_Payment application::
+It is online payment application like Paypal to provide payment service used by Cernet web site.
+Its framework mocked the Sun pet store using *JavaScript, JSP, Servlet, JDBC, EJB* +
+
+.Achievements
+Developed admin module of E-payment application from the front-end to back-end
+Features includes
+
+- [*] Register/update new user information. +
+- [*] Manage user authority via user's group. +
+
+Developed common library
+
+- [*] Defined DTD, a Document Type Definition, and developed a parser to parse a given *XML* according the DTD. +
+- [*] Wraped *Log4j* to make it easy to handle. +
+
