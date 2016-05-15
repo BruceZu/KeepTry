@@ -23,16 +23,28 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 @RunWith(Parameterized.class)
 public class ReverseListTest {
 
-    @Parameterized.Parameters(name = "test {index}")
-    public static Iterable<int[]> data() {
-        return Arrays.asList(new int[][]{
-                {1, 2, 3, 4},
-                {},
-                {1, 2}});
+//    @Parameterized.Parameters(name = "test {index}")
+//    public static Iterable<int[]> data() {
+//        return Arrays.asList(new int[][]{
+//                {1, 2, 3, 4},
+//                {},
+//                {1, 2}
+//        });
+//    }
+
+
+    @Parameterized.Parameters(name = "test with {index}")
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {new int[]{1, 2, 3, 4}},
+                {new int[]{}},
+                {new int[]{1, 2}},
+        });
     }
 
     private int[] originalData;
