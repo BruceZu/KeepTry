@@ -24,7 +24,6 @@ import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -32,14 +31,15 @@ import java.util.List;
 public class SortTest {
 
     @Parameterized.Parameters(name = "test with {index} {0}")
-    public static Collection<Object[]> data() {
+    public static Iterable<Object[]> data() {
         List r = Arrays.asList(new Comparable[][][]{
-                {{3, 1, 4, 6, 7, 9}, {1, 3, 4, 6, 7, 9}},
+                {{9, 7, 6, 4, 3, 2, 1}, {1, 2, 3, 4, 6, 7, 9}},
                 {{}, {}},
                 {{1}, {1}},
-                {{9, 8, 7, 6, 5, 4, 0}, {0, 4, 5, 6, 7, 8, 9}},
+                {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}},
                 {{4, 5, 6, 7, 8, 9}, {4, 5, 6, 7, 8, 9}},
                 {{6, 5, 2}, {2, 5, 6}},
+                {{'b', 'a', 'z'}, {'a', 'b', 'z'}},
                 {null, null}
         });
         return r;
@@ -81,10 +81,34 @@ public class SortTest {
     }
 
     @Test(timeout = 10l, expected = Test.None.class)
-    public void testSort() {
+    public void testSortTest() {
         Comparable[] ar = clone(arr);
         // start test
         Sort.shellSort(ar);
+        Assert.assertTrue(Arrays.equals(ar, sorted));
+    }
+
+    @Test(timeout = 10l, expected = Test.None.class)
+    public void mergeSortTest() {
+        Comparable[] ar = clone(arr);
+        // start test
+        Sort.mergeSort(ar);
+        Assert.assertTrue(Arrays.equals(ar, sorted));
+    }
+
+    @Test(timeout = 10l, expected = Test.None.class)
+    public void mergeSort2Test() {
+        Comparable[] ar = clone(arr);
+        // start test
+        Sort.mergeSort2(ar);
+        Assert.assertTrue(Arrays.equals(ar, sorted));
+    }
+
+    @Test(timeout = 10l, expected = Test.None.class)
+    public void mergeSort2NoRecursionTest() {
+        Comparable[] ar = clone(arr);
+        // start test
+        Sort.mergeSort2NoRecursion(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 }
