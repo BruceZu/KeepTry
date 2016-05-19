@@ -15,16 +15,15 @@
 
 package array;
 
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 public class Sort {
-    private static boolean lessThan(Comparable a, Comparable b) {
+    private static <T extends Comparable<T>> boolean lessThan(T a, T b) {
         return a.compareTo(b) < 0;
     }
 
-    private static void swap(Comparable[] arr, int i, int j) {
-        Comparable tmp = arr[i];
+    private static <T extends Comparable<T>> void swap(T[] arr, int i, int j) {
+        T tmp = arr[i];
         arr[i] = arr[j];
         arr[j] = tmp;
     }
@@ -38,7 +37,7 @@ public class Sort {
      *
      * @param arr
      */
-    public static void selectionSort(Comparable[] arr) {
+    public static <T extends Comparable<T>> void selectionSort(T[] arr) {
         // Input check
         if (arr == null) {
             return;
@@ -62,7 +61,7 @@ public class Sort {
      *
      * @param arr
      */
-    public static void insertSort(Comparable[] arr) {
+    public static <T extends Comparable<T>> void insertSort(T[] arr) {
         // Input check
         if (arr == null) {
             return;
@@ -99,7 +98,7 @@ public class Sort {
      *
      * @param ar
      */
-    public static void shellSort(Comparable[] ar) {
+    public static <T extends Comparable<T>> void shellSort(T[] ar) {
         // Input check
         if (ar == null) {
             return;
@@ -122,7 +121,7 @@ public class Sort {
     /**
      * Divide arr into 2 halves
      */
-    private static Comparable[][] divide(Comparable[] arr) {
+    private static <T extends Comparable<T>> Comparable[][] divide(T[] arr) {
         Comparable[][] re = new Comparable[2][];
 
         Comparable[] l = new Comparable[arr.length / 2];
@@ -143,9 +142,9 @@ public class Sort {
      *
      * @param l  sorted left half
      * @param r  sorted right half
-     * @param re
+     * @param re result
      */
-    private static void merge(Comparable[] l, Comparable[] r, Comparable[] re) {
+    private static <T extends Comparable<T>> void merge(T[] l, T[] r, T[] re) {
         // System.out.format("\nmerge %s and %s\n", Arrays.toString(l), Arrays.toString(r));
 
         int i = 0, j = 0;
@@ -169,7 +168,7 @@ public class Sort {
      * @param arr
      * @return
      */
-    public static void mergeSort(Comparable[] arr) {
+    public static <T extends Comparable<T>> void mergeSort(T[] arr) {
         // Input check
         if (arr == null || arr.length <= 1) {
             return;
@@ -217,8 +216,8 @@ public class Sort {
      * @param mid index
      * @param r   right index
      */
-    private static void merge2(Comparable[] ar, int l, int mid, int r, Comparable[] tmp) {
-        System.out.format("\nmerge %s : index scope[%s, %s] and  index scope [%s, %s]", Arrays.toString(ar), l, mid, mid + 1, r);
+    private static <T extends Comparable<T>> void merge2(T[] ar, int l, int mid, int r, T[] tmp) {
+        // System.out.format("\nmerge %s : index scope[%s, %s] and  index scope [%s, %s]", Arrays.toString(ar), l, mid, mid + 1, r);
 
         // Improved
         if (lessThan(ar[mid], ar[mid + 1])) {
@@ -242,7 +241,7 @@ public class Sort {
                 ar[k++] = tmp[j++];
             }
         }
-        System.out.format(" -->   %s \n", Arrays.toString(ar));
+        // System.out.format(" -->   %s \n", Arrays.toString(ar));
     }
 
     /**
@@ -253,7 +252,7 @@ public class Sort {
      * @param r   right bound index, included.
      * @param tmp with it, do not need new tmp array every time when merge and care its length
      */
-    private static void mergeSort2Help(Comparable[] arr, int l, int r, Comparable[] tmp) {
+    private static <T extends Comparable<T>> void mergeSortRecursionHelp(T[] arr, int l, int r, T[] tmp) {
         if (l == r) {
             // stop recursion
             return;
@@ -262,8 +261,8 @@ public class Sort {
         int mid = (l + r) / 2;
 
         // 2 Sort each halves
-        mergeSort2Help(arr, l, mid, tmp);
-        mergeSort2Help(arr, mid + 1, r, tmp);
+        mergeSortRecursionHelp(arr, l, mid, tmp);
+        mergeSortRecursionHelp(arr, mid + 1, r, tmp);
 
         // 3 Merge them into one.
         merge2(arr, l, mid, r, tmp);
@@ -274,21 +273,16 @@ public class Sort {
      *
      * @param arr
      */
-    public static void mergeSort2(Comparable[] arr) {
+    public static <T extends Comparable<T>> void mergeSortRecursion(T[] arr) {
         // Input check
         if (arr == null || arr.length <= 1) { // note: arr may be empty array: {}
             return;
         }
-        mergeSort2Help(arr, 0, arr.length - 1, // note: The index is included
+        mergeSortRecursionHelp(arr, 0, arr.length - 1, // note: The index is included
                 new Comparable[arr.length]);
     }
 
-    /**
-     *
-     * @param arr
-     * @param tmp
-     */
-    private static void mergeSort2NoRecursionHelp(Comparable[] arr, Comparable[] tmp) {
+    private static <T extends Comparable<T>> void mergeSortNoRecursionHelp(T[] arr, T[] tmp) {
         int len = 1; /* sub arr lengh */
         while (len <= arr.length) {
             int l = 0;
@@ -313,11 +307,111 @@ public class Sort {
      *
      * @param arr
      */
-    public static void mergeSort2NoRecursion(Comparable[] arr) {
+    public static <T extends Comparable<T>> void mergeSortNoRecursion(T[] arr) {
         // Input check
-        if (arr == null || arr.length <= 1) { // note: arr may be empty array: {}
+        if (arr == null || arr.length <= 1) { // Note: arr may be empty array: {}
             return;
         }
-        mergeSort2NoRecursionHelp(arr, new Comparable[arr.length]);
+        mergeSortNoRecursionHelp(arr, new Comparable[arr.length]);
+    }
+
+    private static <T extends Comparable<T>> boolean greatThan(T i, T u) {
+        return i.compareTo(u) > 0;
+    }
+
+    /**
+     * @param arr
+     * @param p     left index included, as pivot firstly
+     * @param other right index included
+     * @param <T>
+     * @return index of pivot
+     */
+    private static <T extends Comparable<T>> int pivotIndex(T[] arr, int p, int other) {
+        while (p != other) {
+            if (p < other && greatThan(arr[p], arr[other])
+                    || p > other && lessThan(arr[p], arr[other])
+                    ) {
+                swap(arr, p, other);
+                // also swap index variable
+                p ^= other;
+                other ^= p;
+                p ^= other;
+            }
+            if (p < other) {
+                other--;
+            } else {
+                other++;
+            }
+        }
+        return p;
+    }
+
+    /**
+     * O(N^2) , average O(NlgN)
+     *
+     * @param arr
+     * @param l   left index included
+     * @param r   right index included
+     */
+    private static <T extends Comparable<T>> void doQuickSort(T[] arr, int l, int r) {
+        int p = pivotIndex(arr, l, r);
+
+        if (p - 1 > l) {
+            // Note: java.lang.ArrayIndexOutOfBoundsException
+            doQuickSort(arr, l, p - 1); // Note: not 0
+        }
+        if (p + 1 < r) {
+            // Note: java.lang.ArrayIndexOutOfBoundsException
+            doQuickSort(arr, p + 1, r); // Note: not arr.length
+        }
+    }
+
+    /**
+     * Quick sort
+     * https://en.wikipedia.org/wiki/Quicksort
+     *
+     * @param arr
+     * @param <T>
+     */
+    public static <T extends Comparable<T>> void quickSort(T[] arr) {
+        // Input check
+        if (arr == null || arr.length <= 1) { // Note: arr.length may be 0  and 1
+            return;
+        }
+        doQuickSort(arr, 0, arr.length - 1); // Note
+    }
+
+    /**
+     * For array having many repeated elements.
+     * <p>
+     * http://www.sorting-algorithms.com/quick-sort-3-way
+     * http://www.sorting-algorithms.com/static/QuicksortIsOptimal.pdf
+     * https://en.wikipedia.org/wiki/Radix_sort
+     *
+     * @param arr
+     * @param <T>
+     */
+    public static <T extends Comparable<T>> void quickSort3Way(T[] arr) {
+        // Input check
+        if (arr == null || arr.length <= 1) { // Note: arr.length may be 0  and 1
+            return;
+        }
+        // todo
+    }
+
+    /**
+     * http://permalink.gmane.org/gmane.comp.java.openjdk.core-libs.devel/2628
+     * https://dzone.com/articles/algorithm-week-quicksort-three
+     * http://www.isical.ac.in/~pdslab/2014/slides/23Quicksort.pdf
+     *
+     * @param arr
+     * @param <T>
+     */
+    public static <T extends Comparable<T>> void quickSortDualPivot(T[] arr) {
+        // Input check
+        if (arr == null || arr.length <= 1) { // Note: arr.length may be 0  and 1
+            return;
+        }
+        // todo
     }
 }

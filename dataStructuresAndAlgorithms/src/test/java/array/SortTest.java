@@ -33,11 +33,12 @@ public class SortTest {
     @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<Object[]> data() {
         List r = Arrays.asList(new Comparable[][][]{
-                {{9, 7, 6, 4, 3, 2, 1}, {1, 2, 3, 4, 6, 7, 9}},
+                {{9, 7, 6, 4, 3, 3}, {3, 3, 4, 6, 7, 9}},
                 {{}, {}},
                 {{1}, {1}},
-                {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}},
+                {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 4}, {0, 1, 2, 3, 4, 4, 5, 6, 7, 8, 9}},
                 {{4, 5, 6, 7, 8, 9}, {4, 5, 6, 7, 8, 9}},
+                {{4, 9, 4, 4, 1, 4, 4, 4, 9, 4, 4, 1, 4}, {1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 9, 9}},
                 {{6, 5, 2}, {2, 5, 6}},
                 {{'b', 'a', 'z'}, {'a', 'b', 'z'}},
                 {null, null}
@@ -97,18 +98,26 @@ public class SortTest {
     }
 
     @Test(timeout = 10l, expected = Test.None.class)
-    public void mergeSort2Test() {
+    public void mergeSortRecursionTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.mergeSort2(ar);
+        Sort.mergeSortRecursion(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
     @Test(timeout = 10l, expected = Test.None.class)
-    public void mergeSort2NoRecursionTest() {
+    public void mergeSortNoRecursionTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.mergeSort2NoRecursion(ar);
+        Sort.mergeSortNoRecursion(ar);
+        Assert.assertTrue(Arrays.equals(ar, sorted));
+    }
+
+    @Test(timeout = 10l, expected = Test.None.class)
+    public void quickSortTest() {
+        Comparable[] ar = clone(arr);
+        // start test
+        Sort.quickSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 }
