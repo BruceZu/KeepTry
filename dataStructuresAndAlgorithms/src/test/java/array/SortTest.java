@@ -120,4 +120,12 @@ public class SortTest {
         Sort.quickSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
+
+    @Test(timeout = 10l, expected = Test.None.class)
+    public void quickSort3wayTest() {
+        Comparable[] ar = clone(arr);
+        // start test
+        Sort.quickSort3Way(ar);
+        Assert.assertTrue(Arrays.equals(ar, sorted));
+    }
 }

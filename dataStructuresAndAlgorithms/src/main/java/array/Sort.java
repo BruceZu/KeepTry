@@ -335,19 +335,20 @@ public class Sort {
         int medianIndex = lessThan(a[l], a[m])
                 ? lessThan(a[m], a[r]) ? m : lessThan(a[l], a[r]) ? r : l
                 : lessThan(a[l], a[r]) ? l : lessThan(a[m], a[r]) ? r : m;
-        if (medianIndex != l) {
+        if (medianIndex != l && a[medianIndex] != a[l]) {// Note: equal relation
             swap(a, l, medianIndex);
         }
     }
 
     /**
      * @param arr
-     * @param p     left index included, as pivot firstly
-     * @param other right index included
+     * @param l   left index included, as pivot index firstly
+     * @param r   right index included
      * @param <T>
      * @return index of pivot
      */
-    private static <T extends Comparable<T>> int pivotIndex(T[] arr, int p, int other) {
+    private static <T extends Comparable<T>> int pivotIndex(T[] arr, int l, int r) {
+        int p = l, other = r;
         initPivotByMedianOf3(arr, p, other, (p + other) / 2);
         while (p != other) {
             if (p < other && greatThan(arr[p], arr[other])
@@ -376,16 +377,14 @@ public class Sort {
      * @param r   right index included
      */
     private static <T extends Comparable<T>> void doQuickSort(T[] arr, int l, int r) {
+        // Range check in recursion.  Note: java.lang.ArrayIndexOutOfBoundsException
+        if (l >= r) {
+            return;
+        }
+        // todo insertion sort for tiny array
         int p = pivotIndex(arr, l, r);
-
-        if (p - 1 > l) {
-            // Note: java.lang.ArrayIndexOutOfBoundsException
-            doQuickSort(arr, l, p - 1); // Note: not 0
-        }
-        if (p + 1 < r) {
-            // Note: java.lang.ArrayIndexOutOfBoundsException
-            doQuickSort(arr, p + 1, r); // Note: not arr.length
-        }
+        doQuickSort(arr, l, p - 1); // Note: not 0
+        doQuickSort(arr, p + 1, r); // Note: not arr.length
     }
 
     /**
@@ -404,7 +403,82 @@ public class Sort {
     }
 
     /**
-     * For array having many repeated elements.
+     * @param arr
+     * @param l   Left index
+     * @param r   Right index
+     * @param <T>
+     * @return Left and right index of center pivot area
+     */
+    private static <T extends Comparable<T>> int[] pivotIndex3way(T[] arr, int l, int r) {
+        initPivotByMedianOf3(arr, l, r, (l + r) / 2);
+
+        int lpr = l - 1; // right index of left pivots area
+        int rpl = r + 1; // left index of right pivots area
+
+        int p = l, other = r;
+        while (p != other) {
+            // equal
+            if (arr[p] == arr[other]) {
+                if (other > p) {
+                    swap(arr, other, --rpl);
+                } else { // Note: must 'else', else run both of them.
+                    swap(arr, other, ++lpr);
+                }
+            } else if (p < other && greatThan(arr[p], arr[other])
+                    || p > other && lessThan(arr[p], arr[other])
+                    ) {
+                swap(arr, p, other);
+                // also swap index variable
+                p ^= other;
+                other ^= p;
+                p ^= other;
+            }
+            if (p < other) {
+                other--;
+            } else {
+                other++;
+            }
+        }
+
+        // Move both sides pivot value into the center
+        int pr = p; // center pivots area right index
+        if (lpr != l - 1) {
+            while (lpr >= l) {
+                swap(arr, --p, lpr--);
+            }
+        }
+
+        if (rpl != r + 1) {
+            while (rpl <= r) {
+                swap(arr, ++pr, rpl++);
+            }
+        }
+        return new int[]{p, pr};
+    }
+
+    /**
+     * 3 way partitioning quick sort.
+     * http://www.sorting-algorithms.com/static/QuicksortIsOptimal.pdf
+     *
+     * @param arr
+     * @param l
+     * @param r
+     * @param <T>
+     */
+    private static <T extends Comparable<T>> void doQuickSort3way(T[] arr, int l, int r) {
+        // Range check.  Note: java.lang.ArrayIndexOutOfBoundsException
+        if (l >= r) {
+            return;
+        }
+        // Todo: insertion sort for tiny array
+        int[] p = pivotIndex3way(arr, l, r);
+        doQuickSort3way(arr, l, p[0] - 1); // Note: not 0
+        doQuickSort3way(arr, p[1] + 1, r); // Note: not arr.length
+
+    }
+
+    /**
+     * Improves quicksort in presence of duplicate keys.
      * <p>
      * http://www.sorting-algorithms.com/quick-sort-3-way
      * http://www.sorting-algorithms.com/static/QuicksortIsOptimal.pdf
@@ -418,7 +492,7 @@ public class Sort {
         if (arr == null || arr.length <= 1) { // Note: arr.length may be 0  and 1
             return;
         }
-        // todo
+        doQuickSort3way(arr, 0, arr.length - 1);
     }
 
     /**
