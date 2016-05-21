@@ -320,6 +320,27 @@ public class Sort {
     }
 
     /**
+     * Improvement of quick sort.
+     *
+     * @param a
+     * @param l   left index
+     * @param r   right index
+     * @param m   middle index
+     * @param <T>
+     */
+    private static <T extends Comparable<T>> void initPivotByMedianOf3(T[] a, int l, int r, int m) {
+        if (r == l + 1) {
+            return;
+        }
+        int medianIndex = lessThan(a[l], a[m])
+                ? lessThan(a[m], a[r]) ? m : lessThan(a[l], a[r]) ? r : l
+                : lessThan(a[l], a[r]) ? l : lessThan(a[m], a[r]) ? r : m;
+        if (medianIndex != l) {
+            swap(a, l, medianIndex);
+        }
+    }
+
+    /**
      * @param arr
      * @param p     left index included, as pivot firstly
      * @param other right index included
@@ -327,6 +348,7 @@ public class Sort {
      * @return index of pivot
      */
     private static <T extends Comparable<T>> int pivotIndex(T[] arr, int p, int other) {
+        initPivotByMedianOf3(arr, p, other, (p + other) / 2);
         while (p != other) {
             if (p < other && greatThan(arr[p], arr[other])
                     || p > other && lessThan(arr[p], arr[other])
