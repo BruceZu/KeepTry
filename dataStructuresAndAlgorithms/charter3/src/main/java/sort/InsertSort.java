@@ -16,21 +16,22 @@
 package sort;
 
 public class InsertSort {
-    public static <T extends Comparable> void sortByInsert(T[] given) {
-        //ascending
-        for (int j = 1; j < given.length; j++) {
-            if (given[j].compareTo(given[j - 1]) >= 0) {
-                continue;// not break
-            }
+    private static <T extends Comparable> boolean lessThan(T i, T j) {
+        return i.compareTo(j) < 0;
+    }
 
-            //need move them and insert to a location
-            T temp = given[j];
-            int i = j - 1;
-            for (; i >= 0 && temp.compareTo(given[i]) < 0; ) {
-                given[i + 1] = given[i];
-                i--;
+    public static <T extends Comparable> void sortByInsert(T[] arr) {
+        //ascending
+        for (int k = 1; k < arr.length; k++) {
+            if (lessThan(arr[k], arr[k - 1])) {
+                int p = k;
+                T v = arr[k];
+                do {
+                    p--;
+                    arr[p + 1] = arr[p]; // move back
+                } while (p - 1 >= 0 && lessThan(v, arr[p - 1]));
+                arr[p] = v; // find the right place.
             }
-            given[i + 1] = temp;
         }
     }
 }
