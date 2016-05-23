@@ -15,7 +15,6 @@
 
 package array;
 
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 public class Sort {
@@ -515,7 +514,6 @@ public class Sort {
             return;
         }
         doDualPivotQuickSort(arr, 0, arr.length - 1);
-        System.out.println(Arrays.toString(arr));
     }
 
     private static <T extends Comparable<T>> void doDualPivotQuickSort(T[] arr, int l, int r) {
@@ -529,13 +527,20 @@ public class Sort {
             return;
         }
 
-        int[] dualPivots = dualPivots(arr, l, r);
+        // int[] dualPivots = dualPivots(arr, l, r);
+        int[] dualPivots = improvedDualPivots(arr, l, r);
         int p1 = dualPivots[0], p2 = dualPivots[1]; // index of pivot
 
         doDualPivotQuickSort(arr, l, p1 - 1);
         doDualPivotQuickSort(arr, p2 + 1, r);
-        if (lessThan(arr[p1], arr[p2])) { // Improvement
-            doDualPivotQuickSort(arr, p1 + 1, p2 - 1); // arr[p1] == arr[p2]
+        if (lessThan(arr[p1], arr[p2])) { // Improvement check arr[p1] == arr[p2]
+            if (dualPivots.length == 2) {
+                //  dualPivots()
+                doDualPivotQuickSort(arr, p1 + 1, p2 - 1);
+            } else {
+                // improvedDualPivots()
+                doDualPivotQuickSort(arr, dualPivots[2], dualPivots[3]);
+            }
         }
     }
 
@@ -569,5 +574,91 @@ public class Sort {
 
         // Now array becomes:  < pv1, pv1, [ p1 <= e <= pv2 ], pv2, > pv2.
         return new int[]{le, re};
+    }
+
+    private static <T extends Comparable<T>> boolean same(T a, T b) {
+        return a.compareTo(b) == 0;
+    }
+
+    /**
+     * Improved dual pivots quick sort based on dualPivots()
+     *
+     * @param arr
+     * @param l
+     * @param r
+     * @param <T>
+     * @return
+     */
+    private static <T extends Comparable<T>> int[] improvedDualPivots(T[] arr, int l, int r) {
+        // todo:  Improvement of how to select pivots
+        if (greatThan(arr[l], arr[r])) {
+            swap(arr, l, r);
+        }
+        T pv1 = arr[l];
+        T pv2 = arr[r];
+
+        int le = l + 1, re = r - 1;
+        for (int i = le; i <= re; i++) {
+            Comparable v = arr[i];
+            if (lessThan(v, pv1)) {
+                swap(arr, i, le++);
+            } else if (greatThan(v, pv2)) {
+                // Improvement
+                while (re >= i
+                        && greatThan(arr[re], pv2)/*find an element < pv2 */) {
+                    re--;
+                }
+                if (re < i) { // re never equal with i
+                    break;
+                }
+
+                swap(arr, i, re--);
+
+                if (lessThan(arr[i], pv1)) {
+                    swap(arr, i, le++);
+                }
+            }
+        }
+
+        if (l != le - 1) { // e.g. 3, le->7 8 9, 6
+            swap(arr, l, --le);
+        } else {
+            --le;
+        }
+        if (r != re + 1) { // e.g. 7, 6 5 4 <- re, 9
+            swap(arr, r, ++re);
+        } else {
+            ++re;
+        }
+        // Now:   < pv1 |le -> pv1 <= & <=pv2   <-re| >pv2
+
+        // Improvement: find out same elements as pv1 or pv2
+        int greatPv1 = le + 1, lessPv2 = re - 1; //  left and right index of pv1 < & <pv2
+        if (lessThan(pv1, pv2) && re - le > 2 * (le - re)) {
+            for (int i = greatPv1; i <= lessPv2; i++) {
+                Comparable v = arr[i];
+                if (same(v, pv1)) {
+                    swap(arr, i, greatPv1++);
+                } else if (same(v, pv2)) {
+                    while (lessPv2 >= i && same(arr[lessPv2], pv2)) {
+                        lessPv2--;
+                    }
+                    if (lessPv2 < i) {
+                        break;
+                    }
+
+                    swap(arr, i, lessPv2--);
+
+                    if (same(arr[i], pv1)) {
+                        swap(arr, i, greatPv1++);
+                    }
+                }
+            }
+
+        }
+        //now:   < pv1 | le-> pv1...pv1|
+        //                               greatPv1-> pv1 < & <pv2   <-lessPv2
+        //                                                                    | pv2...pv2 <- re] | >pv2
+        return new int[]{le, re, greatPv1, lessPv2};
     }
 }
