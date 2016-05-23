@@ -39,7 +39,8 @@ public class SortTest {
                 {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 4}, {0, 1, 2, 3, 4, 4, 5, 6, 7, 8, 9}},
                 {{4, 5, 6, 7, 8, 9}, {4, 5, 6, 7, 8, 9}},
                 {{4, 9, 4, 4, 1, 4, 4, 4, 9, 4, 4, 1, 4}, {1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 9, 9}},
-                {{6, 5, 2}, {2, 5, 6}},
+                {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}, {0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9}},
+                {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9}},
                 {{'b', 'a', 'z'}, {'a', 'b', 'z'}},
                 {null, null}
         });
@@ -126,6 +127,16 @@ public class SortTest {
         Comparable[] ar = clone(arr);
         // start test
         Sort.quickSort3Way(ar);
+        Assert.assertTrue(Arrays.equals(ar, sorted));
+    }
+
+    @Test(timeout = 10l, expected = Test.None.class)
+    public void quickSortDualPivotTest() {
+        Comparable[] ar = clone(arr);
+        // start test
+        System.out.println(" Start" + Arrays.toString(ar));
+        Sort.quickSortDualPivot(ar);
+        System.out.println(" End" + Arrays.toString(ar));
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 }

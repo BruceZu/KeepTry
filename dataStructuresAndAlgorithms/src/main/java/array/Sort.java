@@ -15,6 +15,7 @@
 
 package array;
 
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 public class Sort {
@@ -470,7 +471,12 @@ public class Sort {
         if (l >= r) {
             return;
         }
-        // Todo: insertion sort for tiny array
+        // Insertion sort for tiny array
+        if (arr.length <= 4) {
+            insertSort(arr);
+            return;
+        }
+
         int[] p = pivotIndex3way(arr, l, r);
         doQuickSort3way(arr, l, p[0] - 1); // Note: not 0
         doQuickSort3way(arr, p[1] + 1, r); // Note: not arr.length
@@ -508,6 +514,60 @@ public class Sort {
         if (arr == null || arr.length <= 1) { // Note: arr.length may be 0  and 1
             return;
         }
-        // todo
+        doDualPivotQuickSort(arr, 0, arr.length - 1);
+        System.out.println(Arrays.toString(arr));
+    }
+
+    private static <T extends Comparable<T>> void doDualPivotQuickSort(T[] arr, int l, int r) {
+        // Input check
+        if (l >= r) {
+            return;
+        }
+        // Improvement: insertion sort for tiny array, 27 is experience point.
+        if (arr.length <= 5) {
+            insertSort(arr);
+            return;
+        }
+
+        int[] dualPivots = dualPivots(arr, l, r);
+        int p1 = dualPivots[0], p2 = dualPivots[1]; // index of pivot
+
+        doDualPivotQuickSort(arr, l, p1 - 1);
+        doDualPivotQuickSort(arr, p2 + 1, r);
+        if (lessThan(arr[p1], arr[p2])) { // Improvement
+            doDualPivotQuickSort(arr, p1 + 1, p2 - 1); // arr[p1] == arr[p2]
+        }
+    }
+
+    private static <T extends Comparable<T>> int[] dualPivots(T[] arr, int l, int r) {
+        // Get 2 pivots and make sure pv1 <= pv2
+        if (greatThan(arr[l], arr[r])) {
+            swap(arr, l, r);
+        }
+        T pv1 = arr[l];
+        T pv2 = arr[r];
+
+        // Find the right place for each pivot by moving all elements: e < pv1 and e > pv2
+        int le = l + 1, re = r - 1;  // The left and right index included of p1 <= e <= pv2
+
+        // Now array is:  pv1,  others, pv2
+        for (int i = le; i <= re; i++) {
+            if (lessThan(arr[i], pv1)) {
+                swap(arr, i, le++);
+            } else if (greatThan(arr[i], pv2)) {
+                swap(arr, i, re--);
+                i--; // note: after swap, now the current arr[i] is wait precess
+            }
+        }
+        // now if:
+        // le > re. cross : no element match pv1 <= e <= pv2.
+        // le = re. same  : there is only one element match.
+        // le < re. normal: there more than one elements match.
+
+        swap(arr, l, --le);
+        swap(arr, r, ++re);
+
+        // Now array becomes:  < pv1, pv1, [ p1 <= e <= pv2 ], pv2, > pv2.
+        return new int[]{le, re};
     }
 }
