@@ -283,15 +283,15 @@ public class Sort {
     }
 
     private static <T extends Comparable<T>> void mergeSortNoRecursionHelp(T[] arr, T[] tmp) {
-        int len = 1; /* sub arr lengh */
+        int len = 1; /* sub arr length, start from 1. */
         while (len <= arr.length) {
             int l = 0;
-            int mid = l + len - 1;
+            int mid = l + len - 1; // mid is included in the pre sub arr, the pre sub arr's right bound index
             int r = mid + len;
-
-            int rightBound = arr.length - 1;
-            while (rightBound > mid) { // note !
-                r = r <= rightBound ? r : rightBound; // note
+            // arr1: [l, mid], arr2: [mid+1, r]
+            int arrLastIndex = arr.length - 1;
+            while (arrLastIndex > mid) { // adjust when the len is very big or at the end of arr.
+                r = r <= arrLastIndex ? r : arrLastIndex;
                 merge2(arr, l, mid, r, tmp);
 
                 l = r + 1;
@@ -483,7 +483,7 @@ public class Sort {
     }
 
     /**
-     * Improves quicksort in presence of duplicate keys.
+     * Improves quick sort in presence of duplicate keys.
      * <p>
      * http://www.sorting-algorithms.com/quick-sort-3-way
      * http://www.sorting-algorithms.com/static/QuicksortIsOptimal.pdf
