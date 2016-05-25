@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * Follow up:
- * The input are distinguished numbers from 1 to 250, but only one number is missed.
+ * The input are distinguished unsorted numbers, value from 1 to 250, but only one number is missed.
  * Figure out the missed number.
  * The input is string containing only numbers.
  */
@@ -131,27 +131,22 @@ public class Leetcode268MissingNumber {
     public static int missingNumber(int[] in) {
         int tmp = in[0];
         for (int i = 1; i < in.length; i++) {
-            tmp ^= in[i];   // in[1] ~ in[248]
-            tmp ^= i;       // 1 ~ 248
+            tmp ^= in[i] ^ i;   // in[1] ~ in[248], i: 1 ~ 248
         }
-        tmp ^= in.length;  // 249
-        tmp ^= in.length + 1; // 250
+        tmp ^= in.length ^ in.length + 1;  // 249, 250
         return tmp;
     }
 
     // Using sum to check the missed one number
     public static int missingNumber2(int[] in) {
-        int sum = 0;
         int missedSum = 0;
 
-        int i = 0;
-        while (i < in.length) {
+        for (int i = 0; i < in.length; i++) {
             missedSum += in[i];
-            sum += i + 1;
-            i++;
         }
-        sum += i + 1; // note: do not forget it
-        return sum - missedSum;
+
+        return (int) ((1 + in.length + 1) * (in.length + 1) / 2.0) - missedSum;
+        // note: when in.length +1 is a odd number, need float or double
     }
 
     /**
@@ -159,7 +154,7 @@ public class Leetcode268MissingNumber {
      * Can check more missed numbers.
      */
     public static int missingNumber3(int[] in) {
-        byte[] h = new byte[STR_NUMBER + 2]; // note:  +2 not +1. value as index 0 ~ 250
+        byte[] h = new byte[in.length + 2]; // note:  +2 not +1. value as index 0 ~ 250
         for (int i = 0; i < in.length; i++) {
             h[in[i]] = 1;
         }
