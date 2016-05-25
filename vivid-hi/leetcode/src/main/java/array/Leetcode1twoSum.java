@@ -57,26 +57,22 @@ two array, a and b:
 —— ask all pair of i and j , K = a[i]+ b[j]
  */
 public class Leetcode1twoSum {
-    // runtime beats 99.94% of java submissions
+    // runtime beats 99.66% of java submissions
     // it depends on the max number.
     // O(N)
-    public static int[] twoSum(final int[] nums, int target) {
-        int[] r = new int[2];
-        r[0] = -1;
-        r[1] = -1;
-        int[] vIndex = new int[0Xffff];
+    public static int[] twoSum(int[] nums, int target) {
+        Integer[] vIndex = new Integer[0Xffff];
+        int delta = 0Xfff;
+
         for (int i = 0; i < nums.length; i++) {
-            int delta = 0Xfff;
-            int gapIndex = target - nums[i] + delta;
-            if (vIndex[gapIndex] != 0) {
-                r[0] = vIndex[gapIndex];
-                r[1] = i + 1;
-                return r;
+            int index = target - nums[i] + delta;
+            if (vIndex[index] != null) {
+                return new int[]{vIndex[index], i};
             } else {
-                vIndex[nums[i] + delta] = i + 1;
+                vIndex[nums[i] + delta] = i;
             }
         }
-        return r;
+        return null;
     }
 
     public static int[] twoSum1(final int[] nums, int target) {
