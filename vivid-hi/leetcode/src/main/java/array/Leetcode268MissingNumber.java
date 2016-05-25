@@ -71,7 +71,6 @@ public class Leetcode268MissingNumber {
         return r;
     }
 
-
     /**
      * Parse the String s into 249 numbers exactly.
      * <pre>
