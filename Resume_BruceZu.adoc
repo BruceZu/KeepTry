@@ -11,15 +11,14 @@
 :whatisjenkins: https://jenkins.io/
 :whatisgerrit: https://www.gerritcodereview.com/index.md
 
-- Contribute to open source {Gerrit}[Google Gerrit Code Review] since 2011. +
-- Can design and write efficient code, shift valuable features independently with Java/Java EE experiences (14 yrs) +
-- Have administrator experience (8 yrs) of web applications running on Linux environment. +
-- Self-driven, familiar with Scrum/Agile/Sprint methods. +
-- Familiar with SQL, Python, Bash, HTML, Javascript, CSS, RESTful API, Google Guaua, GWT, Guice, Lucene, Apache Lucene,
-  Oracle, Postgres,IBM DB2, MQ, Linux, Tomcat, Jetty, Gerrit, Jenkins, Git, Maven, Buck
+- Full stack software engineer, mainly focus on back end of Java/J2EE based distributed application (14 yrs). Contribute to open source {Gerrit}[Google Gerrit Code Review] since 2011. +
+- Administrator (8 yrs) of web applications running on Linux environment. +
+- Familiar with Java, Java EE; Bash, SQL, Oracle, Postgres,IBM DB2,MySQL, MQ; Linux, Bash; Tomcat, Jetty, IBM WebSphere, Weblogic; Gerrit, Jenkins, Git, Maven, Buck.
+  Basic experience: HTML, Javascript, CSS, Python
 
+- Self-driven. Familiar with Scrum/Agile/Sprint methods. +
 
-[small Gray]#Temple city, Greater Los Angeles Area, CA 91780 |
+[small Gray]#Temple City, Greater Los Angeles Area, CA 91780 |
 (626) 747-6721 |
 zu.bruce.china@gmail.com +
 My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
@@ -30,37 +29,37 @@ My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 [small Gray]#Following Gerrit community# |
 [small Gray]#Acquiring Data Structures and Algorithms# +
 [small Gray]#Got EAD and SSN in April, 2016# |
-[small Gray]#Looking for a job now in CA# +
+[small Gray]#Looking for a job now in CA | _I can work immediately_# +
 
 '''
 === *EMPLOYMENT*
 
-==== Sony Mobile — Senior Software Engineer
+==== Sony Mobile — Senior Software Engineer, full stack, mainly focus on back end
 
 [small Gray]#_Sep 2011 -  Apr 2015_# +
 [small Gray]#Sony Mobile {whatisgerrit}[Gerrit] team is a global team (4 ~ 8 members) supporting 7000+ inner end users.#
 
 * Tackled daily *Gerrit/Git/Repo* related issues and feature requirements for CM users, Git Admin and developers. +
-* Contributed 140+ {mycommits}[commit] to improve and strengthen Gerrit functions to make users convenient. +
+* Contributed 140+ {mycommits}[commits] to improve and strengthen Gerrit functions to make users convenient. +
 * Received 2 awards for outstanding contributions for software development. +
 
 [small Gray]#_Nov 2010 - Sep 2011_# +
 [small Gray]#Sony Mobile {whatisjenkins}[Jenkins] team is a global team (4 ~ 8 members) including Beijing, Lund and Tokyo sites.#
 
 * Tackled daily *Jenkins* related issues for developers and CM users. +
-* Took part in developing Gerrit-trigger-plugin. +
-* In charge of maintaining *Jenkins* servers. +
+* Developed Gerrit-trigger-plugin. +
+* Maintained *Jenkins* servers. +
 
-==== Canon — DBA & Senior Software Engineer
+==== Canon — DBA & Senior Software Engineer, back end
 
 [small Gray]#_Apr 2007 - Mar 2010_# +
 [small Gray]#E-Order, E-Bank, E-Parts ... web applications#
 
-* In charge of tuning SQL statement performance for web applications. +
+* Perform query optimization and tuning of complex queries, write efficient SQL and Stored Procedures. +
 * Tackled backup & restore issues of *DB2* databases, *MS SQL server* databases. +
 * Developed and maintained a real-time application to exchange data between web applications and core application. +
 
-==== CS&S — Software Engineer
+==== CS&S — Software Engineer, full stack, mainly focus on back end
 
 [small Gray]#_Mar 2003 - Feb 2007_# +
 [small Gray]#Large scale distributed web applications built for Guangdong Province China using *Java EE, Oracle, BEA Weblogic*.#
@@ -69,7 +68,7 @@ My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 * Designed _Social Insurance Payment Application_. +
 * Received  several awards for outstanding performance in team.
 
-==== Cernet — Intern
+==== Cernet — Intern, full stack, mainly focus on back end
 
 [small Gray]#_Mar 2002 - Dec 2002_# +
 [small Gray]#E-payment Application#
@@ -124,13 +123,13 @@ English, Mandarin.
 
 .Job Title
 
-Senior Software Engineer
+Senior Software Engineer, full stack, mainly focus on back end.
 
 .Job Function
 I was a member of global Gerrit development team supporting Git Admin team, CM team and developers by delivering new features
 and bugfixes.
 
-.Application introduce
+.Application introduction
 :gerrit-case: https://gerrit.googlesource.com/homepage/+/md-pages/docs/ShowCases.md
 
 Gerrit Code Review::
@@ -149,7 +148,7 @@ This is a step towards implementing open-source version of multi-master feature.
 * Gerrit has replication function, now is a plugin, to enable master-slave mode. Multi-master is under building. +
 * Gerrit uses *Google Guice*, not *Spring*, as dependency injection framework. +
 * Gerrit supports developing Gerrit plugin. +
-* Gerrit uses *BUCK* to build source code, run Junit test, package release file (war). BUCK runs faster that *Maven*. +
+* Gerrit uses *BUCK* to build source code, run Junit test, wrap release file (war). BUCK runs faster that *Maven*. +
 * Gerrit provides `init` command to do every initial works and startup Gerrit automatically.
 * Gerrit has tons of framework .......
 
@@ -158,15 +157,15 @@ The Sony Mobile Gerrit server::
 Gerrit server runs in Tomcat web container behind a Apache web server. +
 Gerrit server is master-slave mode, one master server and on average 7 slave servers * 3 sites accessed by 7000+ end users in total. +
 Sony Mobile Gerrit server uses PostgreSQL which has replication features. Each Gerrit slave server has a PostgreSQL database. +
-On each site, The Gerrit slave servers are located behind balance servers which balance the requests from local developers and local Jenkins servers.
+On each site, The Gerrit slave servers are located behind balance servers that balance the requests from local developers and local Jenkins servers.
 
 
 .Achievements
 
 Develop :::
-Some features, e.g. :
+Some features, e.g.:
 
-- [*] Create project (ssh command and RESTful API) +
+- [*] Create project (SSH command and RESTful API) +
 - [*] Add file comment to a patch +
 - [*] Enable branch specified label +
 - [*] Add reviewers in batch by LDAP group +
@@ -187,13 +186,13 @@ Daily support :::
 
 .Job Function
 
-Jenkins master
+Jenkins master.
 
 .Job Title
 
 Staff Engineer
 
-.Application introduce
+.Application introduction
 
 Sony mobile has few Jenkins servers in each site with hundreds of slave machines for developers, CM teams.
 
@@ -215,27 +214,29 @@ Develop
 
 .Job Title
 
-Senior Software Engineer
+Senior Software Engineer, back end.
 
 .Job Function
 
-supervise all local web applications
+Supervise all local web applications
 
-.Application introduce
+.Application introduction
 
 Cannon China local applications ::
-Web applications, e.g. e-order, e-bank, e-parts .... They are built using Java EE, DB2 or MS SQL Server.
-Their databases need exchange data with core applications which is built using AS400 and DB2.
+Web applications, e.g. e-order, e-bank, e-parts ... They are built using Java EE, DB2 or MS SQL Server.
+Their databases need exchange data with core application that is built using AS400 and DB2.
 
 .Achievements
 
 DBA
 
-- [*] Tuned SQL statement of web applications, e.g. reduced the running time of some SQL statements to be less than 5 seconds from 2+ minutes. +
+- [*] Perform query optimization and tuning of complex queries, write efficient SQL and Stored Procedures.
+ That access several million rows across several database tables. Tuned SQL statement of web applications,
+  e.g. reduced the running time of some SQL statements to be less than 5 seconds from 2+ minutes. +
 - [*] Setup MS SQL Server database backup plan and carried it out. +
 - [*] Tacked day-to-day issues of DB2 backup to tape and wrote tutorial. +
 
-Develop:
+Develop using the API of IBM MQ and Java RMI:
 
 - [*] Designed, developed, tested, deployed and maintained a real-time application used to sync data between web applications and core applications. +
 
@@ -244,7 +245,7 @@ Develop:
 [small Green]#_Mar 2003 - Feb 2007_# +
 
 .Job Title
-Software Engineer +
+Software Engineer, full stack, mainly focus on back end +
 
 .Job Function
 With other members developed 2 web applications for Guangdong Province China .
@@ -252,7 +253,7 @@ With other members developed 2 web applications for Guangdong Province China .
 - Centralized Taxes Payment Application.
 - Social Insurance Payment Application.
 
-.Application introduce
+.Application introduction
 
 Centralized Taxes Payment Application ::
 
@@ -261,14 +262,14 @@ Oracle RAC Weblogic cluster. The number of GDP and people of Guandong Province i
 The numbers of this application’s online users and concurrent users are very big. It is also a big data application.
 Its is multi-tier, browser/server mode and client/server mode architecture.
 User can access it via telephone, browser and client side application.
-It also communicate with other applications of banks and other government departments.
+It also communicates with other applications of banks and other government departments.
 
 
 .Achievements
 
 - [*] Design and coding features like online payment and printing cash receipt, General-purpose Tax Payment Certificate. +
 
-.Application introduce
+.Application introduction
 
 Social Insurance Payment Application ::
 This application is used to collect 5 kinds of social insurance fee from employer for their employee.
@@ -295,13 +296,13 @@ I was in charge of system requirement and system design. +
 
 .Job Title
 
-Software Engineer
+Software Engineer, full stack, mainly focus on back end .
 
 .Job Function
 
 Took part in developing E_Payment web application
 
-.Application introduce
+.Application introduction
 
 E_Payment application::
 It is online payment application like Paypal to provide payment service used by Cernet web site.
@@ -317,5 +318,5 @@ Features includes
 Developed common library
 
 - [*] Defined DTD, a Document Type Definition, and developed a parser to parse a given *XML* according the DTD. +
-- [*] Wrapped *Log4j* to make it easy to handle. +
+
 
