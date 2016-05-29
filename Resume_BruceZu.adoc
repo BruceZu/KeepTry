@@ -10,26 +10,26 @@
 :mycommits: https://gerrit-review.googlesource.com/#/q/author:%22Bruce+Zu%22
 :whatisjenkins: https://jenkins.io/
 :whatisgerrit: https://www.gerritcodereview.com/index.md
+:My Create project: https://gerrit-review.googlesource.com/#/q/topic:create-project-ui
 
-- Full stack software engineer, mainly focus on back end of Java/J2EE based distributed application (14 yrs). Contribute to open source {Gerrit}[Google Gerrit Code Review] since 2011. +
-- Administrator (8 yrs) of web applications running on Linux environment. +
-- Familiar with Java, Java EE; Bash, SQL, Oracle, Postgres,IBM DB2,MySQL, MQ; Linux, Bash; Tomcat, Jetty, IBM WebSphere, Weblogic; Gerrit, Jenkins, Git, Maven, Buck.
-  Basic experience: HTML, Javascript, CSS, Python
+- *Full stack*, mainly *back end*, *Java/Java EE* based *distributed application* software engineer (*14 years*). +
+- Contribute to *open source* {Gerrit}[Google Gerrit Code Review] since 2011. +
+- Administrator experience (*8 years*) of web applications running on *Linux*.
+- Self-driven and organized.
 
-- Self-driven. Familiar with Scrum/Agile/Sprint methods. +
 
 [small Gray]#Temple City, Greater Los Angeles Area, CA 91780 |
-(626) 747-6721 |
-zu.bruce.china@gmail.com +
-My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
+(626) 747-6721 | English, Mandarin. +
+zu.bruce.china@gmail.com |
+{Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 
 '''
 [small Gray]#_Apr 2015 -  Apr 2016_# +
-[small Gray]#Relocated to LA from Beijing# +
+[small Gray]#Relocated to CA from Beijing# +
 [small Gray]#Following Gerrit community# |
 [small Gray]#Acquiring Data Structures and Algorithms# +
-[small Gray]#Got EAD and SSN in April, 2016# |
-[small Gray]#Looking for a job now in CA | _I can work immediately_# +
+[small Gray]#Got *EAD* and *SSN* in April, 2016# |
+[small Gray]#Looking for a job now in CA or Seattle | _I can work immediately_# +
 
 '''
 === *EMPLOYMENT*
@@ -40,14 +40,14 @@ My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 [small Gray]#Sony Mobile {whatisgerrit}[Gerrit] team is a global team (4 ~ 8 members) supporting 7000+ inner end users.#
 
 * Tackled daily *Gerrit/Git/Repo* related issues and feature requirements for CM users, Git Admin and developers. +
-* Contributed 140+ {mycommits}[commits] to improve and strengthen Gerrit functions to make users convenient. +
-* Received 2 awards for outstanding contributions for software development. +
+* Contributed *140+ {mycommits}[commits]* to improve and strengthen Gerrit functions to make users convenient. +
+* Received *2 awards* for outstanding contributions for software development. +
 
 [small Gray]#_Nov 2010 - Sep 2011_# +
 [small Gray]#Sony Mobile {whatisjenkins}[Jenkins] team is a global team (4 ~ 8 members) including Beijing, Lund and Tokyo sites.#
 
 * Tackled daily *Jenkins* related issues for developers and CM users. +
-* Developed Gerrit-trigger-plugin. +
+* Developed *Gerrit-trigger-plugin*. +
 * Maintained *Jenkins* servers. +
 
 ==== Canon — DBA & Senior Software Engineer, back end
@@ -55,9 +55,9 @@ My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 [small Gray]#_Apr 2007 - Mar 2010_# +
 [small Gray]#E-Order, E-Bank, E-Parts ... web applications#
 
-* Perform query optimization and tuning of complex queries, write efficient SQL and Stored Procedures. +
+* Perform *query optimization*, tuning of complex queries, write efficient SQL and Stored Procedures. +
 * Tackled backup & restore issues of *DB2* databases, *MS SQL server* databases. +
-* Developed and maintained a real-time application to exchange data between web applications and core application. +
+* *Developed* and maintained a *real-time* application to exchange data between web applications and core application. +
 
 ==== CS&S — Software Engineer, full stack, mainly focus on back end
 
@@ -66,7 +66,7 @@ My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 
 * Designed and developed payment module of _Centralized Taxes Payment Application_.  +
 * Designed _Social Insurance Payment Application_. +
-* Received  several awards for outstanding performance in team.
+* Received *several awards* for outstanding performance in team.
 
 ==== Cernet — Intern, full stack, mainly focus on back end
 
@@ -79,18 +79,25 @@ My {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 === *EDUCATION*
 
 [small Gray]#_Sep 2000 - Mar 2003_# +
-University of Science and Technology Beijing - Master +
+[Gray]#University of Science and Technology Beijing - Master# +
 [small Gray]#_Sep 1994 - Mar 1998_# +
-University of Science and Technology Hebei - Bachelor +
+[Gray]#University of Science and Technology Hebei - Bachelor# +
 
 '''
-=== *SKILLS*
+=== *SKILLS* [small Gray]#_( years)#_
 
-Open Source Software Development, Gerrit/Git [small Gray]#_(5 yr)_#, Jenkins, BUCK [small Gray]#_(3 yr)_# +
-Java/Java EE [small Gray]#_(14 yr)_#, SQL [small Gray]#_(4 yr)_#, Bash, Python [small Gray]#_(2 yr)_# +
-Google Guice/Guaua/GWT [small Gray]#_(5 yr)_# +
-Oracle, DB2, MS SQL Server [small Gray]#_(5 yr)_# +
-C/C++ [small Gray]#_(2 yr)_#, Javascript/HTML/CSS [small Gray]#_(2 yr)_# +
+Open Source Software Development
+Gerrit/Git [small Gray]#_(5)_#, Jenkins [small Gray]#_(5)_#, BUCK [small Gray]#_(3)_#, Maven [small Gray]#_(2)_# +
+Java/Java EE [small Gray]#_(14)_#, Python [small Gray]#_(2)_# +
+C/C++ [small Gray]#_(2)_#, Javascript/HTML/CSS [small Gray]#_(2)_# +
+Linux [small Gray]#_(7)_#, Bash +
+Google Guice [small Gray]#_(5)_#, Google Guaua [small Gray]#_(5)_#, Google GWT [small Gray]#_(5)_# +
+RESTful API, develop client & server side +
+Tomcat [small Gray]#_(3)_#, Jetty, Bea Weblogic [small Gray]#_(3)_#, IBM WebShpere [small Gray]#_(2)_# +
+SQL DB: Oracle [small Gray]#_(5)_#, Postgres [small Gray]#_(4)_#, IBM DB2 [small Gray]#_(3)_#, SQL Server [small Gray]#_(3)_# +
+IBM MQ [small Gray]#_(2)_#, Apache Lucene +
+Scrum/Agile/Sprint [small Gray]#_(3)_# +
+
 
 
 '''
@@ -103,9 +110,8 @@ C/C++ [small Gray]#_(2 yr)_#, Javascript/HTML/CSS [small Gray]#_(2 yr)_# +
 * Excellent attention to detail, troubleshooting and analytical skills. +
 
 '''
-=== *LANGUAGES*
 
-English, Mandarin.
+
 
 [NOTE]
 ====
@@ -134,30 +140,32 @@ and bugfixes.
 
 Gerrit Code Review::
 
- * Gerrit provides access via browser, RESTful API and SSH Command line. Gerrit uses *GWT* as web framework, uses *CodeMirror* to show the `git diff` result on web.
-A new UI is under building using *Polymer*. Gerrit replaced nearly all *GWT RPC* implementation with its own *RESTful API*.
-The SSH Command line features are build with *Apache MINA*'s sub project *Apache SSHD*. +
- * Gerrit notification function: Hook, Stream-event and E-mail. +
- * Gerrit stores data in *Git* repositories and SQL database. Gerrit does not use *Hibernate*, instead it supports 9 kinds of SQL database by its own open source tiny *ORM* library which is build
- using *ObjectWeb ASM 3*, *H2* and *ANTLR 3*.
-e.g. Oracle, MySQL,  H2, PostgreSQL, DB2. But Gerrit is moving the data stored in DB into `Git notes`.
-This is a step towards implementing open-source version of multi-master feature.  +
-* Gerrit caches search result in memory, disk of server side and client side via browser. +
-* Gerrit builds second index using *Lucene* and *Protocol Buffers*. +
-* Gerrit provides search function, the grammar is built using *Antlr 3*. +
-* Gerrit has replication function, now is a plugin, to enable master-slave mode. Multi-master is under building. +
-* Gerrit uses *Google Guice*, not *Spring*, as dependency injection framework. +
-* Gerrit supports developing Gerrit plugin. +
-* Gerrit uses *BUCK* to build source code, run Junit test, wrap release file (war). BUCK runs faster that *Maven*. +
-* Gerrit provides `init` command to do every initial works and startup Gerrit automatically.
-* Gerrit has tons of framework .......
+Gerrit provides access via browser, *RESTful API* and *SSH Command line*. Gerrit select *GWT* as its web framework,
+uses *CodeMirror* to show the `git diff` result on web. A new UI is under building using *Polymer*.
+Gerrit replaced nearly all *GWT RPC* implementation with its own *RESTful API*.
+The *SSH Command line* features are built with *Apache MINA*'s sub project *Apache SSHD*.
+Gerrit notification functions including *Hook*, *Stream-event* and *E-mail*.
+Gerrit stores data in *Git* repositories and *SQL database*.
+Gerrit does not use *Hibernate*. Instead, it supports 9 kinds of *SQL database* with its own *open source* tiny *ORM* library,
+which is built by using *ObjectWeb ASM 3, H2* and *ANTLR 3*, e.g. *Oracle, MySQL, H2, PostgreSQL, DB2*. However,
+Gerrit is moving the data stored in DB into `git notes`. This is a step towards implementing open-source version of *multi-master* feature.
+Gerrit caches search results in memory, disk of server side and client side via browser.
+Gerrit builds second index using *Lucene* and *Protocol Buffers*.
+Gerrit provides search function, and the grammar is built by using *Antlr 3*.
+Gerrit has replication function, which now is a plugin, to enable *master-slave* mode.
+Gerrit uses *Google Guice*, not *Spring*, as dependency injection framework.
+Gerrit supports developing *Gerrit plugin*. Gerrit uses *BUCK* to build source code, run *Junit* test, wrap release file (war).
+BUCK runs faster that *Maven*. Gerrit provides init command to do every initial works and startup Gerrit automatically.
+Gerrit has tons framework.
+
 
 The Sony Mobile Gerrit server::
 
-Gerrit server runs in Tomcat web container behind a Apache web server. +
-Gerrit server is master-slave mode, one master server and on average 7 slave servers * 3 sites accessed by 7000+ end users in total. +
-Sony Mobile Gerrit server uses PostgreSQL which has replication features. Each Gerrit slave server has a PostgreSQL database. +
-On each site, The Gerrit slave servers are located behind balance servers that balance the requests from local developers and local Jenkins servers.
+Gerrit server runs in *Tomcat* web container behind an *Apache* web server.
+Gerrit server is *master-slave* mode, one master server and on average *7 slave servers* * *3 sites* accessed by *7000+* end users in total.
+Sony Mobile Gerrit server uses *PostgreSQL* that has replication features. Each Gerrit slave server has a *PostgreSQL* database.
+On each site, the Gerrit slave servers are located behind balance servers that balance the requests from local developers and local *Jenkins* servers.
+
 
 
 .Achievements
@@ -165,10 +173,10 @@ On each site, The Gerrit slave servers are located behind balance servers that b
 Develop :::
 Some features, e.g.:
 
-- [*] Create project (SSH command and RESTful API) +
+- [*] Create project (*SSH command* and *RESTful API*) +
 - [*] Add file comment to a patch +
 - [*] Enable branch specified label +
-- [*] Add reviewers in batch by LDAP group +
+- [*] Add reviewers in batch by *LDAP* group +
 - [*] Add new system configuration options +
 - [*] Enable register email registered automatically +
 
@@ -194,7 +202,7 @@ Staff Engineer
 
 .Application introduction
 
-Sony mobile has few Jenkins servers in each site with hundreds of slave machines for developers, CM teams.
+Sony mobile has few *Jenkins servers* in each site with hundreds of slave machines for developers, CM teams.
 
 .Achievements
 
@@ -206,7 +214,7 @@ Admin Jenkins Server
 
 Develop
 
-- [*] Took part in developing Jenkins plugin: Gerrit-trigger-plugin +
+- [*] Took part in developing Jenkins plugin: *Gerrit-trigger-plugin* +
 
 ==== Canon China
 
@@ -223,8 +231,8 @@ Supervise all local web applications
 .Application introduction
 
 Cannon China local applications ::
-Web applications, e.g. e-order, e-bank, e-parts ... They are built using Java EE, DB2 or MS SQL Server.
-Their databases need exchange data with core application that is built using AS400 and DB2.
+Web applications, e.g. e-order, e-bank, e-parts ... They are built using *Java/Java EE, DB2* or *MS SQL Server*.
+Their databases need exchange data with core application that is built using *AS400* and *DB2*.
 
 .Achievements
 
@@ -232,11 +240,11 @@ DBA
 
 - [*] Perform query optimization and tuning of complex queries, write efficient SQL and Stored Procedures.
  That access several million rows across several database tables. Tuned SQL statement of web applications,
-  e.g. reduced the running time of some SQL statements to be less than 5 seconds from 2+ minutes. +
+  e.g. reduced the running time of some SQL statements to be less than *5 seconds* from *2+ minutes*. +
 - [*] Setup MS SQL Server database backup plan and carried it out. +
 - [*] Tacked day-to-day issues of DB2 backup to tape and wrote tutorial. +
 
-Develop using the API of IBM MQ and Java RMI:
+Develop using the API of *IBM MQ* and *Java RMI*:
 
 - [*] Designed, developed, tested, deployed and maintained a real-time application used to sync data between web applications and core applications. +
 
@@ -257,11 +265,11 @@ With other members developed 2 web applications for Guangdong Province China .
 
 Centralized Taxes Payment Application ::
 
-The application provides local tax services for the whole province. It is a large-scale distributed Java EE based web application built using
-Oracle RAC Weblogic cluster. The number of GDP and people of Guandong Province is greater than that of Taiwan.
-The numbers of this application’s online users and concurrent users are very big. It is also a big data application.
-Its is multi-tier, browser/server mode and client/server mode architecture.
-User can access it via telephone, browser and client side application.
+The application provides local tax services for the whole province. It is a *large-scale distributed Java EE based web application* built
+with *Oracle RAC* and *Weblogic cluster*. The number of GDP and people of Guandong Province is greater than that of Taiwan.
+The number of this application’s *online users (2000+)* and concurrent users is very tremendous. It is also a *big data* application.
+It is *multi-tier, browser/server mode* and *client/server mode* architecture.
+Users can access it via telephone, browser and client side application.
 It also communicates with other applications of banks and other government departments.
 
 
@@ -281,14 +289,14 @@ I was in charge of system requirement and system design. +
 
 - Design:
 
-- [*] Wrote out system requirement with end user. Made clear the boundary of system, wrote out user cases. +
-- [*] Combed out the business data flow, draw out business data module.  +
-- [*] Created physical data module, DB scheme. +
+- [*] Wrote out system requirement with end user. Made clear the *boundary of system*, wrote out *user cases*. +
+- [*] Combed out the business data flow, draw out *business data module*.  +
+- [*] Created *physical data module*, DB scheme. +
 - [*] Divided system into sub modules. +
 
 - ETL:
 
-- [*] Took part in ETL work between old application DB and new application DB. +
+- [*] Took part in *ETL* work between old application DB and new application DB. +
 
 
 ==== Cernet — Intern
@@ -309,7 +317,7 @@ It is online payment application like Paypal to provide payment service used by 
 Its framework mocked the Sun pet store using *JavaScript, JSP, Servlet, JDBC, EJB* +
 
 .Achievements
-Developed admin module of E-payment application from the front-end to back-end
+Developed admin module of E-payment application from the *front-end* to *back-end*
 Features includes
 
 - [*] Register/update new user information. +
@@ -317,6 +325,6 @@ Features includes
 
 Developed common library
 
-- [*] Defined DTD, a Document Type Definition, and developed a parser to parse a given *XML* according the DTD. +
+- [*] Defined *DTD*, a Document Type Definition, and developed a parser to parse a given *XML* according the DTD. +
 
 
