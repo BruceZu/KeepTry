@@ -45,7 +45,7 @@ public class UniqueCharsTest {
     @Test(timeout = 10l, expected = Test.None.class)
     public void testGetUniqueChars() {
 
-        Assert.assertEquals(UniqueChars.getUniqueChars(test), expected);
-        Assert.assertEquals(UniqueChars.getUniqueCharsBitWise(test), expected);
+        Assert.assertEquals(UniqueCharsOfString.getUniqueChars(test), expected);
+        Assert.assertEquals(UniqueCharsOfString.getUniqueCharsBitWise(test), expected);
     }
 }

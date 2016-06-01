@@ -15,7 +15,7 @@
 
 package array;
 
-public class UniqueChars {
+public class UniqueCharsOfString {
 // Hello xxx, This is Bruce. Thank you very much for your time!
 // Hi, This is xxxx
 
