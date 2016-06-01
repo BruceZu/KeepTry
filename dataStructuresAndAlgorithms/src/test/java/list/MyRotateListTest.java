@@ -40,7 +40,7 @@ public class MyRotateListTest {
         this.list = list;
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 20L, expected = Test.None.class)
     public void testRotate() {
         list.addBeforeHead("head");
         list.addAfter("second", 0);
