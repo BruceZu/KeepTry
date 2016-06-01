@@ -62,17 +62,17 @@ public class Leetcode1twoSum {
     // O(N)
     public static int[] twoSum(int[] nums, int target) {
         Integer[] vIndex = new Integer[0Xffff];
-        int delta = 0Xfff;
+        int DELTA = 0Xfff;
 
         for (int i = 0; i < nums.length; i++) {
-            int index = target - nums[i] + delta;
+            int index = target - nums[i] + DELTA;
             if (vIndex[index] != null) {
-                return new int[]{vIndex[index], i};
+                return new int[]{vIndex[index], i + 1};// require return index +1
             } else {
-                vIndex[nums[i] + delta] = i;
+                vIndex[nums[i] + DELTA] = i + 1; // require return index + 1
             }
         }
-        return null;
+        return new int[]{-1, -1}; // -1 as not found, for test
     }
 
     public static int[] twoSum1(final int[] nums, int target) {

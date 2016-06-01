@@ -27,8 +27,9 @@ public class Leetcode1TwoSumTest {
     @Parameterized.Parameters(name = " test {index}")
     public static Iterable<int[][]> data() {
         return Arrays.asList(new int[][][]{
+             // {test array}, {target, result1 result2}
                 {{3, 2, 4}, {6, 2, 3}},
-                {{3, 2, 4}, {8, -1, -1}},
+                {{3, 3, 4}, {8, -1, -1}},
                 {{8, 0, 8}, {16, 1, 3}},
                 {{0, 4, 3, 0}, {0, 1, 4}},
                 {{-1, -2, -3, -4, -5}, {-8, 3, 5}},
