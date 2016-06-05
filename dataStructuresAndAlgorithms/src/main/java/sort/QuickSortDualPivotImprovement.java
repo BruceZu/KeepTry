@@ -75,6 +75,7 @@ public class QuickSortDualPivotImprovement {
         T pv2 = arr[r];
 
         int le = l + 1, er = r - 1;
+        // 2
         for (int i = le; i <= er; i++) {
             Comparable v = arr[i];
             if (lessThan(v, pv1)) {
@@ -104,6 +105,7 @@ public class QuickSortDualPivotImprovement {
          *                                   le            er
          */
 
+        // 3
         swap(arr, l, --le);
         swap(arr, r, ++er);
 
@@ -112,7 +114,7 @@ public class QuickSortDualPivotImprovement {
          *     Now:
          *                    < pv1,  pv1,   pv1 <= e <= pv2,   pv2,   > pv2
          *                             |      |            |     |
-         *                            le     greatPv1   lessPv2  er
+         *                            le     ic            ci    er
          *
          *
          * Improvement B:
@@ -120,32 +122,32 @@ public class QuickSortDualPivotImprovement {
          *
          *                   < pv1,    pv1....pv1,   pv1< e < pv2,   pv2....pv2,  > pv2
          *                              |              |        |            |
-         *                             le         greatPv1  lessPv2         er
+         *                             le              ic       ci          er
          *
          */
-        int greatPv1 = le + 1, lessPv2 = er - 1;
-        if (lessThan(pv1, pv2) && er - le > 2 * (le - er)) {
-            for (int i = greatPv1; i <= lessPv2; i++) {
+        int ic = le + 1, ci = er - 1; // index of center field  pv1< e < pv2, included
+        if (lessThan(pv1, pv2) && er - le > 2) {
+            for (int i = ic; i <= ci; i++) {
                 Comparable v = arr[i];
                 if (same(v, pv1)) {
-                    swap(arr, i, greatPv1++);
+                    swap(arr, i, ic++);
                 } else if (same(v, pv2)) {
-                    while (lessPv2 > i && same(arr[lessPv2], pv2)) {
-                        lessPv2--;
+                    while (ci > i && same(arr[ci], pv2)) {
+                        ci--;
                     }
-                    if (lessPv2 == i) {
-                        lessPv2--;
+                    if (ci == i) {
+                        ci--;
                         break;
                     }
 
-                    swap(arr, i, lessPv2--);
+                    swap(arr, i, ci--);
 
                     if (same(arr[i], pv1)) {
-                        swap(arr, i, greatPv1++);
+                        swap(arr, i, ic++);
                     }
                 }
             }
         }
-        return new int[]{le, er, greatPv1, lessPv2};
+        return new int[]{le, er, ic, ci};
     }
 }
