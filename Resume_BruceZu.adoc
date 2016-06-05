@@ -12,15 +12,18 @@
 :whatisgerrit: https://www.gerritcodereview.com/index.md
 :My Create project: https://gerrit-review.googlesource.com/#/q/topic:create-project-ui
 
-- *Full stack*, mainly *back end*, *Java/Java EE* based *distributed application* software engineer (*14 years*). +
-- Contribute to *open source* {Gerrit}[Google Gerrit Code Review] since 2011. +
+- Like algorithm, math, coding to defeat every kind technology issue and challenge.
+I appreciate *hacker culture*, *concise* and *quick* code which is improving the life of human kind.
+Excited to work in *open source* community and interested in distributed application systems.
+Having passion of continuous improvement through refactoring and introducing new technologies.
+- Have been touching *Java*/*Java EE* since 2002. *Full stack* or *back end*. +
+- Contributed to *open source* {Gerrit}[Google Gerrit Code Review] since 2011. +
 - Administrator experience (*8 years*) of web applications running on *Linux*.
-- Self-driven and organized.
 
 
-[small Gray]#Temple City, Greater Los Angeles Area, CA 91780 |
-(626) 747-6721 | English, Mandarin. +
-zu.bruce.china@gmail.com |
+
+[small Gray]#Bay Area, CA |
+(626) 747-6721 | English, Mandarin | zu.bruce.china@gmail.com +
 {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 
 '''
