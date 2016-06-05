@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array;
+package sort;
 
 
 import org.junit.Assert;
@@ -34,8 +34,9 @@ public class SortTest {
     public static Iterable<Object[]> data() {
         List r = Arrays.asList(new Comparable[][][]{
                 {{2, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 6}, {0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9}},
+                {{2, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 6}, {0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9}},
                 {{9, 7, 6, 4, 3, 3}, {3, 3, 4, 6, 7, 9}},
-                {{}, {}},
+                {{7, 2, 3, 4, 7, 8, 7, 9, 7, 9, 8, 9, 13, 12, 10, 9}, {2, 3, 4, 7, 7, 7, 7, 8, 8, 9, 9, 9, 9, 10, 12, 13}},
                 {{1}, {1}},
                 {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 4}, {0, 1, 2, 3, 4, 4, 5, 6, 7, 8, 9}},
                 {{4, 5, 6, 7, 8, 9}, {4, 5, 6, 7, 8, 9}},
@@ -71,7 +72,7 @@ public class SortTest {
     public void selectSortTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.selectionSort(ar);
+        SelectionSort.selectionSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -79,7 +80,7 @@ public class SortTest {
     public void insertSortTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.insertSort(ar);
+        InsertSort.insertSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -87,15 +88,15 @@ public class SortTest {
     public void testSortTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.shellSort(ar);
+        ShellSort.shellSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 20l, expected = Test.None.class)
     public void mergeSortTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.mergeSort(ar);
+        MergeSortRecursionMultiThreads.mergeSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -103,7 +104,7 @@ public class SortTest {
     public void mergeSortRecursionTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.mergeSortRecursion(ar);
+        MergeSortRecursionSingleThread.mergeSortRecursion(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -111,7 +112,7 @@ public class SortTest {
     public void mergeSortNoRecursionTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.mergeSortNoRecursion(ar);
+        MergeSortNoRecursion.mergeSortNoRecursion(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -119,7 +120,7 @@ public class SortTest {
     public void quickSortTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.quickSort(ar);
+        QuickSort.quickSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -127,7 +128,7 @@ public class SortTest {
     public void quickSort3wayTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.quickSort3Way(ar);
+        QuickSort3way.quickSort3Way(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -135,7 +136,16 @@ public class SortTest {
     public void quickSortDualPivotTest() {
         Comparable[] ar = clone(arr);
         // start test
-        Sort.quickSortDualPivot(ar);
+        QuickSortDualPivot.quickSortDualPivot(ar);
+        Assert.assertTrue(Arrays.equals(ar, sorted));
+    }
+
+
+    @Test(timeout = 10l, expected = Test.None.class)
+    public void quickSortDualPivotImprovementTest() {
+        Comparable[] ar = clone(arr);
+        // start test
+        QuickSortDualPivotImprovement.quickSortDualPivot(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 }

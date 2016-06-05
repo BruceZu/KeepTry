@@ -15,12 +15,18 @@
 
 package sort;
 
+import static array.Common.swap;
+
 public class InsertSort {
     private static <T extends Comparable> boolean lessThan(T i, T j) {
         return i.compareTo(j) < 0;
     }
 
     public static <T extends Comparable> void sortByInsert(T[] arr) {
+        // Input check
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
         //ascending
         for (int k = 1; k < arr.length; k++) {
             if (lessThan(arr[k], arr[k - 1])) {
@@ -31,6 +37,22 @@ public class InsertSort {
                     arr[p + 1] = arr[p]; // move back
                 } while (p - 1 >= 0 && lessThan(v, arr[p - 1]));
                 arr[p] = v; // find the right place.
+            }
+        }
+    }
+
+    /**
+     * The runtime is depends on the input. If the input is sorted already its runtime is O(n);
+     * It is used for partially-sorted arrays.
+     */
+    public static <T extends Comparable<T>> void insertSort(T[] arr) {
+        // Input check
+        if (arr == null || arr.length <= 1) {
+            return;
+        }
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = i; j > 0 && lessThan(arr[j], arr[j - 1]); j--) {
+                swap(arr, j, j - 1);
             }
         }
     }
