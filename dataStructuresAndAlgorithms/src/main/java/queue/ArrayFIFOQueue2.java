@@ -21,6 +21,8 @@ import java.util.NoSuchElementException;
 // prohibit the insertion of null elements
 // capacity-restricted FIFO queue
 public class ArrayFIFOQueue2<T> implements FIFOQueue<T> {
+    // Refer https://www.quora.com/What-is-the-maximum-size-of-the-array-in-Java
+    // The value of MAX_ARRAY_SIZE may not work
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
     private static int DEFAULT_CAPACITY = 2 << 2;
 
