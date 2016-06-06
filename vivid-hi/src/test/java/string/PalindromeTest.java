@@ -13,14 +13,17 @@
 // limitations under the License.
 //
 
-package string;import org.junit.Assert;
+package string;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.text.Collator;
 
 public class PalindromeTest {
-    @Test(timeout = 4000L, expected = Test.None.class)
-    public void testPalindrome() {
+    static String s, expected;
+
+    static {
         StringBuffer b = new StringBuffer()
                 .append("A man, a plan, a canal, Panama!")
                 .append("Amor, Roma")
@@ -75,9 +78,26 @@ public class PalindromeTest {
                 .append("313")
                 .append("191")
                 .append("Is it crazy how saying sentences backwards creates backwards sentences saying how crazy it is?");
-        Assert.assertEquals(Palindrome.findTheLongestPalindromicSubStrOf(b.toString()),
-                "Doc, note: I dissent. A fast never prevents a fatness. I diet on cod");
-        Assert.assertEquals(Collator.getInstance().compare(Palindrome.findTheLongestPalindromicSubStrOf(b.toString()),
-                "Doc, note: I dissent. A fast never prevents a fatness. I diet on cod"), 0);
+        s = b.toString();
+        expected = "Doc, note: I dissent. A fast never prevents a fatness. I diet on cod";
+    }
+
+    @Test(timeout = 800L, expected = Test.None.class)
+    public void testPalindrome() {
+        Assert.assertEquals(expected, PalindromeGeneral.findTheLongestPalindromicSubStrOf(s));
+        Assert.assertEquals(0,
+                Collator.getInstance().compare(PalindromeGeneral.findTheLongestPalindromicSubStrOf(s),
+                        expected));
+    }
+
+    @Test(timeout = 40L, expected = Test.None.class)
+    public void testSpecialPalindrome() {
+        s = PalindromeGeneral.cleanAndLowerCase(s);
+        expected = PalindromeGeneral.cleanAndLowerCase(expected);
+
+        Assert.assertEquals(expected, PalindromeSpecial.findTheLongestPalindromicSubStrOf(s));
+        Assert.assertEquals(0,
+                Collator.getInstance().compare(PalindromeSpecial.findTheLongestPalindromicSubStrOf(s),
+                        expected));
     }
 }
