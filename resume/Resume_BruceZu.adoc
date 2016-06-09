@@ -22,7 +22,7 @@ Having passion of continuous improvement through refactoring and introducing new
 
 
 
-[small Gray]#Bay Area, CA |
+[small Gray]#Londonderry Dr, Santa Clara, CA 95050 |
 (626) 747-6721 | English, Mandarin | zu.bruce.china@gmail.com +
 {Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
 
@@ -40,7 +40,7 @@ Having passion of continuous improvement through refactoring and introducing new
 ==== Sony Mobile — Senior Software Engineer, full stack, mainly focus on back end
 
 [small Gray]#_Sep 2011 -  Apr 2015_# +
-[small Gray]#Sony Mobile {whatisgerrit}[Gerrit] team is a global team (4 ~ 8 members) supporting 7000+ inner end users.#
+[small Gray]#Sony Mobile {whatisgerrit}[Gerrit] team is a global team (4 ~ 8 members from Sweden, Tokyo, Brazil and Beijing) supporting 7000+ inner end users.#
 
 * Tackled daily *Gerrit/Git/Repo* related issues and feature requirements for CM users, Git Admin and developers. +
 * Contributed *140+ {mycommits}[commits]* to improve and strengthen Gerrit functions to make users convenient. +
@@ -135,8 +135,10 @@ Scrum/Agile/Sprint [small Gray]#_(3)_# +
 Senior Software Engineer, full stack, mainly focus on back end.
 
 .Job Function
-I was a member of global Gerrit development team supporting Git Admin team, CM team and developers by delivering new features
-and bugfixes.
+I was a member of global Gerrit development team, supporting Git Admin team, CM team and developers
+by delivering new features and bugfixes. Members are from Sweden, Tokyo, Brazil and Beijing.
+We also keep close relation with other Gerrit community core contributors who works for Google,
+SAP, Qualcomm and OpenStack.
 
 .Application introduction
 :gerrit-case: https://gerrit.googlesource.com/homepage/+/md-pages/docs/ShowCases.md
