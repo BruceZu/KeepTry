@@ -14,7 +14,7 @@
 //
 
 import org.junit.Assert;
-        import org.junit.Test;
+import org.junit.Test;
 
 public class R32Test {
     @Test(timeout = 30L, expected = Test.None.class)

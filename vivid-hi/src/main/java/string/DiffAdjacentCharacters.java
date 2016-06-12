@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Math.max;
+
 /**
  * Input a string, return a new string that all adjacent characters are not the same.
  * For example:
@@ -191,7 +193,7 @@ public class DiffAdjacentCharacters {
         int start = m.start(1);
         char[] in = inStr.toCharArray();
         int indexLastRepeatFromHead = -1;
-        for (int i = Math.max(1, start); i < in.length; i++) {
+        for (int i = max(1, start); i < in.length; i++) {
             int indexFrom = -1;
             if (in[i] != in[i - 1]) {
                 continue;

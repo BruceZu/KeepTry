@@ -13,25 +13,25 @@
 // limitations under the License.
 //
 
-package string;import java.util.regex.Matcher;
+package string;
+
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*
-getContent in K length
-
-Imagine there is an address: "213MaryAve,Chalrottesville,VA 22903".
-You are asked to return a smaller string with limitation of size.
-But there are three rules:
-
-Number is more important than chars
-The content ahead is more important than the content after
-Rule 1 is higher priority than rule 2.
-If K = 5, the return should be
-21322
-If K = 11, the return should be
-213Mar22903
-
-Please do it in two passes.
+/**
+ * getContent in K length
+ * <pre>
+ * Imagine there is an address: "213MaryAve,Chalrottesville,VA 22903".
+ * You are asked to return a smaller string with limitation of size.
+ * But there are three rules:
+ * Number is more important than chars
+ * The content ahead is more important than the content after
+ * Rule 1 is higher priority than rule 2.
+ * If K = 5, the return should be
+ * 21322
+ * If K = 11, the return should be
+ * 213Mar22903
+ * Please do it in two passes.
  */
 public class KLengthContentOfAddress {
     static String getSubStr(int length, String from) {

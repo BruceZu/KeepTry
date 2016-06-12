@@ -18,6 +18,10 @@ package bitwise;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.pow;
+
 public class BitMaskTest {
    /*
    sources of magic algorithms:
@@ -96,11 +100,11 @@ public class BitMaskTest {
                 x / 2);
 
         //2 ^^ n == 1 << n    (0 =< n <= 30)
-        Assert.assertEquals(Math.pow(2, 0), 1 << 0, 0);
-        Assert.assertEquals(Math.pow(2, 30), 1 << 30, 0);
+        Assert.assertEquals(pow(2, 0), 1 << 0, 0);
+        Assert.assertEquals(pow(2, 30), 1 << 30, 0);
         Assert.assertEquals(Integer.MIN_VALUE, 1 << 31, 0); // attention
 
-        Assert.assertEquals(2147483648L, Math.pow(2, 31), 0);
+        Assert.assertEquals(2147483648L, pow(2, 31), 0);
         Assert.assertEquals(-2147483648L, Integer.MIN_VALUE, 0);
 
         Assert.assertEquals(2147483647, Integer.MAX_VALUE, 0);
@@ -272,9 +276,9 @@ public class BitMaskTest {
         Assert.assertEquals(n, n - ((n - m) & ~(n - m) >> 31));
         // special case n = 0
         m = 3;
-        Assert.assertEquals(Math.min(m, 0), m & m >> 31);
+        Assert.assertEquals(min(m, 0), m & m >> 31);
         m = -3;
-        Assert.assertEquals(Math.min(m, 0), m & m >> 31);
+        Assert.assertEquals(min(m, 0), m & m >> 31);
     }
 
     @Test(timeout = 3000L, expected = Test.None.class)
@@ -298,15 +302,15 @@ public class BitMaskTest {
         // special case, n = 0
         m = 3;
         n = 0;
-        Assert.assertEquals(Math.max(m, 0), m - (m & m >> 31));
+        Assert.assertEquals(max(m, 0), m - (m & m >> 31));
         Assert.assertEquals(m, n ^ (m & -m >> 31));
 
         //m & ~(m >> 31)
-        Assert.assertEquals(Math.max(m, 0), -(-m & -m >> 31));
-        Assert.assertEquals(Math.max(m, 0), m & ~(m >> 31) /* here ~(m >> 31) is -1 or 0 */);
+        Assert.assertEquals(max(m, 0), -(-m & -m >> 31));
+        Assert.assertEquals(max(m, 0), m & ~(m >> 31) /* here ~(m >> 31) is -1 or 0 */);
         m = -3;
-        Assert.assertEquals(Math.max(m, 0), m - (m & m >> 31));
-        Assert.assertEquals(Math.max(m, 0), -(-m & -m >> 31));
+        Assert.assertEquals(max(m, 0), m - (m & m >> 31));
+        Assert.assertEquals(max(m, 0), -(-m & -m >> 31));
     }
 
     @Test(timeout = 3000L, expected = Test.None.class)
@@ -939,7 +943,7 @@ public class BitMaskTest {
             int lz = (s + lo) & ~s;      // lowest zero bit above lo
             s = s |= lz;                     // add lz to the set
             s &= ~(lz - 1);              // reset bits below lz
-            s |= ( lz / lo  / 2) - 1;      // put back right number of bits at end
+            s |= (lz / lo / 2) - 1;      // put back right number of bits at end
 
             System.out.println(BitOperation.binaryFormat(s));
             t = s & 1 << N;

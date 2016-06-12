@@ -18,6 +18,8 @@ package tree;
 import java.util.Iterator;
 import java.util.List;
 
+import static java.lang.Math.max;
+
 public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<T, E> {
 
     /**
@@ -30,7 +32,7 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
         int maxChildDepth = 0;
         for (T c : n.<E>getChildren()) {
             if (!isLeaf(c)) {
-                maxChildDepth = Math.max(maxChildDepth, childrenMaxDepth(c, dd + 1));
+                maxChildDepth = max(maxChildDepth, childrenMaxDepth(c, dd + 1));
             }
             // skip leaf as it is not the child with max depth
         }
@@ -68,7 +70,7 @@ public abstract class AbstractTree<T extends TreeNode<T, E>, E> implements Tree<
         int subTreeHeight = 0;
         for (T c : n.<E>getChildren()) {
             if (!isLeaf(c)) {
-                subTreeHeight = Math.max(subTreeHeight, height(c));
+                subTreeHeight = max(subTreeHeight, height(c));
             }
             // skip leaf as it is not the child with max depth
         }

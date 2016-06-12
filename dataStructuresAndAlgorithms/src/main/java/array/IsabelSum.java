@@ -15,6 +15,8 @@
 
 package array;
 
+import static java.lang.Math.log;
+
 // C524 Isabel has an interesting way of summing up the values in an array A of n integers,
 // where n is a power of two. She creates an array B of half the size of A and sets
 // B[i] = A[2i]+ A[2i+ 1], for i = 0,1, . . . , (n/2)− 1. If B has size 1, then she
@@ -33,7 +35,7 @@ public class IsabelSum {
     }
 
     public static long isabelSum(long[] data) throws UnsupportedOperationException {
-        double log = Math.log(data.length) / Math.log(2);
+        double log = log(data.length) / log(2);
         if (log != (long) log) {
             throw new UnsupportedOperationException();
         }

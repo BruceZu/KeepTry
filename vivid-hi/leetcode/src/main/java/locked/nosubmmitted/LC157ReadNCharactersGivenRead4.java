@@ -15,6 +15,8 @@
 
 package locked.nosubmmitted;
 
+import static java.lang.Math.min;
+
 /**
  * 157. Read N Characters Given Read4
  * https://leetcode.com/problems/read-n-characters-given-read4/
@@ -57,7 +59,7 @@ public class LC157ReadNCharactersGivenRead4 {
             int hasRead = 0;//running total of char read
             while (true) {
                 read = read4(buffer);//read4
-                int toRead = Math.min(read, n - hasRead);//determine how many char to copy over to buf from buffer
+                int toRead = min(read, n - hasRead);//determine how many char to copy over to buf from buffer
                 for (int i = 0; i < toRead; i++) {//do the copy
                     buf[hasRead++] = buffer[i];
                 }

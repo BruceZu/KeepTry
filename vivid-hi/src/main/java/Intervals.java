@@ -16,6 +16,9 @@
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 /**
  * Add interval -- add new interval and merge it
  * Query -- see if an intege is within interval
@@ -36,7 +39,7 @@ public class Intervals {
 
         Interval merge(Interval i) {
             if (canMerge(i)) {
-                return new Interval(Math.min(i.start, this.start), Math.max(i.end, this.end));
+                return new Interval(min(i.start, this.start), max(i.end, this.end));
             }
             return null;
         }
@@ -58,7 +61,7 @@ public class Intervals {
     private LinkedList<Interval> intervals = new LinkedList<>();
 
     public void add(int start, int end) {
-        int min = Math.min(start, end);
+        int min = min(start, end);
         Interval newI = new Interval(min, start == min ? end : start);
         if (intervals.size() == 0) {
             intervals.add(newI);

@@ -20,6 +20,9 @@ import tree.AbstractTree;
 import java.util.Iterator;
 import java.util.List;
 
+import static java.lang.Math.max;
+
+
 public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         extends AbstractTree<T, E>
         implements BinaryTree<T, E> {
@@ -297,7 +300,7 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         }
         x[0]++;
         T right = n.getRight();
-        maxLengthOfValues[0] = Math.max(maxLengthOfValues[0], v.toString().length());
+        maxLengthOfValues[0] = max(maxLengthOfValues[0], v.toString().length());
         if (right != null) {
             allocate(right, out, maxLengthOfValues, y + 2, x);
         }
@@ -405,7 +408,7 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
      * @param from         valid index bounder from, include.
      * @param to           valid index bounder to, include.
      * @param root         for it to create left or right child by the middle element of arr
-     * @param isCreateLeft  true to create left for root, else create right for root.
+     * @param isCreateLeft true to create left for root, else create right for root.
      */
     private void toBST(E[] arr, int from, int to, T root, boolean isCreateLeft) {
         int mid = (from + to) / 2;
