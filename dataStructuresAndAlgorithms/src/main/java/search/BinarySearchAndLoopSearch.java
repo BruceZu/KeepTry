@@ -15,6 +15,9 @@
 
 package search;
 
+/**
+ * see {@link java.util.Arrays#binarySearch(int[], int, int, int)}
+ */
 public class BinarySearchAndLoopSearch {
     // Tail recursion
     private static boolean my_binarySearch(int target, int[] array, int startIndex, int endIndex) {

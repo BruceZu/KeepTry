@@ -15,8 +15,14 @@
 
 package sort;
 
+import java.util.List;
+
 import static array.Common.merge;
 
+/**
+ * @see java.util.Arrays#sort(int[])
+ * @see java.util.Collections#sort(List)
+ */
 public class MergeSortRecursionSingleThread {
     /**
      * Merge sort array arr's scope [l, r].
