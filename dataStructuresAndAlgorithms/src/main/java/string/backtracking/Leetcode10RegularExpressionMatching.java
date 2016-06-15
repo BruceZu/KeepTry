@@ -33,10 +33,10 @@ package string.backtracking;
  * isMatch("ab", ".*") → true
  * isMatch("aab", "c*a*b") → true
  *
- * Tags: Dynamic Programming Backtracking String
+ * Tags: Dynamic Programming, Backtracking, String
  */
 
-public class Leetcode1010RegularExpressionMatching {
+public class Leetcode10RegularExpressionMatching {
 }
 
 class Solution {
@@ -53,7 +53,10 @@ class Solution {
      * @param ip current index of pattern p.
      * @return
      */
-    public boolean execute(String s, int is, String p, int ip) {
+    public boolean byBackTracing(String s, int is, String p, int ip) {
+        if (cache[is][ip] != null) {
+            return cache[is][ip];
+        }
         // index valid check
         if (is == s.length() && ip == p.length()) { // both end
             return true;
@@ -62,26 +65,29 @@ class Solution {
         if (ip + 1 < p.length() && p.charAt(ip + 1) == '*') {
             while (ip < p.length() && is < s.length()
                     && p.startsWith(".*", ip) ? true : is < s.length() && p.charAt(ip) == s.charAt(is)) {
-                // back-tracing
-                if (execute(s, is, p, ip + 2)) {
+                // back-tracing and cache
+                if (cache[is][ip + 2] = byBackTracing(s, is, p, ip + 2)) {
                     return true;
                 }
                 is++;
             }
-            return execute(s, is, p, ip + 2); // take it as no existing, * is zero
+            return byBackTracing(s, is, p, ip + 2); // take it as no existing, * is zero
 
         } else if (ip < p.length() && p.charAt(ip) == '.'
                 || ip < p.length() && is < s.length() && p.charAt(ip) == s.charAt(is)) {
-            return execute(s, is + 1, p, ip + 1);
+            return byBackTracing(s, is + 1, p, ip + 1);
         }
 
         return false;
     }
 
+    Boolean[][] cache;
+
     public boolean isMatch(String s, String p) {
         if (p.equals(s) || p.equals(".*")) {
             return true;
         }
-        return execute(s, 0, p, 0);
+        cache = new Boolean[s.length() + 3][p.length() + 3];
+        return byBackTracing(s, 0, p, 0);
     }
 }
