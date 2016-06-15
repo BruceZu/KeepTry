@@ -53,18 +53,18 @@ class Solution {
      * @param ip current index of pattern p.
      * @return
      */
-    public boolean byBackTracing(String s, int is, String p, int ip) {
+    public boolean byBackTracing(char[] s, int is, char[] p, int ip) {
         if (cache[is][ip] != null) {
             return cache[is][ip];
         }
         // index valid check
-        if (is == s.length() && ip == p.length()) { // both end
+        if (is == s.length && ip == p.length) { // both end
             return true;
         }
 
-        if (ip + 1 < p.length() && p.charAt(ip + 1) == '*') {
-            while (ip < p.length() && is < s.length()
-                    && p.startsWith(".*", ip) ? true : is < s.length() && p.charAt(ip) == s.charAt(is)) {
+        if (ip + 1 < p.length && p[ip + 1] == '*') {
+            while (ip < p.length && is < s.length
+                    && p[ip + 1] == '*' && p[ip] == '.' ? true : is < s.length && p[ip] == s[is]) {
                 // back-tracing and cache
                 if (cache[is][ip + 2] = byBackTracing(s, is, p, ip + 2)) {
                     return true;
@@ -73,8 +73,8 @@ class Solution {
             }
             return byBackTracing(s, is, p, ip + 2); // take it as no existing, * is zero
 
-        } else if (ip < p.length() && p.charAt(ip) == '.'
-                || ip < p.length() && is < s.length() && p.charAt(ip) == s.charAt(is)) {
+        } else if (ip < p.length && p[ip] == '.'
+                || ip < p.length && is < s.length && p[ip] == s[is]) {
             return byBackTracing(s, is + 1, p, ip + 1);
         }
 
@@ -88,6 +88,6 @@ class Solution {
             return true;
         }
         cache = new Boolean[s.length() + 3][p.length() + 3];
-        return byBackTracing(s, 0, p, 0);
+        return byBackTracing(s.toCharArray(), 0, p.toCharArray(), 0);
     }
 }
