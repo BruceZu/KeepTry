@@ -25,6 +25,11 @@ package array.binarysearch;
  * Tags: Binary Search Array Divide and Conquer
  */
 public class Leetcode4MedianofTwoSortedArrays {
+    public static void main(String[] args) {
+        System.out.println(new SolutionByFindKthElement().findMedianSortedArrays(
+                new int[]{1, 4, 5, 6}, new int[]{2, 3, 7, 8}
+        ));
+    }
 }
 
 /**
@@ -120,7 +125,7 @@ class Solution {
 
         int cut = smIndex - is;
         if (s[smIndex] < l[mIndex]) {
-            return exe(s, smIndex, m - cut, l, il, n - cut);
+            return exe(s, is + cut, m - cut, l, il, n - cut);
         } else if (s[smIndex] > l[mIndex]) {
             return exe(s, is, m - cut, l, il + cut, n - cut);
         } else { // Same
@@ -131,6 +136,7 @@ class Solution {
         }
     }
 
+    //Assume s and n are null at the same time.
     public double findMedianSortedArrays(int[] s, int[] l) {
         int m = s.length, n = l.length;
         int lmIndex;
@@ -156,3 +162,83 @@ class Solution {
                 : exe(l, 0, n, s, 0, m);
     }
 }
+
+class SolutionByFindKthElement {
+
+    /**
+     * <pre>
+     * Get the kth element of the ordered merged result of array s and l.
+     * if sumIsOdd is false then also get the (k+1)th one.
+     *
+     * Assume the kth >=1 and kth <= m+n
+     *
+     * 1> cases where we should not cut the shorter array: {3}, {1,2,4,5,6}
+     * 2> always calculate from left, thus the cut number will never great than kth
+     * 3> always include the checker to cut, to be able to continue {1,2},{3,4,5,6}
+     * 4> keep the shorter array on left, check it is empty firstly
+     */
+    public Double[] call(int[] s, int is, int m, int[] l, int il, int n, int kth, boolean sumIsOdd) {
+        if (m == 0 && sumIsOdd) {
+            return new Double[]{l[il + kth - 1] * 1D};
+        }
+        if (m == 0) {
+            return new Double[]{l[il + kth - 1] * 1D, l[il + kth] * 1D};
+        }
+        if (kth == 1) {
+            double first = s[is] < l[il]
+                    ? s[is] * 1D
+                    : l[il] * 1D;
+            Double second = null;
+            if (!sumIsOdd) {
+                if (first == s[is]) {
+                    if (m == 1) {
+                        second = l[il] * 1D;
+                    } else {
+                        second = s[is + 1] < l[il] ? s[is + 1] * 1D : l[il] * 1D;
+                    }
+                } else {
+                    if (n == 1) {
+                        second = s[is] * 1D;
+                    } else {
+                        second = l[il + 1] < s[is] ? l[il + 1] * 1D : s[is] * 1D;
+                    }
+                }
+            }
+            return new Double[]{first, second};
+        }
+        int numberS = kth * m / (m + n);
+        numberS = numberS < 1 ? 1 : numberS;
+        int sCheckIndex = is + numberS - 1;
+        int lCheckIndex = il + kth - numberS - 1;
+
+        int cutsum;
+        if (s[sCheckIndex] < l[lCheckIndex]) {
+            cutsum = sCheckIndex - is + 1;
+            return m - cutsum <= n
+                    ? call(s, is + cutsum, m - cutsum, l, il, n, kth - cutsum, sumIsOdd)
+                    : call(l, il, n, s, is + cutsum, m - cutsum, kth - cutsum, sumIsOdd);
+        } else if (l[lCheckIndex] < s[sCheckIndex]) {
+            cutsum = lCheckIndex - il + 1;
+            return m <= n - cutsum
+                    ? call(s, is, m, l, il + cutsum, n - cutsum, kth - cutsum, sumIsOdd)
+                    : call(l, il + cutsum, n - cutsum, s, is, m, kth - cutsum, sumIsOdd);
+        } else { // Same
+            return new Double[]{s[sCheckIndex] * 1D,
+                    s[sCheckIndex + 1] < l[lCheckIndex + 1]
+                            ? s[sCheckIndex + 1] * 1D
+                            : l[lCheckIndex + 1] * 1D};
+        }
+    }
+
+    //Assume s and n are null at the same time.
+    public double findMedianSortedArrays(int[] s, int[] l) {
+        int m = s.length, n = l.length;
+        boolean sumIsOdd = ((m + n) & 1) == 1;
+        int kth = sumIsOdd ? (m + n) / 2 + 1 : (m + n) / 2; // (left) median element
+        Double[] median = m <= n
+                ? call(s, 0, m, l, 0, n, kth, sumIsOdd)
+                : call(l, 0, n, s, 0, m, kth, sumIsOdd);
+        return sumIsOdd ? median[0] : (median[0] + median[1]) * 1d / 2;
+    }
+}
+
