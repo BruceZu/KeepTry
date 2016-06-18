@@ -75,6 +75,12 @@ class Solution {
         if (m > n) {
             return exe(l, il, n, s, is, m);
         }
+        if (m == 0) { // start check.
+            if ((n & 1) == 1) {
+                return l[n >> 1];
+            }
+            return (l[n / 2 - 1] + l[n / 2]) * 0.5;
+        }
         boolean lIsOdd = (n & 1) == 1;
         int mIndex = il + (lIsOdd ? n >> 1 : n / 2 - 1);
         int lRightMIndex = il + n / 2;
@@ -138,26 +144,7 @@ class Solution {
     public double findMedianSortedArrays(int[] s, int[] l) {
         assert (s != null);
         assert (l != null);
-        int m = s.length, n = l.length;
-        int lmIndex;
-        int rmIndex;
-        if (n == 0) {
-            if ((m & 1) == 1) {
-                return s[m >> 1];
-            }
-            lmIndex = m / 2 - 1;
-            rmIndex = m / 2;
-            return (s[lmIndex] + s[rmIndex]) * 0.5;
-        }
-        if (m == 0) {
-            if ((n & 1) == 1) {
-                return l[n >> 1];
-            }
-            lmIndex = n / 2 - 1;
-            rmIndex = n / 2;
-            return (l[lmIndex] + l[rmIndex]) * 0.5;
-        }
-        return exe(s, 0, m, l, 0, n);
+        return exe(s, 0, s.length, l, 0, l.length);
     }
 }
 
@@ -291,9 +278,9 @@ class SolutionByFind1KthElementImproved {
         int m = s.length, n = l.length;
         boolean sumIsOdd = ((m + n) & 1) == 1;
         int kth = sumIsOdd ? (m + n) / 2 + 1 : (m + n) / 2; // (left) median element
-        double median = m <= n ? call(s, 0, l, 0, kth) : call(l, 0, s, 0, kth);
+        double median = call(s, 0, l, 0, kth);
         if (!sumIsOdd) {
-            return (median + (m <= n ? call(s, 0, l, 0, kth + 1) : call(l, 0, s, 0, kth + 1))) / 2;
+            return (median + (call(s, 0, l, 0, kth + 1))) / 2;
         }
         return median;
     }
