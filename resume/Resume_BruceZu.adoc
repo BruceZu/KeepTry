@@ -13,10 +13,10 @@
 :My Create project: https://gerrit-review.googlesource.com/#/q/topic:create-project-ui
 
 - Like algorithm, math, coding to defeat every kind technology issue and challenge.
-I appreciate *hacker culture*, *concise* and *quick* code which is improving the life of human kind.
+I appreciate *hacker culture*, *concise* and *quick* code which is improving the life of people.
 Excited to work in *open source* community and interested in distributed application systems.
 Having passion of continuous improvement through refactoring and introducing new technologies.
-- Have been touching *Java*/*Java EE* since 2002. *Full stack* or *back end*. +
+- 14-year *Java*/*Java EE* experience since 2002. *Full stack* or *server side* development. +
 - Contributed to *open source* {Gerrit}[Google Gerrit Code Review] since 2011. +
 - Administrator experience (*8 years*) of web applications running on *Linux*.
 
