@@ -15,6 +15,9 @@
 
 package array.binarysearch;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 /**
  * <pre>
  * Difficulty: Hard
@@ -38,8 +41,8 @@ class Solution {
      * <pre>
      * Idea:
      * Compare 2 arrays's (left) medians.
-     * If they are no same, cut the same numbers of elements(not include current medians), translates to new arrays with same result.
-     * till the shorter array have 2 or 1 element left.
+     * If they are no same, cut the same numbers of elements(not include current medians).
+     * translates to new arrays with same result. till the shorter array have 2 or 1 element left.
      * Focus on medians.
      *
      * 1> keep the shorter array at left, thus only check its length.
@@ -106,7 +109,9 @@ class Solution {
         }
         // median index, when the length is even using the left median index
         boolean sIsOdd = (m & 1) == 1;
-        int smIndex = is + (sIsOdd ? m >> 1 : m / 2 - 1);
+        int cutNum = sIsOdd ? m >> 1 : m / 2 - 1;
+        int smIndex = is + cutNum;
+
         if (m == 2) {
             if (!lIsOdd) {
                 if (l[mIndex] <= s[is] && s[is + 1] <= l[lRightMIndex]) {
@@ -130,13 +135,13 @@ class Solution {
             }
             return s[smIndex];
         }
-        int cut = smIndex - is;
-        m = m - cut;
-        n = n - cut;
+
+        m = m - cutNum;
+        n = n - cutNum;
         if (s[smIndex] < l[mIndex]) {
-            is = is + cut;
+            is = is + cutNum;
         } else {
-            il = il + cut;
+            il = il + cutNum;
         }
         return exe(s, is, m, l, il, n);
     }
@@ -283,5 +288,73 @@ class SolutionByFind1KthElementImproved {
             return (median + (call(s, 0, l, 0, kth + 1))) / 2;
         }
         return median;
+    }
+}
+
+class Solution2 {
+    /**
+     * <pre>
+     *     Check if there is one array is empty firstly.
+     *
+     *     Define kth as median, or define and search left median then right median.
+     *     Do not care which array is shorter and longer, just care which array the kth should be in.
+     *     Always assume the kth is in a array till left index > right index, that means result is sure in b array
+     *
+     *     Valid boundary left and right:
+     *     a:  1 ....... l
+     *     b:  1....m
+     *
+     *     left + m = kth.
+     *  So left = kth - m
+     *     right = kth
+     *
+     * @see <a href="http://www2.myoops.org/twocw/mit/NR/rdonlyres/Electrical-Engineering-and-Computer-Science/6-046JFall-2005/30C68118-E436-4FE3-8C79-6BAFBB07D935/0/ps9sol.pdf"
+     * > link </a>
+     */
+    public double searchKthValue(int[] a, int[] b, int leftIndex, int rightIndex, int kth) {
+        int l = a.length;
+        int m = b.length;
+        if (leftIndex > rightIndex) {
+            leftIndex = max(1, kth - l) - 1;
+            rightIndex = min(kth, m) - 1;
+            return searchKthValue(b, a, leftIndex, rightIndex, kth);
+        }
+
+        int i = (leftIndex + rightIndex) / 2;
+        int j = kth - (i + 1) - 1;
+
+        int v = a[i];
+        if ((j <= -1 || 0 <= j && j < b.length && b[j] <= v) &&
+                (0 <= j + 1 && j + 1 < b.length && v <= b[j + 1] || j + 1 >= b.length)) {
+            return v;
+        } else if (0 <= j && j < b.length && v <= b[j]) {
+            return searchKthValue(a, b, i + 1, rightIndex, kth);
+        }
+        return searchKthValue(a, b, leftIndex, i - 1, kth);
+    }
+
+    public double findMedianSortedArrays(int[] a, int[] b) {
+        assert (a != null);
+        assert (b != null);
+        int l = a.length;
+        int m = b.length;
+        int[] longer = l < m ? b : a;
+        int[] shorter = l < m ? a : b;
+
+        if (shorter.length == 0) {
+            int mIndex = (longer.length - 1) / 2;
+            int next = (longer.length) / 2;
+            return (longer[mIndex] + longer[next]) * 0.5;
+        }
+
+        int kth = (l + m + 1) / 2;
+        int leftIndex = max(1, kth - m) - 1;
+        int rightIndex = min(kth, l) - 1;
+        double result = searchKthValue(a, b, leftIndex, rightIndex, kth);
+        if (((l + m) & 1) == 0) {
+            double rightMedian = searchKthValue(a, b, leftIndex, rightIndex, kth + 1);
+            return (result + rightMedian) * 0.5;
+        }
+        return result;
     }
 }
