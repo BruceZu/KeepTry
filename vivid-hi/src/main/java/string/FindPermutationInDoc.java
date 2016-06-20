@@ -17,7 +17,7 @@ package string;import java.util.HashMap;
 import java.util.Map;
 
 public class FindPermutationInDoc {
-    /* string array， A and B. B is like a doc.
+    /* String array， A and B. B is like a doc.
        check if there is a sub-list of doc that is A's permutation，
        require the sub-list is consecutive sub list,
         e.g.
@@ -30,9 +30,9 @@ public class FindPermutationInDoc {
         return no
      */
 
-    private static Map getMapOf(String[] arr, int startIndexInclusive, int endIndexInclusive) {
+    private static Map getMapOf(String[] arr, int is, int si) {
         HashMap<String, Integer> r = new HashMap<String, Integer>();
-        for (int i = startIndexInclusive; i <= endIndexInclusive; i++) {
+        for (int i = is; i <= si; i++) {
             String w = arr[i];
             if (r.containsKey(w)) {
                 r.put(w, r.get(w) + 1);

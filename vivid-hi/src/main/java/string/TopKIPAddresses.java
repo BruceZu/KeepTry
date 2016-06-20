@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * Given millions of log, an example log file is "Abdfdfd\tdfdfd\t1.23.132.21\n" and at the end of the log it will have an IP address.
  * You are asked to select the Top K IP addresses
  * Follow Up:
- * What if one machien can't store the whole log files
+ * What if one machine can't store the whole log files
  * What if one machine can't store the whole IP address
  */
 
