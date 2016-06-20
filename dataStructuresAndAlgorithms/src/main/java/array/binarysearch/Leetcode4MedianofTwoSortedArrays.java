@@ -358,3 +358,15 @@ class Solution2 {
         return result;
     }
 }
+
+class Solution3 {
+
+    /**
+     * @see <a href ="https://leetcode.com/discuss/41621/very-concise-iterative-solution-with-detailed-explanation"> Idea 1 </a>
+     *       <a href="https://leetcode.com/discuss/15790/share-my-o-log-min-m-n-solution-with-explanation"> Idea 2 </a>
+     */
+    public double findMedianSortedArrays(int[] a, int[] b) {
+        //todo
+        return 0;
+    }
+}
