@@ -75,6 +75,5 @@ public class PredecessorSuccessorTest {
         Assert.assertEquals(Arrays.toString(go(18f, root)), "[key = 17.0, null]");
         Assert.assertEquals(Arrays.toString(go(8f, root)), "[null, key = 9.0]");
         Assert.assertEquals(Arrays.toString(go(1f, root)), "[null, key = 8.0]");
-
     }
 }
