@@ -28,8 +28,8 @@ package tree.bst;
  *           e.g. key is 13 -> result is [12, 14]
  *       if the given key is not found, then
  *           this sure will be confirmed at one leaf child of the given binary search tree.
- *           when starting bianry search from the root, just keep the left bound when go right, or right bound when go left till
- *           reach this leaf node.
+ *           when starting binary search from the root, just keep the last left bound when go right,
+ *           or last right bound when go left till reach this leaf node.
  *           e.g. key is 13.5 -. result is[13, 14]
  *
  *   Also the give key may be not lie in the scope of BST.
