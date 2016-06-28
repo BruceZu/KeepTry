@@ -19,9 +19,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Let A be an array of size n ≥ 2 containing integers from 1 to n−1 inclusive, one
- * of which is repeated. Describe an algorithm for finding the integer in A that is
- * repeated.
+ * <pre>
+ * Let A be an array of size n ≥ 2 containing integers from 1 to n−1 inclusive,
+ *
+ *  e.g. n = 5
+ *  3 1 2 3 4
+ *  0 1 2 3 4
+ *
+ *  4 1 2 3 4
+ *  0 1 2 3 4
+ *
+ *  one of which is repeated. Describe an algorithm for finding the integer in A that is
+ *  repeated.
  */
 public class FindRepeatedInteger {
     public static int getTheRepeatedInteger(int[] array) {
