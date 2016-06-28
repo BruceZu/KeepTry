@@ -19,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static array.FirstRepeatedString.firstDuplicate;
 
@@ -33,6 +34,7 @@ public class FirstRepeatedStringTest {
         Assert.assertEquals("a", firstDuplicate(new String[]{"a", "b", "a"}));
         Assert.assertEquals("a", firstDuplicate(new String[]{"a", null, "a", null}));
         Assert.assertEquals("nullnull", firstDuplicate(new String[]{"a", "b", null, null}));
+        Assert.assertEquals("nullnull", firstDuplicate(new String[]{null, null, "a", "b",}));
 
         HashMap map = new HashMap();
         Assert.assertEquals(null, map.get(null));
@@ -42,5 +44,10 @@ public class FirstRepeatedStringTest {
         Assert.assertEquals(2, map.get(null));
         map.put(null, null);
         Assert.assertEquals(null, map.get(null));
+
+        HashSet set = new HashSet();
+        set.add(null);
+        Assert.assertEquals(1, set.size());
+        Assert.assertTrue(set.contains(null));
     }
 }
