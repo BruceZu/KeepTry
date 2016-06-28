@@ -21,7 +21,7 @@ import static array.Common.swap;
 public class SelectionSort {
     /**
      * Idea:
-     * For each loop，select the minimun one from the left member (un-sorted).
+     * For each loop，select the minimum one from the left member (un-sorted).
      * Swap the ith member with the selected one.
      * Run time is O(n^2).
      * 1 > independent of the array is sorted or not.
