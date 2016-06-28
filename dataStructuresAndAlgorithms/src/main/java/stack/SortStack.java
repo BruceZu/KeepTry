@@ -19,13 +19,14 @@ import java.util.Stack;
 
 /**
  * Sort the stack using only Stack API, without using other data structure
+ * Ascending from bottom to top
  */
 public class SortStack<T extends Comparable<T>> {
-    /**
-     * Ascending from bottom to top
-     */
     int sorted;
 
+    /**
+     * Just Bubble Sort.
+     */
     private void bubble(Stack<T> s, T max) {
         if (s.empty() || s.size() == sorted) {
             s.push(max);
@@ -53,6 +54,37 @@ public class SortStack<T extends Comparable<T>> {
         while (sorted != s.size()) {
             bubble(s, s.pop());
         }
+        return s;
+    }
+
+    /**
+     * Just Insert Sort.
+     */
+    private void insertSort(Stack<T> s) {
+        if (s.empty()) {
+            return;
+        }
+        T currentTop = s.pop();
+        insertSort(s);
+        insert(s, currentTop);
+    }
+
+    private void insert(Stack<T> s, T insert) {
+        if (s.isEmpty() || insert.compareTo(s.peek()) <= 0) {
+            s.push(insert);
+            return;
+        }
+
+        T current = s.pop();
+        insert(s, insert);
+        s.push(current);
+    }
+
+    public Stack<T> sortAscendingByInsertSort(Stack<T> s) {
+        if (s == null || s.size() <= 1) {
+            return s;
+        }
+        insertSort(s);
         return s;
     }
 }
