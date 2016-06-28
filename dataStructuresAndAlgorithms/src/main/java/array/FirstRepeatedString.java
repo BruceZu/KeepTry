@@ -23,6 +23,8 @@ public class FirstRepeatedString {
      * Precess null respectively
      *
      * @return null if there is not found. “nullnull” if the the second null is first found.
+     *
+     * runtime O(N)
      */
     public static String firstDuplicate(String[] strs) {
         if (strs == null || strs.length <= 1) {
