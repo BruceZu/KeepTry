@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 @RunWith(Parameterized.class)
@@ -112,11 +113,18 @@ public class FIFOQueueTest {
         q.offer(8);
         Assert.assertEquals(q.poll(), 9, 0);
         Assert.assertEquals(q.toString(), "[4, 6, 8]");
+        Assert.assertTrue(q.poll() == 4);
+        q.offer(1);
+        q.offer(2);
+        q.offer(3);
+        Assert.assertEquals(q.toString(), "[6, 8, 1, 2, 3]");
         if (CircularQueue.class.isInstance(q)) {
             // CircularQueue.class.isAssignableFrom(q.getClass())
             try {
-                CircularQueue.class.getMethod("rotate").invoke(q);
-                Assert.assertEquals(q.toString(), "[6, 8, 4]");
+                Method rotate = CircularQueue.class.getMethod("rotate");
+                rotate.setAccessible(true);
+                rotate.invoke(q);
+                Assert.assertEquals(q.toString(), "[8, 1, 2, 3, 6]");
             } catch (Throwable e) {
                 e.printStackTrace();
             }

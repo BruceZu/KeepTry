@@ -224,8 +224,7 @@ public class QueueWith2Stacks<E> implements Queue, FIFOQueue {
         }
     }
 
-    @Override
-    public String toString() {
+    public String toString2() {
         synchronized (out) {
             synchronized (in) {
                 StringBuilder sb = new StringBuilder();
@@ -236,9 +235,54 @@ public class QueueWith2Stacks<E> implements Queue, FIFOQueue {
                     sb.append(", ");
                 }
                 readDownToTop(in, sb, in.size());
-                
-                sb.append("]");
-                return sb.toString();
+                return sb.append("]").toString();
+            }
+        }
+    }
+
+    /**
+     * <pre>
+     * in       1 2 3 4 <-
+     * out      <-
+     *
+     * in       5 6 7 8 <-
+     * out      4 3 2 1 <-
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        synchronized (out) {
+            synchronized (in) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("[");
+
+                boolean first = true;
+                E[] o = (E[]) out.toArray();
+                for (int i = o.length - 1; i >= 0; i--) {
+                    if (first) {
+                        sb.append(o[i].toString());
+                        first = false;
+                        continue;
+                    }
+                    sb.append(", ").append(o[i].toString());
+                }
+
+                if (!out.empty() && !in.empty()) {
+                    sb.append(", ");
+                }
+
+                E[] inArr = (E[]) in.toArray();
+                first = true;
+                for (int i = 0; i < inArr.length; i++) {
+                    if (first) {
+                        sb.append(inArr[i].toString());
+                        first = false;
+                        continue;
+                    }
+                    sb.append(", ").append(inArr[i].toString());
+                }
+                return sb.append("]").toString();
             }
         }
     }
