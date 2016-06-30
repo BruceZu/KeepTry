@@ -69,7 +69,7 @@ public class ShuffleListTest {
         }
     }
 
-    @Test(timeout = 1000l, expected = Test.None.class)
+    @Test(timeout = 10l, expected = Test.None.class)
     public void shuffleTest() {
         StringBuilder sb = new StringBuilder();
         ShuffleList.toString(l, sb);
