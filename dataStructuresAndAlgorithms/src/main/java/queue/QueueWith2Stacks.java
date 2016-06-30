@@ -198,24 +198,47 @@ public class QueueWith2Stacks<E> implements Queue, FIFOQueue {
         throw new NotImplementedException();
     }
 
+    private void readTopToDown(Stack<E> s, StringBuilder sb) {
+        if (!s.empty()) {
+            E cur = s.pop();
+            sb.append(cur.toString());
+            if (s.size() != 0) {
+                sb.append(", ");
+            }
+
+            readTopToDown(s, sb);
+            s.push(cur);
+        }
+    }
+
+    private void readDownToTop(Stack<E> s, StringBuilder sb, int size) {
+        if (!s.empty()) {
+            E cur = s.pop();
+            readDownToTop(s, sb, size);
+
+            s.push(cur);
+            sb.append(cur.toString());
+            if (s.size() != size) {
+                sb.append(", ");
+            }
+        }
+    }
+
     @Override
     public String toString() {
         synchronized (out) {
             synchronized (in) {
                 StringBuilder sb = new StringBuilder();
-                if (!out.empty()) {
-                    String os = out.toString();
-                    sb.append(os.substring(1, os.length() - 1)).reverse();
+                sb.append("[");
+
+                readTopToDown(out, sb);
+                if (!out.empty() && !in.empty()) {
+                    sb.append(", ");
                 }
-                if (!in.empty()) {
-                    String is = in.toString();
-                    if (!out.empty()) {
-                        sb.append(", ");
-                    }
-                    sb.append(is.substring(1, is.length() - 1));
-                }
+                readDownToTop(in, sb, in.size());
+                
                 sb.append("]");
-                return "[" + sb.toString();
+                return sb.toString();
             }
         }
     }
