@@ -19,6 +19,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Thanks a lot to Wen, Jie.
+ */
 public class ChangeMoney {
     private int[] currencys;
     private int solutonsNum;
@@ -26,8 +29,8 @@ public class ChangeMoney {
     public ChangeMoney(int[] currencys) {
         this.currencys = currencys;
     }
-    
-    private void select(int from, int target, List solution) {
+
+    private void selectWithDetail(int from, int target, List solution) {
         for (int i = from; i < currencys.length; i++) {
             int v = currencys[i];
             int nextTarget = target - v;
@@ -43,23 +46,48 @@ public class ChangeMoney {
                 return;
             }
             solution.add(currencys[i]);
-            select(i, nextTarget, solution);
+            selectWithDetail(i, nextTarget, solution);
             solution.remove(solution.size() - 1);
         }
     }
 
-    public void changeWays(int target) {
+
+    private void select(int from, int target) {
+        for (int i = from; i < currencys.length; i++) {
+            int v = currencys[i];
+            int nextTarget = target - v;
+            if (nextTarget == 0) {
+                solutonsNum++;
+                return;
+            }
+            if (nextTarget < 0) {
+                return;
+            }
+
+            select(i, nextTarget);
+        }
+    }
+
+
+    public void changeWays(int target, boolean withDetail) {
         Arrays.sort(currencys);
         solutonsNum = 0;
 
-        List<Integer> solution = new LinkedList<>();
-        select(0, target, solution);
+        if (withDetail) {
+            List<Integer> solution = new LinkedList<>();
+            selectWithDetail(0, target, solution);
+        } else {
+            select(0, target);
+        }
 
         System.out.println("in total:" + solutonsNum);
     }
 
+
     public static void main(String[] args) {
         ChangeMoney cm = new ChangeMoney(new int[]{1, 2, 5});
-        cm.changeWays(4);
+
+        cm.changeWays(5, true);
+        cm.changeWays(5, false);
     }
 }
