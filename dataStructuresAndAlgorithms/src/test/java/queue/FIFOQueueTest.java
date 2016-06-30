@@ -78,7 +78,8 @@ public class FIFOQueueTest {
                     public String toString() {
                         return deque.toString();
                     }
-                });
+                },
+                new QueueWith2Stacks());
     }
 
     private FIFOQueue<Integer> q;
@@ -88,7 +89,7 @@ public class FIFOQueueTest {
     }
 
     @Test(timeout = 10L, expected = Test.None.class)
-    public void test() {
+    public void testBySingleThread() {
         q.offer(5);
         q.offer(3);
         Assert.assertEquals(q.toString(), "[5, 3]");
