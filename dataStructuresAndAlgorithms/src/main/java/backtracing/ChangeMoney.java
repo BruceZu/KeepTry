@@ -21,14 +21,14 @@ import java.util.List;
 
 /**
  * Thanks a lot to Wen, Jie.
- *
+ * <pre>
  * Note:
- *   1. Sort in ascending order before search.
- *   2. Next loop will start from current index.
- *   3. When backtracking happen, solution need restore to original status.
  *
- *   To make the loop easy, keep the currency types and solutions number in global variable
+ *       1. Sort in ascending order before search.
+ *       2. Next loop will start from current index. avoid repeated solution
+ *       3. When backtracking happen, solution need restore to original status.
  *
+ * To make the loop easy, keep the currency types and solutions number in global variable
  */
 public class ChangeMoney {
     private int[] currencys;
@@ -89,11 +89,19 @@ public class ChangeMoney {
         System.out.println("in total:" + solutonsNum);
     }
 
-
+    /**
+     * <pre>
+     * [1, 1, 1, 1, 1, 1, 1]
+     * [1, 1, 1, 1, 1, 2]
+     * [1, 1, 1, 2, 2]
+     * [1, 1, 5]
+     * [1, 2, 2, 2]
+     * [2, 5]
+     */
     public static void main(String[] args) {
         ChangeMoney cm = new ChangeMoney(new int[]{1, 5, 2});
 
-        cm.changeWays(5, true);
-        cm.changeWays(5, false);
+        cm.changeWays(7, true);
+        cm.changeWays(7, false);
     }
 }
