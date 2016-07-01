@@ -21,6 +21,14 @@ import java.util.List;
 
 /**
  * Thanks a lot to Wen, Jie.
+ *
+ * Note:
+ *   1. Sort in ascending order before search.
+ *   2. Next loop will start from current index.
+ *   3. When backtracking happen, solution need restore to original status.
+ *
+ *   To make the loop easy, keep the currency types and solutions number in global variable
+ *   
  */
 public class ChangeMoney {
     private int[] currencys;
@@ -51,7 +59,6 @@ public class ChangeMoney {
         }
     }
 
-
     private void select(int from, int target) {
         for (int i = from; i < currencys.length; i++) {
             int v = currencys[i];
@@ -67,7 +74,6 @@ public class ChangeMoney {
             select(i, nextTarget);
         }
     }
-
 
     public void changeWays(int target, boolean withDetail) {
         Arrays.sort(currencys);
@@ -85,7 +91,7 @@ public class ChangeMoney {
 
 
     public static void main(String[] args) {
-        ChangeMoney cm = new ChangeMoney(new int[]{1, 2, 5});
+        ChangeMoney cm = new ChangeMoney(new int[]{1, 5, 2});
 
         cm.changeWays(5, true);
         cm.changeWays(5, false);
