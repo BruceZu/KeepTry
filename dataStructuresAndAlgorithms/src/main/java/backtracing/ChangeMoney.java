@@ -28,7 +28,7 @@ import java.util.List;
  *   3. When backtracking happen, solution need restore to original status.
  *
  *   To make the loop easy, keep the currency types and solutions number in global variable
- *   
+ *
  */
 public class ChangeMoney {
     private int[] currencys;
@@ -38,8 +38,8 @@ public class ChangeMoney {
         this.currencys = currencys;
     }
 
-    private void selectWithDetail(int from, int target, List solution) {
-        for (int i = from; i < currencys.length; i++) {
+    private void selectWithDetail(int remain, int target, List solution) {
+        for (int i = remain; i < currencys.length; i++) {
             int v = currencys[i];
             int nextTarget = target - v;
             if (nextTarget == 0) {
