@@ -19,7 +19,7 @@ public class NoRepeated2Num {
 
     /**
      * <pre>
-     * Find the two non-repeating elements in an array of repeating elements
+     * Find the two non-repeating elements in an array of repeating elements (twice)
      *
      *  Q:  2, 4, 2, 7, 9, 4, -5, -5
      *  (not in order, negative and positive integer)
@@ -79,7 +79,7 @@ public class NoRepeated2Num {
      * For example, array = {4, 2, 4, 5, 2, 3, 1} and n = 5
      *
      * The above array has n + 2 = 7 elements with all elements occurring once except 2 and 4 which occur twice.
-     * So the output should be 4 2
+     * So the output should be 4, 2
      *
      *
      *  Idea A:
