@@ -28,7 +28,7 @@ import java.util.Set;
  * Figure out the missed number.
  * The input is string containing only numbers.
  */
-public class Leetcode268MissingNumber {
+public class Leetcode268MissingNumber2 {
     static int STR_NUMBER = 249;
 
     private static int[] createTestNumbers() {
