@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package tree.bst;
+package tree.binarytree.bst;
 
 /**
  * <pre>
