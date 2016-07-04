@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends AbstractBinaryTree<T, E> {
-    private class BinaryTreeNodeImplement<N extends BinaryTreeNodeImplement<N, E>, E> implements BinaryTreeNode<N, E> {
+    private static class BinaryTreeNodeImplement<N extends BinaryTreeNodeImplement<N, E>, E> implements BinaryTreeNode<N, E> {
         private E e;
         private N parent;
 
@@ -63,6 +63,12 @@ public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends Abst
         @Override
         public N getRight() {
             return this.right;
+        }
+
+        @Override
+        public boolean updateElement(E e) {
+            this.setElement(e);
+            return true;
         }
 
         @Override
@@ -122,6 +128,92 @@ public class BinaryTreeImplement<T extends BinaryTreeNode<T, E>, E> extends Abst
         left.setParent((BinaryTreeNodeImplement) n);
         size++;
         return (T) left;
+    }
+
+    @Override
+    public T insertLeftFor(T n, E in) {
+        valid(n);
+        T left = n.getLeft();
+        BinaryTreeNodeImplement newLeft = new BinaryTreeNodeImplement(in);
+        ((BinaryTreeNodeImplement) n).setLeft(newLeft);
+        newLeft.setParent((BinaryTreeNodeImplement) n);
+        if (left != null) {
+            newLeft.setLeft((BinaryTreeNodeImplement) left);
+            ((BinaryTreeNodeImplement) left).setParent(newLeft);
+        }
+        size++;
+        return (T) newLeft;
+    }
+
+    @Override
+    public void replaceByRightSubTree(T n) {
+        valid(n);
+        if (n.getLeft() != null) {
+            throw new IllegalArgumentException("The node n should has not left children");
+        }
+        T right = n.getRight();
+        BinaryTreeNodeImplement p = (BinaryTreeNodeImplement) n.getParent();
+
+        if (right != null) {
+            ((BinaryTreeNodeImplement) right).setParent(p);
+        }
+        if (n != root) {
+            if (p.getLeft() == n) {
+                p.setLeft((BinaryTreeNodeImplement) right);
+            } else {
+                p.setRight((BinaryTreeNodeImplement) right);
+            }
+        } else {
+            root = right;
+        }
+
+        ((BinaryTreeNodeImplement) n).setParent(null);
+        ((BinaryTreeNodeImplement) n).setLeft(null);
+        size--;
+    }
+
+    public void replaceByLeftSubTree(T n) {
+        valid(n);
+        if (n.getRight() != null) {
+            throw new IllegalArgumentException("The node n should has not right children");
+        }
+        T left = n.getLeft();
+        BinaryTreeNodeImplement p = (BinaryTreeNodeImplement) n.getParent();
+
+        if (left != null) {
+            ((BinaryTreeNodeImplement) left).setParent(p);
+        }
+        if (n != root) {
+            if (p.getLeft() == n) {
+                p.setLeft((BinaryTreeNodeImplement) left);
+            } else {
+                p.setRight((BinaryTreeNodeImplement) left);
+            }
+        } else {
+            root = left;
+        }
+
+        ((BinaryTreeNodeImplement) n).setParent(null);
+        ((BinaryTreeNodeImplement) n).setLeft(null);
+        size--;
+    }
+
+    @Override
+    public void cutLeaf(T n) {
+        if (n.getLeft() != null || n.getRight() != null) {
+            throw new IllegalArgumentException("n is assumed as a leaf");
+        }
+        T p = n.getParent();
+        if (n == root) {
+            root = null;
+        } else {
+            if (p.getLeft() == n) {
+                ((BinaryTreeNodeImplement) p).setLeft(null);
+            } else {
+                ((BinaryTreeNodeImplement) p).setRight(null);
+            }
+        }
+        size--;
     }
 
     @Override

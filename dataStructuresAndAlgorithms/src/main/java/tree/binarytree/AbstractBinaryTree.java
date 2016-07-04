@@ -311,6 +311,10 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
      */
     @Override
     public void drawing() {
+        if (root() == null) {
+            System.out.println("tree is null");
+            return;
+        }
         int high = 2 * height() + 1;
         int width = size();
         E[][] XYCoordinates = (E[][]) new Object[high][width];

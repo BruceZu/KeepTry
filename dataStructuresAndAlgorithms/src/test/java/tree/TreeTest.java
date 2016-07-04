@@ -68,6 +68,12 @@ public class TreeTest {
             return children;
         }
 
+        @Override
+        public boolean updateElement(E e) {
+            this.setElement(e);
+            return true;
+        }
+
         public void setChildren(List<T> children) {
             this.children = children;
         }

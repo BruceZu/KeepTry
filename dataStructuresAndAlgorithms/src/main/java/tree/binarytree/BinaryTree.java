@@ -65,6 +65,52 @@ public interface BinaryTree<T extends BinaryTreeNode<T, E>, E> extends Tree<T, E
 
     T createLeftFor(T n, E e);
 
+    /**
+     * <pre>
+     *      n              n
+     *     /       =>     /
+     *   old left        left(e)
+     * @param n         /    \
+     * @param e   old left   null
+     * @return
+     */
+    T insertLeftFor(T n, E e);
+
+    /**
+     * <pre>
+     * the n must has not right child or n is null.
+     *  1
+     *        p          p
+     *       /          /
+     *      n      => left
+     *     /\
+     *  left null
+     *
+     *  2
+     *    p          p
+     *     \          \
+     *      n      => left
+     *     /\
+     *  left null
+     *
+     *  3
+     *      p      p
+     *     /   =>
+     *    n
+     *
+     *  4
+     *    p       p
+     *     \  =>
+     *      n
+     * @param n
+     * @return
+     */
+    void replaceByLeftSubTree(T n);
+
+    void replaceByRightSubTree(T n);
+
+    void cutLeaf(T n);
+
     T createRightFor(T n, E e);
 
     void attachLeftFor(T n, BinaryTree<? extends BinaryTreeNode<T, E>, E> tree);

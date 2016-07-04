@@ -15,6 +15,7 @@
 
 package tree.binarytree.implementation;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import tree.binarytree.AbstractBinaryTree;
 import tree.binarytree.BinaryTree;
 import tree.binarytree.BinaryTreeNode;
@@ -49,6 +50,7 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
         }
 
         /**
+         * <pre>
          * For every node n of T, let f (n) be the integer defined as follows.
          * • If n is the root of T, then f (n) = 0.
          * • If n is the  left child of n q, then f (n) = 2 f (q)+1.
@@ -56,7 +58,6 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
          *
          *   f (p) ≤ 2^n−2.
          *
-         * <p/>
          * The numbering function f is known as a level numbering of the n in a
          * binary tree T, for it numbers the n on each level of T in increasing order
          * from left to right.
@@ -70,6 +71,12 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
         @Override
         public N getRight() {
             return array[2 * index + 2];
+        }
+
+        @Override
+        public boolean updateElement(E e) {
+            this.setElement(e);
+            return true;
         }
 
         @Override
@@ -141,6 +148,29 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
         array[index] = left;
         size++;
         return (T) left;
+    }
+
+    @Override
+    public T insertLeftFor(T n, E e) {
+        // TODO: 7/3/16
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void replaceByRightSubTree(T n) {
+        // TODO: 7/3/16
+        throw new NotImplementedException();
+    }
+
+    public void replaceByLeftSubTree(T n) {
+        // TODO: 7/3/16
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void cutLeaf(T n) {
+        // TODO: 7/3/16
+        throw new NotImplementedException();
     }
 
     @Override

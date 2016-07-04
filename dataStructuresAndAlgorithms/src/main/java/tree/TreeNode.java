@@ -27,4 +27,6 @@ public interface TreeNode<SELF extends TreeNode<SELF, E>, E> {
     int childrenSize(); // direct children
 
     List<SELF> getChildren(); // direct children
+
+    boolean updateElement(E e);
 }

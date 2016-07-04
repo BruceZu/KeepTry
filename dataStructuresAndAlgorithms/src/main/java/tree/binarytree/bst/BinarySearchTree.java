@@ -18,20 +18,20 @@ package tree.binarytree.bst;
 import tree.binarytree.BinaryTree;
 import tree.binarytree.BinaryTreeNode;
 
-public interface BinarySearchTree<T extends BinaryTreeNode<T, E>, E> extends BinaryTree {
+public interface BinarySearchTree<T extends BinaryTreeNode<T, E>, E extends Comparable<E>> extends BinaryTree {
     /**
      * Add a node to the bst, return the root of new bst
      *
-     * @param node
+     * @param e
      * @return
      */
-    T add(T node);
+    T add(E e);
 
     /**
      * Delete a node to the bst, return the root of new bst
      *
-     * @param node
+     * @param e
      * @return
      */
-    T delete(T node);
+    T delete(E e);
 }
