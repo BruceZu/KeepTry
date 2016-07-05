@@ -82,7 +82,7 @@ public class PalindromeTest {
         expected = "Doc, note: I dissent. A fast never prevents a fatness. I diet on cod";
     }
 
-    @Test(timeout = 900L, expected = Test.None.class)
+    @Test(timeout = 1000L, expected = Test.None.class)
     public void testPalindrome() {
         Assert.assertEquals(expected, PalindromeGeneral.findTheLongestPalindromicSubStrOf(s));
         Assert.assertEquals(0,
@@ -90,7 +90,7 @@ public class PalindromeTest {
                         expected));
     }
 
-    @Test(timeout = 40L, expected = Test.None.class)
+    @Test(timeout = 140L, expected = Test.None.class)
     public void testSpecialPalindrome() {
         s = PalindromeGeneral.cleanAndLowerCase(s);
         expected = PalindromeGeneral.cleanAndLowerCase(expected);
