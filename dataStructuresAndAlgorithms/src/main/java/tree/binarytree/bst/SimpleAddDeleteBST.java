@@ -25,7 +25,7 @@ public class SimpleAddDeleteBST {
     }
 
     /**
-     * <pre>
+     * <pre> 6 minutes, white board, bug-free.
      *
      * find pre-order.
      * if it exist, insert the ‘add’ as its left child which has not right child.
@@ -87,9 +87,8 @@ public class SimpleAddDeleteBST {
         return root;
     }
 
-
     /**
-     * <pre>
+     * <pre>  13 minutes, white board, bug-free
      *
      * Node:
      *  A> the 'delete' is not leaf: the 'replaced by' maybe left child of parent or right child of parent.
