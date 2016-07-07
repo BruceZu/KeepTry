@@ -24,7 +24,7 @@ import java.util.Random;
 public class RandomByRandom {
     private static Random r = new Random();
 
-    public static int random5() {
+    private static int random5() {
         return r.nextInt(5);
     }
 
@@ -42,7 +42,8 @@ public class RandomByRandom {
      *                   15,16,17,18,19;      3
      *                   20,21,22,23,24 ]     4
      *      So at most it can construct random25(). or add more like:
-     *         25 * random5() + 5 * random5() + random5()
+     *
+     *      125 * random5() + 25 * random5() + 5 * random5() + random5()
      *
      *      For those < 25, to make sure the result is uniformly distributed:
      * B    need cut some element
@@ -54,5 +55,37 @@ public class RandomByRandom {
             r = 5 * random5() + random5();
         }
         return r % 7;
+    }
+
+    /**
+     * <pre>
+     * random5:    0  1  2  3  4
+     *      %2:    0  1  0  1  0
+     * so need cut out 2
+     * or cut out 4
+     * or cut out 2, 3 and 4
+     * to make sure result is uniformly distributed.
+     */
+    public static int rand2() {
+        int r = random5();
+        while (r == 4) {
+            r = random5();
+        }
+        return r % 2;
+    }
+
+    /**
+     * <pre>
+     *  r is      0  1
+     *            2  3
+     *            4  5
+     *            6  7
+     */
+    public static int rand7() {
+        int r = 4 * rand2() + 2 * rand2() + rand2();
+        while (r == 7) {
+            r = 4 * rand2() + 2 * rand2() + rand2();
+        }
+        return r;
     }
 }
