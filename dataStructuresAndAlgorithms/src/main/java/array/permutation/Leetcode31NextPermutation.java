@@ -48,7 +48,7 @@ package array.permutation;
  *        if not found then reverse the whole arr;
  *        else
  *              i is the one 'need swap';
- *              find the j to 'swap with':  left <--right . arr[j] > 'need swap'.
+ *              find the j to 'swap with':  left <---( try binary search )----right . arr[j] > 'need swap'.
  *
  *             a>  swap arr[i] and arr[j]
  *             b>  reverse [i+1~ end]
