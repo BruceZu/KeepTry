@@ -59,46 +59,46 @@ import java.util.List;
  * @see <a href = "https://leetcode.com/problems/permutations/">leetcode</a>
  */
 public class Leetcode46Permutations {
-
-    private List<List<Integer>> result;
-    private List cp; //currentPermutation
+    private List<List<Integer>> r;
+    private List p;
+    private int[] ms;
     private boolean[] selected;
-    private int[] nums;
 
-    private void currentNumber() {
-        if (cp.size() == nums.length) {
-            result.add(new ArrayList(cp));
+    private void permute3() {
+        if (p.size() == ms.length) {
+            r.add(new ArrayList(p));
             return;
         }
-        for (int i = 0; i < nums.length; i++) {
-            if (selected[i] == true) {
-                continue;
+
+        for (int i = 0; i < ms.length; i++) {
+            if (selected[i] != true) {
+                p.add(ms[i]);//  -->
+                selected[i] = true;//  -->
+
+                permute3();
+
+                p.remove(p.size() - 1); // <--
+                selected[i] = false; // <--
             }
-            cp.add(nums[i]);    //  -->
-            selected[i] = true; //  -->
-
-            currentNumber();
-
-            cp.remove(cp.size() - 1); // <--
-            selected[i] = false;      // <--
         }
     }
 
+
     /**
      * back-tracing
+     * Big O: runtime O(N!), space O(N!)
      */
-    public List<List<Integer>> permute(int[] in) {
+    public List<List<Integer>> permute3(int[] in) {
         if (in == null) {
             return null;
         }
-        nums = in;
-        result = new ArrayList();
-        cp = new ArrayList(nums.length);
-        selected = new boolean[nums.length];
+        ms = in;
+        r = new ArrayList();
+        p = new ArrayList(ms.length);
+        selected = new boolean[ms.length];
 
-
-        currentNumber();
-        return result;
+        permute3();
+        return r;
     }
 
     /**
@@ -108,51 +108,173 @@ public class Leetcode46Permutations {
      *     1 2 3
      *           1 2 3
      *                  start = end
+     *           rotate
+     *
      *           1 3 2
      *                  start = end
-     *     2 1 3
-     *           2 1 3
-     *                  start = end
+     *           rotate
+     *           1 2 3
+     *     rotate
+     *     2 3 1
      *           2 3 1
      *                  start = end
+     *           rotate
+     *           2 1 3
+     *                 start = end
+     *           rotate
+     *           2 3 1
+     *     rotate
      *     3 1 2
      *           3 1 2
      *                  start = end
+     *           rotate
      *           3 2 1
      *                  start = end
+     *           rotate
+     *           3 1 2
+     *    rotate
+     *    1 2 3
+     *    the result is
+     *      [1, 2, 3]
+     *      [1, 3, 2]
+     *      [2, 3, 1]
+     *      [2, 1, 3]
+     *      [3, 1, 2]
+     *      [3, 2, 1]
      *
-     *  look down to see the choices of fist , second, .... number of permutations.
+     *  look down to see the choices of fist , second, .... number of permutations. like a Permutation Lock.
+     *
+     *  Big O: run time O(N!), space  O(N!)
      */
-    public List<List<Integer>> permute2(int[] nums) {
-        List<List<Integer>> ll = new ArrayList<List<Integer>>();
-        nextNumber(nums, ll, 0, nums.length - 1);
-        return ll;
+    private void rotateNextChoice(int si, int ei) {
+        int siv = ms[si];
+        for (int i = si; i < ei; i++) {
+            ms[i] = ms[i + 1];
+        }
+        ms[ei] = siv;
     }
 
-    public void nextNumber(int[] nums, List<List<Integer>> ll, int start, int end) {
-        if (end == start) {// all numbers are decided
-            List<Integer> l = new ArrayList<>();
-            for (int n : nums) {
-                l.add(n);
+    /**
+     * <pre>
+     * Note:
+     *   1 Arrays.asList(ms) can not work; it will wrap a []
+     *   2 choice need -- each loop
+     *   3 the loop only about choices, not affect next recursive which always is 'si +1'
+     *
+     * @param si start index
+     * @param ei end index
+     */
+    private void pNextNumber(int si, int ei) {
+        if (si == ei) {
+            List<Integer> p = new ArrayList(ms.length);
+            for (int i = 0; i < ms.length; i++) {
+                p.add(ms[i]);
             }
-            ll.add(l);
+            r.add(p);
             return;
-        } else {
-            int choices = end - start + 1;
-            for (int j = 1; j <= choices; j++) {
-                nextNumber(nums, ll, start + 1, end);
-                rotateToNextChoice(nums, start, end);
-            }
+        }
+        int choices = ei - si + 1;
+        while (choices-- >= 1) {
+            pNextNumber(si + 1, ei);
+            rotateNextChoice(si, ei);
         }
     }
 
-    public void rotateToNextChoice(int[] num, int start, int end) {
-        int temp = num[start];
-        int i = start;
-        while (i < end) {
-            num[i] = num[i + 1];
-            i++;
+    /**
+     * <pre>
+     * 10 minutes
+     * Note:
+     *   input check null
+     *   it is length -1, not length.
+     */
+    public List<List<Integer>> permute2(int[] in) {
+        if (in == null) {
+            return null;
         }
-        num[i] = temp;
+        ms = in;
+        r = new ArrayList();
+        pNextNumber(0, ms.length - 1);
+        return r;
+    }
+
+    /**
+     * <pre>
+     * Note:
+     * 2 swaps:
+     * fist swap: choices of current number depends on pre
+     * without the last swap:
+     *      [[1,2,3],[1,3,2],
+     *      [3,1,2],[3,2,1],   3 get back 1 then 2 push 1 to the last
+     *      [1,2,3],[1,3,2]]   now 1 is duplicated
+     *
+     * for the case [1, 2, 3]
+     * Result is
+     *      [1, 2, 3]
+     *      [1, 3, 2]
+     *      [2, 1, 3]
+     *      [2, 3, 1]
+     *      [3, 2, 1]
+     *      [3, 1, 2]
+     *
+     *
+     *  Note:
+     *  <1>
+     *   before swap need check i!=j;
+     *   Here the nums is distinct numbers:
+     *   i == j means
+     *   ms[i]^=ms[i]  // ms[i] ==0
+     *   ms[i]^=ms[i]  // ms[i] ==0
+     *   ms[i]^=ms[i]  // ms[i] ==0
+     *
+     *   So if the nums is not distinct numbers.
+     *   Do not use ^= operation.
+     *
+     *   <2> if use while loop make sure the variable not affect the actions in loop;
+     *
+     *     it is ok:
+     *      int choice = si;
+     *      while (choice <=ei){  // wrong while (choice++ <=ei){
+     *          swap(si, choice);
+     *          pNextNum(si + 1, ei);
+     *          swap(si, choice);
+     *          choice ++;
+     *      }
+     * }
+     */
+
+    private void swap(int i, int j) {
+        if (i != j) {
+            ms[i] ^= ms[j];
+            ms[j] ^= ms[i];
+            ms[i] ^= ms[j];
+        }
+    }
+
+    private void pNextNum(int si, int ei) {
+        if (si == ei) {
+            List p = new ArrayList(ms.length);
+            for (int i = 0; i < ms.length; i++) {
+                p.add(ms[i]);
+            }
+            r.add(p);
+            return;
+        }
+
+        for (int curChoice = si; curChoice <= ei; curChoice++) {
+            swap(si, curChoice);
+            pNextNum(si + 1, ei);
+            swap(si, curChoice);
+        }
+    }
+
+    public List<List<Integer>> permute(int[] in) {
+        // 15:03
+        if (in == null) {
+            return null;
+        }
+        ms = in;
+        r = new ArrayList();
+        pNextNum(0, ms.length - 1);
+        return r;
     }
 }
