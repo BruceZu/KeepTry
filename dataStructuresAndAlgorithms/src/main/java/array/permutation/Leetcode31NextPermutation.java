@@ -88,30 +88,19 @@ public class Leetcode31NextPermutation {
                 break;
             }
         }
-        if (iswap == -1) {
-            int i = 0;
-            int j = nums.length - 1;
-            while (i < j) {
-                nums[i] ^= nums[j];
-                nums[j] ^= nums[i];
-                nums[i] ^= nums[j];
-                i++;
-                j--;
+        if (iswap != -1) {
+            int vswap = nums[iswap];
+            int swapi = -1;
+            for (int i = nums.length - 1; i >= 0; i--) {
+                if (nums[i] > vswap) {
+                    swapi = i;
+                    break;
+                }
             }
-            return;
-
+            nums[iswap] ^= nums[swapi];
+            nums[swapi] ^= nums[iswap];
+            nums[iswap] ^= nums[swapi];
         }
-        int vswap = nums[iswap];
-        int swapi = -1;
-        for (int i = nums.length - 1; i >= 0; i--) {
-            if (nums[i] > vswap) {
-                swapi = i;
-                break;
-            }
-        }
-        nums[iswap] ^= nums[swapi];
-        nums[swapi] ^= nums[iswap];
-        nums[iswap] ^= nums[swapi];
         int i = iswap + 1;
         int j = nums.length - 1;
         while (i < j) {
