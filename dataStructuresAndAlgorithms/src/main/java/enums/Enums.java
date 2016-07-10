@@ -128,6 +128,9 @@ public class Enums {
     /**
      * Parses the state from an HTML form submission, converting it to
      * the two-letter abbreviation.
+     *
+     * @param s full name of state
+     * @return abbrev name of state, or null when there is no related abbrev.
      */
     public static String parseSelectedState(String s) {
         try {
@@ -140,6 +143,9 @@ public class Enums {
 
     /**
      * Displays the full name of the state specified by the two-letter code.
+     *
+     * @param abbr  abbrev name of state
+     * @return full name of state, or null when there is no related full name.
      */
     public static String displayStateFullName(String abbr) {
         for (STATE state : STATE.values()) {

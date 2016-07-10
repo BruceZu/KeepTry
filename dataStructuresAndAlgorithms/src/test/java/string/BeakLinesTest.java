@@ -22,7 +22,7 @@ import static string.BreakLines.wrapText;
 
 public class BeakLinesTest {
 
-    @Test(timeout = 400L, expected = Test.None.class)
+    @Test(timeout = 10L, expected = Test.None.class)
     public void wrapTextTest() {
         String in = " 1234 67\n 0 ";
         String expected = "[1234\n67\n0]";
