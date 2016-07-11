@@ -101,6 +101,7 @@ public class Leetcode46Permutations {
         return r;
     }
 
+    // ---------------------------------------------------------
     /**
      * <pre>
      *      1 2 3
@@ -197,6 +198,7 @@ public class Leetcode46Permutations {
         return r;
     }
 
+    // ---------------------------------------------------------
     /**
      * <pre>
      * Note:
@@ -206,6 +208,12 @@ public class Leetcode46Permutations {
      *      [[1,2,3],[1,3,2],
      *      [3,1,2],[3,2,1],   3 get back 1 then 2 push 1 to the last
      *      [1,2,3],[1,3,2]]   now 1 is duplicated
+     *
+     * for array with duplicated element. this approach can not work.
+     * e.g.: see {@link array.permutation.Leetcode47PermutationsII#permuteUnique(int[])}
+     *   1 1 2 2
+     *   ->  1 2 1 2 -> 1 2 2 1
+     *   ->  1 2 2 1
      *
      * for the case [1, 2, 3]
      * Result is
@@ -241,7 +249,6 @@ public class Leetcode46Permutations {
      *      }
      * }
      */
-
     private void swap(int i, int j) {
         if (i != j) {
             ms[i] ^= ms[j];
@@ -275,6 +282,7 @@ public class Leetcode46Permutations {
         ms = in;
         r = new ArrayList();
         pNextNum(0, ms.length - 1);
+
         return r;
     }
 }
