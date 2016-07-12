@@ -13,12 +13,9 @@
 // limitations under the License.
 //
 
-package sort;
+package leetcode;
 
-/**
- * See {@link  treesimple.binarytree.heap.Heap#add(Comparable, boolean)} and {@link  treesimple.binarytree.heap.Heap#delete(boolean)}
- */
-public class HeapSort {
-    public void f(String[] args) {
-    }
+public class Leetcode15ThreeSum {
+    // discuss
+    // site:stackoverflow.com/questions array contains two elements value sum -newest -recently
 }

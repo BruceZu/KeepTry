@@ -13,12 +13,19 @@
 // limitations under the License.
 //
 
-package sort;
+package leetcode;
 
 /**
- * See {@link  treesimple.binarytree.heap.Heap#add(Comparable, boolean)} and {@link  treesimple.binarytree.heap.Heap#delete(boolean)}
+ * <pre>
+ * stack. its pop, push, getMin ‘algorithm complexity is O1
+ * implement it with 2 stack, one maintenance min
+ * http://articles.leetcode.com/2010/11/stack-that-supports-push-pop-and-getmin.html
+ *
+ * @see <a href="https://leetcode.com/problems/min-stack/">leetcode</a>
  */
-public class HeapSort {
-    public void f(String[] args) {
-    }
+
+public class Leetcode155MinStack {
+
 }
+
+
