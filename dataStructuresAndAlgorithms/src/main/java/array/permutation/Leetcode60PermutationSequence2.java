@@ -15,14 +15,86 @@
 
 package array.permutation;
 
+/**
+ * <pre>
+ *    1 2 3 4    r
+ *    0 1 2 3 <-- index
+ *
+ *               k    k/6    (k-1)/6 +1     (k-1)/6
+ *    1 2 3 4    1      0        1            0
+ *    1 2 4 3    2      0        1            0
+ *    1 3 2 4    3      0        1            0
+ *    1 3 4 2    4      0        1            0
+ *    1 4 2 3    5      0        1            0
+ *    1 4 3 2    6      1        1            0
+ *
+ *    2 1 3 4    7      1        2            1
+ *    2 1 4 3    8      1        2            1
+ *    2 3 1 4    9      1        2            1
+ *    2 3 4 1    10     1        2            1
+ *    2 4 1 3    11     1        2            1
+ *    2 4 3 1    12     2        2            1
+ *
+ *    3 1 2 4    13     2        3            2
+ *
+ *    if( k % factorial ==0){
+ *        reverse remains
+ *        or
+ *        k = factorial;
+ *           e.g. k = 12, the first number index is (12-1)/6 = 1, the first number is '2',
+ *           adjust r to
+ *              2 1 3 4
+ *                0 1 2
+ *              0 1 2 3
+ *           next loop:
+ *                 k = 6, factorial = 2, the second number index is (6-1)/2 = 2, it is '4'
+ *           adjust r to
+ *              2 4 1 3
+ *                  0 1
+ *              0 1 2 3
+ *           next loop:
+ *                 k = 2, factorial = 1, the third number index is (2-1)/1 = 1, it is '3'
+ *           adjust r to
+ *              2 4 3 1
+ *                    0
+ *              0 1 2 3
+ *    }
+ */
 public class Leetcode60PermutationSequence2 {
 
-    private int[] r;
+    private char[] r;
     private int size;
 
     private boolean[] selectedIndex;
     private int[] facts;
     private int[] choices;
+
+    private void init(int n) {
+        choices = new int[n];
+        facts = new int[n + 1]; //factorial
+        facts[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            choices[i - 1] = i;
+            facts[i] = i * facts[i - 1];
+        }
+
+        selectedIndex = new boolean[n];
+        r = new char[n];
+        size = 0;
+    }
+
+    private void plusLeft() {
+        if (size != choices.length) {
+            for (int i = choices.length - 1; i >= 0; i--) {
+                if (!selectedIndex[i]) {
+                    r[size++] = (char) (choices[i] + '0'); //Note: Given n will be between 1 and 9 inclusive.
+                    if (size == choices.length) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     private int choiceIndex(int choiceth) {
         int c = 0;
@@ -37,49 +109,15 @@ public class Leetcode60PermutationSequence2 {
         return -1;
     }
 
-    private void init(int n) {
-        choices = new int[n];
-        for (int i = 0; i < n; i++) {
-            choices[i] = i + 1;
-        }
-
-        facts = new int[n];
-        facts[0] = 1;
-        for (int i = 1; i < n; i++) {
-            facts[i] = i * facts[i - 1];
-        }
-
-        selectedIndex = new boolean[n];
-        r = new int[n];
-        size = 0;
-    }
-
-    private void plusLeft() {
-        if (size != choices.length) {
-            for (int i = choices.length - 1; i >= 0; i--) {
-                if (!selectedIndex[i]) {
-                    r[size++] = choices[i];
-                    if (size == choices.length) {
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     private void per(int n, int k) {
-        int fact = facts[n - 1];
-        int choiceth = k / fact;
-        int left = k % fact;
-        if (left == 0) {
-            int cIndex = choiceIndex(choiceth);
-            selectedIndex[cIndex] = true;
-            r[size++] = choices[cIndex];
-        } else {
-            choiceth++;
-            int cIndex = choiceIndex(choiceth);
-            selectedIndex[cIndex] = true;
-            r[size++] = choices[cIndex];
+        int f = facts[n - 1];
+        int choiceth = (k - 1) / f + 1;
+        int left = k % f;
+        int cIndex = choiceIndex(choiceth);
+        selectedIndex[cIndex] = true;
+        r[size++] = (char) (choices[cIndex] + '0');
+
+        if (left != 0) {
             per(n - 1, left);
         }
     }
@@ -88,10 +126,6 @@ public class Leetcode60PermutationSequence2 {
         init(n);
         per(n, k);
         plusLeft();
-        StringBuilder re = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            re.append(r[i]);
-        }
-        return re.toString();
+        return new String(r);
     }
 }

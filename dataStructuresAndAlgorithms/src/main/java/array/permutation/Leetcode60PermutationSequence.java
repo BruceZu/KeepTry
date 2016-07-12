@@ -37,10 +37,21 @@ package array.permutation;
  *
  * Note: Given n will be between 1 and 9 inclusive.
  *
- * Tags Backtracking Math
+ * Tags:
+ *          Backtracking Math
  * Similar Problems
  * (M) Next Permutation
  * (M) Permutations
+ *
+ *
+ * ===================================================================================
+ *   This works but too slow.
+ *       "123"
+ *       "132"
+ *       "213"  // rotate approach can not match this requirement
+ *       "231"
+ *       "312"  // swap  approach can not match this requirement
+ *       "321"
  * @see <a href = "https://leetcode.com/problems/permutation-sequence/">leetcode</a>
  */
 public class Leetcode60PermutationSequence {
@@ -85,16 +96,6 @@ public class Leetcode60PermutationSequence {
         }
     }
 
-    /**
-     * <pre>
-     *   This works but too slow.
-     *       "123"
-     *       "132"
-     *       "213"  // rotate approach can not match this requirement
-     *       "231"
-     *       "312"  // swap  approach can not match this requirement
-     *       "321"
-     */
     public String getPermutation(int n, int k) {
         if (n <= 1) {
             return "" + n + "";
