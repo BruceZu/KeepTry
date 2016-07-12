@@ -20,67 +20,45 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * <pre>
- * Given a collection of numbers that might contain duplicates, return all possible unique permutations.
- *
- * For example,
- * [1,1,2] have the following unique permutations:
- * [
- *  [1,1,2],
- *  [1,2,1],
- *  [2,1,1]
- * ]
- * Subscribe to see which companies asked this question
- *
- *  Tags  Backtracking
- *  Similar Problems
- * (M) Next Permutation
- * (M) Permutations
- * (M) Palindrome Permutation II
- */
-public class Leetcode47PermutationsII {
+public class Leetcode47PermutationsII3 {
     private int[] ms;
     private List<List<Integer>> r;
 
-    private void swap(int i, int j) {
-        if (i != j) {
-            ms[i] ^= ms[j];
-            ms[j] ^= ms[i];
-            ms[i] ^= ms[j];
+    private void rotateNextChoice(int si, int ei) {
+        int siv = ms[si];
+        for (int i = si; i < ei; i++) {
+            ms[i] = ms[i + 1];
         }
+        ms[ei] = siv;
     }
 
-    private void pNextNum(int si, int ei) {
+    private void pNextNumber(int si, int ei) {
         if (si == ei) {
-            List p = new ArrayList(ms.length);
+            List<Integer> p = new ArrayList(ms.length);
             for (int i = 0; i < ms.length; i++) {
                 p.add(ms[i]);
             }
             r.add(p);
             return;
         }
-        Set usedChoice = new HashSet(ei - si + 1); // do not need sort firstly
-        for (int ci = si; ci <= ei; ci++) {
-            int choice = ms[ci];
-            if (usedChoice.contains(choice)) {
-                continue;
+        int choices = ei - si + 1;
+        Set used = new HashSet(); // do not need sort input firstly
+        while (choices-- >= 1) {
+            if (!used.contains(ms[si])) {
+                used.add(ms[si]);
+                pNextNumber(si + 1, ei);
             }
-            usedChoice.add(choice);
-            swap(si, ci);
-            pNextNum(si + 1, ei);
-            swap(si, ci);
+            rotateNextChoice(si, ei);
         }
     }
 
-    public List<List<Integer>> permuteUnique(int[] in) {
+    public List<List<Integer>> permuteUnique3(int[] in) {
         if (in == null) {
             return null;
         }
         ms = in;
         r = new ArrayList();
-        pNextNum(0, ms.length - 1);
-
+        pNextNumber(0, ms.length - 1);
         return r;
     }
 }
