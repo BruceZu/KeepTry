@@ -13,7 +13,10 @@
 // limitations under the License.
 //
 
-package nosubmmitted;
+package string;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <pre>
@@ -41,46 +44,56 @@ package nosubmmitted;
  * (M) Longest Palindromic Substring
  * (E) Valid Anagram
  * (M) Palindrome Permutation II
+ * =============================================================================
+ *
+ * Assume:
+ *    There is not <STRONG> supplementary characters </STRONG>
+ *    Is char limited to that in <STRONG>  ASCII chart </STRONG>?
  */
-public class LC266PalindromePermutation {
-    /**
-     * fast one currently
-     *
-     * @param s
-     * @return
-     */
-    public boolean canPermutePalindrome(String s) {
-        int[] set = new int[256];
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        for (char c : s.toCharArray()) {
-            set[c] ^= 1;
-            min = Math.min(min, c);
-            max = Math.max(max, c);
+public class Leetcode266ParlindromePermutation {
+    public boolean canPermutePalindrome3(String s) {
+        char[] arr = s.toCharArray();
+        int[] evenOdd = new int[256];
+
+        // index scope of times
+        int l = arr[0];
+        int r = arr[0];
+
+        for (char c : arr) {
+            evenOdd[c] ^= 1;
+            l = Math.min(l, c);
+            r = Math.max(r, c);
         }
         int sum = 0;
-        for (int i = min; i <= max; i++) {
-            sum += set[i];
+        for (int i = l; i <= r; i++) {
+            sum += evenOdd[i];
         }
         return (sum <= 1);
     }
 
-    /**
-     * same fast
-     */
     public boolean canPermutePalindrome2(String s) {
-        int[] map = new int[128];
-        char[] string = s.toCharArray();
+        char[] arr = s.toCharArray();
         int oddCount = 0;
-        for (int i = 0; i < string.length; i++) {
-            map[string[i]]++;
-            oddCount = (map[string[i]] % 2 == 0) ? oddCount - 1 : oddCount + 1;
+        int[] times = new int[128];
+        for (int i = 0; i < arr.length; i++) {
+            times[arr[i]]++;
+            oddCount = (times[arr[i]] % 2 == 0) ? oddCount - 1 : oddCount + 1;
         }
         return oddCount <= 1;
     }
 
-    // other ideas
-    // s should have 0 or 1 odd number character
-    // map,  have then remove it ,else add it
+    public boolean canPermutePalindrome(String s) {
+        char[] arr = s.toCharArray();
+        Set<Character> addSub =  new HashSet ();
 
+        for (int i = 0; i < arr.length; i++) {
+            char  c= arr[i];
+            if(addSub.contains(c)){
+                addSub.remove(c);
+            }else{
+                addSub.add(c);
+            }
+        }
+        return addSub.size() <= 1;
+    }
 }
