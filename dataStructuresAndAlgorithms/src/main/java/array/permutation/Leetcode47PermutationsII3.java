@@ -20,6 +20,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * <pre>
+ *              c a c a 9 d 9 e 9 9
+ *   if allocate same char together
+ *              c c a a d e 9 9 9 9
+ *
+ *   if   index = 0 select c, select it only once
+ *   then index = 1 can still select c. still only once
+ *
+ *   if sorted or allocate same char together as above.
+ *   just make sure current choice is not same as prev.
+ */
 public class Leetcode47PermutationsII3 {
     private int[] ms;
     private List<List<Integer>> r;
@@ -52,7 +64,7 @@ public class Leetcode47PermutationsII3 {
         }
     }
 
-    public List<List<Integer>> permuteUnique3(int[] in) {
+    public List<List<Integer>> permuteUnique(int[] in) {
         if (in == null) {
             return null;
         }

@@ -34,7 +34,7 @@ public class Leetcode46Permutations3 {
      *      [1,2,3],[1,3,2]]   now 1 is duplicated
      *
      * for array with duplicated element. this approach can not work.
-     * e.g.: see {@link array.permutation.Leetcode47PermutationsII#permuteUnique(int[])}
+     * e.g.: see {@link Leetcode47PermutationsII2#permuteUnique(int[])}
      *   1 1 2 2
      *   ->  1 2 1 2 -> 1 2 2 1
      *   ->  1 2 2 1
