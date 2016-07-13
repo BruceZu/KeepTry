@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package leetcode;
+package nosubmmitted;
 
 import java.util.Arrays;
 

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package permutation;
+package array.permutation;
 
 import java.util.Arrays;
 import java.util.HashSet;

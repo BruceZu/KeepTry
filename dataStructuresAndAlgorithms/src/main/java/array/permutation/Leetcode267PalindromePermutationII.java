@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package nosubmmitted;
+package array.permutation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,10 +35,14 @@ import java.util.List;
  * <p/>
  * If a palindromic permutation exists, we just need to generate the first half of the string.
  * To generate all distinct permutations of a (half of) string, use a similar approach from: Permutations II or Next Permutation.
- * Hide Tags Backtracking
- * Hide Similar Problems (M) Next Permutation (M) Permutations II (E) Palindrome Permutation
+ *
+ * Tags Backtracking
+ * Similar Problems
+ * (M) Next Permutation
+ * (M) Permutations II
+ * (E) Palindrome Permutation
  */
-public class LC267PalindromePermutationII {
+public class Leetcode267PalindromePermutationII {
 
 
     public class Solution {

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package permutation;
+package array.permutation;
 
 /**
  * C-6.21
