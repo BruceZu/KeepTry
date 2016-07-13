@@ -20,262 +20,142 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * <pre>
  * 267. Palindrome Permutation II
- * Difficulty: Medium <pre>
+ * Difficulty: Medium
  * Given a string s, return all the palindromic permutations (without duplicates) of it.
  * Return an empty list if no palindromic permutation could be form.
- * <p/>
+ *
  * For example:
- * <p/>
+ *
  * Given s = "aabb", return ["abba", "baab"].
- * <p/>
+ *
  * Given s = "abc", return [].
- * <p/>
+ *
  * Hint:
- * <p/>
+ *
  * If a palindromic permutation exists, we just need to generate the first half of the string.
- * To generate all distinct permutations of a (half of) string, use a similar approach from: Permutations II or Next Permutation.
+ * To generate all distinct permutations of a (half of) string, use a similar approach
+ * from: Permutations II or Next Permutation.
  *
  * Tags Backtracking
  * Similar Problems
- * (M) Next Permutation
- * (M) Permutations II
- * (E) Palindrome Permutation
+ *       (M) Next Permutation
+ *       (M) Permutations II
+ *       (E) Palindrome Permutation
+ *
+ * ========================================================================================
+ *   "a b a b a c a b b c 3 3 4 "
+ *  the left side:
+ *    1- sort.
+ *
+ *  index     0  1  2  3  4  5  6  7  8  9 10 11 12
+ *           "3  3  4  a  a  a  a  b  b  b  b  c  c"
+ *
+ *    2- loop:
+ *       if find pair, keep one. (need sort in advance)
+ *       if length is odd and find single char, allocate it to middle.
+ *       (only when the string length is odd and there is only one single char is valid)
+ *
+ *
+ *            0  1  2  3  4  5  6  7  8  9 10 11 12
+ *           "3  a  a  b  b  c  4  b  b  b  b  c  c"
+ *                              |
+ *                            13/2
+ *       the middle character:
+ *           kept till the loop is over, then allocate it to the middle index
+ *           avoiding <strong>break the pairs in the loop</strong>.
+ *
+ *    3 permuteLeftMirrorRight each number to get a permutation of left
+ *       "3  a  a  b  b  c "
+ *
+ *      check duplicated:
+ *           now the arr left is sorted. so we do not need a set to check
+ *           if current choice is used. just compare to the pre one.
+ *      because this is permuteLeftMirrorRight the left half, so at least assume
+ *      <strong>the arr length is 2</strong>.
+ *
+ *    4  once got a permutation of left, mirror -> right side.
  */
 public class Leetcode267PalindromePermutationII {
+    List<String> results;
+    char[] arr;
 
+    private void mirror() {
+        int i = 0;
+        int j = arr.length - 1 - i;
+        while (i < j) {
+            arr[j] = arr[i];
+            i++;
+            j = arr.length - 1 - i;
+        }
+    }
 
-    public class Solution {
+    private void nextChoice(int i, int j) {
+        if (i != j) {
+            arr[i] ^= arr[j];
+            arr[j] ^= arr[i];
+            arr[i] ^= arr[j];
+        }
+    }
 
-        List<String> results;
+    private void permuteLeftMirrorRight(int cur) {
+        if (cur == arr.length / 2 - 1) { //means need arr.length >= 2
+            mirror();
+            results.add(new String(arr));
+            return;
+        }
 
-        char[] chars;
+        char prev = arr[cur];
+        for (int i = cur; i <= arr.length / 2 - 1; i++) {
+            if (i == cur || i > cur && arr[i] != prev) {
+                prev = arr[i];
 
-        int lengthMinusOne, halfLength;
-
-        /**
-         * the top fast level is beat 99%
-         * this is the second level fast
-         * beat 96.7% 2ms
-         * I'm generating permutations on the left side of the string,
-         * then constantly copying characters to the right side to maintain the palindrome.
-         * <p/>
-         * There are lots of comments in the code, but please ask if there is anything that is unclear.
-         *
-         * @param s
-         * @return
-         */
-        public List<String> generatePalindromes(String s) {
-
-            results = new ArrayList<String>();
-
-            // We will be generating permutations in place.
-            chars = s.toCharArray();
-            int length = chars.length;
-
-            // Return no result for empty string.
-            if (length == 0) return results;
-
-            // Sort the array to bring duplicates together.
-            Arrays.sort(chars);
-            // The array now looks like aabbcdd
-
-            // Precompute a few values for performance.
-            lengthMinusOne = length - 1;
-            halfLength = length / 2;
-
-            // Prepare the first half of the string. It will contain
-            // a single character from each pair. The middle character
-            // is placed in the middle.
-            // When done, the array will look like abdc***
-            boolean foundMiddle = false;
-
-            for (int readCursor = 0, writeCursor = 0; readCursor < length; readCursor++) {
-                char c = chars[readCursor];
-
-                // Check for pair of characters.
-                if (readCursor < lengthMinusOne && c == chars[readCursor + 1]) {
-
-                    // Found pair. Write one of them to the left of the string.
-                    chars[writeCursor++] = c;
-                    readCursor++;
-
-                } else {
-
-                    // Found isolated character. Make sure this is the only one
-                    // so far, and check that the string length is odd.
-                    if (!foundMiddle && (chars.length & 1) == 1) {
-
-                        // Place the middle character.
-                        foundMiddle = true;
-                        chars[chars.length / 2] = c;
-
-                    } else {
-
-                        // Can't make palindromes from this string.
-                        return results;
-                    }
-                }
+                nextChoice(cur, i);
+                permuteLeftMirrorRight(cur + 1);
+                nextChoice(cur, i);
             }
+        }
+    }
 
-            // Generate permutations for all characters.
-            generate(0);
+    public List<String> generatePalindromes(String s) {
+        results = new ArrayList<String>();
 
+        if (s == null || s.length() == 0) {
+            return results;
+        }
+        arr = s.toCharArray();
+        if (s.length() == 1) {
+            results.add(s);
             return results;
         }
 
-        // Generates permutations by swapping characters.
-        void generate(int start) {
+        // -------
+        Arrays.sort(arr);
 
-            // When we run out of characters, add the result to the list.
-            if (start == halfLength) {
-                results.add(new String(chars));
-                return;
+        Character oddArrSingleMiddleChar = null;
+        boolean found = false;
+
+        for (int i = 0, halfSize = 0; i < arr.length; i++) {
+            char cur = arr[i];
+            if (i < arr.length - 1 && cur == arr[i + 1]) {
+                arr[halfSize] = cur;
+                halfSize++;
+                i++;
+                continue;
             }
-
-            // Swap each character into place.
-            char prev = 0;
-            for (int i = start; i < halfLength; i++) {
-
-                // Check for duplicates.
-                if (prev == chars[i]) continue;
-                prev = chars[i];
-
-                // Place one character.
-                swap(start, i);
-
-                // Generate permutations for remaining characters.
-                generate(start + 1);
-
-                // Return the character to it's position.
-                swap(start, i);
-            }
-        }
-
-        // Swap maintains the palindrome by mirroring chars on the right side.
-        void swap(int a, int b) {
-            char temp = chars[a];
-
-            // Place at a on left side of palindrome.
-            chars[a] = chars[b];
-
-            // Place matching char on right side.
-            chars[lengthMinusOne - a] = chars[b];
-
-            // Place left.
-            chars[b] = temp;
-
-            // Place right.
-            chars[lengthMinusOne - b] = temp;
-        }
-    }
-
-
-    /**
-     * same as above
-     * My first solution was a typical hashmap/backtracking 7 ms one. However,
-     * I didn't particularly like the part when it checks whether there are any
-     * instances of a character left. That's the part that looks something like this:
-     * <p/>
-     * int count = e.getValue();
-     * if (count == 0) {
-     * continue;
-     * }
-     * When we get closer and closer to the middle, these line hit more and more often,
-     * so we end up running almost the entire loop in vain. So I thought that it would be
-     * nice to remove the character from the list for good when the count reaches zero.
-     * But if we do that with a hashtable, the iterations will start throwing
-     * ConcurrentModificationException. So we need to store characters with counts
-     * in a structure that supports instant removals and re-insertions (for backtracking).
-     * That's obviously a linked list. We can't use LinkedList, though because of
-     * the same reason—concurrent modifications aren't allowed. So I had to roll out
-     * my simple singly-linked list implementation.
-     * <p/>
-     * This only improved 7 ms to 6 ms. That's not a big surprise, though, since
-     * it's still the same order complexity. I got 2 ms by doing away with the hashmap.
-     * <p/>
-     * On a side note, I see a lot of solutions using int[128] or int[256] for the
-     * frequency table. This will obviously screw up anything containing non-ASCII
-     * characters and the problem does not say it's limited to Latin characters.
-     * One interesting question to ask if you encounter this problem at an interview
-     * is are characters limited to ASCII or even BMP. Because if there are characters
-     * outside BMP, we may have to handle surrogate pairs, so even int[65536] / HashMap<Character, Int>
-     * solutions are, strictly speaking, incorrect!
-     */
-    public List<String> generatePalindromes(String s) {
-        int[] freq = new int[65536];
-        char[] chars = new char[s.length()];
-        int ch = 0;
-        for (int i = 0; i < s.length(); ++i) {
-            char c = s.charAt(i);
-            if (++freq[c] == 1) {
-                chars[ch++] = c; // save distinct characters
-            }
-        }
-        List<String> result = new ArrayList<>();
-        boolean odd = false;
-        char[] buffer = new char[s.length()];
-        Node head = null, tail = null;
-        for (int i = 0; i < ch; ++i) {
-            char c = chars[i];
-            int count = freq[c];
-            if (count % 2 != 0) {
-                if (s.length() % 2 == 0 || odd) {
-                    return result;
-                } else {
-                    odd = true;
-                    buffer[buffer.length / 2] = c;
-                }
-                if (--count == 0) {
-                    continue;
-                }
-            }
-            Node n = new Node(c, count / 2);
-            if (head == null) {
-                head = tail = n;
+            if ((arr.length & 1) == 1 && !found) {
+                oddArrSingleMiddleChar = cur;
+                found = true;
             } else {
-                tail.next = n;
-                tail = n;
+                return results; // empty
             }
         }
-        buildCombinations(result, head, buffer, 0);
-        return result;
-    }
-
-    private static void buildCombinations(List<String> result, Node head, char[] buffer, int pos) {
-        if (pos == (buffer.length | 1) / 2) {
-            result.add(new String(buffer));
-            return;
+        if ((arr.length & 1) == 1) {
+            arr[arr.length / 2] = oddArrSingleMiddleChar;
         }
-        Node current = head, prev = head;
-        while (current != null) {
-            buffer[pos] = buffer[buffer.length - 1 - pos] = current.c;
-            if (current.count == 1) {
-                if (current == head) {
-                    buildCombinations(result, head.next, buffer, pos + 1);
-                } else {
-                    prev.next = current.next;
-                    buildCombinations(result, head, buffer, pos + 1);
-                    prev.next = current; // backtrack
-                }
-            } else {
-                --current.count;
-                buildCombinations(result, head, buffer, pos + 1);
-                ++current.count; // backtrack
-            }
-            prev = current;
-            current = current.next;
-        }
-    }
 
-    private static class Node {
-        final char c;
-        int count;
-        Node next;
-
-        Node(char c, int count) {
-            this.c = c;
-            this.count = count;
-        }
+        permuteLeftMirrorRight(0);
+        return results;
     }
 }
