@@ -47,8 +47,11 @@ import java.util.Set;
  *   if   index = 0 select c, select it only once
  *   then index = 1 can still select c. still only once
  *
- *   if sorted or allocate same char together as above.
- *   just make sure current choice is not same as prev.
+ *   ' i=cur || i>cur && ms[ i]!=ms[cur] &&  ms[i]!=ms[i-1]; ' can <strong>NOT</strong> work
+ *   Because even sorted or allocate same char together as above.
+ *   swap will get next number's choice scope not in order.
+ *   the only way is use a set to make sure duplicated choices is used only once.
+ *
  */
 public class Leetcode47PermutationsII2 {
     private int[] ms;
@@ -74,13 +77,13 @@ public class Leetcode47PermutationsII2 {
         Set usedChoice = new HashSet(ei - si + 1); // do not need sort firstly
         for (int ci = si; ci <= ei; ci++) {
             int choice = ms[ci];
-            if (usedChoice.contains(choice)) {
-                continue;
+            if (!usedChoice.contains(choice)) {
+                usedChoice.add(choice); // note
+
+                swap(si, ci);
+                pNextNum(si + 1, ei);
+                swap(si, ci);
             }
-            usedChoice.add(choice);
-            swap(si, ci);
-            pNextNum(si + 1, ei);
-            swap(si, ci);
         }
     }
 

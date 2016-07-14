@@ -16,8 +16,68 @@
 package array.permutation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+/**
+ * <pre>
+ * Note:
+ *   use 'Set used...', do not need sort the input firstly.
+ *
+ *              c a c a 9 d 9 e 9 9
+ *   if allocate same char together
+ *              c c a a d e 9 9 9 9
+ *
+ *   if   index = 0 select c, select it only once
+ *   then index = 1 can still select c. still only once
+ *
+ *   if sorted or allocate same char together as above.
+ *   just make sure current choice is not same as prev.
+ */
+/*private int preChoice(int cur) {
+        int pre = cur - 1;
+        while (pre >= 0 && selected[pre]) {
+            pre--;
+        }
+        return pre;
+    }
+
+    private void permuteUnique() {
+        if (p.size() == ms.length) {
+            r.add(new ArrayList(p));
+            return;
+        }
+
+        for (int i = 0; i < ms.length; i++) {
+            int pre = preChoice(i);   //   ------- NOTE
+            if (!selected[i] && (pre == -1 || pre != -1 && ms[pre] != ms[i])) {  //   ------- NOTE
+
+                p.add(ms[i]);
+                selected[i] = true;
+
+                permuteUnique();
+
+                p.remove(p.size() - 1);
+                selected[i] = false;
+            }
+        }
+    }
+
+    public List<List<Integer>> permuteUnique(int[] in) {
+        if (in == null) {
+            return null;
+        }
+        Arrays.sort(in); //   ------- NOTE
+
+        ms = in;
+        r = new ArrayList();
+        p = new ArrayList(ms.length);
+        selected = new boolean[ms.length];
+
+        permuteUnique();
+        return r;
+    }*/
 
 public class Leetcode47PermutationsII {
     private int[] ms;
@@ -25,38 +85,20 @@ public class Leetcode47PermutationsII {
     private List p;
     private boolean[] selected;
 
-    /**
-     * <pre>
-     * Note:
-     *   use 'Set used...', do not need sort the input firstly.
-     *
-     *              c a c a 9 d 9 e 9 9
-     *   if allocate same char together
-     *              c c a a d e 9 9 9 9
-     *
-     *   if   index = 0 select c, select it only once
-     *   then index = 1 can still select c. still only once
-     *
-     *   if sorted or allocate same char together as above.
-     *   just make sure current choice is not same as prev.
-     *
-     */
     private void permuteUnique() {
         if (p.size() == ms.length) {
             r.add(new ArrayList(p));
             return;
         }
 
-        //Set used = new HashSet();
+        Set used = new HashSet();
         for (int i = 0; i < ms.length; i++) {
-            if (!selected[i] && !(i - 1 >= 0 && ms[i - 1] == ms[i] && !selected[i - 1])) { // need sort input firstly
-                // if (selected[i] != true && !used.contains(ms[i])) {
-                // used.add(ms[i]);
+            if (selected[i] != true && !used.contains(ms[i])) {
+                used.add(ms[i]);
+
                 p.add(ms[i]);//  -->
                 selected[i] = true;//  -->
-
                 permuteUnique();
-
                 p.remove(p.size() - 1); // <--
                 selected[i] = false; // <--
             }
@@ -67,9 +109,9 @@ public class Leetcode47PermutationsII {
         if (in == null) {
             return null;
         }
-        Arrays.sort(in);
+
         ms = in;
-        r = new ArrayList();
+        r = new ArrayList(); //
         p = new ArrayList(ms.length);
         selected = new boolean[ms.length];
 

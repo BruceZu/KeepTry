@@ -31,7 +31,42 @@ import java.util.Set;
  *
  *   if sorted or allocate same char together as above.
  *   just make sure current choice is not same as prev.
+ *   e.g.
  */
+/*
+  <pre>
+    private void pNextNumber(int si, int ei) {
+        if (si == ei) {
+            List<Integer> p = new ArrayList(ms.length);
+            for (int i = 0; i < ms.length; i++) {
+                p.add(ms[i]);
+            }
+            r.add(p);
+            return;
+        }
+        int choices = ei - si + 1;
+        int pre = ms[si]; --------------------------------------------------------//  NOTE
+        while (choices  >= 1) {
+            if (choices== ei - si + 1 || choices<ei - si + 1 &&  ms[si]!=pre) { --//  NOTE
+                pre = ms[si]; ----------------------------------------------------//  NOTE
+                pNextNumber(si + 1, ei);
+            }
+            rotateNextChoice(si, ei);
+            choices--;
+        }
+    }
+
+    public List<List<Integer>> permuteUnique(int[] in) {
+        if (in == null) {
+            return null;
+        }
+        Arrays.sort(in);    -----------------------------------------------------//  NOTE
+        ms = in;
+        r = new ArrayList();
+        pNextNumber(0, ms.length - 1);
+        return r;
+    }*/
+
 public class Leetcode47PermutationsII3 {
     private int[] ms;
     private List<List<Integer>> r;
