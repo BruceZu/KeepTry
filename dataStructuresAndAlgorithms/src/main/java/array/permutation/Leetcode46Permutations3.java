@@ -36,8 +36,11 @@ public class Leetcode46Permutations3 {
      * for array with duplicated element. this approach can not work.
      * e.g.: see {@link Leetcode47PermutationsII2#permuteUnique(int[])}
      *   1 1 2 2
-     *   ->  1 2 1 2 -> 1 2 2 1
-     *   ->  1 2 2 1
+     *     1 2 2
+     *     2 1 2
+     *       1 2
+     *       2 1 ->   1 2 2 1
+     *     2 2 1 ->   1 2 2 1
      *
      * for the case [1, 2, 3]
      * Result is
