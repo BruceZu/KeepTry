@@ -15,7 +15,7 @@
 
 package sort;
 
-import static array.Common.merge;
+import static array.Common.mergeInsort;
 
 public class MergeSortNoRecursion {
 
@@ -26,7 +26,7 @@ public class MergeSortNoRecursion {
      * 1>   decide sub array size from 1, then 2, 4 ,8, 16 .... while the size <= arr.length()
      * 2>   with each size, loop arr from left:
      *   21>     calculate the index of 2 sub arrays: [l, mid] and [mid+1, r]
-     *   22>     merge them
+     *   22>     merge them in sort
      * <p>
      */
     public static <T extends Comparable<T>> void mergeSortNoRecursion(T[] arr) {
@@ -45,7 +45,7 @@ public class MergeSortNoRecursion {
             int arrLastIndex = arr.length - 1;
             while (arrLastIndex > mid) { // adjust when the len is very big or at the end of arr.
                 r = r <= arrLastIndex ? r : arrLastIndex;
-                merge(arr, l, mid, r, tmp);
+                mergeInsort(arr, l, mid, r, tmp);
 
                 l = r + 1;
                 mid = l + len - 1;

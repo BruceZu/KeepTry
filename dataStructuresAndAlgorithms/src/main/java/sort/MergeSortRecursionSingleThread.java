@@ -17,7 +17,7 @@ package sort;
 
 import java.util.List;
 
-import static array.Common.merge;
+import static array.Common.mergeInsort;
 
 /**
  * @see java.util.Arrays#sort(int[])
@@ -30,7 +30,7 @@ public class MergeSortRecursionSingleThread {
      * @param arr array
      * @param l   left bound index, included.
      * @param r   right bound index, included.
-     * @param tmp with it, do not need new tmp array every time when merge and care its length
+     * @param tmp with it, do not need new tmp array every time when mergeInsort and care its length
      */
     private static <T extends Comparable<T>> void call(T[] arr, int l, int r, T[] tmp) {
         if (l == r) {
@@ -43,14 +43,14 @@ public class MergeSortRecursionSingleThread {
         call(arr, l, mid, tmp);
         call(arr, mid + 1, r, tmp);
 
-        merge(arr, l, mid, r, tmp);
+        mergeInsort(arr, l, mid, r, tmp);
     }
 
     /**
      * Merge sort an array with one thread using recursion
      * Idea:
      * 1>  Divide into 2 halves  [l, mid] and [mid+1, r]
-     * 2>  Recursion on each halves. if l == r, stop recursion, return to wait merge
+     * 2>  Recursion on each halves. if l == r, stop recursion, return to wait mergeInsort
      * 3>  Merge them into one.
      */
     public static <T extends Comparable<T>> void mergeSortRecursion(T[] arr) {

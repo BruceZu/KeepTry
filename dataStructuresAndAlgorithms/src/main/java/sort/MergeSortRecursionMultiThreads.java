@@ -15,10 +15,11 @@
 
 package sort;
 
+import array.Common;
+
 import java.util.concurrent.CountDownLatch;
 
 import static array.Common.divide;
-import static array.Common.merge;
 
 public class MergeSortRecursionMultiThreads {
     /**
@@ -26,13 +27,13 @@ public class MergeSortRecursionMultiThreads {
      * <pre>
      * Idea:
      * 1> divide into 2 sub arrays
-     * 2> apply divide-merge logical recursively on 2 sub arrays
-     * 3> merge them into one
+     * 2> apply divide-merge in sort logical recursively on 2 sub arrays
+     * 3> merge them into one in sort
      *
      * Note, when arr == null || arr.length <= 1, then
      * stop start
      * or
-     * stop recursion and return to wait merge directly
+     * stop recursion and return to wait merge in sort directly
      *
      */
     public static <T extends Comparable<T>> void mergeSort(T[] arr) {
@@ -66,6 +67,6 @@ public class MergeSortRecursionMultiThreads {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        merge(halves[0], halves[1], arr);
+        Common.mergeInsort(halves[0], halves[1], arr);
     }
 }

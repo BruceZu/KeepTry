@@ -70,7 +70,7 @@ public class Common {
      * @param r  sorted right half
      * @param re result
      */
-    public static <T extends Comparable<T>> void merge(T[] l, T[] r, T[] re) {
+    public static <T extends Comparable<T>> void mergeInsort(T[] l, T[] r, T[] re) {
         // System.out.format("\nmerge %s and %s\n", Arrays.toString(l), Arrays.toString(r));
         int i = 0, j = 0; // in loop the current index of l and r
         int k = 0;
@@ -104,7 +104,7 @@ public class Common {
      *            without `new` more tmp arrays.
      * @param <T>
      */
-    public static <T extends Comparable<T>> void merge(T[] ar, int l, int mid, int r, T[] tmp) {
+    public static <T extends Comparable<T>> void mergeInsort(T[] ar, int l, int mid, int r, T[] tmp) {
         // System.out.format("\nmerge %s : index scope[%s, %s] and  index scope [%s, %s]", Arrays.toString(ar), l, mid, mid + 1, r);
 
         // Input check
@@ -120,7 +120,7 @@ public class Common {
         for (int i = l; i <= r; i++) {
             tmp[i] = ar[i];
         }
-        // Start merge. Rewrite arr from l
+        // Start merge in sort. Rewrite arr from l
         int i = l, j = mid + 1;
         int k = l;
         while (true) {
