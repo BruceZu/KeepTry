@@ -23,8 +23,8 @@ import static array.Common.mergeInsort;
 
 public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
     // Runnable is enough, do not need Callable as each thread only work on its elements scope of arr
-    private static class DivideMergeInSort<T extends Comparable<T>> implements Runnable {
-        private T[] arr, tmp;
+    private static class DivideMergeInSort implements Runnable {
+        private Comparable[] arr, tmp;
         private int l, r;
 
         @Override
@@ -46,7 +46,7 @@ public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
             mergeInsort(arr, l, mid, r, tmp);
         }
 
-        public DivideMergeInSort(T[] arr, int l, int r, T[] tmp) {
+        public DivideMergeInSort(Comparable[] arr, int l, int r, Comparable[] tmp) {
             this.arr = arr;
             this.l = l;
             this.r = r;
@@ -62,9 +62,8 @@ public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
             return;
         }
         try {
-            executorService.submit(new DivideMergeInSort(arr, 0, arr.length - 1, // note: The index is included
-                    new Comparable[arr.length])).get();
-        } catch (InterruptedException| ExecutionException e) {
+            executorService.submit(new DivideMergeInSort(arr, 0, arr.length - 1, new Comparable[arr.length])).get();
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }
