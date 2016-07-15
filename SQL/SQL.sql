@@ -1,8 +1,8 @@
-   /**
-    * www.hackerrank.com test used by TrialPay a Visa company
-    * Find the 5 oldest (earliest) orders which are not yet shipped.
-    * (rownum is Oracle SQL)
-    */
+/**
+ * www.hackerrank.com test used by TrialPay a Visa company
+ * Find the 5 oldest (earliest) orders which are not yet shipped.
+ * (rownum is Oracle SQL)
+ */
 
  select orderNumber, orderDate, requiredDate, shippedDate, status,  comments, customerNumber
  from orders
@@ -10,18 +10,19 @@
  order by orderDate asc;
 
 
-
  /**
-  * table A和B是一对多的关系，求A对应在B的某column的avg。
+  * table A:B is 1:n，search avg(column in B) group by column in A.
+  *
   * http://www.w3schools.com/sql/trysql.asp?filename=trysql_select_join
-  * =: have no space on both side
+  * have no space on both side of =
   * join need on
-  * group by is at last
   * CustomerID need specify its table name
+  * 'group by' is at last
   */
  select Customers.CustomerID, OrderID, avg(EmployeeID)
  from  Customers left join orders
  on Customers.customerid=orders.customerid
  where Customers.customerid in ('5', '4')
- group by Customers.CustomerID
+ group by Customers.CustomerID;
+
 
