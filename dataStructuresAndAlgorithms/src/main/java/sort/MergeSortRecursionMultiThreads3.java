@@ -23,44 +23,42 @@ import java.util.concurrent.RecursiveAction;
 import static array.Common.divide;
 
 public class MergeSortRecursionMultiThreads3 {
+    /**
+     * <pre>
+     * Should use RecursiveTask.
+     * --But as the input is array and only its content is changed in the precess of fork.
+     *   So use RecursiveAction to make it simple.
+     *
+     * --Must join() to wait else the result will be unexpected
+     *
+     * invokeAll(l,r); // same as l.fork();  r.fork(); l.join();  r.join();
+     */
+    private static class DivideMergeInSortAction extends RecursiveAction {
+        private Comparable[] arr;
+
+        @Override
+        protected void compute() {
+            // Input check, threshold
+            if (arr == null || arr.length <= 1) {
+                return;
+            }
+
+            final Comparable[][] halves = divide(arr);
+
+            RecursiveAction l = new DivideMergeInSortAction(halves[0]);
+            RecursiveAction r = new DivideMergeInSortAction(halves[1]);
+            invokeAll(l, r);
+
+            Common.mergeInsort(halves[0], halves[1], arr);
+        }
+
+        public DivideMergeInSortAction(Comparable[] arr) {
+            this.arr = arr;
+        }
+    }
+
     public static <T extends Comparable<T>> void mergeSort(T[] arr) {
         ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
         forkJoinPool.invoke(new DivideMergeInSortAction(arr));
-    }
-}
-
-/**
- * <pre>
- * Should use RecursiveTask.
- * --But as the input is array and only its content is changed in the precess of fork.
- * So use RecursiveAction to make it simple.
- *
- * --Must join() to wait else the result will be unexpected
- *
- * invokeAll(l,r); // same as l.fork();  r.fork(); l.join();  r.join();
- */
-class DivideMergeInSortAction extends RecursiveAction {
-    private final Comparable[] arr;
-
-    @Override
-    protected void compute() {
-        // Input check, threshold
-        if (arr == null || arr.length <= 1) {
-            return;
-        }
-        // 1 Divide into 2 halves
-        final Comparable[][] halves = divide(arr);
-
-        // 2 Divide, merge each halves in sort
-        RecursiveAction l = new DivideMergeInSortAction(halves[0]);
-        RecursiveAction r = new DivideMergeInSortAction(halves[1]);
-        invokeAll(l, r);
-
-        // 3 Merge them back into one.
-        Common.mergeInsort(halves[0], halves[1], arr);
-    }
-
-    public DivideMergeInSortAction(Comparable[] arr) {
-        this.arr = arr;
     }
 }
