@@ -32,10 +32,8 @@ public class MergeSortRecursionMultiThreads4 {
                 return;
             }
             int mid = (l + r) / 2;
-
-            RecursiveAction left = new DivideMergeInSortAction(arr, l, mid, tmp);
-            RecursiveAction right = new DivideMergeInSortAction(arr, mid + 1, r, tmp);
-            invokeAll(left, right);
+            invokeAll(new DivideMergeInSortAction(arr, l, mid, tmp),
+                    new DivideMergeInSortAction(arr, mid + 1, r, tmp));
 
             mergeInsort(arr, l, mid, r, tmp);
         }

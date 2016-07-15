@@ -45,9 +45,8 @@ public class MergeSortRecursionMultiThreads3 {
 
             final Comparable[][] halves = divide(arr);
 
-            RecursiveAction l = new DivideMergeInSortAction(halves[0]);
-            RecursiveAction r = new DivideMergeInSortAction(halves[1]);
-            invokeAll(l, r);
+            invokeAll(new DivideMergeInSortAction(halves[0]),
+                    new DivideMergeInSortAction(halves[1]));
 
             Common.mergeInsort(halves[0], halves[1], arr);
         }
