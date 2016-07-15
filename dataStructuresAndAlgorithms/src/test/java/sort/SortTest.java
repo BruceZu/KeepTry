@@ -112,7 +112,15 @@ public class SortTest {
     public void mergeSortTest2() {
         Comparable[] ar = clone(arr);
         // start test
-        MergeSortRecursionMultiThreads2.mergeSort(ar);
+        MergeSortRecursionMultiThreads2.mergeSortRecursion(ar);
+        Assert.assertTrue(Arrays.equals(ar, sorted));
+    }
+
+    @Test(timeout = 20l, expected = Test.None.class)
+    public void mergeSortTest3() {
+        Comparable[] ar = clone(arr);
+        // start test
+        MergeSortRecursionMultiThreads3.mergeSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 

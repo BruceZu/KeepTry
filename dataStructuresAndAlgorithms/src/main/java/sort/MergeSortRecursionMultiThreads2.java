@@ -15,53 +15,57 @@
 
 package sort;
 
-import array.Common;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveAction;
+import static array.Common.mergeInsort;
 
-import static array.Common.divide;
+public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
+    // Runnable is enough, do not need Callable as each thread only work on its elements scope of arr
+    private static class DivideMergeInSort<T extends Comparable<T>> implements Runnable {
+        private T[] arr, tmp;
+        private int l, r;
 
-public class MergeSortRecursionMultiThreads2 {
-    public static <T extends Comparable<T>> void mergeSort(T[] arr) {
-        ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
-        forkJoinPool.invoke(new DivideMergeInSortAction(arr));
+        @Override
+        public void run() {
+            if (l == r) {
+                // stop divide
+                return;
+            }
+
+            int mid = (l + r) / 2;
+
+            try {
+                executorService.submit(new DivideMergeInSort(arr, l, mid, tmp)).get();
+                executorService.submit(new DivideMergeInSort(arr, mid + 1, r, tmp)).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            mergeInsort(arr, l, mid, r, tmp);
+        }
+
+        public DivideMergeInSort(T[] arr, int l, int r, T[] tmp) {
+            this.arr = arr;
+            this.l = l;
+            this.r = r;
+            this.tmp = tmp;
+        }
     }
-}
 
-/**
- * Should use RecursiveTask.
- * --But as the input is array and only its content is changed in the precess of fork.
- *   So use RecursiveAction to make it simple.
- *
- * --Must join() to wait else the result will be unexpected
- */
-class DivideMergeInSortAction extends RecursiveAction {
-    private final Comparable[] arr;
+    private static ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    @Override
-    protected void compute() {
-        // Input check, threshold
-        if (arr == null || arr.length <= 1) {
+    public static <T extends Comparable<T>> void mergeSort(T[] arr) {
+        // Input check
+        if (arr == null || arr.length <= 1) { // note: arr may be empty array: {}
             return;
         }
-        // 1 Divide into 2 halves
-        final Comparable[][] halves = divide(arr);
-
-        // 2 Divide, merge each halves in sort
-        RecursiveAction l = new DivideMergeInSortAction(halves[0]);
-        RecursiveAction r = new DivideMergeInSortAction(halves[1]);
-        l.fork();
-        r.fork();
-
-        l.join();
-        r.join();
-
-        // 3 Merge them back into one.
-        Common.mergeInsort(halves[0], halves[1], arr);
-    }
-
-    public DivideMergeInSortAction(Comparable[] arr) {
-        this.arr = arr;
+        try {
+            executorService.submit(new DivideMergeInSort(arr, 0, arr.length - 1, // note: The index is included
+                    new Comparable[arr.length])).get();
+        } catch (InterruptedException| ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }
