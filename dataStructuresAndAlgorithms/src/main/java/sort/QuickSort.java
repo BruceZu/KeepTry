@@ -40,25 +40,24 @@ public class QuickSort {
      * @return    index of pivot
      */
     private static <T extends Comparable<T>> int locatePivotIndex(T[] arr, int l, int r) {
-        int p = l, other = r;
-        initPivotUsingMedianOf3(arr, p, other, (p + other) / 2);
+        initPivotUsingMedianOf3(arr, l, r, (l + r) / 2);
 
-        while (p != other) {
-            if (p < other && greatThan(arr[p], arr[other])
-                    || p > other && lessThan(arr[p], arr[other])) {
-                swap(arr, p, other);
+        while (l != r) {
+            if (l < r && greatThan(arr[l], arr[r])
+                    || l > r && lessThan(arr[l], arr[r])) {
+                swap(arr, l, r);
                 // also swap index variable
-                p ^= other;
-                other ^= p;
-                p ^= other;
+                l ^= r;
+                r ^= l;
+                l ^= r;
             }
-            if (p < other) {
-                other--;
+            if (l < r) {
+                r--;
             } else {
-                other++;
+                r++;
             }
         }
-        return p;
+        return l;
     }
 
     /**
@@ -68,8 +67,19 @@ public class QuickSort {
      *   Locate the index of pivot in the sorted array.
      *   recursively call on the left 2 parts, till the length of the left part is 0 or 1
      *
-     * O(N^2) , average O(NlgN)
+     * O(N^2)
+     *  1  n-1  1 9 8 7 6 5 4 3 2
+     *  2  n-2  1 2 9 8 7 6 5 4 3
+     *  3  n-3  1 2 3 9 8 7 6 5 4
+     *  n-1 1   1 2 3 4 5 6 7 8 9
      *
+     * average O(NlgN)
+     *  1    n                       1
+     *  2    n/2 + n/2               2
+     *  3    n/4 + n/4 + n/4 + n/4   4
+     *
+     *  lgn  n                       n
+     * @see <a href="https://en.wikipedia.org/wiki/Quicksort">wiki Big O</a>
      * @param l   left index included
      * @param r   right index included
      */
