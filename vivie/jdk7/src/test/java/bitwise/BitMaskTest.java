@@ -476,7 +476,9 @@ public class BitMaskTest {
         Assert.assertEquals(
                 i -    /**/        ((i >> 1) & 0x55555555),
                 (i & 0x55555555) + ((i >> 1) & 0x55555555));
-        /* count the bits of our two-bit number i by  i-j,
+        /*
+           performance improvement:
+           count the bits of our two-bit number i by  i-j,
            j = ((i >> 1) & 0b01)
                        i           j         i - j
                     ----------------------------------
