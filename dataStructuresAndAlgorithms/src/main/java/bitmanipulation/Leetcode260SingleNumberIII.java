@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package bitoperation;
+package bitmanipulation;
 
 /**
  * <pre>
