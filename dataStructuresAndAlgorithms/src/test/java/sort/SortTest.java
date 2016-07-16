@@ -116,7 +116,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 30l, expected = Test.None.class)
     public void mergeSortTest3() {
         Comparable[] ar = clone(arr);
         // start test
