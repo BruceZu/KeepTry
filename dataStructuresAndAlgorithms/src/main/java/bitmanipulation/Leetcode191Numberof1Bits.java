@@ -17,8 +17,7 @@ package bitmanipulation;
 
 /**
  * <pre>191. Number of 1 Bits  QuestionEditorial Solution  My Submissions
- * Total Accepted: 101492
- * Total Submissions: 269663
+ *
  * Difficulty: Easy
  * Write a function that takes an unsigned integer and returns the number of ’1' bits it has
  * (also known as the Hamming weight).
