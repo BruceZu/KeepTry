@@ -16,7 +16,7 @@
 package bitmanipulation;
 
 /**
- * <pre>191. Number of 1 Bits  QuestionEditorial Solution  My Submissions
+ * <pre>191. Number of 1 Bits
  *
  * Difficulty: Easy
  * Write a function that takes an unsigned integer and returns the number of ’1' bits it has
@@ -31,7 +31,7 @@ package bitmanipulation;
  *  =====================================================================
  *  1 operations precedence: + <<<<  & ^ |
  *
- *  2 who need >>> and who not
+ *  2 who need >>> and who not. The unsigned right shift operator ">>>" shifts a zero into the leftmost position
  *
  *  3 number of hexadecimal
  *
