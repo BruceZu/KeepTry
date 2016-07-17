@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array;
+package bitmanipulation;
 
 /**
  * <pre>
@@ -27,16 +27,20 @@ package array;
  * Similar Problems
  * (M) Single Number
  * (M) Single Number III
+ * ==============================================================================================
+ * watch directly in the 2D map with 31~0 bit columns
+ * sum number of '1' on each bit column and mod 3, this will filter out those elements which appears 2 times
+ * sum maybe 0, 1, 2
  */
 public class Leetcode137SingleNumberII {
     public int singleNumber(int[] nums) {
         int answer = 0;
         for (int i = 0; i < 32; i++) {
-            int sum = 0; // sum number of bit (set 1) on the i column( start from right to left)
+            int sum = 0;
             for (int j = 0; j < nums.length; j++) {
                 sum += ((nums[j] >> i) & 1) == 1 ? 1 : 0;
             }
-            sum %= 3; // not sum is 0 or 1
+            sum %= 3;
             answer |= sum << i;
         }
         return answer;
