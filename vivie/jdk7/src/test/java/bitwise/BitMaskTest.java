@@ -385,65 +385,6 @@ public class BitMaskTest {
         Assert.assertEquals(5, (-5 ^ -5 >> 31) - (-5 >> 31));
     }
 
-    @Test(timeout = 3000L, expected = Test.None.class)
-    public void testReverse_1() {
-        // 1. O(lg(N))
-        int a = -0x9c3e07f0;
-        int backup = a;
-        a = (a >> 16) | (a << 16);
-        a = ((a >> 4) & 0x0f0f0f0f) | ((a & 0x0f0f0f0f) << 4);
-        a = ((a >> 8) & 0x00ff00ff) | ((a & 0x00ff00ff) << 8);
-        a = ((a >> 2) & 0x33333333) | ((a & 0x33333333) << 2); // 0xcccccccc = 0b11001100110011001100110011001100
-        a = ((a >> 1) & 0x55555555) | ((a & 0x55555555) << 1);
-
-        Assert.assertEquals(0b10011100001111100000011111110000, 0x9c3e07f0);
-        Assert.assertEquals(Integer.reverse(backup), a);
-    }
-
-    @Test(timeout = 3000L, expected = Test.None.class)
-    public void testReverse_2() {
-        // 2.
-        int i = -0x9c3e07f0;
-        int backup = i;
-        i = (i & 0x55555555) << 1 | (i >>> 1) & 0x55555555;
-        i = (i & 0x33333333) << 2 | (i >>> 2) & 0x33333333;
-        i = (i & 0x0f0f0f0f) << 4 | (i >>> 4) & 0x0f0f0f0f;
-        //  8  8  8  8
-        i = (i << 24) | ((i & 0xff00) << 8) |                  //0xff00 = 0b 0000 0000 0000 0000 1111 1111 0000 0000
-                ((i >>> 8) & 0xff00) | (i >>> 24);
-        Assert.assertEquals(i, Integer.reverse(backup));
-    }
-
-    @Test(timeout = 3000L, expected = Test.None.class)
-    public void testReverse_3() {
-        // 3. O(lg(N))
-        int s = 32;
-        int mask = ~0;
-        int v = -0x9c3e07f0;
-        int backup = v;
-        while ((s >>= 1) > 0) {
-            mask ^= (mask << s);
-            v = ((v >> s) & mask) | ((v << s) & ~mask);
-        }
-        Assert.assertEquals(v, Integer.reverse(backup));
-    }
-
-    @Test(timeout = 3000L, expected = Test.None.class)
-    public void testReverse_4() {
-        // 4.
-        int v = -0x9c3e07f0;
-        int r = v; // r will be reversed bits of v; first get LSB of v
-        int backup = r;
-        int s = 32 - 1; // extra shift needed at end
-        for (v >>= 1; v != 0; v >>= 1) {
-            r <<= 1;
-            r |= v & 1;
-            s--;
-        }
-        r <<= s;
-        Assert.assertEquals(r, Integer.reverse(backup));
-    }
-
     @Test(timeout = 3L, expected = Test.None.class)
     public void testPopulationCountOf32BitInteger_1() {
         // 1.
@@ -477,7 +418,6 @@ public class BitMaskTest {
                 i -    /**/        ((i >> 1) & 0x55555555),
                 (i & 0x55555555) + ((i >> 1) & 0x55555555));
         /*
-           performance improvement:
            count the bits of our two-bit number i by  i-j,
            j = ((i >> 1) & 0b01)
                        i           j         i - j
