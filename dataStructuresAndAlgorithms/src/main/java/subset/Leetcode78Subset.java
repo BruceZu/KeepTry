@@ -16,184 +16,105 @@
 package subset;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-/*
-Given a set of distinct integers, nums, return all possible subsets.
-
-Note:
-Elements in a subset must be in non-descending order.
-The solution set must not contain duplicate subsets.
-For example,
-If nums = [3,2,1], a solution is:
-
-[
-  [3],
-  [1],
-  [2],
-  [1,2,3],
-  [1,3],
-  [2,3],
-  [1,2],
-  []
-]
+/**
+ * <pre>
+ * 78. Subsets
+ * Difficulty: Medium
+ * Given a set of distinct integers, nums, return all possible subsets.
+ *
+ * Note:
+ * The solution set must not contain duplicate subsets.
+ *
+ * Followup:
+ *   + assume 1:  Elements in a subset must be in non-descending order.
+ *   + assume 2:  calculate subsets with a given size.  0<= size <= array.length.
+ *
+ * For example,
+ * If nums = [1,2,3], a solution is:
+ *
+ * [
+ * [3],
+ * [1],
+ * [2],
+ * [1,2,3],
+ * [1,3],
+ * [2,3],
+ * [1,2],
+ * []
+ * ]
+ * Company Tags Amazon Uber Facebook
+ * Tags Array Backtracking Bit Manipulation
+ * Similar Problems (M) Generalized Abbreviation
+ * ==================================================================================================
+ * 1> Back-tracing: running time O(n^2)
+ *    back-tracing, need restore to original status. next number's choices depends the above ones
+ *   the empty set.
+ *   Left bound of loop:
+ *                  never look back.
+ *                  e.g.: if {1,3} is selected,
+ *                  now the third one will be selected from 4 and 5,
+ *                  do not care 2, because {1,3,2} is same as {1,2,3} which has been done.
+ *   Followup:
+ *    1:  -> + assume 1:  Arrays.sort(nums);
+ *    2:  -> + assume 2:
+ *             check the result length before add it to result:
+ *              if(selected.size() == 3) {
+ *                     // add
+ *              }
+ *             performance:
+ *               right bound check in loop:
+ *               selected numbers, i, left numbers
+ *               i< arr.length -(size - selected)
+ *
+ *               E.g.: sorted array {1,2,3,4,5}. size =3.
+ *               Right bound of loop:
+ *                  First number  has 3 choices.
+ *                      [1, 2, 3]
+ *                      [1, 2, 4]
+ *                      [1, 2, 5]
+ *                      [1, 3, 4]
+ *                      [1, 3, 5]
+ *                      [1, 4, 5]
+ *
+ *                      [2, 3, 4]
+ *                      [2, 3, 5]
+ *                      [2, 4, 5]
+ *
+ *                      [3, 4, 5]
+ *
+ * 2> Bit Manipulation:
+ *  nums is distinguish and nums.length<=64.
+ *
+ * 3> from empty set,
+ *    in a loop:
+ *       add new subsets by inserting current number into existing subsets.
+ *
+ * @see bitmanipulation.Leetcode78SubsetBitManipulation
+ * @see Leetcode78Subset2
  */
 public class Leetcode78Subset {
     /**
-     * Idea A  Back-tracing
-     * <pre>
-     * List all subset of n unique elements.
-     * running time O(?)
-     *
-     * Idea 1:
-     * E.g. sorted array {1,2,3,4,5}
-     * A If it is to calculate subsets with a given size.
-     * For all subsets with size = 3, 0<= 3 <= array.length.
-     *  1 First number  has 3 choices.
-     *    Second number's choices depends on the result of first number
-     *    Third number's choices depends on the result of above 2 numbers.
-     *    [1, 2, 3]
-     *    [1, 2, 4]
-     *    [1, 2, 5]
-     *    [1, 3, 4]
-     *    [1, 3, 5]
-     *    [1, 4, 5]
-     *
-     *    [2, 3, 4]
-     *    [2, 3, 5]
-     *    [2, 4, 5]
-     *
-     *    [3, 4, 5]
-     *
-     *  2 It is set, this means it has nothing to do with the order of elements,
-     *    {1,2,3} is same as {1 3 2}, that means when deciding the loop scope of the choices for a left number,
-     *    never look back, left, instead just go forward towards right
-     *    e.g. if {1,3} is selected 2 numbers, now the left one will be selected from 4 and 5,
-     *    do not need care 2 anymore, because {1,3,2} is same as {1,2,3} which has been done.
-     *
-     *  3  need to check the result length before add it to result
-     *     also need valid index for current number:
-     *      index <= array.length - (size of subset - selected elements' number)
-     *      So
-     *      current number choices:
-     *      start index  <= array.length - size of subset ( above case is <= 5  -  3)
-     *
-     * B  If it is to calculate all subsets without size specified. As in this way each result is distinguish,
-     *    that means all results are just the excepted results except the empty set
-     *
-     * Note
-     *  1 each step back of back-tracing, need restore to original status.
-     *  2 Not use LinkedList in this class, special scenario
-     *
-     * </pre>
-     *
-     * @param sorted   sorted array
-     * @param result   keep all subsets.
-     * @param selected selected elements for current subset
-     * @param choice   index of choice to select current number to calculate current subset in order.
      * @see <a href ="https://www.mathsisfun.com/combinatorics/combinations-permutations.html">Combinations and Permutations</a>
      */
-    private static void subsets(int[] sorted, List<List<Integer>> result, ArrayList<Integer> selected, int choice) {
-        while (choice < sorted.length) {
-            selected.add(sorted[choice]);
-//            // Check subset with size
-//            if(selected.size() == 3) {
-//                System.out.println(Arrays.toString(selected.toArray()));
-//            }
-            result.add((ArrayList<Integer>) selected.clone());
-            if (choice + 1 < sorted.length) {
-                subsets(sorted, result, selected, choice + 1);
-            }
+    private static void subsets(int[] arr, List<List<Integer>> r, ArrayList<Integer> selected, int from) {
+        while (from < arr.length) {
+            selected.add(arr[from]);
+
+            r.add((ArrayList<Integer>) selected.clone());
+            subsets(arr, r, selected, from + 1);
+
             selected.remove(selected.size() - 1);
-            choice++;
+            from++;
         }
     }
 
-
     public List<List<Integer>> subsets(int[] nums) {
-        Arrays.sort(nums);
         List<List<Integer>> result = new ArrayList<>();
         result.add(new ArrayList<Integer>());
 
         subsets(nums, result, new ArrayList<Integer>(), 0);
-        return result;
-    }
-
-    /**
-     * * Idea B
-     * <pre>
-     * if (nums.length <= 64) using bit manipulation with runtime O(N*2^N)
-     *
-     *           1 2 3 4 5
-     *     index 0 1 2 3 4
-     *
-     *           0 0 0 0 1
-     *           0 0 0 1 0
-     *           0 0 0 1 1
-     *            ......
-     *           1 1 1 1 1
-     */
-    public List<List<Integer>> subsets64(int[] nums) {
-        Arrays.sort(nums);
-        List<List<Integer>> result = new ArrayList<>();
-        result.add(new ArrayList<Integer>());
-        int n = nums.length;
-        for (long i = 1; i < Math.pow(2, n); i++) {
-            long selected = i;
-            List<Integer> subset = new ArrayList();
-            int index = 0;
-            do {
-                if ((selected & 1) == 1) {
-                    subset.add(nums[index]);
-                }
-
-                index++;
-                selected >>= 1;
-            } while (selected != 0);
-            result.add(subset);
-        }
-        return result;
-    }
-
-    /**
-     * Idea C
-     * running time O(?)
-     */
-    public List<List<Integer>> subsetsLoop(int[] nums) {
-        Arrays.sort(nums);
-        List<List<Integer>> result = new ArrayList<>();
-        result.add(Arrays.asList(new Integer[]{}));
-
-        for (int i = 0; i < nums.length; i++) {
-            int currentSize = result.size();
-            for (int j = 0; j < currentSize; j++) {
-                List l = new ArrayList<>(result.get(j));
-                l.add(nums[i]);
-                result.add(l);
-            }
-        }
-        return result;
-    }
-
-    private static void subsets2(int[] nums, List<List<Integer>> result, int from) {
-        final int current = nums[from];
-        int currentSize = result.size();
-        for (int j = 0; j < currentSize; j++) {
-            List l = new ArrayList<>(result.get(j));
-            l.add(current);
-            result.add(l);
-        }
-        if (from + 1 < nums.length) {
-            subsets2(nums, result, from + 1);
-        }
-    }
-
-    public List<List<Integer>> subsets2(int[] nums) {
-        Arrays.sort(nums);
-        List<List<Integer>> result = new ArrayList<>();
-        result.add(new ArrayList<Integer>());
-        subsets2(nums, result, 0);
         return result;
     }
 }
