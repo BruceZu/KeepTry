@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array;
+package bitmanipulation;
 
 /**
  * <pre>
@@ -33,8 +33,8 @@ package array;
  */
 public class Leetcode136SingleNumber {
     public int singleNumber(int[] nums) {
-        int xor = nums[0];
-        for (int i = 1; i < nums.length; i++) {
+        int xor = 0;
+        for (int i = 0; i < nums.length; i++) {
             xor ^= nums[i];
         }
         return xor;
