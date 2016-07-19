@@ -13,12 +13,13 @@
 // limitations under the License.
 //
 
-package array;
+package bitmanipulation;
 
 /**
  * <pre>
  * Difficulty: Medium
- * Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
+ * Given an array containing n distinct numbers taken from 0, 1, 2, ..., n,
+ * find the one that is missing from the array.
  *
  * For example,
  * Given nums = [0, 1, 3] return 2.
@@ -32,29 +33,26 @@ package array;
  *  (H) First Missing Positive
  *  (M) Single Number
  *  (H) Find the Duplicate Number
- *
- * </pre>
  */
 public class Leetcode268MissingNumber {
     public int missingNumber(int[] nums) {
         int sum = 0;
         int all = 0;
-        int i = 0;
-        for (; i < nums.length; i++) {
-            all += i;
+
+        for (int i = 0; i <= nums.length - 1; i++) {
             sum += nums[i];
+            all += i;
         }
-        all += i;
+        all += nums.length;
         return all - sum;
     }
 
     public int missingNumber2(int[] nums) {
-        int xor = nums[0];
-        for (int i = 1; i < nums.length; i++) {
+        int xor = 0;
+        for (int i = 0; i <= nums.length - 1; i++) {
             xor ^= nums[i];
             xor ^= i;
         }
-        xor ^= 0;
         xor ^= nums.length;
         return xor;
     }

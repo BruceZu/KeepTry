@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array;
+package backtracing;
 
 import java.util.Arrays;
 import java.util.HashSet;
