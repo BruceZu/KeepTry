@@ -37,11 +37,12 @@ package bitmanipulation;
  *             if (vtimes.get(v) > nums.length / 2) {
  *                      return v;
  *             }
- *   2 int halfNumber, times.  for {3,2,2}
+ *   2  votes:
+ *             {3,2,2}, times.
  *                 3     1
  *                 2     0
  *                 2     1
- *     int halfNumber, times.  for {1,3,3,2,2,2,5 }
+ *    {1,3,3,2,2,2,5 }, times.
  *                 1     1
  *                 3     0
  *                 2     1
@@ -65,29 +66,13 @@ package bitmanipulation;
  *   Watch all elements on this 2D map, As the majority exists, so sure there is some column where there is the bit of majority
  *   number and its sum is more than n/2.
  *
+ * @see  Leetcode169MajorityElement2#majorityElement(int[])
  * @see
- * <a href="http://www.cs.utexas.edu/~moore/best-ideas/mjrty/">A Linear Time Majority Vote Algorithm</a>
- * <a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html">Operator Precedence</a>
+ * <br><a href="http://www.cs.utexas.edu/~moore/best-ideas/mjrty/">A Linear Time Majority Vote Algorithm</a>
+ * <br><a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html">Operator Precedence</a>
  */
 public class Leetcode169MajorityElement {
-    public static int majorityElement3(int[] num) {
-        int major = num[0], count = 1;
-        for (int i = 1; i < num.length; i++) {
-            int v = num[i];
-            if (v != major) {
-                count--;
-                if (count == 0) {
-                    major = v;
-                    count++;
-                }
-            } else {
-                count++;
-            }
-        }
-        return major;
-    }
-
-    public static int majorityElement2(int[] nums) {
+    public static int majorityElement1(int[] nums) {
         int major = 0;
         for (int bits = 0; bits <= 31; bits++) {
             int counts = 0;
