@@ -48,42 +48,7 @@ import java.util.List;
  *      assume world length is less than 32.
  *      replace StringBuilder with char[] can gain performance, but not easy to handle when n>=10.
  *
- *  2> backtracking. e.g.: 'word'
- *
- *     word,
- *
- *     wor1,
- *
- *     wo1d,
- *     wo2,
- *
- *     w1rd,
- *     w1r1,
- *     w2d,
- *     w3,
- *
- *     1ord,
- *     1or1,
- *     1o1d,
- *     1o2,
- *     2rd,
- *     2r1,
- *     3d,
- *     4
- *
- *
- *    Fill and abbreviate, back forward loop:
- *        current index i:  abbreviate 1 ~  array length - i.
- *        after abbreviation, if there is no char left or only one char left. this is a result.
- *                            else if there are 2 or more chars left. continue fill and abbreviate from there.
- *
- *    when the abbreviation number is more than 9,  the number will need more than one char.
- *    need fill again in the process of back tracking to cover last result.
- *
- *    when it is, its abbreviation is
- *      ""                ""
- *      "a"              "a", "1"
- *
+ *  2> backtracking
  * @see Leetcode320GeneralizedAbbreviation2
  */
 public class Leetcode320GeneralizedAbbreviation {
