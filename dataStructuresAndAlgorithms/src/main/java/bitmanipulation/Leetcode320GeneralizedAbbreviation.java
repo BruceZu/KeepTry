@@ -52,16 +52,14 @@ import java.util.List;
  * @see Leetcode320GeneralizedAbbreviation2
  */
 public class Leetcode320GeneralizedAbbreviation {
-    public static List<String> generateAbbreviations2(String word) {
+    public static List<String> generateAbbreviations(String word) {
         List<String> r = new ArrayList<>();
         if (word == null) {
             return r;
         }
         char[] ar = word.toCharArray();
-        r.add(word); // {}
-
-        int max = (int) Math.pow(2, word.length()) - 1;
-        for (int solution = 1; solution <= max; solution++) {
+        int max = (1 << word.length()) - 1;
+        for (int solution = 0; solution <= max; solution++) {
             int cur = solution;
             int i = 0;
 
