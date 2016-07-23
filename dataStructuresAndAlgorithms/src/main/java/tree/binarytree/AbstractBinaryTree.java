@@ -61,6 +61,7 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
      * if p has a right child rc then
      * inorder(rc) { recursively traverse the right subtree of p }
      */
+    // TODO: 7/22/16 need improve. see jiuzhang site
     @Override
     public Iterator<T> iteratorInOrder() {
         if (size() == 0) {
@@ -146,6 +147,7 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         }.init();
     }
 
+    // TODO: 7/22/16 need improve. see jiuzhang site
     @Override
     public Iterator<T> iteratorPreOrder() {
         if (size() == 0) {
@@ -216,6 +218,7 @@ public abstract class AbstractBinaryTree<T extends BinaryTreeNode<T, E>, E>
         }.init();
     }
 
+    // TODO: 7/22/16 need improve. see jiuzhang site
     @Override
     public Iterator<T> iteratorPostOrder() {
         if (size() == 0) {
