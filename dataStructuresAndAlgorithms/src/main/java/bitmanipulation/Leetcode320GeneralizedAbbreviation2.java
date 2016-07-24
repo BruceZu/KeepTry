@@ -20,12 +20,22 @@ import java.util.List;
 
 /**
  * <pre>
- *       left ready parts,
- *       start from 'from', current 'to' ('from' ~ length-1), number of abbr:
- *             - 0 is special
- *             - if pre char is number, so do not abbre from 'from'
- *               else: abbr, the number is:  current 'to' - 'from' + 1;
- *       left parts: 'from' = to+1;
+ *     left ready parts + current abbr number + left.
+ *
+ *      - left ready parts: start from "".
+ *      - abbreviate from 'from'  (0~length),
+ *                  to current 'to' ('from' ~ length-1)
+ *                  number of abbr:
+ *                    <strong>check pre char</strong>:
+ *                    if  pre char is number, so do not abbre from 'from',
+ *                        means only abbr number is 0.
+ *                        0 is special,it is same to "", no abbreviation, there will not be "0"
+ *                        <strong>skill: provide a boolean variable</strong>to let next recursion know its pre char
+ *                        is num or not(abbr number is 0 or not) without calculation.
+ *                    else: abbr number is:  current 'to' - 'from' + 1;
+ *
+ *       - left parts: 'from' = to+1;
+ *
  *       e.g. 'word':
  *       from = index 1 and current 'to' is index 2:
  *
@@ -47,6 +57,7 @@ import java.util.List;
  *      2rd, 2r1,
  *      3d,
  *      4
+ *  See {@link Leetcode320GeneralizedAbbreviation2_2 improved version}
  */
 public class Leetcode320GeneralizedAbbreviation2 {
     private static String word;
