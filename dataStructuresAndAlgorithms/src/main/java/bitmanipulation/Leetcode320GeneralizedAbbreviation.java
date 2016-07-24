@@ -50,6 +50,9 @@ import java.util.List;
  *
  *  2> backtracking
  * @see Leetcode320GeneralizedAbbreviation2
+ * @see Leetcode320GeneralizedAbbreviation3
+ * @see Leetcode320GeneralizedAbbreviation4
+ * @see Leetcode320GeneralizedAbbreviation5
  */
 public class Leetcode320GeneralizedAbbreviation {
     // runtime O(N*2^N)
