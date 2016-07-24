@@ -15,7 +15,7 @@
 
 package bitmanipulation;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +57,7 @@ import java.util.Map;
  *
  *  Note: the improved version can not pass Leetcode,
  *        but in my laptop the result is right with its test data.
+ *            only run that case in leetcode is also ok.
  */
 /*Idea version
    public static List<String> generateAbbreviations(String word) {
@@ -72,20 +73,21 @@ import java.util.Map;
     }
  */
 public class Leetcode320GeneralizedAbbreviation5 {
-    private static Map<Integer, List<String>> cache = new HashMap<>();
+    private static Map<Integer, String[]> cache = new HashMap<>();
 
     public static List<String> generateAbbreviations(String word) {
-        return call(word.toCharArray(), 0);
+        return Arrays.asList(call(word.toCharArray(), 0));
     }
 
-    public static List<String> call(char[] cs, int f/*from*/) {
+    public static String[] call(char[] cs, int f/*from*/) {
         int l = cs.length;
-        int w = l - f;
-        List<String> re = new ArrayList<>(1 << w);
+        int width = l - f;
+        String[] re = new String[1 << width];
+        int size = 0;
 
-        re.add(l - f == 0 ? "" : String.valueOf(w));
+        re[size++] = width == 0 ? "" : String.valueOf(width);
         for (int i = f; i < l; i++) {
-            List<String> rs = cache.get(i + 1);
+            String[] rs = cache.get(i + 1);
             if (rs == null) {
                 rs = call(cs, i + 1);
             }
@@ -96,7 +98,7 @@ public class Leetcode320GeneralizedAbbreviation5 {
                     s.append(left);
                 }
                 s.append(cs[i]).append(ri);
-                re.add(s.toString());
+                re[size++] = s.toString();
             }
         }
         cache.put(f, re);
