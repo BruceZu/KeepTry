@@ -52,6 +52,7 @@ import java.util.List;
  * @see Leetcode320GeneralizedAbbreviation2
  */
 public class Leetcode320GeneralizedAbbreviation {
+    // runtime O(N*2^N)
     public static List<String> generateAbbreviations(String word) {
         List<String> r = new ArrayList<>();
         if (word == null) {
