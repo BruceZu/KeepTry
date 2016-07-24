@@ -37,7 +37,7 @@ import java.util.List;
  *        corner cases: code lines with '//'
  */
 public class Leetcode320GeneralizedAbbreviation3 {
-
+    // runtime,  i*2^(i-1); i:1~N;
     public static List<String> generateAbbreviations(String word) {
         if (word == null) {
             return new ArrayList<>(0);
@@ -53,41 +53,71 @@ public class Leetcode320GeneralizedAbbreviation3 {
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             for (int old = 0; old < (1 << i); old++) {
-                int newIndex = old + (1 << i);
-                int k = 0;
-                for (; abbrs[old][k] != '\0'; k++) {
-                    abbrs[newIndex][k] = abbrs[old][k];
-                }
-                abbrs[old][k] = c;
-
-                int length = k + 1;
-                boolean noPreChar = k == 0; //
-                if (noPreChar || '9' < abbrs[old][k - 1] || abbrs[old][k - 1] < '0') {
-                    abbrs[newIndex][k] = '1';
-                } else {
-                    char last = abbrs[old][k - 1];
-                    boolean has2pre = k - 2 >= 0; //
-                    boolean num2 = has2pre && '0' <= abbrs[old][k - 2] && abbrs[old][k - 2] <= '9';
-                    int num = num2 ? (abbrs[old][k - 2] - '0') * 10 + last - '0' : last - '0';
-
-                    num++;
-                    int fillNto = num2 ? k - 2 : k - 1;
-                    if (num > 9) {
-                        abbrs[newIndex][fillNto++] = (char) ('0' + num / 10);
-                        abbrs[newIndex][fillNto++] = (char) ('0' + num - num / 10 * 10); //
-                    } else {
-                        abbrs[newIndex][fillNto++] = (char) ('0' + num);
+                if (i != chars.length - 1) {
+                    int newIndex = old + (1 << i);
+                    int k = 0;
+                    for (; abbrs[old][k] != '\0'; k++) {
+                        abbrs[newIndex][k] = abbrs[old][k];
                     }
-                    length = fillNto;
-                }
-
-                if (i == chars.length - 1) {
+                    abbrs[old][k] = c;
+                    plusAbbreNumber1(abbrs[old], k, abbrs[newIndex]);
+                } else {
+                    int k = 0;
+                    while (abbrs[old][k] != '\0') {
+                        k++;
+                    }
+                    abbrs[old][k] = c;
                     r.add(new String(abbrs[old], 0, k + 1));
-                    r.add(new String(abbrs[newIndex], 0, length));
+                    int size = plusAbbreNumber1(abbrs[old], k);
+                    r.add(new String(abbrs[old], 0, size));
                 }
             }
         }
 
         return r;
+    }
+
+    private static void plusAbbreNumber1(char[] preChars, int size, char[] newChars) {
+        boolean noPreChar = size == 0; //
+        if (noPreChar || '9' < preChars[size - 1] || preChars[size - 1] < '0') {
+            newChars[size] = '1';
+        } else {
+            char last = preChars[size - 1];
+            boolean has2pre = size - 2 >= 0; //
+            boolean num2 = has2pre && '0' <= preChars[size - 2] && preChars[size - 2] <= '9';
+            int num = num2 ? (preChars[size - 2] - '0') * 10 + last - '0' : last - '0';
+
+            num++;
+            int fillNto = num2 ? size - 2 : size - 1;
+            if (num > 9) {
+                newChars[fillNto++] = (char) ('0' + num / 10);
+                newChars[fillNto++] = (char) ('0' + num - num / 10 * 10); //
+            } else {
+                newChars[fillNto++] = (char) ('0' + num);
+            }
+        }
+    }
+
+    private static int plusAbbreNumber1(char[] preChars, int size) {
+        boolean noPreChar = size == 0; //
+        if (noPreChar || '9' < preChars[size - 1] || preChars[size - 1] < '0') {
+            preChars[size++] = '1';
+            return size;
+        } else {
+            char last = preChars[size - 1];
+            boolean has2pre = size - 2 >= 0; //
+            boolean num2 = has2pre && '0' <= preChars[size - 2] && preChars[size - 2] <= '9';
+            int num = num2 ? (preChars[size - 2] - '0') * 10 + last - '0' : last - '0';
+
+            num++;
+            int fillNto = num2 ? size - 2 : size - 1;
+            if (num > 9) {
+                preChars[fillNto++] = (char) ('0' + num / 10);
+                preChars[fillNto++] = (char) ('0' + num - num / 10 * 10); //
+            } else {
+                preChars[fillNto++] = (char) ('0' + num);
+            }
+            return fillNto;
+        }
     }
 }
