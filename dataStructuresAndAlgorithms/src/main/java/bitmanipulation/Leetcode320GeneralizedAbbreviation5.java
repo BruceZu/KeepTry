@@ -49,7 +49,7 @@ public class Leetcode320GeneralizedAbbreviation5 {
             return r;
         }
         char[] chars = word.toCharArray();
-        char[][] abbrs = new char[1 << chars.length][chars.length];
+        char[][] abbrs = new char[1 << chars.length - 1][chars.length];
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             for (int old = 0; old < (1 << i); old++) {
