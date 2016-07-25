@@ -43,6 +43,7 @@ import java.util.List;
  *      (M) Subsets
  *      (E) Unique Word Abbreviation
  *  ====================================================================
+ *  <strong>assume there is no supplementary character</strong>
  *  1> Bit Manipulation:
  *      same as subsets of size <strong>[0 ~ 2^word.length-1]</strong>
  *      assume world length is less than 32.
