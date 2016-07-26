@@ -15,358 +15,231 @@
 
 package array.binarysearch;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
 /**
  * <pre>
  * Difficulty: Hard
  * There are two sorted arrays nums1 and nums2 of size m and n respectively.
  * Find the median of the two sorted arrays.
- * The overall run time complexity should be O(log (m+n)).
+ * The overall run time complexity should be <strong> O(log (m+n)) </strong>.
  *
  * Assume s and n will never be null.
  *
- * Tags: Binary Search Array Divide and Conquer
+ * Company Tags: Google Zenefits Microsoft Apple Yahoo Dropbox Adobe
+ * Tags:
+ *      Binary Search
+ *      Array
+ *      Divide and Conquer
  *
+ *
+ * ==========================================================================
+ *
+ *    1> Get medians of 2 arrays(left median if its length is even). [Binary Search]
+ *    2> Compare.
+ *         if same: Done. may be need calculate the right median.
+ *         else translate the same question to new pairs arrays with same answer by cutting
+ *              same size elements from both arrays:[Divide and Conquer]
+ *
+ *              numbers to cut: the smaller arrays's half, not include current median.
+ *                              when the shorter array has 2 elements left, there is 2 exception
+ *                              cases A, B as following.
+ *              where to cut: from the side where it is sure the answer does not exist.
+ *
+ *              Till can not cut again, it means current median in the smaller array will still
+ *              be median in next recursion, it means only 1 or 2 elements left in the shorter
+ *              array.
+ *              Then calculate the answers
+ *              e.g.
+ *              shorter:  1 2 3
+ *                          |
+ *              longer:         4 5 6 7 8 9
+ *                                  |
+ *              after cut:
+ *              shorter:    2 3
+ *                          |
+ *              longer:         4 5 6 7 8
+ *                                  |
+ *
+ * Skill:
+ * 1> Focus on medians.
+ *                  length:    even            odd           next-even
+ *                   e.g.:      4               5              6
+ *       the kth of median    length/2       (length+1)/2   length/2
+ *          or left median:     or              or           or
+ *                            (length+1)/2   (length+1)/2   (length+1)/2
+ *
+ *       its index is kth -1:       (length+1)/2 -1
+ *
+ * 1> keep the shorter array at left:
+ *         thus know which is the shorter, and only check its length to calculate the cut size for the longer array.
+ *
+ * 2> Cut members:
+ *   -  why cut members should not include the current median? the median maybe the answer.
+ *   -  2 exceptions when short array has only 2 elements left
+ *                        &&
+ *                        longer+shorter = even
+ *      A> the answer: two median are in short array.
+ *         can continue cut, but do not do it, if cut 4, it will be wrong.
+ *
+ *                3 4
+ *                | |
+ *           1  2     5  6
+ *              |     |
+ *
+ *
+ *     B> the answer: two medians are in long array which only have 2 elements.
+ *        cannot continue cut, but if longer have more than 3, as the answer is in the longer, still can cut.
+ *
+ *           1      4
+ *           |      |
+ *             2  3
+ *             |  |
+ *
+ *  Other cases: can continue divide and conquer half size on both arrays, translate it to next sub question
+ *
+ *  3> compare two medians, when same:
+ *      if lsize+ ssize is odd, sure one array is odd and one is even
+ *                       even, odd, even, odd
+ *                       even, even odd   odd
+ *                       --------------------
+ *                       even  odd  odd   even
+ *
+ *      take shorter and longer in account:
+ *
+ *                       xs     x         x
+ *                       xb     xo        x
+ *            result: (x+s)/2   x         x
+ *  4> when only 1 element left for shorter:
+ *   shorter and odd longer:
+ *       answer is average of 2 medians
+ *       v may be in 3 periods
+ *       Note: corner case: <strong>only m in longger </strong>
+ *
+ *         1   [   2      ]   3
+ *            pre  m  next
+ *
+ *  shorter and even longer:
+ *      answer is one media
+ *      v may be in 3 periods
+ *
+ *       1  [     2        ]  3
+ *          m   rightm(next)
+ *
+ * @see <br>
+ * <a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html"> Operator Precedence </a>
  *
  * @see <a href="https://leetcode.com/problems/median-of-two-sorted-arrays/"> link to leetcode </a>
  */
 public class Leetcode4MedianofTwoSortedArrays {
-}
+    private static int[] s, l;
 
-class Solution {
+    private static double resultWhen2ElementInShorter(int is, int ssize,
+                                                      int il, int lsize, int lmIndex, boolean lIsOdd) {
+        if (!lIsOdd) {
+            int lrmIndex = il + lsize / 2;
+            // A
+            if (l[lmIndex] <= s[is] && s[is + 1] <= l[lrmIndex]) {
+                return (s[is] + s[is + 1]) * 0.5;
+            }
+            // B
+            if (lsize == 2 && s[is] <= l[il] && l[il + 1] <= s[is + 1]) {
+                return (l[il] + l[lrmIndex]) * 0.5;
+            }
+        }
+        // Other cases
+        if (s[is] < l[lmIndex]) {
+            return cutHalfToNewPair(is + 1, ssize - 1, il, lsize - 1);
+        }
+        return cutHalfToNewPair(is, ssize - 1, il + 1, lsize - 1);
+    }
+
+    // @param lmIndex index of long array median, or left median
+    private static double resultWhenOneElementInShorter(int is, int il, int lsize, int lmIndex, boolean lIsOdd) {
+        int v = s[is];
+        int m = l[lmIndex];
+        if (lsize == 1) {
+            return (v + m) * 0.5; //double
+        }
+        int pre = l[lmIndex - 1];
+        int next = l[lmIndex + 1];
+        if (lIsOdd) {
+            if (pre <= v && v <= next) {
+                return (v + m) * 0.5; //double
+            }
+            if (v > next) {
+                return (m + next) * 0.5;
+            }
+            return (pre + m) * 0.5;
+        }
+        // even
+        if (m <= v && v <= next) {
+            return v;
+        }
+        if (next < v) {
+            return next;
+        }
+        return m;
+    }
 
     /**
-     * <pre>
-     * Idea:
-     * Compare 2 arrays's (left) medians.
-     * If they are no same, cut the same numbers of elements(not include current medians).
-     * translates to new arrays with same result. till the shorter array have 2 or 1 element left.
-     * Focus on medians.
-     *
-     * 1> keep the shorter array at left, thus only check its length.
-     * 2> when it is 2 elements.
-     *  when short array length ==2 and m+n is even, 2 cases where we can not divide and conquer:
-     *  A> Two median are in short array
-     *        3 4
-     *        | |
-     *
-     *   1  2     5  6
-     *      |     |
-     *
-     *
-     *  B> Two medians are in long array which only have 2 elements.
-     *
-     *     1     4
-     *     |     |
-     *
-     *       2  3
-     *       |  |
-     *  Other cases: can divide and conquer one for both arrays and translate it to next sub question:
-     *  0 or one the expected two median are in short array
-     *
-     * @param s  short length array
      * @param is start index of array s
-     * @param l  longer array
      * @param il start index of array l
-     * @return
-     * @see <br>
-     * <a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html"> Operator Precedence </a>
      */
-    public double exe(int[] s, int is, int m, int[] l, int il, int n) {
-        if (m > n) {
-            return exe(l, il, n, s, is, m);
+    private static double cutHalfToNewPair(int is, int ssize,
+                                           int il, int lsize) {
+        if (ssize > lsize) {
+            int[] t = s;
+            s = l;
+            l = t;
+            return cutHalfToNewPair(il, lsize, is, ssize);
         }
-        if (m == 0) { // start check.
-            if ((n & 1) == 1) {
-                return l[n >> 1];
+        // input check.
+        if (ssize == 0) {
+            int lmIndex = (lsize + 1) / 2 - 1;
+            if ((lsize & 1) == 1) {
+                return l[lmIndex];
             }
-            return (l[n / 2 - 1] + l[n / 2]) * 0.5;
+            return (l[lmIndex] + l[lmIndex + 1]) * 0.5;
         }
-        boolean lIsOdd = (n & 1) == 1;
-        int mIndex = il + (lIsOdd ? n >> 1 : n / 2 - 1);
-        int lRightMIndex = il + n / 2;
-        if (m == 1) { // only check the left shorter array
-            int v = s[is];
-            if (lIsOdd) {
-                if (n == 1 || l[mIndex - 1] <= v && v <= l[mIndex + 1]) {
-                    return (v + l[mIndex]) * 0.5; //double
-                }
-                if (v > l[mIndex + 1]) {
-                    return (l[mIndex] + l[mIndex + 1]) * 0.5;
-                }
-                return (l[mIndex - 1] + l[mIndex]) * 0.5;
-            } else {
-                if (l[mIndex] <= v && v <= l[lRightMIndex]) {
-                    return v;
-                }
-                if (l[lRightMIndex] < v) {
-                    return l[lRightMIndex];
-                }
-                return l[mIndex];
-            }
+        // stop check
+        boolean lIsOdd = (lsize & 1) == 1;
+        int lmIndex = il + (lsize + 1) / 2 - 1;
+        if (ssize == 1) {
+            return resultWhenOneElementInShorter(is,
+                    il, lsize, lmIndex, lIsOdd);
         }
-        // median index, when the length is even using the left median index
-        boolean sIsOdd = (m & 1) == 1;
-        int cutNum = sIsOdd ? m >> 1 : m / 2 - 1;
+        if (ssize == 2) {
+            return resultWhen2ElementInShorter(is, ssize,
+                    il, lsize, lmIndex, lIsOdd);
+        }
+
+        // binary search, divide and conquer
+        boolean sIsOdd = (ssize & 1) == 1;
+        int cutNum = (ssize + 1) / 2 - 1;
         int smIndex = is + cutNum;
-
-        if (m == 2) {
-            if (!lIsOdd) {
-                if (l[mIndex] <= s[is] && s[is + 1] <= l[lRightMIndex]) {
-                    return (s[is] + s[is + 1]) * 0.5;
-                }
-
-                if (n == 2 && s[is] <= l[il] && l[il + 1] <= s[is + 1]) {
-                    return (l[il] + l[lRightMIndex]) * 0.5;
-                }
-            }
-
-            if (s[is] < l[mIndex]) {
-                return exe(s, is + 1, m - 1, l, il, n - 1);
-            }
-            return exe(s, is, m - 1, l, il + 1, n - 1);
-        }
-
-        if (s[smIndex] == l[mIndex]) {
+        if (s[smIndex] == l[lmIndex]) {
             if (!sIsOdd && !lIsOdd) {
-                return (s[smIndex] + (s[smIndex + 1] < l[mIndex + 1] ? s[smIndex + 1] : l[mIndex + 1])) * 0.5;
+                return 0.5 * (s[smIndex] + (s[smIndex + 1] < l[lmIndex + 1]
+                                ? s[smIndex + 1]
+                                : l[lmIndex + 1]));
             }
             return s[smIndex];
         }
 
-        m = m - cutNum;
-        n = n - cutNum;
-        if (s[smIndex] < l[mIndex]) {
+        ssize = ssize - cutNum;
+        lsize = lsize - cutNum;
+        if (s[smIndex] < l[lmIndex]) {
             is = is + cutNum;
         } else {
             il = il + cutNum;
         }
-        return exe(s, is, m, l, il, n);
+        return cutHalfToNewPair(is, ssize, il, lsize);
     }
 
-    public double findMedianSortedArrays(int[] s, int[] l) {
+    public static double findMedianSortedArrays(int[] a, int[] b) {
+        s = a;
+        l = b;
         assert (s != null);
         assert (l != null);
-        return exe(s, 0, s.length, l, 0, l.length);
-    }
-}
-
-class SolutionByFindKthElement {
-
-    /**
-     * <pre>
-     * Get the kth element of the ordered merged result of array s and l.
-     * If sum is even, then also get the (k+1)th one,
-     * but the performance in Leetcode show it is not efficient.
-     *
-     * Always assume: kth >=1 and kth <= m+n
-     *
-     * Notes:
-     *  1> cases where we should not cut the shorter array: {3}, {1,2,4,5,6}
-     *  2> cut and recursive till kth == 1, return the smaller first element of current 2 arrays.
-     *     - from left only.
-     *     - cut only one array thus the cut number will never include the one in result.
-     *     - include the checker to cut, to be able to continue {1,2},{3,4,5,6}
-     *  3> keep the shorter array on left, check it is empty firstly.
-     *
-     *  Focus on kth
-     */
-    public double[] call(int[] s, int is, int[] l, int il, int kth, boolean sumIsOdd) {
-        int m = s.length - is;
-        int n = l.length - il;
-        if (m > n) {
-            return call(l, il, s, is, kth, sumIsOdd);
-        }
-
-        if (m == 0 && sumIsOdd) {
-            return new double[]{l[il + kth - 1] * 1d};
-        }
-        if (m == 0) {
-            return new double[]{l[il + kth - 1] * 1d, l[il + kth] * 1d};
-        }
-        if (kth == 1) {
-            double first = s[is] < l[il]
-                    ? s[is] * 1d
-                    : l[il] * 1d;
-            Double second = null;
-            if (!sumIsOdd) {
-                if (first == s[is]) {
-                    if (m == 1) {
-                        second = l[il] * 1d;
-                    } else {
-                        second = s[is + 1] < l[il] ? s[is + 1] * 1d : l[il] * 1d;
-                    }
-                } else {
-                    if (n == 1) {
-                        second = s[is] * 1d;
-                    } else {
-                        second = l[il + 1] < s[is] ? l[il + 1] * 1d : s[is] * 1d;
-                    }
-                }
-            }
-            return new double[]{first, second};
-        }
-        int scut = kth * m / (m + n);
-        scut = scut < 1 ? 1 : scut;
-        int sCheckIndex = is + scut - 1;
-        int lCheckIndex = il + kth - scut - 1;
-
-        if (s[sCheckIndex] == l[lCheckIndex]) {
-            return new double[]{s[sCheckIndex] * 1d,
-                    s[sCheckIndex + 1] < l[lCheckIndex + 1]
-                            ? s[sCheckIndex + 1] * 1d
-                            : l[lCheckIndex + 1] * 1d};
-        }
-
-        if (s[sCheckIndex] < l[lCheckIndex]) {
-            is = is + scut;
-            kth = kth - scut;
-        } else if (l[lCheckIndex] < s[sCheckIndex]) {
-            il = il + kth - scut;
-            kth = scut;
-        }
-        return call(s, is, l, il, kth, sumIsOdd);
-    }
-
-    public double findMedianSortedArrays(int[] s, int[] l) {
-        assert (s != null);
-        assert (l != null);
-        int m = s.length, n = l.length;
-        boolean sumIsOdd = ((m + n) & 1) == 1;
-        int kth = sumIsOdd ? (m + n) / 2 + 1 : (m + n) / 2; // (left) median element
-        double[] r = call(s, 0, l, 0, kth, sumIsOdd);
-        return sumIsOdd ? r[0] : (r[0] + r[1]) * 0.5;
-    }
-}
-
-/**
- * Improved:
- * <pre>
- * 1> Change the way of select checker in arrays, both arrays select the k/2th element to compare.
- *    As results:
- *    -  Do not need check sv == lv. Because
- *       when k is odd, kth/2 == (kth -1)/2. The sum of index(sv)+1 and index(lv) +1 does not equal to kth.
- *       so when even sv == lv, sv is not the result.
- *       e.g. k = 3, {1,2}{1,2}
- *    -  Do not need length variables m and n.
- *
- * 2> If sum is even, get the (k+1)th one by run again separately.
- * 3> do not keep the shorter array at left, thus check both arrays' valid length is 0 or not firstly.
- *
- * Other:
- *    convert int to double: using 1d to replace 1D, using 0.5 to replace 1d/2
- */
-class SolutionByFind1KthElementImproved {
-    public double call(int[] s, int is, int[] l, int il, int kth) {
-        if (is == s.length) {
-            return l[il + kth - 1] * 1d;
-        }
-        if (il == l.length) {
-            return s[is + kth - 1] * 1d;
-        }
-        if (kth == 1) {
-            return s[is] < l[il] ? s[is] * 1d : l[il] * 1d;
-        }
-        int sv = is + kth / 2 - 1 < s.length ? s[is + kth / 2 - 1] : Integer.MAX_VALUE;
-        int lv = il + kth / 2 - 1 < l.length ? l[il + kth / 2 - 1] : Integer.MAX_VALUE;
-        if (sv < lv) {
-            return call(s, is + kth / 2, l, il, kth - kth / 2);
-        }
-        return call(s, is, l, il + kth / 2, kth - kth / 2);
-    }
-
-    public double findMedianSortedArrays(int[] s, int[] l) {
-        assert (s != null);
-        assert (l != null);
-        int m = s.length, n = l.length;
-        boolean sumIsOdd = ((m + n) & 1) == 1;
-        int kth = sumIsOdd ? (m + n) / 2 + 1 : (m + n) / 2; // (left) median element
-        double median = call(s, 0, l, 0, kth);
-        if (!sumIsOdd) {
-            return (median + (call(s, 0, l, 0, kth + 1))) / 2;
-        }
-        return median;
-    }
-}
-
-class Solution2 {
-    /**
-     * <pre>
-     *     Check if there is one array is empty firstly.
-     *
-     *     Define kth as median, or define and search left median then right median.
-     *     Do not care which array is shorter and longer, just care which array the kth should be in.
-     *     Always assume the kth is in a array till left index > right index, that means result is sure in b array
-     *
-     *     Valid boundary left and right:
-     *     a:  1 ....... l
-     *     b:  1....m
-     *
-     *     left + m = kth.
-     *  So left = kth - m
-     *     right = kth
-     *
-     * @see <a href="http://www2.myoops.org/twocw/mit/NR/rdonlyres/Electrical-Engineering-and-Computer-Science/6-046JFall-2005/30C68118-E436-4FE3-8C79-6BAFBB07D935/0/ps9sol.pdf"
-     * > link </a>
-     */
-    public double searchKthValue(int[] a, int[] b, int leftIndex, int rightIndex, int kth) {
-        int l = a.length;
-        int m = b.length;
-        if (leftIndex > rightIndex) {
-            leftIndex = max(1, kth - l) - 1;
-            rightIndex = min(kth, m) - 1;
-            return searchKthValue(b, a, leftIndex, rightIndex, kth);
-        }
-
-        int i = (leftIndex + rightIndex) / 2;
-        int j = kth - (i + 1) - 1;
-
-        int v = a[i];
-        if ((j <= -1 || 0 <= j && j < b.length && b[j] <= v) &&
-                (0 <= j + 1 && j + 1 < b.length && v <= b[j + 1] || j + 1 >= b.length)) {
-            return v;
-        } else if (0 <= j && j < b.length && v <= b[j]) {
-            return searchKthValue(a, b, i + 1, rightIndex, kth);
-        }
-        return searchKthValue(a, b, leftIndex, i - 1, kth);
-    }
-
-    public double findMedianSortedArrays(int[] a, int[] b) {
-        assert (a != null);
-        assert (b != null);
-        int l = a.length;
-        int m = b.length;
-        int[] longer = l < m ? b : a;
-        int[] shorter = l < m ? a : b;
-
-        if (shorter.length == 0) {
-            int mIndex = (longer.length - 1) / 2;
-            int next = (longer.length) / 2;
-            return (longer[mIndex] + longer[next]) * 0.5;
-        }
-
-        int kth = (l + m + 1) / 2;
-        int leftIndex = max(1, kth - m) - 1;
-        int rightIndex = min(kth, l) - 1;
-        double result = searchKthValue(a, b, leftIndex, rightIndex, kth);
-        if (((l + m) & 1) == 0) {
-            double rightMedian = searchKthValue(a, b, leftIndex, rightIndex, kth + 1);
-            return (result + rightMedian) * 0.5;
-        }
-        return result;
-    }
-}
-
-class Solution3 {
-
-    /**
-     * @see <a href ="https://leetcode.com/discuss/41621/very-concise-iterative-solution-with-detailed-explanation"> Idea 1 </a>
-     *       <a href="https://leetcode.com/discuss/15790/share-my-o-log-min-m-n-solution-with-explanation"> Idea 2 </a>
-     */
-    public double findMedianSortedArrays(int[] a, int[] b) {
-        //todo
-        return 0;
+        return cutHalfToNewPair(0, s.length, 0, l.length);
     }
 }
