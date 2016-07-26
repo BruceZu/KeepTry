@@ -19,9 +19,11 @@ package array.binarysearch;
  * runtime:  the first left is (m+n+1)/2; each time got left/2; log(m+n+1); Big O(log(m+n))
  * Improved: Find Kth Element
  * <pre>
+ *     each time compare A[Kth/2] with B[Kth/2]
+ *
  *     View the question as finding the kth element of all of 2 sorted arrays.
  *     kth = median, left median; then right median if length(m+n) is even.
- *     each time compare A[Kth/2] with B[Kth/2];
+ *
  *     the result is =,<,>
  *     care the less than part only, as it is sure those kth/2 elements will be in
  *     the [1th ~ kth];

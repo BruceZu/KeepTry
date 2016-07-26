@@ -22,7 +22,7 @@ package array.binarysearch;
  * Find the median of the two sorted arrays.
  * The overall run time complexity should be <strong> O(log (m+n)) </strong>.
  *
- * Assume s and n will never be null.
+ * <strong>Assume s and n will never be null</strong>
  *
  * Company Tags: Google Zenefits Microsoft Apple Yahoo Dropbox Adobe
  * Tags:
@@ -33,10 +33,10 @@ package array.binarysearch;
  *
  * ==========================================================================
  *
- *    1> Get medians of 2 arrays(left median if its length is even). [Binary Search]
- *    2> Compare.
- *         if same: Done. may be need calculate the right median.
- *         else translate the same question to new pairs arrays with same answer by cutting
+ *
+ *    Compare medians of 2 arrays(left median if its length is even). [Binary Search]
+ *         if '=': Done. may be need calculate the right median.
+ *         else '<' or '>': translate the same question to new pairs arrays with same answer by cutting
  *              same size elements from both arrays:[Divide and Conquer]
  *
  *              numbers to cut: the smaller arrays's half, not include current median.
@@ -58,7 +58,8 @@ package array.binarysearch;
  *                          |
  *              longer:         4 5 6 7 8
  *                                  |
- *
+ * Runtime:  each time cut half of odd shorter array, or half-1 of even shorter array.
+ *           Big O(logm), m is the size of shorter array.
  * Skill:
  * 1> Focus on medians.
  *                  length:    even            odd           next-even
@@ -124,10 +125,18 @@ package array.binarysearch;
  *       1  [     2        ]  3
  *          m   rightm(next)
  *
+ * other ideas
+ * {@link Leetcode4MedianofTwoSortedArrays2},
+ * {@link Leetcode4MedianofTwoSortedArrays3},
+ * {@link Leetcode4MedianofTwoSortedArrays5}
  * @see <br>
  * <a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html"> Operator Precedence </a>
- *
  * @see <a href="https://leetcode.com/problems/median-of-two-sorted-arrays/"> link to leetcode </a>
+ * <br>
+ *
+ * todo: see
+ * @see <a href ="https://leetcode.com/discuss/41621/very-concise-iterative-solution-with-detailed-explanation"> Idea 1 </a>
+ * <a href="https://leetcode.com/discuss/15790/share-my-o-log-min-m-n-solution-with-explanation"> Idea 2 </a>
  */
 public class Leetcode4MedianofTwoSortedArrays {
     private static int[] s, l;
@@ -219,8 +228,8 @@ public class Leetcode4MedianofTwoSortedArrays {
         if (s[smIndex] == l[lmIndex]) {
             if (!sIsOdd && !lIsOdd) {
                 return 0.5 * (s[smIndex] + (s[smIndex + 1] < l[lmIndex + 1]
-                                ? s[smIndex + 1]
-                                : l[lmIndex + 1]));
+                        ? s[smIndex + 1]
+                        : l[lmIndex + 1]));
             }
             return s[smIndex];
         }
