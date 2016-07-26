@@ -159,9 +159,9 @@ public class Leetcode4MedianofTwoSortedArrays {
         if (lsize == 1) {
             return (v + m) * 0.5; //double
         }
-        int pre = l[lmIndex - 1];
         int next = l[lmIndex + 1];
         if (lIsOdd) {
+            int pre = l[lmIndex - 1];
             if (pre <= v && v <= next) {
                 return (v + m) * 0.5; //double
             }
