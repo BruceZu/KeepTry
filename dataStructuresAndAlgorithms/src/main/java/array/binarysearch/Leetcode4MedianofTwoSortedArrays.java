@@ -96,6 +96,11 @@ package array.binarysearch;
  *             |  |
  *
  *  Other cases: can continue divide and conquer half size on both arrays, translate it to next sub question
+ *     2   4                 2  3                1  2
+ *     |   |                 |  |                |  |
+ *
+ *   1   3   5  6          1       4   5  6              3  4   5  6
+ *       |   |                     |   |                    |   |
  *
  *  3> compare two medians, when same:
  *      if lsize+ ssize is odd, sure one array is odd and one is even

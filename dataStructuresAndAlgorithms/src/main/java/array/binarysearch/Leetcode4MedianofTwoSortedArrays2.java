@@ -15,87 +15,83 @@
 
 package array.binarysearch;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
 /**
  * <pre>
- * Idea: see the link, check whether an element A[i] is the median.
+ * Idea: see the link, two arrays A and B. n = A.length+B.length
+ *      check whether an element A[i] is the kth =(n+1)/2
+
+ *     How to select a member from A to check?
+ *     Firstly assume the kth is in A array.
+ *     select median from valid index scope: [aFrom, aTo]
+ *          E.g.:
+ *          A:   e1 e2 e3 e4 e5    e6 e e e e
+ *                         |        |
+ *                        aFrom    aTo
+ *          B:   b1 b2
+ *          kth = 6
  *
- *     two arrays A and B. n = A.length+B.length
- *     check whether an element A[i] is the median, or left median in constant time.
- *     Suppose that the median is A[i].
- *     Since the array is sorted, it is >= exactly i values in array A.
- *     it is also greater than exactly j = [n/2] − (i + 1) elements in B.
  *
- *    1> Let i =
+ *     aFrom init value:
+ *          aFrom + b.length = kth.
+ *          aFrom = kth - b.length
+ *          when i is aFrom, j+1==B length.
+ *          see:
+ *           A:  [...........................left boundary.....]
+ *                                                      |
+ *                                                     A[i]
+ *          B:   [.....b.length-1],   b.length
+ *                                      |
+ *                           B[j]     B[j+1]
  *
- *          index of A:   0 1 2 3 ... ...   i
- *                                        A[i]
- *          index of B:   0 1 2 3 ... n/2-(i+1)-1
  *
- *    2> So j =
- *                                  j=n/2-(i+1)-1
- *     value of B:                  B[j]        B[j+1]
+ *     aTo init value: kth.
+ *          when i is aTo, j==-1
+ *          see:
+ *           A:  [... right boundary....]
+ *                           |
+ *                         A[i]
+ *          B:                       -1  [0, 2, ....]
+ *                                    |
+ *                                   B[j] B[j+1]
+ *   How to check?
+ *     compare it to B[j] and B[j+1] to see if it match the condition:
+ *          j is deduced by i: j =  n/2-(i+1)-1
+ *                                  B[j]             B[j+1]
+ *          Suppose kth is just A[i].
+ *          Since the array is sorted,
+ *          it is >= exactly i elements in array A. Also
+ *          it is >= exactly j = kth − (i + 1) elements in B.
+ *          thus make sure the numbers is right
  *
- *     i+1 + j+1 = i+1 + n/2-(i+1)= n/2
- *     thus make sure the number is right
- *
- *    3> compare:
+ *     compare them to check match condition:
+ *                   B[j] ≤ A[i] ≤ B[j + 1]
  *
  *            1       [       match     ]     3
  *                    B[j]        B[j+1]
  *
- *     It requires constant time to check if it matchs B[j] ≤ A[i] ≤ B[j + 1].
- *     match then done.
+ *
  *     thus make sure the element is the right one.
- *     else A[i] is not the median, then
- *
- *   4> next
- *      binary search for A[i] in (lg n) worst-case time.
- *
- *      This is wrong: when found the answer is not in the A. then
- *      if find this from the right end : get the (n/2-A.length)th from B
- *      else find this from the left end: get n/2th directly from B
- *
- *      Need take boundary in account:
- *      Always assume the kth is in 'a' array
- *      Valid left boundary index and right boundary index in A:
- *
- *     A:  [0, 2, ...........................left boundary .
- *                                              |
- *                                             A[i]
- *     B:  [0.... ..b.length-1],   b.length
- *                                 |
- *                        B[j]     B[j+1]
- *     left boundary + b.length = kth.
- *     So left = kth - b.length
- *     Match if  B[j] <= A[i] && B[j+1]== b.length
- *
- *     A:  [0, 2, ... right boundary....
- *                       |
- *                      A[i]
- *     B:                       -1  [0, 2, ....b.length
- *                              |
- *                             B[j] B[j+1]
- *
- *     right boundary= kth
- *     Match if  A[i]<=B[j+1] <=  && B[j]== -1
- *
- *     So there are in total 3 match cases:
+ *     when i is initial aFrom or aTo
+ *         Match if  B[j] <= A[i] && B[j+1]== b.length
+ *         Match if  A[i]<=B[j+1] <=  && B[j]== -1
+ *     match conditons:
  *     (Bj == -1 || validBj && b[Bj] <= ai) && (validBj1 && ai <= b[Bj1] || Bj1 == b.length)
- *
- *     till left > right,
- *     that means result is sure in B array
+ *  Stop or continue:
+ *     match then stop.
+ *     else A[i] is not the median, then.
+ *   4> next, binary search next A[i]. update the valid aFrom or aTo.
+ *     if left > right, that means result is sure in B array.
+ *     switch them and search from new A.
  *     <strong>Note</strong>
  *     1  recalculate valid boundary of new A
  *     2  especially when need calculate right median, need also recalculate K.
  *
- *   Corner case one array may be empty. Skill:
+ *    corner case one array may be empty. Skill:
  *    it may be A,
  *    or
  *    it may be B:
- *         so need valid Bj and Bj1, then after swtich it became new A.
+ *    so need valid Bj and Bj1 in 3 match conditions, then after switch it became new A.
+ *
  * Runtime:
  *    in worse case binary search A and B, logM+ logN . Big O(log(M+N))
  *
@@ -103,36 +99,38 @@ import static java.lang.Math.min;
  * > link </a>
  */
 public class Leetcode4MedianofTwoSortedArrays2 {
-
-    public static double searchKthValue(int aFrom, int aTo) {
+    public static double kthValue(int aFrom, int aTo) {
+        // stop
         if (aFrom > aTo) {
             int[] t = A;
             A = B;
             B = t;
-            aTo = min(k, A.length) - 1;
-            aFrom = max(1, k - B.length) - 1;
+            aFrom = Math.max(k - B.length, 1) - 1;
+            aTo = Math.min(A.length, k) - 1;
         }
         if (A.length == 0) {
             return B[k - 1];
         }
 
-        int Ai = (aFrom + aTo) / 2;
-        int Bj = k - (Ai + 1) - 1;
-        int Bj1 = Bj + 1;
-        int ai = A[Ai];  
-        boolean validBj = 0 <= Bj && Bj < B.length;
-        boolean validBj1 = 0 <= Bj1 && Bj1 < B.length;
-
-        if (validBj1 && Bj == -1 && ai <= B[Bj1]
-                || validBj && validBj1 && B[Bj] <= ai && ai <= B[Bj1]
-                || validBj && Bj1 == B.length && B[Bj] <= ai) {
-            return ai;
-        } else if (validBj && ai <= B[Bj]) {
-            return searchKthValue(Ai + 1, aTo);
+        //start
+        int i = (aFrom + aTo) / 2;
+        int n = i + 1;
+        int j = k - n - 1;
+        int j1 = j + 1;
+        boolean jValid = 0 <= j && j < B.length;
+        boolean j1Valid = 0 <= j1 && j1 < B.length;
+        int v = A[i];
+        if (j1Valid && j == -1 && v <= B[j1]
+                || j1Valid && jValid && B[j] <= v && v <= B[j1]
+                || jValid && B[j] <= v && j1 == B.length) {
+            return v;
         }
-        return searchKthValue(aFrom, Ai - 1);
-    }
+        if (jValid && v < B[j]) {
+            return kthValue(i + 1, aTo);
+        }
+        return kthValue(aFrom, i - 1);
 
+    }
     private static int[] A, B;
     private static int k; // kth
 
@@ -141,15 +139,17 @@ public class Leetcode4MedianofTwoSortedArrays2 {
         B = b;
         k = (A.length + B.length + 1) / 2;
 
-        int aFrom = max(1, k - B.length) - 1;
-        int aTo = min(k, A.length) - 1;
-        double lm = searchKthValue(aFrom, aTo);
-        if (((A.length + B.length) & 1) == 0) {
+        int aFrom = Math.max(k - B.length, 1) - 1;
+        int aTo = Math.min(A.length, k) - 1;
+        double l = kthValue(aFrom, aTo);
+        if ((A.length + B.length & 1) == 0) {
             k = k + 1;
-            aFrom = max(1, k - B.length) - 1;
-            aTo = min(k, A.length) - 1;
-            return 0.5 * (lm + searchKthValue(aFrom, aTo));
+            aFrom = Math.max(k - B.length, 1) - 1;
+            aTo = Math.min(A.length, k) - 1;
+            return 0.5 * (l +
+                    kthValue(aFrom, aTo)
+            );
         }
-        return lm;
+        return l;
     }
 }
