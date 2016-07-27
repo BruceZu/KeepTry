@@ -133,7 +133,7 @@ package array.binarysearch;
  * other ideas
  * {@link Leetcode4MedianofTwoSortedArrays2},
  * {@link Leetcode4MedianofTwoSortedArrays3},
- * {@link Leetcode4MedianofTwoSortedArrays5}
+ * {@link Leetcode4MedianofTwoSortedArrays2_2}
  * @see <br>
  * <a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html"> Operator Precedence </a>
  * @see <a href="https://leetcode.com/problems/median-of-two-sorted-arrays/"> link to leetcode </a>
