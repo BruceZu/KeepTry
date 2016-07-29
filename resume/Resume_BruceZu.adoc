@@ -20,19 +20,16 @@ Having passion of continuous improvement through refactoring and introducing new
 - Contributed to *open source* {Gerrit}[Google Gerrit Code Review] since 2011. +
 - Administrator experience (*8 years*) of web applications running on *Linux*.
 
-
-
-[small Gray]# 1015 Nottingham PL，San Jose, CA 95117 |
-(626) 747-6721 | English, Mandarin | zu.bruce@yahoo.com +
-{Linkedin}[Linkedin] {Facebook}[Facebook] {Github}[Github]#
+[small Gray]#_Nottingham PL，San Jose, CA 95117 |
+English, Mandarin | zu.bruce@yahoo.com +
+{Github}[Github] {Linkedin}[Linkedin] {Facebook}[Facebook]_#
 
 '''
 [small Gray]#_Apr 2015 -  Apr 2016_# +
-[small Gray]#Relocated to CA from Beijing# +
-[small Gray]#Following Gerrit community# |
-[small Gray]#Acquiring Data Structures and Algorithms# +
-[small Gray]#Got *EAD* and *SSN* in April, 2016# |
-[small Gray]#Looking for a job now in CA or Seattle | _I can work immediately_# +
+[small Gray]#_Relocated to CA from Beijing_# +
+[small Gray]#_Following Gerrit community_# |
+[small Gray]#_Acquiring Data Structures and Algorithms_# +
+[small Gray]#_Can work immediately_# +
 
 '''
 === *EMPLOYMENT*
