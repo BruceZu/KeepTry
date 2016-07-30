@@ -15,8 +15,6 @@
 
 package stack;
 
-import java.util.Stack;
-
 /**
  * <pre>
  * 20. Valid Parentheses
@@ -48,101 +46,35 @@ import java.util.Stack;
  * Cases:
  *      [({(())}[()])]  true
  *      [{()}]          true
- *
- *    @see <a herf="http://docs.oracle.com/javase/tutorial/essential/regex/literals.html">metacharacter</a>
- *      <([{\^-=$!|]})?*+.>
  */
 public class Leetcode20ValidParentheses {
-    public boolean isValid(String s) {
-        if (s == null || s.length() == 0) {
+    public boolean isValid(String str) {
+        if (str == null || str.length() == 0) {
             return true;
         }
-        if (s.length() % 2 != 0) {
+        if ((str.length() & 1) == 1) {
             return false;
         }
-        char[] stack = new char[s.length()];
+
+        char[] arr = str.toCharArray();
+        char[] stack = new char[arr.length];
         int size = 0;
-        for (int i = 0, j = s.length(); i < j; i++) {
-            char c = s.charAt(i);
-            if (c == '[' || c == '(' || c == '{') {
+        for (int i = 0; i < arr.length; i++) {
+            char c = arr[i];
+            if (c == '(' || c == '{' || c == '[') {
                 stack[size++] = c;
                 continue;
             }
-            if (size == 0) {
+            if (size == 0) { // note
                 return false;
             }
-
-            char poped = stack[--size];
-            if (poped == '[' && c == ']' || poped == '(' && c == ')' || poped == '{' && c == '}') {
+            size--;
+            char poped = stack[size];
+            if (poped == '(' && c == ')' || poped == '{' && c == '}' || poped == '[' && c == ']') {
                 continue;
-            } else {
-                return false;
             }
+            return false;
         }
         return size == 0;
-    }
-
-    public static boolean isValid2(String s) {
-        if (s == null || s.length() == 0) {
-            return true;
-        }
-        if (s.length() % 2 != 0) {
-            return false;
-        }
-        char[] arr = s.toCharArray();
-        Stack<Character> ls = new Stack();
-        ls.push(arr[0]);
-        for (int i = 1; i < arr.length; i++) {
-            char c = arr[i];
-            if (c == '(' || c == '{' || c == '[') { //  left half
-                ls.push(c);
-                continue;
-            }
-            if (ls.empty()) {
-                return false;
-            }
-            char top = ls.pop();
-            switch (top) {
-                case '(':
-                    if (c == ')') {
-                        continue;
-                    }
-                    return false;
-                case '{':
-                    if (c == '}') {
-                        continue;
-                    }
-                    return false;
-                case '[':
-                    if (c == ']') {
-                        continue;
-                    }
-                    return false;
-            }
-        }
-        return ls.empty();
-    }
-
-    // very slow
-    public static boolean isValid3(String s) {
-        if (s == null || s.length() == 0) {
-            return true;
-        }
-        if (s.length() % 2 != 0) {
-            return false;
-        }
-        boolean done = false;
-        while (!done) {
-            done = true;
-            if (s.contains("{}") || s.contains("[]") || s.contains("()")) {
-                done = false;
-                s = s.replaceAll("(\\Q{\\E})?", "");
-                s = s.replaceAll("(\\[\\])?", "");
-                s = s.replaceAll("(\\(\\))?", "");
-            } else {
-                continue;
-            }
-        }
-        return s.length() == 0;
     }
 }
