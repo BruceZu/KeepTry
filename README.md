@@ -18,7 +18,10 @@ Have libs available and run all Junit tests
 ```
 $ buck targets | xargs buck build && buck test --all
 ```
-
+Leetcode
+```
+$ find . -name LC*.java -o -name  Leetcode*[a-zA-Z1].java | grep -v Test.java |wc -l
+```
 Welcome ideas, comments and commits. No contribution is too small.
 
 WebChat  : brucezu
