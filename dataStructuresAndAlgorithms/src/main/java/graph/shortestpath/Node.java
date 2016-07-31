@@ -22,7 +22,7 @@ public class Node {
     // node and distance from curent node to this neighbor node
     Map<Node, Integer> nds;
 
-    // keep calculate result
+    // keep calculate result: tentative distance from 'from' node to I
     int td;
     Node from;
 

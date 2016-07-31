@@ -39,17 +39,17 @@ import java.util.Stack;
 
 
 public class DijkstraShortestPath {
-    private static void visit(Node n, Node to, Set<Node> visted) {
+    private static void visit(Node cur, Node to, Set<Node> visted) {
         // Smallest tentative distance from start node
         int std = Integer.MAX_VALUE;
         Node stdn = null;
 
-        for (Node c : n.nds.keySet()) {
+        for (Node c : cur.nds.keySet()) {
             if (!visted.contains(c)) {
-                int td = n.nds.get(c) + n.td;
+                int td = cur.nds.get(c) + cur.td;
                 if (c.td > td) {
                     c.td = td;
-                    c.from = n;
+                    c.from = cur;
                 }
                 if (c.td < std) {
                     std = c.td;
@@ -58,8 +58,8 @@ public class DijkstraShortestPath {
             }
         }
 
-        visted.add( n);
-        if (!(n == to || std == Integer.MAX_VALUE)) {
+        visted.add( cur);
+        if (!(cur == to || std == Integer.MAX_VALUE)) {
             visit(stdn, to, visted);
         }
     }
@@ -69,6 +69,7 @@ public class DijkstraShortestPath {
 
         visit(from, to, unvisit);
 
+        // trace back to from along the result road
         Stack<String> path = new Stack();
         path.push(to.name);
         Node n = to;
@@ -77,6 +78,7 @@ public class DijkstraShortestPath {
             n = n.from;
         }
 
+        // print result
         StringBuilder r = new StringBuilder();
         r.append("Shortest path is ");
         boolean first = true;
