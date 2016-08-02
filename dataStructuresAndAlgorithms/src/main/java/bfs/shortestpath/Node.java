@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package graph.shortestpath;
+package bfs.shortestpath;
 
 import java.util.Map;
 

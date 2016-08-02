@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package backtracing;
+package bfs;
 
 import java.util.LinkedList;
 import java.util.Queue;
