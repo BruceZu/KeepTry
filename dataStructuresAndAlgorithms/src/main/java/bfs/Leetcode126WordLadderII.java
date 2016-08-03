@@ -156,23 +156,23 @@ public class Leetcode126WordLadderII {
                 for (char c = 'a'; c <= 'z'; c++) {
                     if (c != ci) {
                         cs[i] = c;
-                        String nei = new String(cs);// neighbor;
-                        if (aims.contains(nei)) {
-                            pickUp(cur, nei, r, pres, s, e, maxSeriesSize);
+                        String t = new String(cs);// transformed neighbor;
+                        if (aims.contains(t)) {
+                            pickUp(cur, t, r, pres, s, e, maxSeriesSize);
                             found = true;
 
                         }
                         if (!found) {
-                            if (pool.contains(nei)) {
-                                nexts.add(nei);
+                            if (pool.contains(t)) {
+                                nexts.add(t);
                                 //pool.remove(nei);
 
-                                Set<String> froms = pres.get(nei);
+                                Set<String> froms = pres.get(t);
                                 if (froms == null) {
                                     froms = new HashSet<>();
                                 }
                                 froms.add(cur);
-                                pres.put(nei, froms);
+                                pres.put(t, froms);
                             }
                         }
                     }
@@ -191,7 +191,7 @@ public class Leetcode126WordLadderII {
                                        Map<String, Set<String>> pres,
                                        List<String[]> half1s, String[] half, int index
     ) {
-        if (cutoff.equals(sta) || cutoff.equals(end)) {
+        if (cutoff.equals(sta) || cutoff.equals(end)) { //
             half1s.add(Arrays.copyOf(half, index));
             return;
         }
@@ -202,8 +202,8 @@ public class Leetcode126WordLadderII {
         }
     }
 
-    private static void pickUp( String cur, String nei,
-                                List<List<String>> rs, Map<String, Set<String>> pres, String sta, String end, int maxSeriesSize) {
+    private static void pickUp(String cur, String t,
+                               List<List<String>> rs, Map<String, Set<String>> pres, String sta, String end, int maxSeriesSize) {
         List<String[]> half1s = new ArrayList<>();
         List<String[]> half2s = new ArrayList<>();
 
@@ -212,8 +212,8 @@ public class Leetcode126WordLadderII {
         tmp[0] = cur;
         tracesToArrays(cur, sta, end, pres, half1s, tmp, 1);
 
-        tmp[0] = nei;
-        tracesToArrays(nei, sta, end, pres, half2s, tmp, 1);
+        tmp[0] = t;
+        tracesToArrays(t, sta, end, pres, half2s, tmp, 1);
 
         String[] checker = half1s.iterator().next();
         if (checker[checker.length - 1].equals(sta)) {
@@ -225,15 +225,15 @@ public class Leetcode126WordLadderII {
 
     private static void connect(List<List<String>> rs, List<String[]> toStarts, List<String[]> toEnds) {
         String[] tmp = new String[toStarts.iterator().next().length + toEnds.iterator().next().length];
-        for (String[] tostart : toStarts) {
+        for (String[] toStart : toStarts) {
             int size = 0;
-            for (int i = tostart.length - 1; i >= 0; i--) {
-                tmp[size++] = tostart[i];
+            for (int i = toStart.length - 1; i >= 0; i--) {
+                tmp[size++] = toStart[i];
             }
-            for (String[] toend : toEnds) {
+            for (String[] toEnd : toEnds) {
                 int position = size;
-                for (int i = 0; i <= toend.length - 1; i++) {
-                    tmp[position++] = toend[i];
+                for (int i = 0; i <= toEnd.length - 1; i++) {
+                    tmp[position++] = toEnd[i];
                 }
                 rs.add(Arrays.asList(tmp.clone()));
             }
