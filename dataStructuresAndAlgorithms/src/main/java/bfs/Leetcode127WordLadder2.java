@@ -37,7 +37,7 @@ import java.util.Set;
  * performance:
  *   it is possible now remove the 'transformed' in time
  *
- * Recursively version see {@link Leetcode127WordLadder2_2_}
+ * Recursively version see {@link Leetcode127WordLadder2_2}
  */
 public class Leetcode127WordLadder2 {
 

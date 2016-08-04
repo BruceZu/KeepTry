@@ -18,7 +18,7 @@ package bfs;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Leetcode127WordLadder2_2_ {
+public class Leetcode127WordLadder2_2 {
     /**
      * Note:
      * stop check
