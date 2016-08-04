@@ -62,14 +62,18 @@ import java.util.Set;
  *
  *       begin   ...      ...         ...       ...    end
  *
+ *   or
+ *      red -> rex -> tex
+ *      red -> ted -> tex
+ *
  *      Note:
- *         1   do not move from pool to early
- *         2   need handle the one like parks who have more than 1 pre, N:1
+ *         1   do not move from pool too early before current level is done.
+ *         2   need handle the one like 'parks' who have more than 1 pres, N:1
  *         3   once found on some level then stop continue to next level.
  *
  *    Test case:
  *      String s = "magic";
- *      String b = "pearl";
+ *      String e = "pearl";
  *      String[] arr = new String[]{
  *      "flail", "halon", "lexus", "joint", "pears", "slabs", "lorie", "lapse", "wroth", "yalow", "swear", "cavil", "piety",
  *      "yogis", "dhaka", "laxer", "tatum", "provo", "truss", "tends", "deana", "dried", "hutch", "basho", "flyby",
@@ -106,96 +110,38 @@ import java.util.Set;
  *        ["magic","manic","mania","maria","marta","marty","party","parry","perry","peary","pearl"]]
  *
  *      s = "a";
- *      b = "c";
+ *      e = "c";
  *      arr = new String[]{"a", "b", "c"};
  *
  *      expected: [['a','c']]
  */
 public class Leetcode126WordLadderII {
-    public static List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
-        //18:11
-        Map<String, Set<String>> pres = new HashMap<>();
 
-        Set<String> starts = new HashSet();
-        Set<String> aims = new HashSet();
-
-        starts.add(beginWord);
-        aims.add(endWord);
-
-        pres.put(beginWord, null);
-        pres.put(endWord, null);
-
-        wordList.remove(beginWord);
-        wordList.remove(endWord);
-
-        List r = new ArrayList();
-        goToMeet(starts, aims, wordList, r, pres, beginWord, endWord, wordList.size() + 2);
-        return r;
-    }
-
-    private static void goToMeet(Set<String> starts, Set<String> aims, Set<String> pool,
-                                 List r, Map<String, Set<String>> pres, String s, String e, int maxSeriesSize) {
-        // stop check
-        if (starts.isEmpty()) {
-            return;
-        }
-        if (starts.size() > aims.size()) {
-            goToMeet(aims, starts, pool, r, pres, s, e, maxSeriesSize);
-            return;
-        }
-        // starts
-        Set<String> nexts = new HashSet();
-        boolean found = false;
-        for (String cur : starts) {
-            char[] cs = cur.toCharArray();
-            if (cur.equals("maris")) {
-                pres.toString();
+    private static void connect(List<List<String>> rs, List<String[]> toStarts, List<String[]> toEnds) {
+        String[] tmp = new String[toStarts.iterator().next().length + toEnds.iterator().next().length];
+        for (String[] toStart : toStarts) {
+            int size = 0;
+            for (int i = toStart.length - 1; i >= 0; i--) {
+                tmp[size++] = toStart[i];
             }
-            for (int i = 0; i < cs.length; i++) {
-                char ci = cs[i];
-                for (char c = 'a'; c <= 'z'; c++) {
-                    if (c != ci) {
-                        cs[i] = c;
-                        String t = new String(cs);// transformed neighbor;
-                        if (aims.contains(t)) {
-                            pickUp(cur, t, r, pres, s, e, maxSeriesSize);
-                            found = true;
-
-                        }
-                        if (!found) {
-                            if (pool.contains(t)) {
-                                nexts.add(t);
-                                //pool.remove(nei);
-
-                                Set<String> froms = pres.get(t);
-                                if (froms == null) {
-                                    froms = new HashSet<>();
-                                }
-                                froms.add(cur);
-                                pres.put(t, froms);
-                            }
-                        }
-                    }
+            for (String[] toEnd : toEnds) {
+                int position = size;
+                for (int i = 0; i <= toEnd.length - 1; i++) {
+                    tmp[position++] = toEnd[i];
                 }
-                cs[i] = ci;
+                rs.add(Arrays.asList(tmp.clone()));
             }
-        }
-        pool.removeAll(nexts);
-
-        if (!found) {
-            goToMeet(nexts, aims, pool, r, pres, s, e, maxSeriesSize);
         }
     }
 
     private static void tracesToArrays(String cutoff, String sta, String end,
-                                       Map<String, Set<String>> pres,
-                                       List<String[]> half1s, String[] half, int index
-    ) {
+                                       Map<String, List<String>> pres,
+                                       List<String[]> half1s, String[] half, int index) {
         if (cutoff.equals(sta) || cutoff.equals(end)) { //
             half1s.add(Arrays.copyOf(half, index));
             return;
         }
-        Set<String> froms = pres.get(cutoff);
+        List<String> froms = pres.get(cutoff);
         for (String from : froms) {
             half[index] = from;
             tracesToArrays(from, sta, end, pres, half1s, half, index + 1);
@@ -203,7 +149,7 @@ public class Leetcode126WordLadderII {
     }
 
     private static void pickUp(String cur, String t,
-                               List<List<String>> rs, Map<String, Set<String>> pres, String sta, String end, int maxSeriesSize) {
+                               List<List<String>> rs, Map<String, List<String>> pres, String sta, String end, int maxSeriesSize) {
         List<String[]> half1s = new ArrayList<>();
         List<String[]> half2s = new ArrayList<>();
 
@@ -223,20 +169,72 @@ public class Leetcode126WordLadderII {
         }
     }
 
-    private static void connect(List<List<String>> rs, List<String[]> toStarts, List<String[]> toEnds) {
-        String[] tmp = new String[toStarts.iterator().next().length + toEnds.iterator().next().length];
-        for (String[] toStart : toStarts) {
-            int size = 0;
-            for (int i = toStart.length - 1; i >= 0; i--) {
-                tmp[size++] = toStart[i];
+    private static void meet(Set<String> starts, Set<String> aims, Set<String> pool,
+                             List r, Map<String, List<String>> pres, String s, String e, int maxSeriesSize) {
+        if (starts.size() > aims.size()) {
+            meet(aims, starts, pool, r, pres, s, e, maxSeriesSize);
+            return;
+        }
+        // starts
+        Set<String> nexts = new HashSet();
+        boolean connected = false;
+        for (String cur : starts) {
+            char[] cs = cur.toCharArray();
+            if (cur.equals("maris")) {
+                pres.toString();
             }
-            for (String[] toEnd : toEnds) {
-                int position = size;
-                for (int i = 0; i <= toEnd.length - 1; i++) {
-                    tmp[position++] = toEnd[i];
+            for (int i = 0; i < cs.length; i++) {
+                char ci = cs[i];
+                for (char c = 'a'; c <= 'z'; c++) {
+                    if (c != ci) {
+                        cs[i] = c;
+                        String connectTo = new String(cs);// transformed neighbor;
+                        if (aims.contains(connectTo)) {
+                            pickUp(cur, connectTo, r, pres, s, e, maxSeriesSize);
+                            connected = true;
+                            continue;
+                            // do not break here as cur may connect to more ways.
+                        }
+
+                        if (pool.contains(connectTo)) {
+                            nexts.add(connectTo);
+                            //pool.remove(nei);
+
+                            List<String> froms = pres.get(connectTo);
+                            if (froms == null) {
+                                froms = new ArrayList<>();
+                            }
+                            froms.add(cur);
+                            pres.put(connectTo, froms);
+                        }
+                    }
                 }
-                rs.add(Arrays.asList(tmp.clone()));
+                cs[i] = ci;
             }
         }
+
+        // stop
+        if (!connected && !starts.isEmpty()) {
+            pool.removeAll(nexts);
+            meet(nexts, aims, pool, r, pres, s, e, maxSeriesSize);
+        }
+    }
+
+    public static List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
+        //18:11
+        Map<String, List<String>> pres = new HashMap<>();
+
+        Set<String> starts = new HashSet();
+        Set<String> aims = new HashSet();
+
+        starts.add(beginWord);
+        aims.add(endWord);
+
+        wordList.remove(beginWord);
+        wordList.remove(endWord);
+
+        List r = new ArrayList();
+        meet(starts, aims, wordList, r, pres, beginWord, endWord, wordList.size() + 2);
+        return r;
     }
 }
