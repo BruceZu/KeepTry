@@ -29,19 +29,27 @@ package backtracing;
  * For example,
  * Given board =
  *
- * [
+ *     [
  *      ['A','B','C','E'],
  *      ['S','F','C','S'],
  *      ['A','D','E','E']
- * ]
+ *     ]
  *
- *      word = "ABCCED",       -> returns true,
- *      word = "SEE",          -> returns true,
- *      word = "FSA",          -> returns true,
- *      word = "ABCCFSADEESE", -> returns true,
+ *           word                return
+ *          ----------------------------
+ *          "ABCCED",       ->   true,
+ *          "SEE",          ->   true,
+ *          "FSA",          ->   true,
+ *          "ABCCFSADEESE", ->   true,
  *
- *      word = "ABCB", -> returns false.
- *      word = "FSE",  -> returns false.
+ *          "ABCB",         ->   false.
+ *          "FSE",          ->   false.
+ *
+ *
+ *       Given board =  [[ 'A' ]]
+ *           word                return
+ *          ----------------------------
+ *          "A"             ->   true
  *
  * Subscribe to see which companies asked this question
  *
@@ -55,76 +63,71 @@ package backtracing;
  *           backtracking -> change 1  -> change2 -> change3  -> false
  *                        <- change 1  <- change2 <- change3
  *           3 backtracking means it is as nothing happened when got back to original point.
+ *
+ *  Runtime 6ms, worse case, Big(m*n*l). m is board lines,n is columns, l is word length.
  */
 public class Leetcode79WordSearch {
-    private static boolean rightWay(int i, int j, boolean[][] used, char[][] board, char aim) {
-        return 0 <= i && i < used.length
-                && 0 <= j && j < used[0].length
-                && used[i][j] == false
-                && board[i][j] == aim;
-    }
-
     //@param from  original = 0; left = 1; right = 2; top = 3; down = 4;
-    private static boolean go(int si, int sj, char[] arr, int index, char[][] board, boolean[][] used, int from) {
+    private static boolean go(int i, int j,
+                              char[] arr, int index,
+                              char[][] board, boolean[][] used,
+                              int from, int lines, int columns) {
         if (index == arr.length) {
             return true;
         }
 
-        //try right
-        if (from != 2 && rightWay(si, sj + 1, used, board, arr[index])) {
-            sj = sj + 1;
-            used[si][sj] = true;
-            if (go(si, sj, arr, index + 1, board, used, 1)) {
+        if (from != 1 && j - 1 >= 0 && used[i][j - 1] == false && board[i][j - 1] == arr[index]) {
+            used[i][j - 1] = true;
+            if (go(i, j - 1, arr, index + 1, board, used, 2, lines, columns)) {
                 return true;
             }
-            used[si][sj] = false;
-            sj = sj - 1;
+            used[i][j - 1] = false;
         }
 
-        // try top
-        if (from != 3 && rightWay(si - 1, sj, used, board, arr[index])) {
-            si = si - 1;
-            used[si][sj] = true;
-            if (go(si, sj, arr, index + 1, board, used, 4)) {
+        if (from != 2 && j + 1 < columns && used[i][j + 1] == false && board[i][j + 1] == arr[index]) {
+            used[i][j + 1] = true;
+            if (go(i, j + 1, arr, index + 1, board, used, 1, lines, columns)) {
                 return true;
             }
-            used[si][sj] = false;
-            si = si + 1;
+            used[i][j + 1] = false;
         }
 
-        // try down
-        if (from != 4 && rightWay(si + 1, sj, used, board, arr[index])) {
-            si = si + 1;
-            used[si][sj] = true;
-            if (go(si, sj, arr, index + 1, board, used, 3)) {
+        if (from != 3 && i - 1 >= 0 && used[i - 1][j] == false && board[i - 1][j] == arr[index]) {
+            used[i - 1][j] = true;
+            if (go(i - 1, j, arr, index + 1, board, used, 4, lines, columns)) {
                 return true;
             }
-            used[si][sj] = false;
-            si = si - 1;
+            used[i - 1][j] = false;
         }
-        // try left
-        if (from != 1 && rightWay(si, sj - 1, used, board, arr[index])) {
-            sj = sj - 1;
-            used[si][sj] = true;
-            if (go(si, sj, arr, index + 1, board, used, 2)) {
+
+        if (from != 4 && i + 1 < lines && used[i + 1][j] == false && board[i + 1][j] == arr[index]) {
+            used[i + 1][j] = true;
+            if (go(i + 1, j, arr, index + 1, board, used, 3, lines, columns)) {
                 return true;
             }
-            used[si][sj] = false;
-            sj = sj + 1;
+            used[i + 1][j] = false;
         }
         return false;
     }
 
     public static boolean exist(char[][] board, String word) {
+        if (word == null || word.length() == 0) {
+            return true;
+        }
+        if (board == null || board.length == 0 || board.length * board[0].length < word.length()) {
+            return false;
+        }
+        int lines = board.length;
+        int columns = board[0].length;
 
-        boolean[][] used = new boolean[board.length][board[0].length];
+        boolean[][] used = new boolean[lines][columns];
         char[] arr = word.toCharArray();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length;
-                 j++) {
+
+        for (int i = 0; i < lines; i++) {
+            for (int j = 0; j < columns; j++) {
                 if (board[i][j] == arr[0]) {
                     used[i][j] = true;
-                    if (go(i, j, arr, 1, board, used, 0)) {
+                    if (go(i, j, arr, 1, board, used, 0, lines, columns)) {
                         return true;
                     }
                     used[i][j] = false;

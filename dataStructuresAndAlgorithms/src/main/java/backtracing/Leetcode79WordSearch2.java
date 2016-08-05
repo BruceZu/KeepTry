@@ -19,52 +19,67 @@ package backtracing;
  * <pre>
  *  improve:
  *   Step 1:
- *
- *          1   if the letter is limited to 26 alphabets, in ASCII Characters (0~127) scope.
- *              Extended ASCII Codes (128~255)
- *
- *          2   the content of board will be changed.
- *
- *          Pros:
- *              save the space.  this belongs a Limited implement:
- *              and compare the used letter with next letter of word.
- *         Cons:
- *              ^ operation is slower than comparing 2 boolean variable or comparing 'board[i][j] < 0b100000000;'.
- *         discard step 1.
- *
+ *      Pros:
+ *              Instead using boolean char[][]. using '\0' to mark the used letter as word should not contains
+ *              '\0'.
+ *              Thus make it possible to compare the used letter with next letter of word directly,
+ *              without double check. Saved 1 ms.
+ *              space is also saved without adding more variable to recursion. Big O(1)
+ *              replace
+ *                  used[i][j] = true;
+ *                  // recursion
+ *                  used[i][j] = false;
+ *              by:
+ *                  board[i][j] = '\0';
+ *                  // recursion
+ *                  board[i][j] = word[index];
+ *     Cons:
+ *              boolean operation is fast, so in total sacrifice some performance.
  *  step2 :
- *         put the common part 'validing the i, j' ahead, thus it is possible to use || to make recursion simple;
- *         Just make code simple;
+ *      Pros:
+ *              put the common part 'validing' ahead, thus it is possible to use || to make recursion simple;
+ *              Just make code simple;
+ *      Cons:
+ *              sacrifice some performance. 6ms -> 8ms
  */
 public class Leetcode79WordSearch2 {
+
     // @param from  original = 0; left = 1; right = 2; top = 3; down = 4;
-    private static boolean go(int i, int j, char[] arr, int index, char[][] board, boolean[][] used, int from) {
-        if (index == arr.length) {
-            return true;
-        }
-        if (0 <= i && i < used.length && 0 <= j && j < used[0].length
-                && used[i][j] == false && board[i][j] == arr[index]) {
-            used[i][j] = true;
-            if (from != 2 && go(i, j + 1, arr, index + 1, board, used, 1)
-                    || from != 1 && go(i, j - 1, arr, index + 1, board, used, 2)
-                    || from != 3 && go(i - 1, j, arr, index + 1, board, used, 4)
-                    || from != 4 && go(i + 1, j, arr, index + 1, board, used, 3)) {
+    private static boolean go(int i, int j, char[] arr, int index, char[][] board, int from) {
+        if (board[i][j] != '\0' && board[i][j] == arr[index]) {
+            if (index == arr.length - 1) {
                 return true;
             }
-            used[i][j] = false;
+            board[i][j] = '\0';
+            if (from != 2 && j + 1 < board[0].length
+                    && go(i, j + 1, arr, index + 1, board, 1)
+                    || from != 1 && j - 1 >= 0
+                    && go(i, j - 1, arr, index + 1, board, 2)
+                    || from != 3 && i - 1 >= 0
+                    && go(i - 1, j, arr, index + 1, board, 4)
+                    || from != 4 && i + 1 < board.length
+                    && go(i + 1, j, arr, index + 1, board, 3)) {
+                return true;
+            }
+            board[i][j] = arr[index];
         }
         return false;
     }
 
     public static boolean exist(char[][] board, String word) {
-
-        boolean[][] used = new boolean[board.length][board[0].length];
+        if (word == null || word.length() == 0) {
+            return true;
+        }
+        if (board == null || board.length == 0 || board.length * board[0].length < word.length()) {
+            return false;
+        }
+        // boolean[][] used = new boolean[board.length][board[0].length];
         char[] arr = word.toCharArray();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length;
                  j++) {
                 if (board[i][j] == arr[0]) {
-                    if (go(i, j, arr, 0, board, used, 0)) {
+                    if (go(i, j, arr, 0, board, 0)) {
                         return true;
                     }
                 }
