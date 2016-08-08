@@ -76,7 +76,7 @@ class Node {
  *   O(n) time
  *
  *   If we insert the elements of preorder traversal of a BST one by one, it will generate the BST correctly.
- *   But the problem is that it takes O(log N) time, in the worst case height will be N, and takes O(N^2)
+ *   But the problem is that it takes O(Nlog N) time, in the worst case height will be N, and takes O(N^2)
  *
  * @see <a href="http://www.geeksforgeeks.org/construct-bst-from-given-preorder-traversal-set-2/"> geeksforgeeks</a>
  */
