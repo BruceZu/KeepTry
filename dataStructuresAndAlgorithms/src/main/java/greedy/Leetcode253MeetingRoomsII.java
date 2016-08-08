@@ -15,8 +15,28 @@
 
 package greedy;
 
+import java.util.Arrays;
+
 /**
  * <pre>
+ * 253. Meeting Rooms II
+ *
+ * Difficulty: Medium
+ * Given an array of meeting time intervals consisting of start and end times
+ *
+ *              [[s1,e1],[s2,e2],...] (si < ei),
+ *
+ * find the minimum number of conference rooms required.
+ *
+ * For example,
+ * Given [[0, 30],[5, 10],[15, 20]],
+ * return 2.
+ * Company Tags:  Google Facebook
+ * Tags: Heap, Greedy, Sort
+ * Similar Problems
+ *      (H) Merge Intervals
+ *      (E) Meeting Rooms
+ * ==============================================================================
  *     1 given a meeting room, ask the max meeting. meeting with shorter time has high priority.
  *         sort meetings by finish time. 'sorted'
  *         finishTime = sorted[0].finish time
@@ -43,7 +63,42 @@ package greedy;
  *                need add a meeting room: add i in roomsFinishedFirstlyOnHead.
  *        return the number of roomsFinishedFirstlyOnHead.
  *
- *   using stack?
+ * @see <a href ="https://leetcode.com/problems/meeting-rooms-ii/">leetcode</a>
  */
-public class ScheduleMeetingRoom {
+
+public class Leetcode253MeetingRoomsII {
+    class Interval {
+        int start;
+        int end;
+    }
+
+    /**
+     * <pre>
+     *  sort meetings by start time as any meeting must be satisfied.
+     *  loop sorted:
+     *  if current meeting need start before the earliest finish time:
+     *      need another meeting room,
+     *  else
+     *      just use the meeting room where the meeting has earliest finish time
+     *      and update 'earliest finish time'
+     */
+    public int minMeetingRooms(Interval[] meetings) {
+        int[] starts = new int[meetings.length];
+        int[] ends = new int[meetings.length];
+        for (int i = 0; i < meetings.length; i++) {
+            starts[i] = meetings[i].start;
+            ends[i] = meetings[i].end;
+        }
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+        int rooms = 0;
+        int earliestEnded = 0;
+        for (int i = 0; i < starts.length; i++) {
+            if (starts[i] < ends[earliestEnded])
+                rooms++;
+            else
+                earliestEnded++;
+        }
+        return rooms;
+    }
 }
