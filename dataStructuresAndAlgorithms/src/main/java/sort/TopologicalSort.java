@@ -73,22 +73,22 @@ public class TopologicalSort {
         Set<V> outgoings; // neighbors
     }
 
-    public Stack<V> topSortDSF(Set<V> graph) {
+    public Stack<V> toposortDFS(Set<V> graph) {
         Stack<V> r = new Stack<>();
         Set<V> visited = new HashSet<>();
         for (V v : graph) {
             if (!visited.contains(v)) {
-                topSortDSF(v, r, visited);
+                toposortDFS(v, r, visited);
             }
         }
         return r;
     }
 
-    private void topSortDSF(V vertex, Stack<V> r, Set<V> visited) {
+    private void toposortDFS(V vertex, Stack<V> r, Set<V> visited) {
         visited.add(vertex);
         for (V out : vertex.outgoings) {
             if (!visited.contains(out)) {
-                topSortDSF(out, r, visited);
+                toposortDFS(out, r, visited);
             }
         }
         r.push(vertex);
