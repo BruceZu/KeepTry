@@ -17,16 +17,6 @@ package treesimple.binarytree.bst;
 
 import java.util.Stack;
 
-class Node {
-    int v;
-    Node left;
-    Node right;
-
-    public Node(int v) {
-        this.v = v;
-    }
-}
-
 /**
  * <pre>
  * BST Serialize and Deserialize
@@ -81,6 +71,30 @@ class Node {
  * @see <a href="http://www.geeksforgeeks.org/construct-bst-from-given-preorder-traversal-set-2/"> geeksforgeeks</a>
  */
 public class ConstructBSTByPreOrderTraversal {
+    static class Node {
+        int v;
+        Node left;
+        Node right;
+
+        public Node(int v) {
+            this.v = v;
+        }
+    }
+
+    public static void printInorder(Node node) {
+        if (node == null) {
+            return;
+        }
+        printInorder(node.left);
+        System.out.print(node.v + " ");
+        printInorder(node.right);
+    }
+
+    public static void main(String[] args) {
+        printInorder(toBST(new int[]{7, 4, 2, 1, 3, 5, 6, 22, 16, 11, 18, 17, 19, 19, 27, 26, 29, 29}));
+    }
+    //----------------------------------------------------------------------------------------
+
     public static Node toBST(int[] arr) {
         if (arr == null || arr.length == 0) {
             return null;
@@ -110,18 +124,5 @@ public class ConstructBSTByPreOrderTraversal {
             descendings.push(lastTop.right);
         }
         return root;
-    }
-
-    public static void printInorder(Node node) {
-        if (node == null) {
-            return;
-        }
-        printInorder(node.left);
-        System.out.print(node.v + " ");
-        printInorder(node.right);
-    }
-
-    public static void main(String[] args) {
-        printInorder(toBST(new int[]{7, 4, 2, 1, 3, 5, 6, 22, 16, 11, 18, 17, 19, 19, 27, 26, 29, 29}));
     }
 }
