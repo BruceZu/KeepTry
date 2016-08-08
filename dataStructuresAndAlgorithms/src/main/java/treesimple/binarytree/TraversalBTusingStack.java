@@ -19,7 +19,7 @@ import java.util.Stack;
 
 // TODO: 7/22/16  need improve;
 
-public class TraversalBTWithStack {
+public class TraversalBTusingStack {
     static class TreeNode {
         public int v;
         TreeNode left;

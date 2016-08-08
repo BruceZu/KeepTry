@@ -17,17 +17,21 @@ package treesimple.binarytree.bst;
 
 /**
  * <pre>
- * The trick is to set a range {min .. max} for every node.
- * Initialize the range as { MIN .. MAX}.
+ * To construct a BST you need only one (not in-order) traversal.
+ * Can't create a tree with only the in order traversal because it is in fact a sorted array and
+ * can not decide where is the root.
  *
- * The last node will definitely be in range, so create root node.
+ * For post order array, the last node will definitely be in range, so create root node.
  *
+ * Go array from right to left:
  * To construct the left subtree, set the range as {INT_MIN, root.data}.
  * If a values is in the range { MIN, root.data}, the values is part part of left subtree.
  *
  * To construct the right subtree, set the range as {root.data, MAX}.
  *
  * O(n) time
+ *
+ * This idea can apply Construct BST By Pre Order Traversal, Just Go array from left to right.
  *
  * =========================================================
  * post order array
@@ -46,6 +50,7 @@ package treesimple.binarytree.bst;
  *
  * it is okay but not efficient to scan the array from the right and
  * just do an insert() into a Binary Search Tree
+ * @see <a href="http://www.geeksforgeeks.org/construct-bst-from-given-preorder-traversa/"> Method 2 ( O(n) time complexity ) geeksforgeeks</a>
  */
 public class ConstructBSTByPostOrderTraversal {
     static class Node {

@@ -40,7 +40,7 @@ public class CheckIfBTisBST {
          *       /  \
          *      1    3
          *     /
-         *     1
+         *    1
          */
         Node root = new Node(4);
         root.left = new Node(2);

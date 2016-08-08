@@ -20,7 +20,8 @@ import java.util.Stack;
 /**
  * <pre>
  * BST Serialize and Deserialize
- *
+ * To construct a BST you need only one (not in-order) traversal.  Can't create a tree with only the in order
+ * traversal because it is in fact a sorted array and can not decide where is the root.
  *  if  arr[i] < curNode;
  *      it is curNode's left
  *  else
