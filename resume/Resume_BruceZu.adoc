@@ -7,7 +7,7 @@
 :Linkedin: https://www.linkedin.com/in/bruce-zu-98b82018
 :Facebook: https://www.facebook.com/bruce.zu
 :Github: https://github.com/BruceZu
-:mycommits: https://gerrit-review.googlesource.com/#/q/author:%22Bruce+Zu%22
+:mycommits: https://gerrit-review.googlesource.com/#/q/author:bruce.zu,150
 :whatisjenkins: https://jenkins.io/
 :whatisgerrit: https://www.gerritcodereview.com/index.md
 :My Create project: https://gerrit-review.googlesource.com/#/q/topic:create-project-ui
@@ -182,10 +182,8 @@ Some features, e.g.:
 - [*] Add new system configuration options +
 - [*] Enable register email registered automatically +
 
-
-:My-contribution: https://gerrit-review.googlesource.com/#/q/author:bruce.zu
 :::
-Details: {My-contribution}[ my commits] contributed to Gerrit community.
+Details: {mycommits}[ my commits] contributed to Gerrit community.
 
 Daily support :::
 
