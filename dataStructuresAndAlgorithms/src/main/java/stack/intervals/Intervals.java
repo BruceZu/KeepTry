@@ -78,26 +78,20 @@ public class Intervals {
                             Comparator<Interval> thatCompa = (Comparator<Interval>) obj;
 
                             return IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MAX_VALUE)
-                                    .mapToObj(outInt -> {
-                                        return new Interval(outInt, 0);
-                                    })
-                                    .allMatch(outInterval -> {
-                                                return IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MAX_VALUE)
-                                                        .mapToObj(value -> {
-                                                            return new Interval(value, 0);
-                                                        })
-                                                        .allMatch(innerInteval -> {
-                                                                    try {
-                                                                        // If true then continue going through all cases
-                                                                        // Else return false and stop.
-                                                                        return Integer.signum(thatCompa.compare(innerInteval, outInterval))
-                                                                                == Integer.signum(compare(innerInteval, outInterval));
-                                                                    } catch (ClassCastException ex) {
-                                                                        return false;
-                                                                    }
-                                                                }
-                                                        );
-                                            }
+                                    .mapToObj(outInt -> new Interval(outInt, 0))
+                                    .allMatch(outInterval -> IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MAX_VALUE)
+                                            .mapToObj(value -> new Interval(value, 0))
+                                            .allMatch(innerInteval -> {
+                                                        try {
+                                                            // If true then continue going through all cases
+                                                            // Else return false and stop.
+                                                            return Integer.signum(thatCompa.compare(innerInteval, outInterval))
+                                                                    == Integer.signum(compare(innerInteval, outInterval));
+                                                        } catch (ClassCastException ex) {
+                                                            return false;
+                                                        }
+                                                    }
+                                            )
                                     );
                         }
                         return false;
