@@ -83,7 +83,7 @@ public class ConcurrentHashMapTest {
     public void testConcurrentHashMap() {
         int i = 0;
         while (i < 10) {
-            Assert.assertEquals(new ConcurrentHashMapTest().test(), "{account3=100, account1=100, account2=100}");
+            Assert.assertEquals("{account2=100, account1=100, account3=100}", new ConcurrentHashMapTest().test());
             i++;
         }
     }

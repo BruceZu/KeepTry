@@ -53,7 +53,7 @@ public class MergeSortRecursionSingleThread {
      * 2>  Recursion on each halves. if l == r, stop recursion, return to wait mergeInsort
      * 3>  Merge them into one.
      */
-    public static <T extends Comparable<T>> void mergeSortRecursion(T[] arr) {
+    public static void mergeSortRecursion(Comparable[] arr) {
         // Input check
         if (arr == null || arr.length <= 1) { // note: arr may be empty array: {}
             return;

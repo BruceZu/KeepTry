@@ -17,24 +17,24 @@ package array;
 
 public class Common {
 
-    public static <T extends Comparable<T>> void swap(T[] arr, int i, int j) {
-        T tmp = arr[i];
+    public static void swap(Comparable[] arr, int i, int j) {
+        Comparable tmp = arr[i];
         arr[i] = arr[j];
         arr[j] = tmp;
     }
 
     //   a < b
-    public static <T extends Comparable<T>> boolean lessThan(T a, T b) {
+    public static boolean lessThan(Comparable a, Comparable b) {
         return a.compareTo(b) < 0;
     }
 
     //  a = b
-    public static <T extends Comparable<T>> boolean same(T a, T b) {
+    public static boolean same(Comparable a, Comparable b) {
         return a.compareTo(b) == 0;
     }
 
     //  a > b
-    public static <T extends Comparable<T>> boolean greatThan(T a, T b) {
+    public static boolean greatThan(Comparable a, Comparable b) {
         return a.compareTo(b) > 0;
     }
 
@@ -70,7 +70,7 @@ public class Common {
      * @param r  sorted right half
      * @param re result
      */
-    public static <T extends Comparable<T>> void mergeInsort(T[] l, T[] r, T[] re) {
+    public static void mergeInsort(Comparable[] l, Comparable[] r, Comparable[] re) {
         // System.out.format("\nmerge %s and %s\n", Arrays.toString(l), Arrays.toString(r));
         int i = 0, j = 0; // in loop the current index of l and r
         int k = 0;
@@ -104,7 +104,7 @@ public class Common {
      *            without `new` more tmp arrays.
      * @param <T>
      */
-    public static <T extends Comparable<T>> void mergeInsort(T[] ar, int l, int mid, int r, T[] tmp) {
+    public static void mergeInsort(Comparable[] ar, int l, int mid, int r, Comparable[] tmp) {
         // System.out.format("\nmerge %s : index scope[%s, %s] and  index scope [%s, %s]", Arrays.toString(ar), l, mid, mid + 1, r);
 
         // Input check

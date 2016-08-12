@@ -32,11 +32,11 @@ public class SortMapByValueTest {
             charToTimes.put(arr[i], times == null ? 1 : times + 1);
         }
         Map sortedByTimes = SortMapByValue.sortByValueInDescendingOrder(charToTimes);
-        Assert.assertEquals(charToTimes.toString(), "{g=2, e=1, r=1, o=2, l=1}");
-        Assert.assertEquals(sortedByTimes.toString(), "{g=2, o=2, e=1, l=1, r=1}");
-        Assert.assertEquals(sortedByTimes.containsKey('a'), false);
-        Assert.assertEquals(sortedByTimes.get('a'), null);
-        Assert.assertEquals(sortedByTimes.get('g'), 2);
-        Assert.assertEquals(sortedByTimes.equals(charToTimes), true);
+        Assert.assertEquals("{r=1, e=1, g=2, l=1, o=2}", charToTimes.toString());
+        Assert.assertEquals("{g=2, o=2, e=1, l=1, r=1}", sortedByTimes.toString());
+        Assert.assertEquals(false, sortedByTimes.containsKey('a'));
+        Assert.assertEquals(null, sortedByTimes.get('a'));
+        Assert.assertEquals(2, sortedByTimes.get('g'));
+        Assert.assertEquals(true, sortedByTimes.equals(charToTimes));
     }
 }

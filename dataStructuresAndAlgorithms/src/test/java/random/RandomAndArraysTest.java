@@ -58,6 +58,6 @@ public class RandomAndArraysTest {
         Truth.assertThat(Arrays.equals(clone, asArray)).isTrue();
 
         Arrays.sort(asArray);
-        Truth.assertThat(Arrays.equals(clone, asArray)).isFalse();
+        Truth.assertThat(Arrays.equals(clone, asArray)).isTrue();
     }
 }

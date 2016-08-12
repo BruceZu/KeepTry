@@ -5,11 +5,11 @@ Environment:
 
 ```
 $ java -version
-java version "1.7.0_79"
-Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
-Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
-$ buck -V
-buck version ca8d6cbac373a690f543c5159eec0116e76187a9
+java version "1.8.0_101"
+Java(TM) SE Runtime Environment (build 1.8.0_101-b13)
+Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
+$ buck --version
+buck version e64a2e2ada022f81e42be750b774024469551398
 $ python --version
 Python 2.7.11
 ```

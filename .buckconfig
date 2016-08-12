@@ -1,4 +1,6 @@
 [java]
+    source_level = 8
+    target_level = 8
     jar_spool_mode = direct_to_jar
     src_roots = java, resources
     extra_arguments =  -encoding, UTF-8
