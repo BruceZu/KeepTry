@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array.permutation;
+package probability.permutation;
 
 import java.util.ArrayList;
 import java.util.List;

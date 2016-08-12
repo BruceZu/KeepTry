@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array.permutation;
+package probability.permutation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,7 +74,7 @@ import java.util.Set;
  *      check duplicated:
  *           now the arr left is sorted. <strong>BUT</strong> if use swap way to permute current number
  *           of a permutation, <strong>MUST</strong> need a set to check
- *           if current choice is used, see {@link array.permutation.Leetcode47PermutationsII2}
+ *           if current choice is used, see {@link probability.permutation.Leetcode47PermutationsII2}
  *
  *      because this is permuteLeftMirrorRight the left half, so at least assume
  *      <strong>the arr length is 2</strong>.

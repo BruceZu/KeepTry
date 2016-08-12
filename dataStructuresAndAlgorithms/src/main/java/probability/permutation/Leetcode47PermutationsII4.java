@@ -13,30 +13,8 @@
 // limitations under the License.
 //
 
-package bfs.shortestpath;
+package probability.permutation;
 
-import java.util.Map;
-
-public class Node {
-    String name;
-    // node and distance from curent node to this neighbor node
-    Map<Node, Integer> nds;
-
-    // keep calculate result: tentative distance from 'from' node to I
-    int td;
-    Node from;
-
-    public Node(String name) {
-        this.name = name;
-        this.td = Integer.MAX_VALUE;
-        this.from = null;
-    }
-
-    public void init(Map nds) {
-        this.nds = nds;
-    }
-
-    public void setTd(int td) {
-        this.td = td;
-    }
+public class Leetcode47PermutationsII4 {
+    //fast one
 }

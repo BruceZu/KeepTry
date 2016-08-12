@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package bfs.shortestpath;
+package graph.shortestpath;
 
 import java.util.Set;
 import java.util.Stack;
