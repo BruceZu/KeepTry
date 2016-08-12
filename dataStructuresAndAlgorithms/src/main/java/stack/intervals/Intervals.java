@@ -15,9 +15,12 @@
 
 package stack.intervals;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Stack;
+import java.util.stream.IntStream;
 
 /**
  * <pre>
@@ -45,9 +48,9 @@ public class Intervals {
         int start;
         int end;
 
-        public Interval(int start, int end) {
-            this.start = start;
-            this.end = end;
+        public Interval(Integer s, Integer e) {
+            start = s;
+            end = e;
         }
     }
 
@@ -57,6 +60,47 @@ public class Intervals {
                     @Override
                     public int compare(Interval o1, Interval o2) {
                         return o1.start - o2.start;
+                    }
+
+                    @Override
+                    public boolean equals(Object obj) {
+                        // In real life, do not do anything here or just return false;
+                        if (obj == null) {
+                            return false;
+                        }
+                        Type genericType = obj.getClass().getGenericInterfaces()[0];
+                        Type type = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                        if (((Class<?>) type).getName().equals(Interval.class.getName())) {
+                            // Just see how to implement "sgn(comp1.compare(o1,o2))==sgn(comp2.compare(o1, o2))
+                            // for every object reference o1 and o2."
+
+                            @SuppressWarnings("unchecked")
+                            Comparator<Interval> thatCompa = (Comparator<Interval>) obj;
+
+                            return IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MAX_VALUE)
+                                    .mapToObj(outInt -> {
+                                        return new Interval(outInt, 0);
+                                    })
+                                    .allMatch(outInterval -> {
+                                                return IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MAX_VALUE)
+                                                        .mapToObj(value -> {
+                                                            return new Interval(value, 0);
+                                                        })
+                                                        .allMatch(innerInteval -> {
+                                                                    try {
+                                                                        // If true then continue going through all cases
+                                                                        // Else return false and stop.
+                                                                        return Integer.signum(thatCompa.compare(innerInteval, outInterval))
+                                                                                == Integer.signum(compare(innerInteval, outInterval));
+                                                                    } catch (ClassCastException ex) {
+                                                                        return false;
+                                                                    }
+                                                                }
+                                                        );
+                                            }
+                                    );
+                        }
+                        return false;
                     }
                 }
         );
