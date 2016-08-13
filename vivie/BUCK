@@ -1,6 +1,6 @@
-PKG = ['', 'jdk7/', 'leetcode/', 'lintcode/']
+PKG = ['', 'jdk8/', 'leetcode/', 'lintcode/']
 SRC_PRE = 'src/main/java'
-SRC_NEED_GUICE = ['jdk7/' + SRC_PRE + c for c in [
+SRC_NEED_GUICE = ['jdk8/' + SRC_PRE + c for c in [
     '/dependencyInjection/**/*.java',
 ]]
 SRC_EXCLUDE = SRC_NEED_GUICE
@@ -36,15 +36,15 @@ PRE = 'src/test/java/'
 NEED_HAMCREST = [PRE + c for c in [
     'ParseBalancedParenthesesTests.java',
 ]]
-NEED_HAMCREST_JDK7 = ['jdk7/' + PRE + c for c in [
+NEED_HAMCREST_JDK8 = ['jdk8/' + PRE + c for c in [
     'url/URLTest.java'
 ]]
-NEED_HAMCREST = NEED_HAMCREST + NEED_HAMCREST_JDK7
+NEED_HAMCREST = NEED_HAMCREST + NEED_HAMCREST_JDK8
 
-NEED_JETTY_MINA_JDK7 = ['jdk7/' + PRE + c for c in [
+NEED_JETTY_MINA_JDK8 = ['jdk8/' + PRE + c for c in [
     'net/SocketTest.java'
 ]]
-EXCLUDE = NEED_HAMCREST + NEED_JETTY_MINA_JDK7
+EXCLUDE = NEED_HAMCREST + NEED_JETTY_MINA_JDK8
 
 t_srcs = [p + 'src/test/java/**/*.java' for p in PKG]
 TESTS = glob(t_srcs, excludes=EXCLUDE)
@@ -73,7 +73,7 @@ for t in NEED_HAMCREST:
         vm_args=['-Xmx256m', '-Dfile.encoding=UTF-8']
     )
 
-for t in NEED_JETTY_MINA_JDK7:
+for t in NEED_JETTY_MINA_JDK8:
     n = t[t.index("src/test/java/") + len("src/test/java/"): -len(".java")].replace('/', '.')
     java_test(
         name=n,
