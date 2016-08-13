@@ -73,11 +73,24 @@ public class Intervals {
                         if (((Class<?>) type).getName().equals(Interval.class.getName())) {
                             // Just see how to implement "sgn(comp1.compare(o1,o2))==sgn(comp2.compare(o1, o2))
                             // for every object reference o1 and o2."
-
-                            @SuppressWarnings("unchecked")
                             Comparator<Interval> thatCompa = (Comparator<Interval>) obj;
 
+/*                            for (int i = Integer.MIN_VALUE; i <= Integer.MAX_VALUE; i++) {
+                                for (int j = Integer.MIN_VALUE; j <= Integer.MAX_VALUE; j++) {
+                                    Interval intervala = new Interval(i, 0);
+                                    Interval intervalb = new Interval(j, 0);
+                                    if (Integer.signum(thatCompa.compare(intervala, intervalb))
+                                            != Integer.signum(compare(intervala, intervalb))) {
+                                        return false;
+                                    }
+                                }
+                            }
+                            return true; */
+
+                            // or use aggregate operations and parallel streams to implement parallelism
                             return IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MAX_VALUE)
+                                    .unordered()
+                                    .parallel()
                                     .mapToObj(outInt -> new Interval(outInt, 0))
                                     .allMatch(outInterval -> IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MAX_VALUE)
                                             .mapToObj(value -> new Interval(value, 0))

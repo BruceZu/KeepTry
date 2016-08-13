@@ -44,7 +44,12 @@ import java.util.function.Predicate;
  * Aggregate operations typically accept lambda expressions as parameters,
  * enabling you to customize how they behave.
  *
+ *  Aggregate operations and parallel streams enable you to implement parallelism with non-thread-safe collections
+ *  provided that you do not modify the collection while you are operating on it.
+ *
  *  @see <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#syntax"> syntax of Lambda Expressions</a>
+ *
+ *  @see <a href="https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html"> Parallelism </a>
  */
 public class Person {
 
