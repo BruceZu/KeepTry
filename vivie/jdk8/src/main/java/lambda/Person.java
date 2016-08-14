@@ -17,10 +17,12 @@ package lambda;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * <pre>
@@ -47,13 +49,20 @@ import java.util.function.Predicate;
  *  Aggregate operations and parallel streams enable you to implement parallelism with non-thread-safe collections
  *  provided that you do not modify the collection while you are operating on it.
  *
+ *  see {@link java.lang.invoke.InnerClassLambdaMetafactory InnerClassLambdaMetafactory}
+ *  see {@link Package java.lang.invoke invoke}
+ *
+ *  @see <a href="http://www.oracle.com/technetwork/java/javase/8-whats-new-2157071.html"> jdk 8 whats new</a>
+ *
  *  @see <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#syntax"> syntax of Lambda Expressions</a>
  *
  *  @see <a href="https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html"> Parallelism </a>
+ *
+ *  @see <a href="http://cr.openjdk.java.net/~briangoetz/lambda/lambda-translation.html"> Translation of Lambda Expressions April 2012 </a>
  */
 public class Person {
 
-    static enum Sex {
+    enum Sex {
         MALE, FEMALE
     }
 
@@ -66,6 +75,9 @@ public class Person {
                 s.accept(mapper.apply(p));
             }
         }
+
+        Map<Sex, List<P>> byGender = roster.stream()
+                .collect(Collectors.groupingBy(p -> ((Person) p).gender));
     }
 
     interface Service<T> {
@@ -74,6 +86,10 @@ public class Person {
 
     String name;
     Sex gender;
+
+    public static Sex getGender(Person p) {
+        return p.gender;
+    }
 
     public Person(String name, Sex gender) {
         this.name = name;
