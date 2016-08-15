@@ -27,12 +27,12 @@ public class Leetcode1TwoSumTest {
     @Parameterized.Parameters(name = " test {index}")
     public static Iterable<int[][]> data() {
         return Arrays.asList(new int[][][]{
-             // {test array}, {target, result1 result2}
-                {{3, 2, 4}, {6, 2, 3}},
+                // {test array}, {target, result1 result2}
+                {{3, 2, 4}, {6, 1, 2}},
                 {{3, 3, 4}, {8, -1, -1}},
-                {{8, 0, 8}, {16, 1, 3}},
-                {{0, 4, 3, 0}, {0, 1, 4}},
-                {{-1, -2, -3, -4, -5}, {-8, 3, 5}},
+                {{8, 0, 8}, {16, 0, 2}},
+                {{0, 4, 3, 0}, {0, 0, 3}},
+                {{-1, -2, -3, -4, -5}, {-8, 2, 4}},
                 {{230, 863, 916, 585, 981, 404, 316, 785, 88, 12, 70, 435,
                         384, 778, 887, 755, 740, 337, 86, 92, 325, 422,
                         815, 650, 920, 125, 277, 336, 221, 847,
@@ -43,7 +43,7 @@ public class Leetcode1TwoSumTest {
                         751, 28, 546, 60, 371, 493, 370, 527, 387, 43,
                         541, 13, 457, 328, 227, 652, 365, 430, 803, 59, 858,
                         538, 427, 583, 368, 375, 173, 809, 896, 370, 789},
-                        {542, 29, 46}}
+                        {542, 28, 45}}
         });
     }
 
@@ -63,16 +63,16 @@ public class Leetcode1TwoSumTest {
         int[] r = Leetcode1twoSum.twoSum(array, target);
         Assert.assertEquals(r[0], i);
         Assert.assertEquals(r[1], j);
-        r = Leetcode1twoSum.twoSum1(array, target);
+        r = Leetcode1twoSum.twoSum(array, target);
         Assert.assertEquals(r[0], i);
         Assert.assertEquals(r[1], j);
-        r = Leetcode1twoSum.twoSum2(array, target);
+        r = Leetcode1twoSum2.twoSum(array, target);
         Assert.assertEquals(r[0], i);
         Assert.assertEquals(r[1], j);
-        r = Leetcode1twoSum.twoSum3(array, target);
+        r = Leetcode1twoSum3.twoSum(array, target);
         Assert.assertEquals(r[0], i);
         Assert.assertEquals(r[1], j);
-        r = Leetcode1twoSum.twoSum4(array, target);
+        r = Leetcode1twoSum3.twoSum3(array, target);
         Assert.assertEquals(r[0], i);
         Assert.assertEquals(r[1], j);
     }
