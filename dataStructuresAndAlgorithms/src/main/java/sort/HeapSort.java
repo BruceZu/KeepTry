@@ -16,7 +16,7 @@
 package sort;
 
 /**
- * See {@link  treesimple.binarytree.heap.Heap#add(Comparable, boolean)} and {@link  treesimple.binarytree.heap.Heap#delete(boolean)}
+ * See {@link  treesimple.heap.Heap#add(Comparable, boolean)} and {@link  treesimple.heap.Heap#delete(boolean)}
  */
 public class HeapSort {
     public void f(String[] args) {
