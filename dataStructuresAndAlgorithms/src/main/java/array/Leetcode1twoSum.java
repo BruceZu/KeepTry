@@ -80,6 +80,18 @@ package array;
  *               [1,8,2,8,4,8], 16
  *               after sort:
  *               [1,2,4,8,8,8]
+ *
+ *    performance improvement from 2 ms to 1ms with probability of 80% on Aug 16, 2016
+ *       -A: replace Integer[] with int[].
+ *         this will require make sure map[nums[0]]!=0.
+ *         bit manipulation is better than +/- operation according to leetcode test data.
+ *       -B: sacrificing the 'other' and 'key' variables;
+ *       -C: add 'target -= mi;' before the loop.
+ *
+ *      cons:  A and B will make the code less readable.
+ *
+ *   @see <a href="https://leetcode.com/problems/two-sum/">leetcode </a>
+ *   @see <a href="https://discuss.leetcode.com/topic/50160/does-anybody-know-the-fastest-java-solution-2ms/6">discuss </a>
  */
 public class Leetcode1twoSum {
     // runtime O(N), space depends on value of min, max and target
@@ -98,10 +110,9 @@ public class Leetcode1twoSum {
         int ma = Math.max(max, target - min);
 
         Integer[] map = new Integer[ma - mi + 1];
-
+        target = target - mi;
         for (int i = 0; i < nums.length; i++) {
-            int other = target - nums[i];
-            int key = other - mi;
+            int key = target - nums[i];
             if (map[key] != null) {
                 return new int[]{map[key], i};
             } else {
