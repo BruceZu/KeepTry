@@ -20,6 +20,8 @@ import java.util.List;
 
 /**
  * <pre>
+ *     Note: input check null
+ *
  *      1 2 3
  * rotate:
  *     1 2 3
@@ -98,11 +100,6 @@ public class Leetcode46Permutations2 {
         }
     }
 
-    /**
-     * <pre>
-     * Note:
-     *   input check null
-     */
     public List<List<Integer>> permute(int[] in) {
         if (in == null) {
             return null;

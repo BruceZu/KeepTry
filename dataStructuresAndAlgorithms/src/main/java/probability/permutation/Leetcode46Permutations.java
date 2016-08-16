@@ -39,6 +39,10 @@ import java.util.List;
  *  (M) Permutations II
  *  (M) Permutation Sequence
  *  (M) Combinations
+ *  =============================================================
+ *  Idea
+ *  back-tracing
+ *  Big O: runtime O(N!), space O(N!)
  *
  * Note:
  *   0  This is for * distinct * numbers
@@ -83,11 +87,6 @@ public class Leetcode46Permutations {
         }
     }
 
-
-    /**
-     * back-tracing
-     * Big O: runtime O(N!), space O(N!)
-     */
     public List<List<Integer>> permute(int[] in) {
         if (in == null) {
             return null;
