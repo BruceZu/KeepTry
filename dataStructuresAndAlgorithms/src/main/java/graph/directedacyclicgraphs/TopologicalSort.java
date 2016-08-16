@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package sort;
+package graph.directedacyclicgraphs;
 
 import java.util.HashSet;
 import java.util.Set;

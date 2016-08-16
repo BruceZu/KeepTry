@@ -15,8 +15,8 @@
 
 package graph.shortestgpath;
 
-import graph.shortestpath.DijkstraShortestPath;
-import graph.shortestpath.Node;
+import graph.shortestpath.weightedgraphs.DijkstraShortestPath;
+import graph.shortestpath.weightedgraphs.Node;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package graph.shortestpath;
+package graph.shortestpath.weightedgraphs;
 
 import java.util.Set;
 import java.util.Stack;

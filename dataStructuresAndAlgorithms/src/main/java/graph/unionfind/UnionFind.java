@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package unionfind;
+package graph.unionfind;
 
 /**
  * <pre>
