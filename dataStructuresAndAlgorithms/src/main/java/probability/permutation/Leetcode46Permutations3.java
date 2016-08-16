@@ -18,64 +18,63 @@ package probability.permutation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <pre>
+ * Note:
+ * 2 swaps:
+ * fist swap: choices of current number depends on pre
+ * without the last swap:
+ *      [[1,2,3],[1,3,2],
+ *      [3,1,2],[3,2,1],   3 get back 1 then 2 push 1 to the last
+ *      [1,2,3],[1,3,2]]   now 1 is duplicated
+ *
+ * for array with duplicated element. this approach can not work.
+ * e.g.: see {@link Leetcode47PermutationsII2#permuteUnique(int[])}
+ *   1 1 2 2
+ *     1 2 2
+ *     2 1 2
+ *       1 2
+ *       2 1 ->   1 2 2 1
+ *     2 2 1 ->   1 2 2 1
+ *
+ * for the case [1, 2, 3]
+ * Result is
+ *      [1, 2, 3]
+ *      [1, 3, 2]
+ *      [2, 1, 3]
+ *      [2, 3, 1]
+ *      [3, 2, 1]
+ *      [3, 1, 2]
+ *
+ *
+ *  Note:
+ *  <1>
+ *   before swap need check i!=j;
+ *   Here the nums is distinct numbers:
+ *   i == j means
+ *   ms[i]^=ms[i]  // ms[i] ==0
+ *   ms[i]^=ms[i]  // ms[i] ==0
+ *   ms[i]^=ms[i]  // ms[i] ==0
+ *
+ *   So if the nums is not distinct numbers.
+ *   Do not use ^= operation.
+ *
+ *   <2> if use while loop make sure the variable not affect the actions in loop;
+ *
+ *     it is ok:
+ *      int choice = si;
+ *      while (choice <=ei){  // wrong while (choice++ <=ei){
+ *          swap(si, choice);
+ *          pNextNum(si + 1, ei);
+ *          swap(si, choice);
+ *          choice ++;
+ *      }
+ * }
+ */
 public class Leetcode46Permutations3 {
     private List<List<Integer>> r;
     private int[] ms;
-    // ---------------
 
-    /**
-     * <pre>
-     * Note:
-     * 2 swaps:
-     * fist swap: choices of current number depends on pre
-     * without the last swap:
-     *      [[1,2,3],[1,3,2],
-     *      [3,1,2],[3,2,1],   3 get back 1 then 2 push 1 to the last
-     *      [1,2,3],[1,3,2]]   now 1 is duplicated
-     *
-     * for array with duplicated element. this approach can not work.
-     * e.g.: see {@link Leetcode47PermutationsII2#permuteUnique(int[])}
-     *   1 1 2 2
-     *     1 2 2
-     *     2 1 2
-     *       1 2
-     *       2 1 ->   1 2 2 1
-     *     2 2 1 ->   1 2 2 1
-     *
-     * for the case [1, 2, 3]
-     * Result is
-     *      [1, 2, 3]
-     *      [1, 3, 2]
-     *      [2, 1, 3]
-     *      [2, 3, 1]
-     *      [3, 2, 1]
-     *      [3, 1, 2]
-     *
-     *
-     *  Note:
-     *  <1>
-     *   before swap need check i!=j;
-     *   Here the nums is distinct numbers:
-     *   i == j means
-     *   ms[i]^=ms[i]  // ms[i] ==0
-     *   ms[i]^=ms[i]  // ms[i] ==0
-     *   ms[i]^=ms[i]  // ms[i] ==0
-     *
-     *   So if the nums is not distinct numbers.
-     *   Do not use ^= operation.
-     *
-     *   <2> if use while loop make sure the variable not affect the actions in loop;
-     *
-     *     it is ok:
-     *      int choice = si;
-     *      while (choice <=ei){  // wrong while (choice++ <=ei){
-     *          swap(si, choice);
-     *          pNextNum(si + 1, ei);
-     *          swap(si, choice);
-     *          choice ++;
-     *      }
-     * }
-     */
     private void swap(int i, int j) {
         if (i != j) {
             ms[i] ^= ms[j];
@@ -84,8 +83,8 @@ public class Leetcode46Permutations3 {
         }
     }
 
-    private void pNextNum(int si, int ei) {
-        if (si == ei) {
+    private void pNextNum(int si) {
+        if (si == ms.length - 1) {
             List p = new ArrayList(ms.length);
             for (int i = 0; i < ms.length; i++) {
                 p.add(ms[i]);
@@ -94,9 +93,9 @@ public class Leetcode46Permutations3 {
             return;
         }
 
-        for (int curChoice = si; curChoice <= ei; curChoice++) {
+        for (int curChoice = si; curChoice <= ms.length - 1; curChoice++) {
             swap(si, curChoice);
-            pNextNum(si + 1, ei);
+            pNextNum(si + 1);
             swap(si, curChoice);
         }
     }
@@ -107,7 +106,7 @@ public class Leetcode46Permutations3 {
         }
         ms = in;
         r = new ArrayList();
-        pNextNum(0, ms.length - 1);
+        pNextNum(0);
 
         return r;
     }

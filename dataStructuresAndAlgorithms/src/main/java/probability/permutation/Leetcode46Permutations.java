@@ -64,7 +64,7 @@ public class Leetcode46Permutations {
     private int[] ms;
     private boolean[] selected;
 
-    private void permute3() {
+    private void permute() {
         if (p.size() == ms.length) {
             r.add(new ArrayList(p));
             return;
@@ -75,7 +75,7 @@ public class Leetcode46Permutations {
                 p.add(ms[i]);//  -->
                 selected[i] = true;//  -->
 
-                permute3();
+                permute();
 
                 p.remove(p.size() - 1); // <--
                 selected[i] = false; // <--
@@ -88,7 +88,7 @@ public class Leetcode46Permutations {
      * back-tracing
      * Big O: runtime O(N!), space O(N!)
      */
-    public List<List<Integer>> permute3(int[] in) {
+    public List<List<Integer>> permute(int[] in) {
         if (in == null) {
             return null;
         }
@@ -97,7 +97,7 @@ public class Leetcode46Permutations {
         p = new ArrayList(ms.length);
         selected = new boolean[ms.length];
 
-        permute3();
+        permute();
         return r;
     }
 }

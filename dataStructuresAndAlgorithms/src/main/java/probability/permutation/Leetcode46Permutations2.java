@@ -18,61 +18,61 @@ package probability.permutation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <pre>
+ *      1 2 3
+ * rotate:
+ *     1 2 3
+ *           1 2 3
+ *                  start = end
+ *           rotate
+ *
+ *           1 3 2
+ *                  start = end
+ *           rotate
+ *           1 2 3
+ *     rotate
+ *     2 3 1
+ *           2 3 1
+ *                  start = end
+ *           rotate
+ *           2 1 3
+ *                 start = end
+ *           rotate
+ *           2 3 1
+ *     rotate
+ *     3 1 2
+ *           3 1 2
+ *                  start = end
+ *           rotate
+ *           3 2 1
+ *                  start = end
+ *           rotate
+ *           3 1 2
+ *    rotate
+ *    1 2 3
+ *    the result is
+ *      [1, 2, 3]
+ *      [1, 3, 2]
+ *      [2, 3, 1]
+ *      [2, 1, 3]
+ *      [3, 1, 2]
+ *      [3, 2, 1]
+ *
+ *  look down to see the choices of fist , second, .... number of permutations. like a Permutation Lock.
+ *
+ *  Big O: run time O(N!), space  O(N!)
+ */
 public class Leetcode46Permutations2 {
     private List<List<Integer>> r;
     private int[] ms;
 
-    /**
-     * <pre>
-     *      1 2 3
-     * rotate:
-     *     1 2 3
-     *           1 2 3
-     *                  start = end
-     *           rotate
-     *
-     *           1 3 2
-     *                  start = end
-     *           rotate
-     *           1 2 3
-     *     rotate
-     *     2 3 1
-     *           2 3 1
-     *                  start = end
-     *           rotate
-     *           2 1 3
-     *                 start = end
-     *           rotate
-     *           2 3 1
-     *     rotate
-     *     3 1 2
-     *           3 1 2
-     *                  start = end
-     *           rotate
-     *           3 2 1
-     *                  start = end
-     *           rotate
-     *           3 1 2
-     *    rotate
-     *    1 2 3
-     *    the result is
-     *      [1, 2, 3]
-     *      [1, 3, 2]
-     *      [2, 3, 1]
-     *      [2, 1, 3]
-     *      [3, 1, 2]
-     *      [3, 2, 1]
-     *
-     *  look down to see the choices of fist , second, .... number of permutations. like a Permutation Lock.
-     *
-     *  Big O: run time O(N!), space  O(N!)
-     */
-    private void rotateNextChoice(int si, int ei) {
-        int siv = ms[si];
-        for (int i = si; i < ei; i++) {
+    private void rotateNextChoice(int index) {
+        int v = ms[index];
+        for (int i = index; i < ms.length - 1; i++) {
             ms[i] = ms[i + 1];
         }
-        ms[ei] = siv;
+        ms[ms.length - 1] = v;
     }
 
     /**
@@ -81,12 +81,9 @@ public class Leetcode46Permutations2 {
      *   1 Arrays.asList(ms) can not work; it will wrap a []
      *   2 choice need -- each loop
      *   3 the loop only about choices, not affect next recursive which always is 'si +1'
-     *
-     * @param si start index
-     * @param ei end index
      */
-    private void pNextNumber(int si, int ei) {
-        if (si == ei) {
+    private void pNextNumberOf(int index) {
+        if (index == ms.length - 1) {
             List<Integer> p = new ArrayList(ms.length);
             for (int i = 0; i < ms.length; i++) {
                 p.add(ms[i]);
@@ -94,27 +91,25 @@ public class Leetcode46Permutations2 {
             r.add(p);
             return;
         }
-        int choices = ei - si + 1;
+        int choices = ms.length - index;
         while (choices-- >= 1) {
-            pNextNumber(si + 1, ei);
-            rotateNextChoice(si, ei);
+            pNextNumberOf(index + 1);
+            rotateNextChoice(index);
         }
     }
 
     /**
      * <pre>
-     * 10 minutes
      * Note:
      *   input check null
-     *   it is length -1, not length.
      */
-    public List<List<Integer>> permute2(int[] in) {
+    public List<List<Integer>> permute(int[] in) {
         if (in == null) {
             return null;
         }
         ms = in;
         r = new ArrayList();
-        pNextNumber(0, ms.length - 1);
+        pNextNumberOf(0);
         return r;
     }
 }
