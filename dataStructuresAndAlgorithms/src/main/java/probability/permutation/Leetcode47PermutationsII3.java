@@ -71,16 +71,16 @@ public class Leetcode47PermutationsII3 {
     private int[] ms;
     private List<List<Integer>> r;
 
-    private void rotateNextChoice(int si, int ei) {
+    private void rotateNextChoice(int si) {
         int siv = ms[si];
-        for (int i = si; i < ei; i++) {
+        for (int i = si; i < ms.length - 1; i++) {
             ms[i] = ms[i + 1];
         }
-        ms[ei] = siv;
+        ms[ms.length - 1] = siv;
     }
 
-    private void pNextNumber(int si, int ei) {
-        if (si == ei) {
+    private void pNextNumber(int si) {
+        if (si == ms.length - 1) {
             List<Integer> p = new ArrayList(ms.length);
             for (int i = 0; i < ms.length; i++) {
                 p.add(ms[i]);
@@ -88,14 +88,14 @@ public class Leetcode47PermutationsII3 {
             r.add(p);
             return;
         }
-        int choices = ei - si + 1;
+        int choices = ms.length - si;
         Set used = new HashSet(); // do not need sort input firstly
         while (choices-- >= 1) {
             if (!used.contains(ms[si])) {
                 used.add(ms[si]);
-                pNextNumber(si + 1, ei);
+                pNextNumber(si + 1);
             }
-            rotateNextChoice(si, ei);
+            rotateNextChoice(si);
         }
     }
 
@@ -105,7 +105,7 @@ public class Leetcode47PermutationsII3 {
         }
         ms = in;
         r = new ArrayList();
-        pNextNumber(0, ms.length - 1);
+        pNextNumber(0);
         return r;
     }
 }

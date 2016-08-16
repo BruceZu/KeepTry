@@ -22,23 +22,6 @@ import java.util.Set;
 
 /**
  * <pre>
- * Given a collection of numbers that might contain duplicates, return all possible unique permutations.
- *
- * For example,
- * [1,1,2] have the following unique permutations:
- * [
- *  [1,1,2],
- *  [1,2,1],
- *  [2,1,1]
- * ]
- * Subscribe to see which companies asked this question
- *
- *  Tags  Backtracking
- *  Similar Problems
- * (M) Next Permutation
- * (M) Permutations
- * (M) Palindrome Permutation II
- *  ====================================================================================================
  *
  *              c a c a 9 d 9 e 9 9
  *   if allocate same char together
@@ -51,14 +34,13 @@ import java.util.Set;
  *   Because even sorted or allocate same char together as above.
  *   swap will get next number's choice scope not in order.
  *   the only way is use a set to make sure duplicated choices is used only once.
- *
  */
 public class Leetcode47PermutationsII2 {
     private int[] ms;
     private List<List<Integer>> r;
 
     private void swap(int i, int j) {
-        if (i != j) {
+        if (i != j && ms[i] != ms[j]) {
             ms[i] ^= ms[j];
             ms[j] ^= ms[i];
             ms[i] ^= ms[j];

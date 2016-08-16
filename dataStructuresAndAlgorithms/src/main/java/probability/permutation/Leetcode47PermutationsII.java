@@ -22,6 +22,23 @@ import java.util.Set;
 
 /**
  * <pre>
+ * Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+ *
+ * For example,
+ * [1,1,2] have the following unique permutations:
+ * [
+ *  [1,1,2],
+ *  [1,2,1],
+ *  [2,1,1]
+ * ]
+ * Subscribe to see which companies asked this question
+ *
+ *  Tags  Backtracking
+ *  Similar Problems
+ * (M) Next Permutation
+ * (M) Permutations
+ * (M) Palindrome Permutation II
+ *  ====================================================================================================
  * Note:
  *   use 'Set used...', do not need sort the input firstly.
  *
@@ -96,11 +113,13 @@ public class Leetcode47PermutationsII {
             if (selected[i] != true && !used.contains(ms[i])) {
                 used.add(ms[i]);
 
-                p.add(ms[i]);//  -->
-                selected[i] = true;//  -->
+                p.add(ms[i]);           //  -->
+                selected[i] = true;     //  -->
+
                 permuteUnique();
+
                 p.remove(p.size() - 1); // <--
-                selected[i] = false; // <--
+                selected[i] = false;    // <--
             }
         }
     }
