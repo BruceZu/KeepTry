@@ -40,25 +40,27 @@ import java.util.List;
  *  (M) Permutation Sequence
  *  (M) Combinations
  *  =============================================================
- *  Idea
- *  back-tracing
- *  Big O: runtime O(N!), space O(N!)
+ *  Idea:
+ *  1> back-tracing using recursion
+ *   Big O: runtime O(N!), space O(N!)
  *
- * Note:
- *   0  This is for * distinct * numbers
- *   1  current choice scope is depends on pre
- *   2  back-tracing need restore original status when step back:
- *         delete before return
- *         delete after call
- *   3 List methods:
- *     --  2 remove():
- *              remove(int index);
- *              remove(Object o);
- *     --  contains(): need check if current one is selected.
- *   4 Improve:
- *       a. use a boolean[] to check current choice is selected or not
- *       b. return directly once a permutation is finished.
- *       c. all parameters to be variables, easy to read.
+ *      Note:
+ *          0  This is for * distinct * numbers
+ *          1  current choice scope is depends on pre
+ *          2  back-tracing need restore original status when step back:
+ *              delete before return
+ *              delete after call
+ *        3 List methods:
+ *          --  2 remove():
+ *                   remove(int index);
+ *                   remove(Object o);
+ *          --  contains(): need check if current one is selected.
+ *        4 Improve:
+ *              a. use a boolean[] to check current choice is selected or not
+ *              b. return directly once a permutation is finished.
+ *              c. all parameters to be variables, easy to read.
+ *     same like ways see {@link Leetcode46Permutations2} and {@link Leetcode46Permutations3}
+ *  2> iterate see {@link Leetcode47PermutationsII5}
  *
  * @see <a href = "https://leetcode.com/problems/permutations/">leetcode</a>
  */
