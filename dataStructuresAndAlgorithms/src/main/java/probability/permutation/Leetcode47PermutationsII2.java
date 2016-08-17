@@ -56,7 +56,7 @@ public class Leetcode47PermutationsII2 {
             r.add(p);
             return;
         }
-        Set usedChoice = new HashSet(ei - si + 1); // do not need sort firstly
+        Set usedChoice = new HashSet(ei - si + 1);
         for (int ci = si; ci <= ei; ci++) {
             int choice = ms[ci];
             if (!usedChoice.contains(choice)) {
