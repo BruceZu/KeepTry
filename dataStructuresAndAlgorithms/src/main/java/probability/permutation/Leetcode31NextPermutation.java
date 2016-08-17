@@ -73,6 +73,13 @@ package probability.permutation;
  *     {}
  *     {1}
  *
+ *     Note:
+ *          it required "If such arrangement is not possible,
+ *          it must rearrange it as the lowest possible order (ie, sorted in ascending order)."
+ *          This make the resolution is not common; If without this special condition. Its pros:
+ *          can process all permutations for a given array which can have duplicated number.
+ *          see {@link Leetcode47PermutationsII5}
+ *
  * @see <a href="https://leetcode.com/problems/next-permutation/">leetcode</a>
  */
 public class Leetcode31NextPermutation {
@@ -80,28 +87,21 @@ public class Leetcode31NextPermutation {
         if (nums == null || nums.length <= 1) {
             return;
         }
-
-        int iswap = -1;
-        for (int i = nums.length - 2; i >= 0; i--) {
+        int i = nums.length - 2;
+        for (; i >= 0; i--) {
             if (nums[i] < nums[i + 1]) {
-                iswap = i;
+                for (int j = nums.length - 1; j >= 0; j--) {
+                    if (nums[j] > nums[i]) {
+                        nums[i] ^= nums[j];
+                        nums[j] ^= nums[i];
+                        nums[i] ^= nums[j];
+                        break;
+                    }
+                }
                 break;
             }
         }
-        if (iswap != -1) {
-            int vswap = nums[iswap];
-            int swapi = -1;
-            for (int i = nums.length - 1; i >= 0; i--) {
-                if (nums[i] > vswap) {
-                    swapi = i;
-                    break;
-                }
-            }
-            nums[iswap] ^= nums[swapi];
-            nums[swapi] ^= nums[iswap];
-            nums[iswap] ^= nums[swapi];
-        }
-        int i = iswap + 1;
+        i++;
         int j = nums.length - 1;
         while (i < j) {
             nums[i] ^= nums[j];
