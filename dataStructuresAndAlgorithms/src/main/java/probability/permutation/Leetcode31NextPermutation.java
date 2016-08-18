@@ -77,8 +77,10 @@ package probability.permutation;
  *          it required "If such arrangement is not possible,
  *          it must rearrange it as the lowest possible order (ie, sorted in ascending order)."
  *          This make the resolution is not common; If without this special condition. Its pros:
- *          can process all permutations for a given array which can have duplicated number.
- *          see {@link Leetcode47PermutationsII5}
+ *          1 can process all permutations for a given array
+ *          2 array can have duplicated number.
+ *          3 array do not need sort in this resolution.
+ *          see {@link Leetcode47PermutationsII4}
  *
  * @see <a href="https://leetcode.com/problems/next-permutation/">leetcode</a>
  */
@@ -87,10 +89,10 @@ public class Leetcode31NextPermutation {
         if (nums == null || nums.length <= 1) {
             return;
         }
-        int i = nums.length - 2;
+        int i = nums.length - 2; // pre peak
         for (; i >= 0; i--) {
             if (nums[i] < nums[i + 1]) {
-                for (int j = nums.length - 1; j >= 0; j--) {
+                for (int j = nums.length - 1; j >= 0; j--) { // bigger
                     if (nums[j] > nums[i]) {
                         nums[i] ^= nums[j];
                         nums[j] ^= nums[i];

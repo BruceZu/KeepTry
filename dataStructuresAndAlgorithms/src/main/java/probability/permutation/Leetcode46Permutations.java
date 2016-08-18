@@ -60,7 +60,7 @@ import java.util.List;
  *              b. return directly once a permutation is finished.
  *              c. all parameters to be variables, easy to read.
  *     same like ways see {@link Leetcode46Permutations2} and {@link Leetcode46Permutations3}
- *  2> iterate see {@link Leetcode47PermutationsII5}
+ *  2> iterate see {@link Leetcode47PermutationsII4}
  *
  * @see <a href = "https://leetcode.com/problems/permutations/">leetcode</a>
  */
