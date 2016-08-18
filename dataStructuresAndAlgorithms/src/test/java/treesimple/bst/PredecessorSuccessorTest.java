@@ -13,14 +13,14 @@
 // limitations under the License.
 //
 
-package treesimple.binarytree.bst;
+package treesimple.bst;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static treesimple.binarytree.bst.PredecessorSuccessor.go;
+import static treesimple.bst.PredecessorSuccessor.go;
 
 public class PredecessorSuccessorTest {
     @Test(timeout = 30L, expected = Test.None.class)

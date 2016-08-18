@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package treesimple.binarytree.heap;
+package treesimple.heap;
 
 public class Heap<T extends Comparable> {
     private final static int LIMITED_SIZE = Integer.MAX_VALUE >> 2;

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package treesimple.binarytree.bst;
+package treesimple.bst;
 
 import java.util.Random;
 

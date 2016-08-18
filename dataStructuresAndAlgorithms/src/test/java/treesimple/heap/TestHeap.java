@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package treesimple.binarytree.heap;
+package treesimple.heap;
 
 import org.junit.Assert;
 import org.junit.Test;
