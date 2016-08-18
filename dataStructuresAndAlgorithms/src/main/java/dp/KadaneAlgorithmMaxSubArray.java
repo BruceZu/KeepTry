@@ -80,18 +80,13 @@ package dp;
  *     1, 2, 2, 1, 3                                -> 9
  *     0, -1, -2, -1, 0, 1, 2, 1, 0, -1, -2, -1, 0  -> 4
  *
- *   mininum:
- *     -2, 1, -3, 4, -1, 2, 1, -5, 4                -> -5
- *     -2, -3, 4, -1, -2, 1, 5, -3, 4               -> -5
- *     -1, -2, -2, -1, -3                           -> -9
- *     1, 2, 2, 1, 3                                -> 1
- *     0, -1, -2, -1, 0, 1, 2, 1, 0, -1, -2, -1, 0  -> -4
+
  *
  *   more test case @see <a href="https://leetcode.com/problems/maximum-subarray/">leetcode</a>
  *
  *  @see <a href="https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane.27s_algorithm">Kadane's algorithm</a>
  */
-public class KadaneAlgorithm {
+public class KadaneAlgorithmMaxSubArray {
     public static int maximum(int[] arr) {
         int maxEndsHere = arr[0], peak = arr[0];
 
@@ -102,45 +97,25 @@ public class KadaneAlgorithm {
         return peak;
     }
 
-    // Alternative
+    // Alternative. accepted by leetcode 53
     public static int maximum2(int[] arr) {
-        int bottom = 0;
-        int rightDelta = arr[0], sum = arr[0];
+        int sum = arr[0];
+        int sumBottom;
+        int rightDelta = arr[0];
+
+        if (arr[0] >= 0) {
+            sumBottom = 0;
+        } else {
+            sumBottom = arr[0];
+        }
 
         for (int i = 1; i < arr.length; i++) {
             sum += arr[i];
-            if (sum - bottom > rightDelta) {
-                rightDelta = sum - bottom;
+            if (sum - sumBottom > rightDelta) {
+                rightDelta = sum - sumBottom;
             }
-            if (sum < bottom) {
-                bottom = sum;
-            }
-        }
-        return rightDelta;
-    }
-
-    public static int minimum(int[] arr) {
-        int maxEndsHere = arr[0], peak = arr[0];
-
-        for (int i = 1; i < arr.length; i++) {
-            maxEndsHere = Math.min(arr[i], maxEndsHere += arr[i]);
-            peak = Math.min(maxEndsHere, peak);
-        }
-        return peak;
-    }
-
-    // Alternative
-    public static int minimum2(int[] arr) {
-        int top = 0;
-        int rightDelta = arr[0], sum = arr[0];
-
-        for (int i = 1; i < arr.length; i++) {
-            sum += arr[i];
-            if (sum - top < rightDelta) {
-                rightDelta = sum - top;
-            }
-            if (sum > top) {
-                top = sum;
+            if (sum < sumBottom) {
+                sumBottom = sum;
             }
         }
         return rightDelta;
