@@ -21,26 +21,26 @@ public class Leetcode122BestTimetoBuyandSellStockII2 {
      * IF sure need find out all the bottom and peak and sum all uphill value by peak_i - bottom_i
      *
      * up: last update is increase?
-     * bottom: bottom price, default is prices[0]; it maybe just the bottom if it is uphill,
-     *                                          else it is downhill and will be replaced by first bottom
-     *                                                                                      or end of prices.
-     *                                          - bottom peak
-     *                                          - bottom(peak)  bottom  peak
-     *                    so always we have a bottom price, once a peak appears, calculate profit once.
-     *                    and once a peak appears, before next peak appear, sure will appear a bottom, or ...
-     *                      - peak bottom peak
-     *                      - peak end
-     *                      - peak bottom end
+     * bottom: Bottom price. Default is prices[0].
+     *         It maybe just the bottom if it starts with uphill,
+     *         else it starts with downhill and will be replaced by first bottom or end of prices.
+     *            - bottom peak
+     *            - bottom(peak)  bottom  peak
+     *         With the default value, always we have a bottom price.
+     *         Once a peak appears, calculate profit once.
+     *         Once a peak appears, before next peak appear, sure will appear a bottom, or ...
+     *             - peak bottom peak
+     *             - peak end
+     *             - peak bottom end
      *
-     * comparing to today's price, next day price will be -> , down, up
-     * once bottom appear
+     * Comparing to today's price, next day price will be -> , down, up
      *
      * test case:
      *      [],
      *      [1],
      *      [3,3]
      */
-    public int maxProfit2(int[] prices) {
+    public int maxProfit(int[] prices) {
         if (prices == null || prices.length <= 1) {
             return 0;
         }
