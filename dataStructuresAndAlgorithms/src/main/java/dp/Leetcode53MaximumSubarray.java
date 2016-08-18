@@ -44,7 +44,7 @@ package dp;
  *
  *   ===========================================================================
  *
- *   O(n) in time  see {@link KadaneAlgorithm Kadane Algorithm  }
+ *   O(n) in time  see {@link KadaneAlgorithmMaxSubArray Kadane Algorithm  }
  *
  * @see <a href="https://leetcode.com/problems/maximum-subarray/">leetcode</a>
  */
