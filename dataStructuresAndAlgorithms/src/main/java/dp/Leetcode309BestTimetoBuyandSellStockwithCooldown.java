@@ -86,7 +86,7 @@ package dp;
  *              3 max profit of 'nothing happen after cooldown' happen on last day,
  *          }
  *
- *          try make it simple:
+ * try make it simple  ---------------------------------------
  *
  *     all possible operation on day i and result status:
  *          endByBuy                        ->  1 share in hand
@@ -100,7 +100,7 @@ package dp;
  *              2 max profit of 'endByCooldown' happen on last day,
  *          }
  *
- *     DP translations of max profix: drawing a picture will be easy to understand.
+ *     DP translations of max profit: drawing a picture will be easy to understand.
  *              max_endBysell[last] = max_endByBuy[last - 1] + prices[last];
  *              max_endByCooldown[last] = Math.max(max_endByCooldown[last - 1], max_endBysell[last - 1]);
  *
@@ -111,6 +111,8 @@ package dp;
  *         max_endBySell[0] = Integer.MIN_VALUE;
  *         max_endByCooldown[0] = 0;
  *         max_endByBuy[0] = -prices[0];
+ *
+ *   see also {@link Leetcode309BestTimetoBuyandSellStockwithCooldown2}
  *
  * @see <a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/"> leetcode </a>
  */
