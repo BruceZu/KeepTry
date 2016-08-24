@@ -55,17 +55,26 @@ package dp;
  *
  *     relation:
  *
- *          zero--> buy1--> sell1--> buy2--> sell2.
- *                       \       \         \       \
- *                 zero-->  buy1-->  sell1--> buy2--> sell2.
+ *     day   0        1        2      3     4    ...
+ *           0        0        0      0     0
+ *                \       \      \      \
+ *           buy1 - buy1  - buy1 - buy1 - buy1   ...
+ *                 \      \      \       \
+ *                  sell1 - sell1- sell1 - sell1 ...
+ *                         \     \       \
+ *                          buy2 - buy2  - buy2  ...
+ *                                \       \
+ *                                 sell2  -sell2 ...
  *
- *
- *     day   0       1      2      3       .....
- *           0       0      0      0
- *           buy1   buy1    buy1   buy1    ...
- *                  sell1   sell1  sell1   ...
- *                          buy2   buy2    ...
- *                                 sell2   ...
+ *     initial value:
+ *     day:   0      1        2      3     4    ...
+ *          buy1 - buy1 - buy1 - buy1 - buy1   ...
+ *               \       \       \       \
+ *          0     sell1 -  sell1- sell1 - sell1 ...
+ *                       \       \       \
+ *          MIN           buy2  - buy2 - buy2  ...
+ *                               \       \
+ *          0                    sell2  - sell2 ...
  *
  *    "at most two transactions" means at last day max profit of the max one of
  *       1  never buy or sell
@@ -74,89 +83,34 @@ package dp;
  *
  *   Initial value:
  *      Integer.MIN_VALUE - some positive value will = a very big number;
+ *      So it only can be initial value of buy and make sure it cannot be selected as the result of
+ *      next sell value depends on this buy.
  *
  *   make it simple see {@link Leetcode123BestTimetoBuyandSellStockIII2}
  */
 public class Leetcode123BestTimetoBuyandSellStockIII {
     // DP basic idea
-    public static int maxProfit2(int[] prices) {
-
+    public static int maxProfit(int[] prices) {
         int[] sell2 = new int[prices.length],
                 sell1 = new int[prices.length],
                 buy2 = new int[prices.length],
-                buy1 = new int[prices.length],
-                zero = new int[prices.length];
-        if (prices.length <= 1) {
+                buy1 = new int[prices.length];
+
+        if (prices.length == 0) {
             return 0;
         }
         buy1[0] = -prices[0];
-        sell1[0] = Integer.MIN_VALUE;
+        sell1[0] = 0;
+        buy2[0] = Integer.MIN_VALUE;
+        sell2[0] = 0;
 
-        buy1[1] = Math.max(buy1[0], zero[0] - prices[1]);
-        sell1[1] = Math.max(sell1[0], buy1[0] + prices[1]);
-        buy2[1] = Integer.MIN_VALUE;
-        if (prices.length == 2) {
-            return Math.max(0, sell1[1]);
-        }
-        buy1[2] = Math.max(buy1[1], zero[0] - prices[2]);
-        sell1[2] = Math.max(sell1[1], buy1[1] + prices[2]);
-        buy2[2] = Math.max(buy2[1], sell1[1] - prices[2]);
-        sell2[2] = Integer.MIN_VALUE;
-
-        if (prices.length == 3) {
-            return Math.max(0, sell1[2]);
-        }
-        for (int i = 3; i < prices.length; i++) {
-            buy1[i] = Math.max(buy1[i - 1], zero[i - 1] - prices[i]);
+        for (int i = 1; i < prices.length; i++) {
+            buy1[i] = Math.max(buy1[i - 1], 0 - prices[i]);
             sell1[i] = Math.max(sell1[i - 1], buy1[i - 1] + prices[i]);
             buy2[i] = Math.max(buy2[i - 1], sell1[i - 1] - prices[i]);
             sell2[i] = Math.max(sell2[i - 1], buy2[i - 1] + prices[i]);
         }
         int happen = Math.max(sell2[prices.length - 1], sell1[prices.length - 1]);
-        return happen > 0 ? happen : 0;
-    }
-
-    // Space O(1)
-    public static int maxProfit(int[] prices) {
-
-        int zero = 0, b1, s1, b2, s2;
-        if (prices.length <= 1) {
-            return 0;
-        }
-        b1 = -prices[0];
-        s1 = Integer.MIN_VALUE;
-
-        int newb1 = Math.max(b1, zero - prices[1]);
-        s1 = Math.max(s1, b1 + prices[1]);
-        b1 = newb1;
-        b2 = Integer.MIN_VALUE;
-        if (prices.length == 2) {
-            return Math.max(0, s1);
-        }
-
-
-        newb1 = Math.max(b1, zero - prices[2]);
-        int news1 = Math.max(s1, b1 + prices[2]);
-        b2 = Math.max(b2, s1 - prices[2]);
-        b1 = newb1;
-        s1 = news1;
-        s2 = Integer.MIN_VALUE;
-
-        if (prices.length == 3) {
-            return Math.max(0, s1);
-        }
-        int newb2;
-        for (int i = 3; i < prices.length; i++) {
-            newb1 = b1 > -prices[i] ? b1 : -prices[i];
-            news1 = s1 > b1 + prices[i] ? s1 : b1 + prices[i];
-            newb2 = b2 > s1 - prices[i] ? b2 : s1 - prices[i];
-            s2 = s2 > b2 + prices[i] ? s2 : b2 + prices[i];
-
-            b1 = newb1;
-            s1 = news1;
-            b2 = newb2;
-        }
-        int happen = Math.max(s2, s1);
         return happen > 0 ? happen : 0;
     }
 }
