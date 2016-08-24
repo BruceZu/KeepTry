@@ -45,7 +45,6 @@ package dp;
  *     5 cancel 'zero' operation.
  *     6 simplify return result.
  *
- *  fast version see Leetcode123BestTimetoBuyandSellStockIII3
  */
 public class Leetcode123BestTimetoBuyandSellStockIII2 {
 
@@ -55,11 +54,11 @@ public class Leetcode123BestTimetoBuyandSellStockIII2 {
         s1 = 0;
         b2 = Integer.MIN_VALUE;
         s2 = 0;
-        for (int i = 0; i < prices.length; i++) {
-            s2 = s2 > b2 + prices[i] ? s2 : b2 + prices[i];
-            b2 = b2 > s1 - prices[i] ? b2 : s1 - prices[i];
-            s1 = s1 > b1 + prices[i] ? s1 : b1 + prices[i];
-            b1 = b1 > -prices[i] ? b1 : -prices[i];
+        for (int p : prices) {
+            s2 = s2 > b2 + p ? s2 : b2 + p;
+            b2 = b2 > s1 - p ? b2 : s1 - p;
+            s1 = s1 > b1 + p ? s1 : b1 + p;
+            b1 = b1 > -p ? b1 : -p;
         }
         return s2;
     }

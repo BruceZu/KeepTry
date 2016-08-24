@@ -39,6 +39,7 @@ package dp;
  *          (H) Best Time to Buy and Sell Stock IV
  *
  *  ===============================================================================
+ *  easy handle one see {@link Leetcode123BestTimetoBuyandSellStockIII_Last4} using idea in {@link Leetcode122BestTimetoBuyandSellStockII2}
  *
  *   ??
  *    1 how to translation to sub question
@@ -87,6 +88,7 @@ package dp;
  *      next sell value depends on this buy.
  *
  *   make it simple see {@link Leetcode123BestTimetoBuyandSellStockIII2}
+ *   fast one see {@link Leetcode123BestTimetoBuyandSellStockIII_Followup3}
  */
 public class Leetcode123BestTimetoBuyandSellStockIII {
     // DP basic idea
