@@ -26,29 +26,21 @@ English, Mandarin | zu.bruce@yahoo.com +
 
 '''
 [small Gray]#_Apr 2015 -  Apr 2016_# +
-[small Gray]#_Relocated to CA from Beijing_# +
-[small Gray]#_Following Gerrit community_# |
-[small Gray]#_Acquiring Data Structures and Algorithms_# +
-[small Gray]#_Can work immediately_# +
+[small Gray]#_Relocated to CA and wait EAD till the end of April 2016_# +
+[small Gray]#_meanwhile: Following Gerrit community_# |
+[small Gray]#_solid Data Structures and Algorithms_# +
 
 '''
 === *EMPLOYMENT*
 
 ==== Sony Mobile — Senior Software Engineer, full stack, mainly focus on back end
 
-[small Gray]#_Sep 2011 -  Apr 2015_# +
+[small Gray]#_Nov 2010 -  Apr 2015_# +
 [small Gray]#Sony Mobile {whatisgerrit}[Gerrit] team is a global team (4 ~ 8 members from Sweden, Tokyo, Brazil and Beijing) supporting 7000+ inner end users.#
 
-* Tackled daily *Gerrit/Git/Repo* related issues and feature requirements for CM users, Git Admin and developers. +
+* Tackled daily *Gerrit/Git/Repo/Jenkins* related issues and feature requirements for CM users, Git Admin and developers. +
 * Contributed *140+ {mycommits}[commits]* to improve and strengthen Gerrit functions to make users convenient. +
 * Received *2 awards* for outstanding contributions for software development. +
-
-[small Gray]#_Nov 2010 - Sep 2011_# +
-[small Gray]#Sony Mobile {whatisjenkins}[Jenkins] team is a global team (4 ~ 8 members) including Beijing, Lund and Tokyo sites.#
-
-* Tackled daily *Jenkins* related issues for developers and CM users. +
-* Developed *Gerrit-trigger-plugin*. +
-* Maintained *Jenkins* servers. +
 
 ==== Canon — DBA & Senior Software Engineer, back end
 
@@ -125,7 +117,7 @@ Scrum/Agile/Sprint [small Gray]#_(3)_# +
 
 ==== Sony Mobile
 
-[small Green]#_Sep 2011 -  Apr 2015_# +
+[small Green]#_Nov 2010 -  Apr 2015_# +
 
 .Job Title
 
@@ -187,34 +179,8 @@ Details: {mycommits}[ my commits] contributed to Gerrit community.
 
 Daily support :::
 
-- [*] Tackled issues related to Gerrit, Apache, Tomcat with CM user and Git Admin  +
+- [*] Tackled issues related to Gerrit, Apache, Tomcat and Jenkins with CM user and Git Admin  +
 - [*] Tried new Gerrit version and Gerrit plugins in Test Environment +
-
-[small Green]#_No 2010 ~ Sep 2011_# +
-
-.Job Function
-
-Jenkins master.
-
-.Job Title
-
-Staff Engineer
-
-.Application introduction
-
-Sony mobile has few *Jenkins servers* in each site with hundreds of slave machines for developers, CM teams.
-
-.Achievements
-
-Admin Jenkins Server
-
-- [*]  Evaluated/Upgraded Jenkins new version and Jenkins plugins +
-- [*]  Setup and configured new Jenkins slaves. Allocated slave groups to Jenkins jobs, Tuned slave groups +
-- [*]  Monitored Jenkins server/jobs/slaves and tackled issues +
-
-Develop
-
-- [*] Took part in developing Jenkins plugin: *Gerrit-trigger-plugin* +
 
 ==== Canon China
 
