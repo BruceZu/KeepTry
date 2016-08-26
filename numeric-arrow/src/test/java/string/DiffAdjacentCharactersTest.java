@@ -13,9 +13,10 @@
 // limitations under the License.
 //
 
-package string;import org.junit.Assert;
+package string;
+
+import org.junit.Assert;
 import org.junit.Test;
-import string.DiffAdjacentCharacters;
 
 public class DiffAdjacentCharactersTest {
     @Test(timeout = 3000l, expected = Test.None.class)

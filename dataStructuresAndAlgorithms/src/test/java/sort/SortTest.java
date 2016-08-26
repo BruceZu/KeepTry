@@ -84,7 +84,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 20l, expected = Test.None.class)
     public void insertSortTest2() {
         Comparable[] ar = clone(arr);
         // start test

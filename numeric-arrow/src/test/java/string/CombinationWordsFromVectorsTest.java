@@ -13,8 +13,11 @@
 // limitations under the License.
 //
 
-package string;import org.junit.Assert;
+package string;
+
+import org.junit.Assert;
 import org.junit.Test;
+import string.CombinationWordsFromVectors;
 
 import java.util.Collections;
 import java.util.Vector;

@@ -13,9 +13,10 @@
 // limitations under the License.
 //
 
-package string;import org.junit.Assert;
+package string;
+
+import org.junit.Assert;
 import org.junit.Test;
-import string.FindPermutationInDoc;
 
 public class FindPermutationInDocTest {
     private String[] given = {"snow", "fly", "fly"};

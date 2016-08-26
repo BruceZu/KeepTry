@@ -13,7 +13,9 @@
 // limitations under the License.
 //
 
-package string;import java.util.HashMap;
+package string;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class FindPermutationInDoc {

@@ -13,7 +13,9 @@
 // limitations under the License.
 //
 
-package string;import java.util.Vector;
+package string;
+
+import java.util.Vector;
 
 /*
   You're given a vector of vectors of words, e.g.:

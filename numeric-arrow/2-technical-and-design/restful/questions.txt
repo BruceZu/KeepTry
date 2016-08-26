@@ -1,0 +1,13 @@
+4 method:  put, get, post, delete.
+           put and post
+
+design:
+                     url patten
+       put
+       post
+       get
+       delete
+
+       select books from bookstore
+
+

@@ -13,7 +13,9 @@
 // limitations under the License.
 //
 
-package string;import org.junit.Assert;
+package string;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Collections;

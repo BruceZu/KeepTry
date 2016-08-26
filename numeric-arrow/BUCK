@@ -1,6 +1,6 @@
-PKG = ['', 'jdk8/', 'leetcode/', 'lintcode/']
+PKG = ['', '2-technical-and-design/jdk8/']
 SRC_PRE = 'src/main/java'
-SRC_NEED_GUICE = ['jdk8/' + SRC_PRE + c for c in [
+SRC_NEED_GUICE = ['2-technical-and-design/jdk8/' + SRC_PRE + c for c in [
     '/dependencyInjection/**/*.java',
 ]]
 SRC_EXCLUDE = SRC_NEED_GUICE
@@ -36,12 +36,12 @@ PRE = 'src/test/java/'
 NEED_HAMCREST = [PRE + c for c in [
     'ParseBalancedParenthesesTests.java',
 ]]
-NEED_HAMCREST_JDK8 = ['jdk8/' + PRE + c for c in [
+NEED_HAMCREST_JDK8 = ['2-technical-and-design/jdk8/' + PRE + c for c in [
     'url/URLTest.java'
 ]]
 NEED_HAMCREST = NEED_HAMCREST + NEED_HAMCREST_JDK8
 
-NEED_JETTY_MINA_JDK8 = ['jdk8/' + PRE + c for c in [
+NEED_JETTY_MINA_JDK8 = ['2-technical-and-design/jdk8/' + PRE + c for c in [
     'net/SocketTest.java'
 ]]
 EXCLUDE = NEED_HAMCREST + NEED_JETTY_MINA_JDK8

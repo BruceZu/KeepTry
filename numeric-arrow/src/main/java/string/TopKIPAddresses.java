@@ -13,7 +13,9 @@
 // limitations under the License.
 //
 
-package string;import java.io.BufferedReader;
+package string;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;

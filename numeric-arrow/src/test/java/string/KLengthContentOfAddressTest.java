@@ -13,9 +13,10 @@
 // limitations under the License.
 //
 
-package string;import org.junit.Assert;
+package string;
+
+import org.junit.Assert;
 import org.junit.Test;
-import string.KLengthContentOfAddress;
 
 public class KLengthContentOfAddressTest {
     @Test(timeout = 3000L, expected = Test.None.class)
