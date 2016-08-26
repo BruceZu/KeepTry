@@ -37,51 +37,84 @@ package dp;
  *
  *  @see <a href="http://blog.csdn.net/fightforyourdream/article/details/14503469">reference </a>
  *
- *    on day i, it can happen more transactions on the same day. while
- *    the effective result is buy, sell or nothing.
- *    price i-1 price i
- *    nothing   nothing
- *    buy1      buy1
- *    sell1     sell1
- *    buy2      buy2
- *    sell2     sell2
- *    ...       ...
  *
+ *    every day may happen more times buy sell buy sell ....
+ *    the effective result is have 1 share, no share by the end of that day.
+ *    because buy,sell, buy = buy;  sell, buy, sell = sell.
+ *
+ *    1 transactions = buy and sell
+ *    1 transaction cover 2 days in effective view.
+ *
+ *   == so the objective is:
+ *
+ *              no share in hand by the end of ith day
+ *               | in some day of i days
+ *               |  |  kth transaction end up with sell.
+ *               |  |  |
+ *    max_profit_0_[i][k]
+ *    so what is   max_profit_1_[i][k]
+ *                            |  |  |
+ *                            |  |  kth transaction follow up with a buy
+ *                            |  in some day of i days
+ *                            1 share in hand by the end of ith day.
+ *
+ *     T = Transaction
+ *                1 T  ]
+ *     buy,  sell;  buy, sell; buy, sell;
+ *                          2 T   ]
+ *
+ *
+ *    buy,  sell; is the first T, why  buy,  sell;  buy, is also the first T?
+ *
+ *
+ *          max_profit_0_[i-1][k]            ---  > max_profit_0_[i][k]
+ *                                             /
+ *          max_profit_1_[i-1][k-1] + price[i]
+ *
+ *   == then how to translate max_profix_1[][] to max_profix_0[][]?
+ *
+ *          max_profit_1_[i-1][k]            ---  > max_profit_1_[i][k]
+ *                                             /
+ *          max_profit_0_[i-1][k] - price[i]
+ *                     |       |
+ *                     note    note
+ *                            |_____________kth T cover 2 days________|
+ *   == Initial value:
  *
  */
 public class Leetcode188BestTimetoBuyandSellStockIV {
-    public int maxProfit(int k, int[] prices) {
-        // write your code here
-        if (k == 0) {
-            return 0;
-        }
-        if (k >= prices.length / 2) {
-            int profit = 0;
-            for (int i = 1; i < prices.length; i++) {
-                if (prices[i] > prices[i - 1]) {
-                    profit += prices[i] - prices[i - 1];
-                }
-            }
-            return profit;
-        }
-        int n = prices.length;
-        int[][] mustsell = new int[n + 1][n + 1];   // mustSell[i][j] 表示前i天，至多进行j次交易，第i天必须sell的最大获益
-        int[][] globalbest = new int[n + 1][n + 1];  // globalbest[i][j] 表示前i天，至多进行j次交易，第i天可以不sell的最大获益
-
-        mustsell[0][0] = globalbest[0][0] = 0;
-        for (int i = 1; i <= k; i++) {
-            mustsell[0][i] = globalbest[0][i] = 0;
-        }
-
-        for (int day = 1; day < n; day++) {
-            int gainorlose = prices[day] - prices[day - 1];
-            mustsell[day][0] = 0;
-            for (int t = 1; t <= k; t++) {
-                mustsell[day][t] = Math.max(globalbest[(day - 1)][t - 1] + gainorlose,
-                        mustsell[(day - 1)][t] + gainorlose);
-                globalbest[day][t] = Math.max(globalbest[(day - 1)][t], mustsell[day][t]);
+    private int maxP(int[] prices) {
+        int res = 0;
+        for (int i = 0; i < prices.length; i++) {
+            if (i > 0 && prices[i] > prices[i - 1]) {
+                res += prices[i] - prices[i - 1];
             }
         }
-        return globalbest[(n - 1)][k];
+        return res;
     }
+
+    public int maxProfit(int k, int[] prices) {
+        if (k > prices.length / 2) {
+            return maxP(prices);
+        }
+        int[][] max_1_ = new int[prices.length][k + 1];
+        int[][] max_0_ = new int[prices.length][k + 1];
+        max_1_[0][0] = -prices[0];
+
+        for (int d = 1; d < prices.length; d++) {
+            max_1_[d][0] = Math.max(max_1_[d - 1][0], -prices[d]);
+        }
+        for (int t = 1; t <= k; t++) {
+            max_1_[0][t] = -prices[0];
+        }
+        for (int day = 1; day < prices.length; day++) {
+            for (int t = 1; t <= k; t++) {
+                max_1_[day][t] = Math.max(max_1_[day - 1][t], max_0_[day - 1][t] - prices[day]);
+                max_0_[day][t] = Math.max(max_0_[day - 1][t], max_1_[day - 1][t - 1] + prices[day]);
+            }
+        }
+        return Math.max(max_1_[prices.length - 1][k], max_0_[prices.length - 1][k]);
+    }
+
+    //// TODO: 8/25/16 how to translate to space O(1)
 };
