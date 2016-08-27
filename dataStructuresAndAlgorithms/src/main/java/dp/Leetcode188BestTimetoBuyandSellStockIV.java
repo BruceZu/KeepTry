@@ -34,87 +34,117 @@ package dp;
  * (M) Best Time to Buy and Sell Stock II
  * (H) Best Time to Buy and Sell Stock III
  * =====================================================================================
+ * <pre>
+ *     max profit:
  *
- *  @see <a href="http://blog.csdn.net/fightforyourdream/article/details/14503469">reference </a>
+ *     day            0  1  2  3  4  5  6  7
  *
+ *     price          2  5  7  1  4  3  1  3
+ *     transaction
+ *       0            0  0  0  0  0  0  0  0     // no transaction no profit
+ *       1            0  3  5  5  5  5  5  5
+ *       2            0  3  5  5  8
+ *       3            0
+ *       ...
  *
- *    every day may happen more times buy sell buy sell ....
- *    the effective result is have 1 share, no share by the end of that day.
- *    because buy,sell, buy = buy;  sell, buy, sell = sell.
- *
- *    1 transactions = buy and sell
- *    1 transaction cover 2 days in effective view.
- *
- *   == so the objective is:
- *
- *              no share in hand by the end of ith day
- *               | in some day of i days
- *               |  |  kth transaction end up with sell.
- *               |  |  |
- *    max_profit_0_[i][k]
- *    so what is   max_profit_1_[i][k]
- *                            |  |  |
- *                            |  |  kth transaction follow up with a buy
- *                            |  in some day of i days
- *                            1 share in hand by the end of ith day.
- *
- *     T = Transaction
- *                1 T  ]
- *     buy,  sell;  buy, sell; buy, sell;
- *                          2 T   ]
+ *                profit of any times transaction on the first day is 0, as only have one day.
  *
  *
- *    buy,  sell; is the first T, why  buy,  sell;  buy, is also the first T?
+ * Easier to understand.
+ * Time complexity is O(k * number of days ^ 2)
  *
+ * T[t][d] = max(T[t][d-1],
+ *               max(prices[d] - prices[pre] + T[t-1][pre]) // where pre is 0...d-1
+ *               )
  *
- *          max_profit_0_[i-1][k]            ---  > max_profit_0_[i][k]
- *                                             /
- *          max_profit_1_[i-1][k-1] + price[i]
+ *  =====>
+ * O(K * number of days)
+ *  Formula is
+ *   maxDiff = Math.max(maxDiff, T[t - 1][d-1] - prices[d-1]);
+ *   T[t][d] = Math.max(T[t][d - 1], prices[d] + maxDiff);
  *
- *   == then how to translate max_profix_1[][] to max_profix_0[][]?
+ *  or
+ *   T[t][d] = Math.max(T[t][d - 1], prices[d] + maxDiff);
+ *   maxDiff = Math.max(maxDiff, T[t - 1][d] - prices[d]);  // used for next turn
  *
- *          max_profit_1_[i-1][k]            ---  > max_profit_1_[i][k]
- *                                             /
- *          max_profit_0_[i-1][k] - price[i]
- *                     |       |
- *                     note    note
- *                            |_____________kth T cover 2 days________|
- *   == Initial value:
+ *  =====>
+ *   one dimension array
  *
+ * @see <a href="https://www.youtube.com/watch?v=oDhu5uGq_ic">youtube, idea of Tushar Roy</a>
  */
 public class Leetcode188BestTimetoBuyandSellStockIV {
-    private int maxP(int[] prices) {
-        int res = 0;
-        for (int i = 0; i < prices.length; i++) {
-            if (i > 0 && prices[i] > prices[i - 1]) {
-                res += prices[i] - prices[i - 1];
+    // same as Leetcode122BestTimetoBuyandSellStockII
+    private static int greedy(int[] prices) {
+        int r = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > prices[i - 1]) {
+                r += prices[i] - prices[i - 1];
             }
         }
-        return res;
+        return r;
     }
 
-    public int maxProfit(int k, int[] prices) {
+    //Idea  Easier to understand
+    public static int maxProfitSlowSolution(int prices[], int k) {
+        if (k == 0 || prices.length == 0) {
+            return 0;
+        }
         if (k > prices.length / 2) {
-            return maxP(prices);
+            return greedy(prices);
         }
-        int[][] max_1_ = new int[prices.length][k + 1];
-        int[][] max_0_ = new int[prices.length][k + 1];
-        max_1_[0][0] = -prices[0];
+        int T[][] = new int[k + 1][prices.length];
 
-        for (int d = 1; d < prices.length; d++) {
-            max_1_[d][0] = Math.max(max_1_[d - 1][0], -prices[d]);
-        }
         for (int t = 1; t <= k; t++) {
-            max_1_[0][t] = -prices[0];
-        }
-        for (int day = 1; day < prices.length; day++) {
-            for (int t = 1; t <= k; t++) {
-                max_1_[day][t] = Math.max(max_1_[day - 1][t], max_0_[day - 1][t] - prices[day]);
-                max_0_[day][t] = Math.max(max_0_[day - 1][t], max_1_[day - 1][t - 1] + prices[day]);
+            for (int d = 1; d < prices.length; d++) {
+                int maxVal = 0;
+                for (int pre = 0; pre < d; pre++) {
+                    maxVal = Math.max(maxVal, prices[d] - prices[pre] + T[t - 1][pre]);
+                }
+                T[t][d] = Math.max(T[t][d - 1], maxVal);
             }
         }
-        return Math.max(max_1_[prices.length - 1][k], max_0_[prices.length - 1][k]);
+
+        return T[k][prices.length - 1];
     }
 
-    //// TODO: 8/25/16 how to translate to space O(1)
+    // improve to O(K * number of days)
+    public static int maxProfit(int k, int[] prices) {
+        if (k == 0 || prices.length == 0) {
+            return 0;
+        }
+        if (k > prices.length / 2) {
+            return greedy(prices);
+        }
+        int T[][] = new int[k + 1][prices.length];
+
+        for (int t = 1; t < T.length; t++) {
+            int maxDiff = 0 - prices[0];
+            for (int d = 1; d < prices.length; d++) {
+                T[t][d] = Math.max(T[t][d - 1], prices[d] + maxDiff);
+                maxDiff = Math.max(maxDiff, T[t - 1][d] - prices[d]);
+            }
+        }
+        return T[k][prices.length - 1];
+    }
+
+    // improved, using one dimension array
+    public static int maxProfitOneDimensionArray(int[] prices, int k) {
+        if (k == 0 || prices.length == 0) {
+            return 0;
+        }
+        if (k > prices.length / 2) {
+            return greedy(prices);
+        }
+        int T[] = new int[prices.length];
+
+        for (int t = 1; t < T.length; t++) {
+            int maxDiff = 0 - prices[0];
+            for (int d = 1; d < prices.length; d++) {
+                int newTd = Math.max(T[d - 1], prices[d] + maxDiff);
+                maxDiff = Math.max(maxDiff, T[d] - prices[d]);
+                T[d] = newTd;
+            }
+        }
+        return T[prices.length - 1];
+    }
 };
