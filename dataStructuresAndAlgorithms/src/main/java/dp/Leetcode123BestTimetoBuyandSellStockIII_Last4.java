@@ -17,8 +17,6 @@ package dp;
 
 /**
  * @see <a href="http://www.jiuzhang.com/solutions/best-time-to-buy-and-sell-stock-iii/"> jiuzhang</a>
- *
- *  k times see {@Leetcode123BestTimetoBuyandSellStockIII5}
  */
 public class Leetcode123BestTimetoBuyandSellStockIII_Last4 {
     // see jiuzhang.  todo merge all loop in one
