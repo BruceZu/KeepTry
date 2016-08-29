@@ -33,7 +33,9 @@ public class Leetcode351AndroidUnlockPatterns3 {
         selected[cur] = true;
         int rst = 0;
         for (int i = 1; i <= 9; ++i) {
-            if (!selected[i] && (skiped[cur][i] == 0 || (selected[skiped[cur][i]]))) {
+            int skippedKeyBetweenCurAndi = skiped[cur][i];
+            boolean iIsadjacent = skippedKeyBetweenCurAndi == 0;
+            if (!selected[i] && (iIsadjacent || (selected[skippedKeyBetweenCurAndi]))) {
                 rst += DFS(selected, skiped, i, remain - 1);
             }
         }
