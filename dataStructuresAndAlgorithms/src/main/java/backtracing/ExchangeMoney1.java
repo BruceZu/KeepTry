@@ -29,54 +29,50 @@ import java.util.List;
  *       3. When backtracking happen, solution need restore to original status.
  *
  * To make the loop easy, keep the currency types and solutions number in global variable
+ *
+ *    coins:    1    25   50   100     // ascending order
+ *
  */
-public class ChangeMoney {
-    private int[] currencys;
+public class ExchangeMoney1 {
+    private int[] conins;
     private int solutonsNum;
 
-    public ChangeMoney(int[] currencys) {
-        this.currencys = currencys;
+    public ExchangeMoney1(int[] currencys) {
+        this.conins = currencys;
     }
 
-    private void selectWithDetail(int remain, int target, List solution) {
-        for (int i = remain; i < currencys.length; i++) {
-            int v = currencys[i];
-            int nextTarget = target - v;
-            if (nextTarget == 0) {
-                solution.add(currencys[i]);
-                solutonsNum++;
-                System.out.println(solution.toString());
-
-                solution.remove(solution.size() - 1);
+    private void selectWithDetail(int remain, int left, List solution) {
+        if (left == 0) {
+            solutonsNum++;
+            System.out.println(solution.toString());
+            return;
+        }
+        for (int i = remain; i < conins.length; i++) {
+            if (left < conins[i]) {
                 return;
             }
-            if (nextTarget < 0) {
-                return;
-            }
-            solution.add(currencys[i]);
-            selectWithDetail(i, nextTarget, solution);
+            solution.add(conins[i]);
+            selectWithDetail(i, left - conins[i], solution);
             solution.remove(solution.size() - 1);
         }
     }
 
-    private void select(int from, int target) {
-        for (int i = from; i < currencys.length; i++) {
-            int v = currencys[i];
-            int nextTarget = target - v;
-            if (nextTarget == 0) {
-                solutonsNum++;
-                return;
-            }
-            if (nextTarget < 0) {
-                return;
-            }
+    private void select(int from, int left) {
+        if (left == 0) {
+            solutonsNum++;
+            return;
+        }
 
-            select(i, nextTarget);
+        for (int i = from; i < conins.length; i++) {
+            if (left < conins[i]) {
+                return;
+            }
+            select(i, left - conins[i]);
         }
     }
 
     public void changeWays(int target, boolean withDetail) {
-        Arrays.sort(currencys);
+        Arrays.sort(conins); // ascending order
         solutonsNum = 0;
 
         if (withDetail) {
@@ -99,7 +95,7 @@ public class ChangeMoney {
      * [2, 5]
      */
     public static void main(String[] args) {
-        ChangeMoney cm = new ChangeMoney(new int[]{1, 5, 2});
+        ExchangeMoney1 cm = new ExchangeMoney1(new int[]{1, 5, 2});
 
         cm.changeWays(7, true);
         cm.changeWays(7, false);
