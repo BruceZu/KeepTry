@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package concurrent;
+package concurrency;
 
 import java.util.Stack;
 

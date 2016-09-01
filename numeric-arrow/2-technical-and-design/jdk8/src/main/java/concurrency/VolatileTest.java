@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package concurrent;
+package concurrency;
 
 public class VolatileTest {
     //  http://tutorials.jenkov.com/java-concurrency/volatile.html

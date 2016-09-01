@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package concurrent.countDownLatchCyclicBarrierSemaphore;
+package concurrency.countDownLatchCyclicBarrierSemaphore;
 
 import org.junit.Assert;
 import org.junit.Test;

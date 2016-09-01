@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package concurrent.threadLocal;
+package concurrency.threadLocal;
 
 class Context {
     private static final ThreadLocal<Boolean> FORWARDED_EVENT =

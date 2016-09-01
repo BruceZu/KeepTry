@@ -15,7 +15,7 @@
 
 package jvm;
 
-import concurrent.VolatileTest;
+import concurrency.VolatileTest;
 
 import java.io.File;
 import java.net.URL;

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package concurrent.countDownLatchCyclicBarrierSemaphore;
+package concurrency.countDownLatchCyclicBarrierSemaphore;
 
 import java.util.ArrayList;
 import java.util.List;
