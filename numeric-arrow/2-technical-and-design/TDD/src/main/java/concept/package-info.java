@@ -1,5 +1,20 @@
+//  Copyright 2016 The Sawdust Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 /**
- *
+ * <pre>
  * Set:
  *  What is the objective:
  *     1  distinguish elements
@@ -54,10 +69,11 @@
  *         add method remove()
  *         make a loop to check if it exists
  *           elements[i] = elments[numberOfElements-1];
- *           numberOfElements--;
+ *           numberOfElements--; // minus minus
  *
  *   what do you feeling?
  *
  * @see <a href="https://en.wikipedia.org/wiki/Test-driven_development">wiki</a>
+ * @see <a href="http://stackoverflow.com/questions/8162423/what-is-positive-test-and-negative-test-in-unit-testing">positive test and negative test-</a>
  */
-package TDD;
+package concept;
