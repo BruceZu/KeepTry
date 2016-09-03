@@ -15,6 +15,8 @@
 
 package backtracing;
 
+import java.util.Arrays;
+
 /**
  * <pre>
  * Minimum number of coins I can use to get to a given amount
@@ -32,12 +34,7 @@ package backtracing;
  * check current left with conins[i], break early.
  */
 public class ExchangeMoney {
-    public static int exchange(int sum) {
-        int[] r = new int[0];
-        recursionWithAscendingArray(new int[]{1, 25, 50}, sum, 0, r, 0);
-        return r[0];
-    }
-
+    //Combinations
     private static void recursionWithDescendingArray(int[] conins, int left, int from, int[] result, int counts) {
         if (left == 0) {
             result[0] = result[0] > counts ? counts : result[0];
@@ -52,20 +49,24 @@ public class ExchangeMoney {
         }
     }
 
-    private static void recursionWithNoSortedArray(int[] conins, int left, int from, int[] result, int counts) {
+    //Permutations
+    private static void recursionWithNoSortedArray(int[] conins, int left, int[] result, int counts) {
         if (left == 0) {
             result[0] = result[0] > counts ? counts : result[0];
+
             return;
         }
 
-        for (int i = from; i < conins.length; i++) {
+        for (int i = 0; i < conins.length; i++) {
             if (left < conins[i]) {
                 continue;
             }
-            recursionWithNoSortedArray(conins, left - conins[i], i, result, counts + 1); // care "left - conins[i]"
+
+            recursionWithNoSortedArray(conins, left - conins[i], result, counts + 1); // care "left - conins[i]"
         }
     }
 
+    //Combinations
     private static void recursionWithAscendingArray(int[] conins, int left, int from, int[] result, int counts) {
         if (left == 0) {
             result[0] = result[0] > counts ? counts : result[0];
@@ -81,6 +82,41 @@ public class ExchangeMoney {
     }
 
     public static void main(String[] args) {
-        System.out.println(exchange(278));
+        int[] r = new int[1];
+        r[0] = Integer.MAX_VALUE;
+
+        int sum = 18;
+        int[] coins = new int[]{10, 5, 4, 1};
+
+        recursionWithDescendingArray(coins, sum, 0, r, 0);
+        System.out.println(r[0]);
+
+        r[0] = Integer.MAX_VALUE;
+        Arrays.sort(coins);
+        recursionWithAscendingArray(coins, sum, 0, r, 0);
+        System.out.println(r[0]);
+
+        r[0] = Integer.MAX_VALUE;
+        coins = new int[]{5, 4, 10, 1};
+        recursionWithNoSortedArray(coins, sum, r, 0);
+        System.out.println(r[0]);
+
+        //
+        System.out.println("-------------");
+        r[0] = Integer.MAX_VALUE;
+        coins = new int[]{50, 3, 10};
+        sum = 62;
+        recursionWithNoSortedArray(coins, sum, r, 0);
+        System.out.println(r[0]);
+
+        r[0] = Integer.MAX_VALUE;
+        coins = new int[]{50, 10, 3};
+        recursionWithDescendingArray(coins, sum, 0, r, 0);
+        System.out.println(r[0]);
+
+        r[0] = Integer.MAX_VALUE;
+        Arrays.sort(coins);
+        recursionWithAscendingArray(coins, sum, 0, r, 0);
+        System.out.println(r[0]);
     }
 }

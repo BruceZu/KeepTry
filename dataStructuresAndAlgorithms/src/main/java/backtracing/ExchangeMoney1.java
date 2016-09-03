@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Thanks a lot to Wen, Jie.
+ * Thanks a lot to Wen, Jie and 阿杰
  * <pre>
  * Note:
  *
@@ -36,11 +36,11 @@ import java.util.List;
 public class ExchangeMoney1 {
     public static void selectSmallestResolution(int[] sortedCoins, //ascending
                                                 ArrayList<Integer> curResolution,
-                                                ArrayList<Integer> smallestResolution,
+                                                ArrayList<Integer>[] smallestResolution,
                                                 int left, int from) {
         if (left == 0) {
-            if (smallestResolution.size() == 0 || smallestResolution.size() > curResolution.size()) {
-                smallestResolution = new ArrayList(curResolution);
+            if (smallestResolution[0] == null || smallestResolution[0].size() > curResolution.size()) {
+                smallestResolution[0] = new ArrayList(curResolution);
             }
             return;
         }
@@ -62,7 +62,7 @@ public class ExchangeMoney1 {
         this.conins = currencys;
     }
 
-    private void selectWithDetail(int remain, int left, List solution) {
+    private void selectAndPrintEachSolution(int remain, int left, List solution) {
         if (left == 0) {
             solutonsNum++;
             System.out.println(solution.toString());
@@ -73,7 +73,7 @@ public class ExchangeMoney1 {
                 return;
             }
             solution.add(conins[i]);
-            selectWithDetail(i, left - conins[i], solution);
+            selectAndPrintEachSolution(i, left - conins[i], solution);
             solution.remove(solution.size() - 1);
         }
     }
@@ -92,45 +92,47 @@ public class ExchangeMoney1 {
         }
     }
 
-    public void changeWays(int target, boolean withDetail) {
+    public int changeWaysNumber(int target, boolean printEachSolution) {
         Arrays.sort(conins); // ascending order
         solutonsNum = 0;
 
-        if (withDetail) {
+        if (printEachSolution) {
             List<Integer> solution = new LinkedList<>();
-            selectWithDetail(0, target, solution);
+            selectAndPrintEachSolution(0, target, solution);
 
         } else {
             select(0, target);
         }
-
-        System.out.println("in total:" + solutonsNum);
+        return solutonsNum;
     }
 
-    /**
-     * <pre>
-     * [1, 1, 1, 1, 1, 1, 1]
-     * [1, 1, 1, 1, 1, 2]
-     * [1, 1, 1, 2, 2]
-     * [1, 1, 5]
-     * [1, 2, 2, 2]
-     * [2, 5]
-     */
-    public static void main(String[] args) {
-        int[] conins = new int[]{1, 5, 10, 25};
-        int target = 67;
-
+    public static void exchange(int[] conins, int target) {
         ExchangeMoney1 cm = new ExchangeMoney1(conins);
 
-        cm.changeWays(target, true);
-        cm.changeWays(target, false);
+        //cm.changeWaysNumber(target, true);
+        System.out.println("number of solutions: " + cm.changeWaysNumber(target, false));
 
         // smallest resolution
         Arrays.sort(conins);
-        ArrayList<Integer> smallestResolution = new ArrayList();
+        ArrayList<Integer>[] smallestResolution = new ArrayList[1];
+
         selectSmallestResolution(conins, //ascending
                 new ArrayList<>(), smallestResolution,
                 target, 0);
-        System.out.println("smallest resolution: " + Arrays.toString(smallestResolution.toArray()));
+        System.out.println("smallest resolution: " + Arrays.toString(smallestResolution[0].toArray()));
+    }
+
+    public static void main(String[] args) {
+        int[] conins = new int[]{1, 5, 10, 25};
+        int target = 67;
+        exchange(conins, target);
+
+        conins = new int[]{3, 10, 50};
+        target = 62;
+        exchange(conins, target);
+
+        conins = new int[]{10, 5, 4, 1};
+        target = 18;
+        exchange(conins, target);
     }
 }
