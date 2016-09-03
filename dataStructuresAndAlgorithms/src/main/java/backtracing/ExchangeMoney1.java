@@ -54,33 +54,25 @@ public class ExchangeMoney1 {
         }
     }
 
-    private int[] conins;
-    private int solutonsNum;
-
-
-    public ExchangeMoney1(int[] currencys) {
-        this.conins = currencys;
-    }
-
-    private void selectAndPrintEachSolution(int remain, int left, List solution) {
+    private static void selectAndPrintEachSolution(int[] coins, int remain, int left, int[] solutionsNum, List solution) {
         if (left == 0) {
-            solutonsNum++;
+            solutionsNum[0]++;
             System.out.println(solution.toString());
             return;
         }
-        for (int i = remain; i < conins.length; i++) {
-            if (left < conins[i]) {
+        for (int i = remain; i < coins.length; i++) {
+            if (left < coins[i]) {
                 return;
             }
-            solution.add(conins[i]);
-            selectAndPrintEachSolution(i, left - conins[i], solution);
+            solution.add(coins[i]);
+            selectAndPrintEachSolution(coins, i, left - coins[i], solutionsNum, solution);
             solution.remove(solution.size() - 1);
         }
     }
 
-    private void select(int from, int left) {
+    private static void select(int[] conins, int from, int left, int[] solutonsNum) {
         if (left == 0) {
-            solutonsNum++;
+            solutonsNum[0]++;
             return;
         }
 
@@ -88,35 +80,33 @@ public class ExchangeMoney1 {
             if (left < conins[i]) {
                 return;
             }
-            select(i, left - conins[i]);
+            select(conins, i, left - conins[i], solutonsNum);
         }
     }
 
-    public int changeWaysNumber(int target, boolean printEachSolution) {
-        Arrays.sort(conins); // ascending order
-        solutonsNum = 0;
+    public static int changeWaysNumber(int[] coins, int target, boolean printEachSolution) {
+        Arrays.sort(coins); // ascending order
+        int[] solutonsNum = new int[1];
 
         if (printEachSolution) {
             List<Integer> solution = new LinkedList<>();
-            selectAndPrintEachSolution(0, target, solution);
+            selectAndPrintEachSolution(coins, 0, target, solutonsNum, solution);
 
         } else {
-            select(0, target);
+            select(coins, 0, target, solutonsNum);
         }
-        return solutonsNum;
+        return solutonsNum[0];
     }
 
-    public static void exchange(int[] conins, int target) {
-        ExchangeMoney1 cm = new ExchangeMoney1(conins);
-
-        //cm.changeWaysNumber(target, true);
-        System.out.println("number of solutions: " + cm.changeWaysNumber(target, false));
+    public static void exchange(int[] coins, int target) {
+        // changeWaysNumber(target, true);
+        System.out.println("number of solutions: " + changeWaysNumber(coins, target, false));
 
         // smallest resolution
-        Arrays.sort(conins);
+        Arrays.sort(coins);
         ArrayList<Integer>[] smallestResolution = new ArrayList[1];
 
-        selectSmallestResolution(conins, //ascending
+        selectSmallestResolution(coins, //ascending
                 new ArrayList<>(), smallestResolution,
                 target, 0);
         System.out.println("smallest resolution: " + Arrays.toString(smallestResolution[0].toArray()));
