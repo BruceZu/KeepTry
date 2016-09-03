@@ -16,7 +16,8 @@
 package array.doublepoint;
 
 /**
- * Difficulty: Easy <pre>
+ * Difficulty: Easy
+ * <pre>
  * Given an array nums, write a function to move all 0's to the end of it while maintaining the relative
  * order of the non-zero elements.
  * For example, given nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].
@@ -24,104 +25,122 @@ package array.doublepoint;
  * Note:
  * You must do this in-place without making a copy of the array.
  * Minimize the total number of operations.
- * 
+ *
  * Tags: Array Two Pointers
  * Similar Problems (E) Remove Element
+ *
+ * @see <a href="https://leetcode.com/problems/move-zeroes/">leetcode</a>
  */
 public class Leetcode283MoveZeroes {
-    /**
-     * <pre>
-     * Idea:
-     *   from start. 2 pointers to start and end index of zeros field
-     *   swap
-     *   update the end index
-     *   till reach the end of array
-     * or
-     *   from end, 2 pointers to start and end index of numbers field
-     *   swap
-     *   update the start index
-     *   till reach the first element of array
-     *
-     * Leetcode site shows this method has better performance that the next one.
-     * It depends on the test data. Their idea are same.
-     *
-     * bad case:
-     * [ 0, 0, 0 , num, num, num, num]
-     *    m                n
-     *
-     *  operations: m x n
-     */
+    // better idea 1
     public void moveZeroes(int[] nums) {
-        int izero = 0;
-        while (izero < nums.length && nums[izero] != 0) {
-            izero++;
-        }
-        if (izero == nums.length) {
-            return;
-        }
+        int forNextNum = 0;
 
-        int zeroi = izero;
-        while (true) {
-            while (zeroi + 1 < nums.length && nums[zeroi + 1] == 0) {
-                zeroi++;
+        for (int i : nums) {
+            if (i != 0) {
+                nums[forNextNum++] = i;
             }
-            if (zeroi == nums.length - 1) {
-                return;
-            }
-
-            nums[izero] = nums[zeroi + 1];
-            nums[zeroi + 1] = 0;
-            izero++;
-            zeroi++;
+        }
+        // the left elements will all be zero.
+        while (forNextNum < nums.length) {
+            nums[forNextNum++] = 0;
         }
     }
 
+    //better idea 2
     public void moveZeroes2(int[] nums) {
-        int ni = nums.length - 1;
-        while (ni >= 0 && nums[ni] == 0) {
-            ni--;
-        }
-        if (ni == -1) {
-            return;
-        }
-        int in = ni;
-        while (true) {
-            while (in - 1 >= 0 && nums[in - 1] != 0) {
-                in--;
+        int num = 0, forNextNum = 0;
+        while (num < nums.length) {
+            if (nums[num] != 0) {
+                int temp = nums[num];
+                nums[num] = nums[forNextNum];
+                nums[forNextNum] = temp;
+
+                forNextNum++;
             }
-            if (in == 0) {
-                return;
-            }
-            for (int m = in - 1; m < ni; m++) {
-                nums[m] = nums[m + 1];
-            }
-            nums[ni] = 0;
-            ni--;
-            in--;
+            num++;
         }
     }
 
-    /**
-     * Maintain the right index for next number,
-     * hop each number, till no number are left,
-     * then update the elements from the 'right index for next number' to the end.
-     *
-     * @param nums
-     */
+    // Basic Idea 1:
     public void moveZeroes3(int[] nums) {
-        int rIndexForNextNumber = 0;
-        int i = 0;
-        while (i < nums.length) {
-            if (nums[i] != 0) {
-                // hop
-                nums[rIndexForNextNumber] = nums[i];
-                rIndexForNextNumber++;
+        int zeroForNextNum = -1; // index
+        int num = -1; // index
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                zeroForNextNum = i;
+                break;
             }
-            i++;
         }
-        while (rIndexForNextNumber < nums.length) {
-            nums[rIndexForNextNumber] = 0;
-            rIndexForNextNumber++;
+        if (zeroForNextNum == -1) {
+            return;
+        }
+
+        int findNextNumFrom = zeroForNextNum + 1;
+        while (true) {
+            for (int i = findNextNumFrom; i < nums.length; i++) {
+                if (nums[i] != 0) {
+                    num = i;
+                    break;
+                }
+            }
+            if (num == -1) {
+                return;
+            }
+
+            nums[zeroForNextNum] = nums[num];
+            nums[num] = 0;
+
+            zeroForNextNum++;
+            findNextNumFrom = num + 1;
+            num = -1;
+        }
+    }
+
+    // Basic Idea 1, improved version
+    public void moveZeroes4(int[] nums) {
+        int zeroForNextNum = 0;
+        while (zeroForNextNum < nums.length && nums[zeroForNextNum] != 0) {
+            zeroForNextNum++;
+        }
+        if (zeroForNextNum == nums.length) {
+            return;
+        }
+
+        int num = zeroForNextNum;
+        while (true) {
+            while (num + 1 < nums.length && nums[num + 1] == 0) {
+                num++;
+            }
+            if (num == nums.length - 1) {
+                return;
+            }
+
+            nums[zeroForNextNum] = nums[num + 1];
+            nums[num + 1] = 0;
+
+            zeroForNextNum++;
+            num++;
+        }
+    }
+
+    // Basic Idea 1, other version
+    public void moveZeroes5(int[] nums) {
+        int zeroIndex = -1;
+        for (int i = 0; i < nums.length; i++) {
+            int cur = nums[i];
+
+            if (cur == 0 && zeroIndex == -1) {
+                zeroIndex = i;
+                continue;
+            }
+
+            if (cur != 0 && zeroIndex != -1) {
+                //swap
+                nums[zeroIndex] = cur;
+                nums[i] = 0;
+                zeroIndex++;
+            }
         }
     }
 }
