@@ -63,7 +63,7 @@
  *           refactoring the old constructor to call the
  *           new one;
  *
- *           update the add() to add checking capcity logic
+ *           update the add() to add checking capacity logic
  *           if(size()==elements.length){
  *               Object[] newArray = new Object[elements.length*2];
  *               System.arraycopy.(elements,0,newArray,newArray.length);
