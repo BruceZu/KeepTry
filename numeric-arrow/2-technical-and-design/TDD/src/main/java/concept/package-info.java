@@ -22,56 +22,67 @@
  *
  *  Steps:
  *     1 default status
- *        test emptyTest()
- *        Set empty
- *        coding:  data structure  boolean isEmpty;
- *     2  add add() method add test case in emptyTest()
- *        Set empty
- *        Set one
- *        Set many
  *
- *        test sizeTest()
+ *         src                                                  Junit test class
+ *        -------------------------------------------------------------------------------------------
+ *        Set empty                                   |  test emptyTest()
+ *        coding:  data structure  boolean isEmpty;   |
+ *     2                                              |    add add() method, add test case in emptyTest()
+ *                                                    |    Set empty
+ *                                                    |    Set one
+ *                                                    |    Set many
+ *         update add() using   isEmpty               |
+ *                                                    |    test sizeTest()
+ *                                                    |    assert(true, many.size()>1);
+ *                                                    |
+ *        add size()                                  |
  *        replace the
  *                  'boolean isEmpty'
  *        with
  *                  'int numberOfElements'
- *        and update add() method;
- *        assert(true, many.size()>1);
+ *        update add() method;
+ *                                                     |
+ *     3                                               |    refactoring: abstract out the  Set empty, one and many to setup();
+ *     4 further more
+ *                                                     |  test containsTest()
+ *                                                     |
  *
- *     3 refactoring: abstract out the  Set empty, one and many to setup();
- *     4 further more for testing add logical, it is not enough to only know
- *       the set is empty or not and size is right or not
- *       test containsTest()
- *       and add:
+ *        Object[] elements with a default capacity
+ *        contains(Object) method, add loop in it check .equal();
  *
- *              Object[] elements
- *              contains(Object) method, add loop in it check .equal();
- *     5 continue: testNotAddDuplicatedElement()
+ *     5 continue:                                      |  testNotAddDuplicatedElement()
  *
- *           in add() add
- *           check contains()
- *           if false: elements[numberOfElements++] = newValue;
- *     6  testCapbility:
- *           add a construture with a default capacity value and
- *           refactoring the default construture to use new one;
- *           exception: outOfArrayIndex
+ *           update add():
+ *           if contains() ...
+ *           else: elements[numberOfElements++] = newValue;
+ *
+ *     6                                                |  testCapacity():
+ *                                                      |   need  add a constructor( int capacity)
+ *                                                      |   exception: outOfArrayIndex
+ *
+ *           refactoring the old constructor to call the
+ *           new one;
+ *
  *           update the add() to add checking capcity logic
  *           if(size()==elements.length){
  *               Object[] newArray = new Object[elements.length*2];
  *               System.arraycopy.(elements,0,newArray,newArray.length);
  *               elements = newArray;
  *           }
- *           corner case: the default capcacity is 0;
- *           so upate it to be  Object[] newArray = new Object[elements.length*2  + 1];
+ *                                                      |  corner case: the default capacity is 0;
+ *           so upate it to be
+ *              Object[] newArray = new Object[elements.length*2  + 1];
  *
- *      7 removeTest
- *         create Set Object in the removeTest()
+ *      7                                               |  removeTest()
+ *                                                      | create Set Object in the removeTest()
  *         add method remove()
  *         make a loop to check if it exists
  *           elements[i] = elments[numberOfElements-1];
+ *           elements[numberOfElements] = null;
  *           numberOfElements--; // minus minus
  *
- *   what do you feeling?
+ *
+ *   ask "what do you feel?"
  *
  * @see <a href="https://en.wikipedia.org/wiki/Test-driven_development">wiki</a>
  * @see <a href="http://stackoverflow.com/questions/8162423/what-is-positive-test-and-negative-test-in-unit-testing">positive test and negative test-</a>
