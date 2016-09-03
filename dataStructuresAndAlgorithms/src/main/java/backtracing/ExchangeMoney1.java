@@ -15,6 +15,7 @@
 
 package backtracing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,12 +31,32 @@ import java.util.List;
  *
  * To make the loop easy, keep the currency types and solutions number in global variable
  *
- *    coins:    1    25   50   100     // ascending order
- *
+ *    coins:    1    5   10   25   100 // ascending order
  */
 public class ExchangeMoney1 {
+    public static void selectSmallestResolution(int[] sortedCoins, //ascending
+                                                ArrayList<Integer> curResolution,
+                                                ArrayList<Integer> smallestResolution,
+                                                int left, int from) {
+        if (left == 0) {
+            if (smallestResolution.size() == 0 || smallestResolution.size() > curResolution.size()) {
+                smallestResolution = new ArrayList(curResolution);
+            }
+            return;
+        }
+        for (int i = from; i < sortedCoins.length; i++) {
+            if (left < sortedCoins[i]) {
+                break;
+            }
+            curResolution.add(sortedCoins[i]);
+            selectSmallestResolution(sortedCoins, curResolution, smallestResolution, left - sortedCoins[i], i);
+            curResolution.remove(curResolution.size() - 1);
+        }
+    }
+
     private int[] conins;
     private int solutonsNum;
+
 
     public ExchangeMoney1(int[] currencys) {
         this.conins = currencys;
@@ -78,6 +99,7 @@ public class ExchangeMoney1 {
         if (withDetail) {
             List<Integer> solution = new LinkedList<>();
             selectWithDetail(0, target, solution);
+
         } else {
             select(0, target);
         }
@@ -95,9 +117,20 @@ public class ExchangeMoney1 {
      * [2, 5]
      */
     public static void main(String[] args) {
-        ExchangeMoney1 cm = new ExchangeMoney1(new int[]{1, 5, 2});
+        int[] conins = new int[]{1, 5, 10, 25};
+        int target = 67;
 
-        cm.changeWays(7, true);
-        cm.changeWays(7, false);
+        ExchangeMoney1 cm = new ExchangeMoney1(conins);
+
+        cm.changeWays(target, true);
+        cm.changeWays(target, false);
+
+        // smallest resolution
+        Arrays.sort(conins);
+        ArrayList<Integer> smallestResolution = new ArrayList();
+        selectSmallestResolution(conins, //ascending
+                new ArrayList<>(), smallestResolution,
+                target, 0);
+        System.out.println("smallest resolution: " + Arrays.toString(smallestResolution.toArray()));
     }
 }

@@ -15,14 +15,12 @@
 
 package backtracing;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * <pre>
  * Minimum number of coins I can use to get to a given amount
  * US coins: 1 25 50
+ *
+ * greedy can not work, e.g. [50， 10， 3], 62
  *
  * care:
  *    do not change the 'left' variable between recursion, it will used for next turn in the loop.
@@ -35,19 +33,14 @@ import java.util.Set;
  */
 public class ExchangeMoney {
     public static int exchange(int sum) {
-        Set<Integer> result = new HashSet();
-        recursionWithAscendingArray(new int[]{1, 25, 50}, sum, 0, result, 0); // sorted array bigger to smaller
-
-        Integer[] re = new Integer[result.size()];
-        result.toArray(re);
-        Arrays.sort(re);
-        return re[0];
+        int[] r = new int[0];
+        recursionWithAscendingArray(new int[]{1, 25, 50}, sum, 0, r, 0);
+        return r[0];
     }
 
-
-    private static void recursionWithDescendingArray(int[] conins, int left, int from, Set<Integer> result, int counts) {
+    private static void recursionWithDescendingArray(int[] conins, int left, int from, int[] result, int counts) {
         if (left == 0) {
-            result.add(counts);
+            result[0] = result[0] > counts ? counts : result[0];
             return;
         }
 
@@ -59,9 +52,9 @@ public class ExchangeMoney {
         }
     }
 
-    private static void recursionWithNoSortedArray(int[] conins, int left, int from, Set<Integer> result, int counts) {
+    private static void recursionWithNoSortedArray(int[] conins, int left, int from, int[] result, int counts) {
         if (left == 0) {
-            result.add(counts);
+            result[0] = result[0] > counts ? counts : result[0];
             return;
         }
 
@@ -73,9 +66,9 @@ public class ExchangeMoney {
         }
     }
 
-    private static void recursionWithAscendingArray(int[] conins, int left, int from, Set<Integer> result, int counts) {
+    private static void recursionWithAscendingArray(int[] conins, int left, int from, int[] result, int counts) {
         if (left == 0) {
-            result.add(counts);
+            result[0] = result[0] > counts ? counts : result[0];
             return;
         }
 
