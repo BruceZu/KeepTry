@@ -15,23 +15,66 @@
 
 package array;
 
-// https://leetcode.com/problems/remove-element/
+/**
+ * @see <a href="https://leetcode.com/problems/remove-element/">leetcode</a>
+ */
 public class Leetcode27RemoveElement {
-    // Leetcode 27 Remove Element
-    // runtime beats 73.63% of java submissions.
 
-    // Given an array and a value, remove all instances of that value in place and return the new length.
-    // The order of elements can be changed. It doesn't matter what you leave beyond the new length.
-    public static int removeElement(int[] nums, int val) {
-        int newIndex = 0;
+    /**
+     * Try two pointers.
+     */
+    public static int removeElement2(int[] nums, int val) {
+        int forNext = 0;
         int i = 0;
         while (i < nums.length) {
             int current = nums[i];
             if (current != val) {
-                nums[newIndex++] = nums[i];
+                nums[forNext++] = nums[i];
             }
             i++;
         }
-        return newIndex;
+        return forNext;
+    }
+
+    /**
+     * Did you use the property of "the order of elements can be changed"?
+     * What happens when the elements to remove are rare?
+     */
+    public static int removeElement(int[] nums, int val) {
+        int valIndex = -1;
+        int otherIndex = -1;
+        int findValFrom = 0;
+        int findOtherFrom = nums.length - 1;
+
+        while (true) {
+            for (int i = findValFrom; i <= findOtherFrom; i++) {
+                if (nums[i] == val) {
+                    valIndex = i;
+                    break;
+                }
+            }
+            if (valIndex == -1) {
+                return findOtherFrom + 1;
+            }
+
+            for (int i = findOtherFrom; i > valIndex; i--) {
+                if (nums[i] != val) {
+                    otherIndex = i;
+                    break;
+                }
+            }
+            if (otherIndex == -1) {
+                return valIndex;
+            }
+
+            nums[valIndex] ^= nums[otherIndex];
+            nums[otherIndex] ^= nums[valIndex];
+            nums[valIndex] ^= nums[otherIndex];
+
+            findValFrom = valIndex + 1;
+            findOtherFrom = otherIndex - 1;
+            valIndex = -1;
+            otherIndex = -1;
+        }
     }
 }
