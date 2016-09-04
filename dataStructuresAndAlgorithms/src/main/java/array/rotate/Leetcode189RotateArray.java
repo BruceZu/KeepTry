@@ -15,58 +15,28 @@
 
 package array.rotate;
 
+import java.util.Arrays;
+
 /**
  * <pre>
- * Difficulty: Easy
- * Rotate an array of n elements to the right by k steps.
- *
- * For example, with n = 7 and k = 3, the array [1,2,3,4,5,6,7] is rotated to [5,6,7,1,2,3,4].
- *
- * Note:
- * Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.
- *
- * Hint:
+ * Array
  * Could you do it in-place with O(1) extra space?
- *
- * Related problem: Reverse Words in a String II
- *
- *
- * Hide Tags Array
- *
  *  @see <a href = "https://leetcode.com/problems/rotate-array/">leetcoce link</a>
  */
 public class Leetcode189RotateArray {
-    /**
-     * Force way <pre>
-     *  Note:
-     *      k = k % array length
-     *      do not change the array reference
-     */
-    public void rotate3(int[] nums, int k) {
-        int[] re = new int[nums.length];
-        k = k % nums.length;
-        for (int i = k; i < nums.length; i++) {
-            re[i] = nums[i - k];
-        }
-        for (int i = 0; i < k; i++) {
-            re[i] = nums[nums.length - k + i];
-        }
-        for (int i = 0; i < nums.length; i++) {
-            nums[i] = re[i];
-        }
-    }
-
     public void reverse(int[] n, int l, int r) {
         while (l < r) {
-            n[l] ^= n[r];
-            n[r] ^= n[l];
-            n[l] ^= n[r];
+            if (n[l] != n[r]) {
+                n[l] ^= n[r];
+                n[r] ^= n[l];
+                n[l] ^= n[r];
+            }
             l++;
             r--;
         }
     }
 
-    public void rotate2(int[] nums, int k) {
+    public void rotate(int[] nums, int k) {
         if (k == 0 || nums == null || nums.length == 0) {
             return;
         }
@@ -75,5 +45,14 @@ public class Leetcode189RotateArray {
         reverse(nums, 0, size - k - 1);
         reverse(nums, size - k, size - 1);
         reverse(nums, 0, size - 1);
+    }
+
+    // use extra space
+    public void rotate2(int[] nums, int k) {
+        int n = nums.length;
+        k = k % n;
+        int[] temp = Arrays.copyOfRange(nums, 0, n - k);
+        System.arraycopy(nums, n - k, nums, 0, k);
+        System.arraycopy(temp, 0, nums, k, n - k);
     }
 }
