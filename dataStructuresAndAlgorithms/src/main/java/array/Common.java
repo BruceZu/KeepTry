@@ -35,7 +35,7 @@ public class Common {
 
     //  a > b
     public static boolean greatThan(Comparable a, Comparable b) {
-        return a.compareTo(b) > 0;
+        return lessThan(b, a);
     }
 
     /**

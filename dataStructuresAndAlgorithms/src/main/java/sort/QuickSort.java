@@ -31,11 +31,12 @@ public class QuickSort {
     /**
      * <pre>
      * Idea:
-     *    Make the one in l as pivot index firstly,
-     *    Dance with the one in r, make sure the 2 in ascending order
-     *    Continue to dance with next r.
+     *    select the pivot and swap it with the one the left side firstly,
+     *    Dance from outer toward inner, firstly dance with the one on the right side, the r,
+     *                             if needed swap them to make sure the 2 in ascending order.
+     *    Continue to dance toward inner from outer till the pivot is left l == r;
      *
-     * @param l   left index included, as pivot index firstly
+     * @param l   left index included, firstly the selected pivot is put here.
      * @param r   right index included
      * @return    index of pivot
      */
@@ -44,7 +45,7 @@ public class QuickSort {
 
         while (l != r) {
             if (l < r && greatThan(arr[l], arr[r])
-                    || l > r && lessThan(arr[l], arr[r])) {
+                    ||  r<l && lessThan(arr[l], arr[r])) {
                 swap(arr, l, r);
                 // also swap index variable
                 l ^= r;
