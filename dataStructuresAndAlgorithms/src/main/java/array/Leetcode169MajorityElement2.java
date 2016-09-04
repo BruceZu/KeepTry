@@ -13,26 +13,28 @@
 // limitations under the License.
 //
 
-package bitmanipulation;
+package array;
 
+/**
+ * other ideas:
+ * {@link  bitmanipulation.Leetcode169MajorityElement#majorityElement(int[])}
+ */
 public class Leetcode169MajorityElement2 {
-    public static int majorityElement(int[] num) {
-        int major = num[0];
-        int count = 1;
-        int size = num.length;
-        for (int i = 1; i < size; i++) {
-            int v = num[i];
-            if (v == major) {
-                count++;
+    public int majorityElement(int[] nums) {
+        int vote = 1;
+        int candidator = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == candidator) {
+                vote++;
                 continue;
             }
-            if (count != 0) {
-                count--;
+            if (vote > 0) {
+                vote--;
                 continue;
             }
-            major = v;
-            count = 1;
+            vote = 1;
+            candidator = nums[i];
         }
-        return major;
+        return candidator;
     }
 }
