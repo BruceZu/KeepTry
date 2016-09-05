@@ -13,37 +13,30 @@
 // limitations under the License.
 //
 
-package stack;
-
-import java.util.Stack;
+package array;
 
 public class Leetcode20ValidParentheses2 {
-    public static boolean isValid(String s) {
-        if (s == null || s.length() == 0) {
-            return true;
-        }
-        if (s.length() % 2 != 0) {
-            return false;
-        }
-        char[] arr = s.toCharArray();
-        Stack<Character> ls = new Stack();
-        ls.push(arr[0]);
-        for (int i = 1; i < arr.length; i++) {
+    // using a array to act as a stack;
+    public boolean isValid1(String str) {
+        char[] arr = str.toCharArray();
+        char[] st = new char[arr.length];
+        int size = 0;
+        for (int i = 0; i < arr.length; i++) {
             char c = arr[i];
-            if (c == '(' || c == '{' || c == '[') { //  left half
-                ls.push(c);
+            if (c == '(' || c == '{' || c == '[') {
+                st[size++] = c;
                 continue;
             }
-            if (ls.empty()) {
+            if (size == 0) { // note
                 return false;
             }
-            char top = ls.pop();
-            if (top == '(' && c == ')' || top == '{' && c == '}' || top == '[' && c == ']') {
+            size--;
+            char poped = st[size];
+            if (poped == '(' && c == ')' || poped == '{' && c == '}' || poped == '[' && c == ']') {
                 continue;
             }
             return false;
-
         }
-        return ls.empty();
+        return size == 0;
     }
 }
