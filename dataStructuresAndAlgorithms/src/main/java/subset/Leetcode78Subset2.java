@@ -27,18 +27,20 @@ public class Leetcode78Subset2 {
      * running time O(N^2)
      * in loop or recursive
      */
-    public List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        result.add(Arrays.asList(new Integer[]{}));
+    public List<List<Integer>> subsets(int[] arr) {
+        Arrays.sort(arr);// if it require the result is in order.
+        List<List<Integer>> r = new ArrayList();
+        r.add(new ArrayList());
+        for (int i = 0; i < arr.length; i++) {
+            int cur = arr[i];
 
-        for (int i = 0; i < nums.length; i++) {
-            int currentSize = result.size();
-            for (int j = 0; j < currentSize; j++) {
-                List l = new ArrayList<>(result.get(j));
-                l.add(nums[i]);
-                result.add(l);
+            int size = r.size();
+            for (int j = 0; j < size; j++) {
+                List<Integer> clone = new ArrayList( r.get(j));
+                clone.add(cur);
+                r.add(clone);
             }
         }
-        return result;
+        return r;
     }
 }

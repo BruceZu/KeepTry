@@ -16,13 +16,15 @@
 package subset;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * <pre>
  * 78. Subsets
  * Difficulty: Medium
- * Given a set of distinct integers, nums, return all possible subsets.
+ * distinct integers
+ * return all possible subsets.
  *
  * Note:
  * The solution set must not contain duplicate subsets.
@@ -30,6 +32,7 @@ import java.util.List;
  * Followup:
  *   + assume 1:  Elements in a subset must be in non-descending order.
  *   + assume 2:  calculate subsets with a given size.  0<= size <= array.length.
+ *   +        3:  if it is not distinct integers
  *
  * For example,
  * If nums = [1,2,3], a solution is:
@@ -45,8 +48,11 @@ import java.util.List;
  * []
  * ]
  * Company Tags Amazon Uber Facebook
- * Tags Array Backtracking Bit Manipulation
- * Similar Problems (M) Generalized Abbreviation
+ * Tags
+ * Array
+ * Backtracking
+ * Bit Manipulation
+
  * ==================================================================================================
  * 1> Back-tracing: running time O(n^2)
  *    back-tracing, need restore to original status. next number's choices depends the above ones
@@ -56,6 +62,7 @@ import java.util.List;
  *                  e.g.: if {1,3} is selected,
  *                  now the third one will be selected from 4 and 5,
  *                  do not care 2, because {1,3,2} is same as {1,2,3} which has been done.
+ *                  this is combinations, set. not permutations.
  *   Followup:
  *    1:  -> + assume 1:  Arrays.sort(nums);
  *    2:  -> + assume 2:
@@ -98,23 +105,23 @@ public class Leetcode78Subset {
     /**
      * @see <a href ="https://www.mathsisfun.com/combinatorics/combinations-permutations.html">Combinations and Permutations</a>
      */
-    private static void subsets(int[] arr, List<List<Integer>> r, ArrayList<Integer> selected, int from) {
-        while (from < arr.length) {
-            selected.add(arr[from]);
-
-            r.add((ArrayList<Integer>) selected.clone());
-            subsets(arr, r, selected, from + 1);
-
-            selected.remove(selected.size() - 1);
-            from++;
+    public static void recursion(int from, int[] arr, List<Integer> dfs, List<List<Integer>> r) {
+        if (from > arr.length) {
+            return;
+        }
+        for (int i = from; i < arr.length; i++) {
+            dfs.add(arr[i]);
+            r.add(new ArrayList<>(dfs));
+            recursion(i+ 1, arr, dfs, r); // i+1 not from +1;
+            dfs.remove(dfs.size() - 1);
         }
     }
 
-    public List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        result.add(new ArrayList<Integer>());
-
-        subsets(nums, result, new ArrayList<Integer>(), 0);
-        return result;
+    public static List<List<Integer>> subsets(int[] arr) {
+        Arrays.sort(arr); // if it require each resolution is in order
+        List<List<Integer>> r = new ArrayList();
+        r.add(new ArrayList());
+        recursion(0, arr, new ArrayList<>(), r);
+        return r;
     }
 }
