@@ -59,7 +59,7 @@ public class Intervals {
         Arrays.sort(arr, new Comparator<Interval>() {
                     @Override
                     public int compare(Interval o1, Interval o2) {
-                        return o1.start - o2.start;
+                        return (o1.start < o2.start) ? -1 : ((o1.start == o2.start) ? 0 : 1);
                     }
 
                     @Override
