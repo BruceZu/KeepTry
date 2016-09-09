@@ -40,17 +40,8 @@ class House {
     private House() {
 
     }
-}
-
-public class MyFactory {
-    // static factory method cannot implement any interface.
-    // it can also be in House class
-    // may be  need implement some interface like
-    private MyFactory() {
-    }
 
     public static House buildHouse(String owner, boolean expensive) {
-
         if (expensive == true) {
             Tv tv = new Tv();
             DinningRoom dinningRoom = new DinningRoom(tv);
@@ -64,6 +55,6 @@ public class MyFactory {
 class Senaria {
     public static void main(String[] args) {
         boolean expensive = true;
-        House h = MyFactory.buildHouse("Brue", expensive);
+        House h = House.buildHouse("Brue", expensive);
     }
 }

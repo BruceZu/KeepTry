@@ -16,8 +16,6 @@
 package design_pattern.static_factory_method;
 
 
-import design_pattern.factory_method.IObject;
-
 /**
  * <pre>
  * factory method Pattern

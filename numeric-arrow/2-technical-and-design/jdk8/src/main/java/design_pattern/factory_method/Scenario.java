@@ -17,20 +17,14 @@ package design_pattern.factory_method;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.stream.Stream;
 
-interface CarFactory {
-    Car getCar(); // why we need this interface??
-}
-
-//the real factory with an implementation of the getCar() factory method
-public class Scenario implements CarFactory {
-
-
-
+public class Scenario  {
     public static void main(String[] args) {
-        CarFactory carFactory = new Scenario(); // user need care the detail?
-        Car myCar = carFactory.getCar();
+
         Iterator it= new ArrayList<>().iterator();
-        myCar.drive();
+        Stream st = new ArrayList<>().stream();
+        Spliterator sp = new ArrayList<>().spliterator();
     }
 }
