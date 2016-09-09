@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package design_pattern.factory;
+package design_pattern.static_factory_method;
 
 
 class Kitchen {

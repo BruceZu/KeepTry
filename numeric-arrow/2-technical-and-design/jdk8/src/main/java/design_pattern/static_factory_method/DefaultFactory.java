@@ -13,8 +13,10 @@
 // limitations under the License.
 //
 
-package design_pattern.factory_method;
+package design_pattern.static_factory_method;
 
+
+import design_pattern.factory_method.IObject;
 
 /**
  * <pre>
@@ -50,7 +52,6 @@ public class DefaultFactory {// interface can not have static method()
         return null;
     }
 }
-
 
 class Senario {
     public static void main(String[] args) {
