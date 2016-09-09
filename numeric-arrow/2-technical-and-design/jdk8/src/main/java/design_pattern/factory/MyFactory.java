@@ -16,86 +16,54 @@
 package design_pattern.factory;
 
 
-class Thing {
-    public Thing(String name,
-                 Object dependency1,
-                 Object dependency2) {
-        // TODO: 9/6/16
+class Kitchen {
+
+}
+
+class Tv {
+
+}
+
+class DinningRoom {
+
+    public DinningRoom(Tv tv) {
+
     }
 }
 
-public class MyFactory implements IFactory {
-    @Override
-    public Thing GetThing(String name) {
-        return new Thing(name,
-                new Object(), new Object());
+class House {
+    public House(String name,
+                 Kitchen Kitch,
+                 DinningRoom DinningRoom) {
     }
 
-    public static void main(String arg[]) {
-        DefaultProducer defaultProducer = new SpecificProducer(true);
-        defaultProducer.taskToBeDone();
+    private House() {
+
     }
 }
 
-/**
- * <pre>
- * factory method Pattern
- * It is good idea to use 'factory methods' inside object when:
- *
- * Object's class is designed so that objects it creates were specified by sub-classes
- * Object's class doesn't know what exact sub-classes it have to create
- * Object's class delegates its duties to auxiliary sub-classes and doesn't know what exact class will take these duties
- *
- * It is good idea to use 'abstract factory class' when:
- *
- * Your object shouldn't depend on how its inner objects are created and designed
- * Group of linked objects should be used together and you need to serve this constraint
- * Object should be configured by one of several possible families of linked objects that will be a part of your parent object
- * It is required to share child objects showing interfaces only but not an implementation
- */
-
-interface Deliverable {
-    String f();
-}
-
-class SpecificDeliverable implements Deliverable {
-    boolean todayIsHoliday;
-
-    public SpecificDeliverable(boolean todayIsHoliday) {
-        this.todayIsHoliday = todayIsHoliday;
+public class MyFactory {
+    // static factory method cannot implement any interface.
+    // it can also be in House class
+    // may be  need implement some interface like
+    private MyFactory() {
     }
 
-    @Override
-    public String f() {
-        /***SPECIFIC TASK CAN BE WRITTEN HERE***/
+    public static House buildHouse(String owner, boolean expensive) {
+
+        if (expensive == true) {
+            Tv tv = new Tv();
+            DinningRoom dinningRoom = new DinningRoom(tv);
+            Kitchen kitchen = new Kitchen();
+            return new House(owner, kitchen, dinningRoom);
+        }
         return null;
     }
 }
 
-abstract class DefaultProducer {
-    public Deliverable taskToBeDone() {
-        return factoryMethodPattern();
-    }
-
-    //We know that when to create an object of required functionality(s) but type of object will remain undecided
-    // or it will be decided by dynamic parameters being passed.
-    // decouples the client system from the actual implementation classes through the abstract types and factories.
-    protected abstract Deliverable factoryMethodPattern();
-}
-
-class SpecificProducer extends DefaultProducer {
-    boolean todayIsHoliday;
-
-    SpecificProducer(boolean todayIsHoliday) {
-        this.todayIsHoliday = todayIsHoliday;
-    }
-
-
-    protected Deliverable factoryMethodPattern() {
-        return new SpecificDeliverable(todayIsHoliday);
+class Senaria {
+    public static void main(String[] args) {
+        boolean expensive = true;
+        House h = MyFactory.buildHouse("Brue", expensive);
     }
 }
-
-
-
-

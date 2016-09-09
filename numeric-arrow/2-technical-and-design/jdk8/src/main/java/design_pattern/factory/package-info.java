@@ -35,7 +35,7 @@
  *
  *     information used to create a new object including
  *     1 user care
- *     2 user without having to know, e.g. the dependencies of the Thing
+ *     2 user without having to know, e.g. the dependencies of the House
  *     with factory to hide the <strong> <2> which maybe nested, and the process</strong>,
  *     it can be considered as an alternative to constructors.
  *
@@ -83,11 +83,34 @@
  *    you produce implementations of a particular Factory interface -- e.g., IFruitFactory.
  *    Each of those knows how to create different kinds of fruit.
  *
- *    ==2==
- *                      When to use: Client just need a class and does not care about which concrete implementation it is getting.
- *    Factory Method,   When to use: Client doesn't know what concrete classes it will be required to create at runtime,
- *                      but just wants to get a class that will do the job.
+ *    ==2== When to use
+ *
  *    Abstract Factory, When to use: When your system has to create multiple families of products or you want to provide
  *                      a library of products without exposing the implementation details.
+ *
+ *    Static Factory Method: in object's class
+ *                           be a single class.
+ *
+ *                      1 Control over instantiation. Singleton. Pool Pattern is based on a factory.
+ *
+ *                      2 Loose coupling, separation of concerns.
+ *                           FileSystemLogger and DBLogger.
+ *                           the client: use an interface of logger (ILogger)
+ *                           factory:  implementation, object of different subclass or different constructors
+ *
+ *                      3 Encapsulation. Avoid code duplication. Organise the code. easy maintenance.
+ *                                       create object with a lot of nested dependency;
+ *                      4 Disambiguation:  multiple constructors (with very different behaviors)
+ *                                         making many different constructor easy to read.
+ *      cases:
+ *                      String.valueOf()
+ *                      Logger log = LoggerFactory.getLogger(MyClass.class);
+ *
+ *
+ *      Factory Method: “Define an interface for creating an object,
+ *                       but let subclasses decide which class to instantiate.
+ *                       Factory Method lets a class defer instantiation to subclasses”
+ *
+ *   @see <a href="http://coding-geek.com/design-pattern-factory-patterns/">design pattern factory patterns</a>
  */
 package design_pattern.factory;
