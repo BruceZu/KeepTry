@@ -16,8 +16,8 @@
 /**
  * <pre>
  *
-      what are they? encapsulate instantiation
-      when to use them?
+ * what are they? encapsulate instantiation
+ * when to use them?
  *
  *    1 Static Factory Method:
  *    all the objects it can create, the objects have the same parent class,
@@ -101,6 +101,5 @@
  *         but they can be implemented using Prototype.
  *         Factory Methods are usually called within Template Methods.
  *         Factory Method: creation through inheritance. Prototype: creation through delegation.
- *
  */
 package design_pattern.factory;
