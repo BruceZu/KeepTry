@@ -9,7 +9,7 @@ cook_prebuilt_jar(
     version='2.0.10',
     bin_sha1='a1cb1136b104219d6238de886bf5a3ea4554eb58',
     src_sha1='b70ff94ba379b4e825caca1af4ec83193fac4b10',
-    visibility=['//vivie:net.SocketTest'],
+    visibility=['//arrow:net.SocketTest'],
 )
 
 cook_prebuilt_jar(

@@ -57,7 +57,7 @@ cook_prebuilt_jar(
         ':continuation',
         ':http',
     ],
-    visibility=['//numeric-arrow:net.SocketTest'],
+    visibility=['//arrow:net.SocketTest'],
 )
 
 cook_prebuilt_jar(
@@ -82,7 +82,7 @@ cook_prebuilt_jar(
     deps=[
         ':security'
     ],
-    visibility=['//numeric-arrow:net.SocketTest'],
+    visibility=['//arrow:net.SocketTest'],
 )
 
 cook_prebuilt_jar(
@@ -92,7 +92,7 @@ cook_prebuilt_jar(
     version=VERSION,
     bin_sha1='a75c78a0ee544073457ca5ee9db20fdc6ed55225',
     src_sha1='e9763c6a178a65514dd0ea9f749621a17d06f9f8',
-    visibility=['//numeric-arrow:net.SocketTest'],
+    visibility=['//arrow:net.SocketTest'],
 )
 
 cook_prebuilt_jar(
