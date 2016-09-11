@@ -1,3 +1,4 @@
+
 //  Copyright 2016 The Sawdust Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,34 +14,10 @@
 // limitations under the License.
 //
 
-package design_pattern.static_factory_method;
-
-public interface IObject {
-    String f();
-}
-
-class SpecificObject1 implements IObject {
-
-    public SpecificObject1(String special) {
-        //
-    }
-
-    @Override
-    public String f() {
-        /***SPECIFIC TASK 1 CAN BE WRITTEN HERE***/
-        return null;
-    }
-}
-
-class SpecificObject2 implements IObject {
-
-    public SpecificObject2(String special) {
-        //
-    }
-
-    @Override
-    public String f() {
-        /***SPECIFIC TASK 2 CAN BE WRITTEN HERE***/
-        return null;
-    }
-}
+/**
+ * http://www.oracle.com/technetwork/java/blueprints-141945.html
+ * http://www.briandupreez.net/2010/11/design-patterns-in-jdk.html
+ * http://sdoulger.blogspot.com/2011/03/design-patterns-in-jdk.html
+ * https://ageekview.wordpress.com/2011/05/08/a-dive-into-design-patterns-used-in-jdk-i/
+ */
+package design_pattern;

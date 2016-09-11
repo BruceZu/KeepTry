@@ -13,18 +13,16 @@
 // limitations under the License.
 //
 
-package design_pattern.factory_method;
+package design_pattern.factory.abstract_factory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.stream.Stream;
+import java.util.Currency;
+import java.util.Locale;
 
-public class Scenario  {
+public class Scenaria {
+    /**
+     * @see <a href="http://docs.spring.io/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html">spring case</a>
+     */
     public static void main(String[] args) {
 
-        Iterator it= new ArrayList<>().iterator();
-        Stream st = new ArrayList<>().stream();
-        Spliterator sp = new ArrayList<>().spliterator();
     }
 }

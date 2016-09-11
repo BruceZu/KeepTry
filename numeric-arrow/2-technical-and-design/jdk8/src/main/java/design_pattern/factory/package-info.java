@@ -15,102 +15,92 @@
 
 /**
  * <pre>
- *    1> what is abstract Factory pattern,  Factory method pattern
- *    2> why we need it
  *
+      what are they? encapsulate instantiation
+      when to use them?
  *
- *    'Factory pattern' is a wrong concept
- *     abstract factory provides methods to create family of related products.
- *     each method in the Abstract factory is an Factory method in itself. whose concrete implementations will be provided by subclasses
+ *    1 Static Factory Method:
+ *    all the objects it can create, the objects have the same parent class,
+ *    or implement the same interface.
+ *    The parameters for your call tell the factory which class to create.
+ *    the client didn't know what was going to be returned,
+ *    the client is expecting a type that matches the parent class /interface.
  *
- *                             shopkeeper (Provides interface to create family of related objects)
- *      cloth       factory for rich, factory  for poor
- *     spring
- *     summer
- *     winter
- *     autumn
+ *      “a static factory method is not the same as the Factory Method pattern from Design Patterns
+ *      [Gamma95, p. 107]. The static factory method described in this item has no direct equivalent
+ *      in Design Patterns.” -- Joshua Bloch
+ *      “Interfaces can’t have static methods, so by convention,
+ *      static factory methods for an interface named Type are put in a noninstantiable
+ *      class (Item 4) named Types.” -- Joshua Bloch
+ *      “A class can provide a public static factory method, which is simply a static method that
+ *      returns an instance of the class.” -- Joshua Bloch in “Effective Java”
  *
- *    Use the Abstract Factory pattern when clients must be decoupled from product classes.
- *    Especially useful for program configuration and modification.
+ *      in object's class;
+ *      or be a single class.
  *
- *     information used to create a new object including
- *     1 user care
- *     2 user without having to know, e.g. the dependencies of the House
- *     with factory to hide the <strong> <2> which maybe nested, and the process</strong>,
- *     it can be considered as an alternative to constructors.
+ *      1 Control over instantiation. Singleton. Pool Pattern is based on a factory.
  *
- *     it is useful when you need a complicated process for constructing the object.
- *     the process can be put in factory, makes it easier to maintain.
- *
- *     useful for testability?
- *
- *
- *     when the construction need a dependency that you do not want for the actual class ??
- *     when you need to construct different objects ??
- *
- *     static factory methods are completely different from the Gang of Four: Factory Method design pattern.
- *     factory class
- *
- *     Factory classes can be abstracted/interfaced away as necessary, whereas factory methods are lighter weight
- *     (and also tend to be testable, since they don't have a defined type, but they will require a well-known registration point)
- *
- *     Factory classes are useful for
- *         when the object type that they return has a private constructor,
- *         when different factory classes set different properties on the returning object,
- *         when a specific factory type is coupled with its returning concrete type in different situations,
- *         If you only have one class that's consuming the factory, then you can just use a factory method within that class.
- *    Factory class for almost every aggregate association
- *
- *   Factory:
- *          Creates objects without exposing the instantiation logic to the client.
- *    Factory method :
- *          Define an interface for creating an object, but let the subclasses decide which class to instantiate.
- *          The Factory method lets a class defer instantiation to subclasses
- *    when to use:
- *         client doesn't know what concrete classes it will be required to create at runtime,
- *         but just wants to get a class that will do the job.
- *
- *  The factory petter uses polymorphism, dependency injection and Inversion of control.
- *  Factory Method:
- *      uses inheritance (indirection is vertical e.g. createThing())
- *  Abstract Factory:
- *     uses composition (indirection is horizontal e.g. getFactory().createThing() )
- *
- * Factory pattern:
- *    you produce implementations (Apple, Banana, Cherry, etc.) of a particular interface -- say, IFruit.
- *    it instantiates things which implement IFruit
- *  Abstract Factory pattern:
- *    you produce implementations of a particular Factory interface -- e.g., IFruitFactory.
- *    Each of those knows how to create different kinds of fruit.
- *
- *    ==2== When to use
- *
- *    Abstract Factory, When to use: When your system has to create multiple families of products or you want to provide
- *                      a library of products without exposing the implementation details.
- *
- *    Static Factory Method: in object's class
- *                           be a single class.
- *
- *                      1 Control over instantiation. Singleton. Pool Pattern is based on a factory.
- *
- *                      2 Loose coupling, separation of concerns.
+ *      2 Loose coupling, separation of concerns.
  *                           FileSystemLogger and DBLogger.
  *                           the client: use an interface of logger (ILogger)
  *                           factory:  implementation, object of different subclass or different constructors
+ *                           Using an IoC container to resolve your dependencies allows you even more flexibility.
+ *                           There is no need to update each call to the constructor whenever you change the dependencies of the class.
  *
- *                      3 Encapsulation. Avoid code duplication. Organise the code. easy maintenance.
- *                                       create object with a lot of nested dependency;
- *                      4 Disambiguation:  multiple constructors (with very different behaviors)
- *                                         making many different constructor easy to read.
+ *      3 Encapsulation. nested dependencies, complicated process, put in factory, easier to maintain, avoid code duplication.
+ *                        you can't have direct access to them,
+ *                        using the factory to act as a knowledge center for producing needed objects.
+ *
+ *      4 Disambiguation:  multiple constructors (with very different behaviors)
+ *                         making many different constructor easy to read.
  *      cases:
- *                      String.valueOf()
- *                      Logger log = LoggerFactory.getLogger(MyClass.class);
+ *          String.valueOf()
+ *          Logger log = LoggerFactory.getLogger(MyClass.class);
  *
  *
- *      Factory Method: “Define an interface for creating an object,
- *                       but let subclasses decide which class to instantiate.
- *                       Factory Method lets a class defer instantiation to subclasses”
+ *    2 Factory Method:
+ *       “Define an interface for creating an object,
+ *        but let subclasses decide which class to instantiate.
+ *        Factory Method lets a class defer instantiation to subclasses” - Gang of Four
  *
- *   @see <a href="http://coding-geek.com/design-pattern-factory-patterns/">design pattern factory patterns</a>
+ *       the client maintains a reference to the abstract Creator,
+ *       but instantiates it with one of the subclasses.
+ *       Note that the client doesn’t really know what the type of the object is,
+ *       just that it is a child of the parent.
+ *       may have a abstract class layer
+ *
+ *        client doesn't know what concrete classes it will be required to create at runtime,
+ *        but just wants to get a class that will do the job.
+ *
+ *        testable. as you can mock interfaces
+ *
+ *        Cases:
+ *        Iterator
+ *
+ *        The Spring Framework is based on a factory method pattern.
+ *        The ApplicationContext implements the BeanFactory Interface
+ *        JDBC uses factory methods to get Connections, Statements, and other objects to work with.
+ *        Which gives you flexibility to change your back-end database without changing your DAO layer
+ *
+ *    3 Abstract Factory:
+ *        “Provide an interface for creating families of related
+ *        or dependent objects without specifying their concrete classes” - Gang of Four
+ *
+ *        the factory interface have multiple factory methods that are conceptually linked
+ *        create a family of related products
+ *        When to use: "a system should be configured with one of multiple families of products,
+ *        you want to provide a class library of products, and you want to reveal just their interfaces,
+ *        not their implementations".- Gang of Four
+ *
+ *         DAO (Data Access Object) frameworks; insert();update();delete();read()
+ *         GWT-ORM?
+ *         CrudRepository from Spring
+ *         Abstract Factory creates objects through composition.
+ *   Relation
+ *         Abstract Factory classes are often implemented with Factory Methods,
+ *         but they can be implemented using Prototype.
+ *         Factory Methods are usually called within Template Methods.
+ *         Factory Method: creation through inheritance. Prototype: creation through delegation.
+ *
  */
 package design_pattern.factory;
