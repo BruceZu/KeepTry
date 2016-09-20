@@ -75,15 +75,19 @@ package string.backtracking;
  *  can the '*'  be used independently?
  *
  *  cache the backtracking parts
- *
+ *  DP see {@link dp.Leetcode10RegularExpressionMatching2#isMatch(String, String)}
  * @see <a href="https://leetcode.com/problems/regular-expression-matching/">leetcode</a>
  */
 
 public class Leetcode10RegularExpressionMatching {
 
+    // 44 ms beat 37%
     private static boolean backtracking2(char[] s, int si, char[] p, final int pi) {
         if (si == s.length && pi == p.length) {
             return true;
+        }
+        if (pi == p.length) {
+            return false;
         }
 
         if (pi + 1 < p.length && p[pi + 1] == '*') {
@@ -98,8 +102,7 @@ public class Leetcode10RegularExpressionMatching {
             // all possible represent (== relation) is tried
             return backtracking2(s, si, p, pi + 2); // care
 
-        } else if (pi < p.length && p[pi] == '.'
-                || pi < p.length && si < s.length && p[pi] == s[si]) {
+        } else if (p[pi] == '.' || si < s.length && p[pi] == s[si]) {
             return backtracking2(s, si + 1, p, pi + 1);
         } else {
             return false;
