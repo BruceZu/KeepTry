@@ -32,5 +32,6 @@
  * Lazy mode operation allows the implementation more optimization opportunities
  * based upon reorganization of the data
  * and operations to be performed.
+ * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html">JDK package Description </a>
  */
 package java_stream;
