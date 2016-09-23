@@ -1,12 +1,12 @@
 package arithmetic.factorial;
 
-public class GCD {
+public class Codepad_GCD {
     /**
      * @see <a href="https://codelab.interviewbit.com/problems/gcd/">code lab</a>
      * m : 6
      * n : 9
      * <p>
-     * GCD(m, n) : 3
+     * Codepad_GCD(m, n) : 3
      */
     public static int gcd(int A, int B) {
         if (A == 0) {
