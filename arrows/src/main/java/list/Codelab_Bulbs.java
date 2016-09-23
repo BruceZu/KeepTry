@@ -2,6 +2,9 @@ package list;
 
 import java.util.ArrayList;
 
+/**
+ * @see <a href="https://codelab.interviewbit.com/problems/bulbs/">code lab</a>
+ */
 public class Codelab_Bulbs {
     public static int bulbs(ArrayList<Integer> a) {
         int state = 0, r = 0;
