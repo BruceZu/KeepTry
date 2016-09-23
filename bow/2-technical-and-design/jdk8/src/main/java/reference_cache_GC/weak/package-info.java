@@ -16,4 +16,4 @@
 /**
  * <pre>
  */
-package weak;
+package reference_cache_GC.weak;
