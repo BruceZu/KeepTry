@@ -1,5 +1,14 @@
 /**
  * <pre>
+ *
+ *   1 method overloading is resolved during compile time, while method overriding is resolved at runtime.
+ *   2 a private, static and final method cannot be overriding in Java but you can still overload them.
+ *   3 For overriding both return type and signature of the method must remain same,
+ *     but in for overloading method, the signature must be different exclude the name.
+ *   4 call to overloaded methods are resolved using static binding
+ *     call to overridden method is resolved using dynamic binding in Java.
+ *
+ *
  *   you can not override a private or static method in Java
  *   you cannot override static method in Java because method overriding is based upon dynamic binding at runtime
  *   and static methods are bonded using static binding at compile time.
@@ -24,5 +33,21 @@
  *
  *   private methods are not even visible to Child class, they are only visible and accessible in the class on which
  *   they are declared. private keyword provides highest level of Encapsulation in Java.
+ *
+ *   === static and dynamic binding
+ *
+ * 1) Static binding in Java occurs during Compile time while Dynamic binding occurs during Runtime.
+ *
+ * 2) private, final and static methods and variables uses static binding and bonded by compiler while
+ *    overriding are bonded during runtime based upon runtime object.
+ *    There is no virtual keyword in Java at least. "In Java, all non-static methods are
+ *    by default "virtual functions." Only methods marked with the keyword final,
+ *    which cannot be overridden, along with private methods, which are not inherited, are non-virtual."
+ *
+ * 3) Static binding uses Type(Class in Java) information for binding while
+ *    Dynamic binding uses Object to resolve binding.
+ *
+ * 3) Overloaded methods are bonded using static binding while
+ *    overridden methods are bonded using dynamic binding at runtime.
  */
 package java_override;

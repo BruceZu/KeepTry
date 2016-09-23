@@ -10,6 +10,11 @@ public class Override {
         private String f(int i) {
             return "child:  method hiding not override f() in parent";
         }
+
+        // note the return type is required to be also same as that in parent
+        public String overrided() {
+            return "child";
+        }
     }
 
     static String sf() {
@@ -20,9 +25,17 @@ public class Override {
         return "Parent";
     }
 
+    public String overrided() {
+        return "parent";
+    }
+
     public static void main(String[] args) {
         Override child = new Child();
+        System.out.println(child.overrided());
+
+        //
         System.out.println(child.f(0)); // Parent
+
         Child reallyChild = new Child();
         System.out.println(reallyChild.f(0));
 
