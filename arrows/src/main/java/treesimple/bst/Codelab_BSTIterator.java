@@ -15,7 +15,7 @@ import java.util.Stack;
  *
  * @see <a href="https://codelab.interviewbit.com/problems/treeiterator/">codelab</a>
  */
-public class BSTIterator {
+public class Codelab_BSTIterator {
     public static void main(String[] args) {
         /**
          * Your Solution will be called like this:
