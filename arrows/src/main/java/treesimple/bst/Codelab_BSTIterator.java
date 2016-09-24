@@ -37,7 +37,7 @@ class TreeNode {
 
 class Solution {
 
-    Stack<TreeNode> track = new Stack();
+    private Stack<TreeNode> track;
 
     public Solution(TreeNode root) {
         track = new Stack<>();
@@ -59,6 +59,7 @@ class Solution {
      * @return the next smallest number
      */
     public int next() {
+
         if (!hasNext()) {
             return -1; // ???
         }
@@ -67,8 +68,7 @@ class Solution {
         int r = node.val;
 
         node = node.right;
-
-        if (node != null) {
+        while (node != null) {
             track.push(node);
             node = node.left;
         }
