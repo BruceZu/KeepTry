@@ -23,6 +23,7 @@ package array;
  *     i <  its index
  *     j > its index
  * Require runtime Big o(n), space Big O(1).
+ *
  * Assume there exists always at least one pivotal number.
  * ========================================================
  *                                update maxByfar
@@ -39,7 +40,17 @@ public class FindPivotalNumber {
         boolean stillValid = true;
         int candidate = arr[0];
         for (int i = 1; i < arr.length; i++) {
-
+            int cur = arr[i];
+            if (cur > maxByfar) {
+                maxByfar = cur;
+                if (!stillValid) {
+                    candidate = maxByfar;
+                    stillValid = true;
+                }
+            }
+            if (cur < candidate) {
+                stillValid = false;
+            }
         }
         // TODO: 8/6/16
         return 0;
