@@ -95,6 +95,7 @@ package array;
  */
 public class Leetcode1twoSum {
     // runtime O(N), space depends on value of min, max and target
+    // wrong solutions
     public static int[] twoSum(int[] nums, int target) {
         int max = nums[0], min = nums[0];
         for (int i = 1; i < nums.length; i++) {
