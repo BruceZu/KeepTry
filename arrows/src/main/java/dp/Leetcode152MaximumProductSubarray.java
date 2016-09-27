@@ -37,9 +37,9 @@ package dp;
  *    Idea:
  *      same like Kadane Algorithm
  *
- *               1   2    -1      3       -2      -1
- *   maxbyfar    1   2/2  -2/-1   -3/3    -6/12   -12/6
- *   minbyfar    1   2/2  -2/-2   -6/-6   12/-6   6/-12
+ *               1   2    -1       3      -2       -1
+ *   maxbyfar    1   2/2  -2/-1   -3/3    -6/12   -12 /6
+ *   minbyfar    1   2/2  -2/-2   -6/-6   12/-6     6 /-12
  *
  *   max         1   2    2       3       12      12
  *

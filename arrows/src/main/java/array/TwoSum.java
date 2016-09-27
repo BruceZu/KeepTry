@@ -17,17 +17,12 @@ package array;
 
 import java.util.Arrays;
 
-/*
-Suppose you are given an array, A, containing n distinct integers that are listed
-in increasing order. Given a number k, describe a recursive algorithm to find two
-integers in A that sum to k, if such a pair exists. What is the running time of your
-algorithm?
+/**
+ * C522 Suppose you are given an array, A, containing n distinct integers that are listed
+ * in increasing order. Given a number k, describe a recursive algorithm to find two
+ * integers in A that sum to k, if such a pair exists. What is the running time of your
+ * algorithm?
  */
-
-// C522 Suppose you are given an array, A, containing n distinct integers that are listed
-// in increasing order. Given a number k, describe a recursive algorithm to find two
-// integers in A that sum to k, if such a pair exists. What is the running time of your
-// algorithm?
 public class TwoSum {
     private static boolean find(int[] nums, long k, int[] ids) {
         // walk from both sides towards center.
