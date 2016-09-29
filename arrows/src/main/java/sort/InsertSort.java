@@ -41,7 +41,7 @@ public class InsertSort {
         for (int i = left + 1; i <= right; i++) {
             iv = arr[i];
             curIndex = i;
-            while (0 < curIndex && lessThan(iv, arr[curIndex - 1])) {
+            while (left < curIndex && lessThan(iv, arr[curIndex - 1])) {
                 swap(arr, curIndex, curIndex - 1);
                 curIndex--;
             }
