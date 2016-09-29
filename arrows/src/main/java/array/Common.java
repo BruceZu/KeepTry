@@ -15,7 +15,26 @@
 
 package array;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class Common {
+
+    public static Integer[] toIntegerArray(int[] ints) {
+        if (ints == null) {
+            return null;
+        }
+        Integer[] arr = new Integer[ints.length];
+        int index = 0;
+        for (int i : ints) {
+            arr[index++] = i;
+        }
+        return arr;
+    }
+
+    public static <T extends Object> void reverse(T[] arr) {
+        Collections.reverse(Arrays.asList(arr));
+    }
 
     public static void swap(Comparable[] arr, int i, int j) {
         Comparable tmp = arr[i];
@@ -102,7 +121,6 @@ public class Common {
      * @param r   right index, included.
      * @param tmp In one thread. this tmp array is provided for performance concern in recursion.
      *            without `new` more tmp arrays.
-     * @param <T>
      */
     public static void mergeInsort(Comparable[] ar, int l, int mid, int r, Comparable[] tmp) {
         // System.out.format("\nmerge %s : index scope[%s, %s] and  index scope [%s, %s]", Arrays.toString(ar), l, mid, mid + 1, r);
