@@ -14,4 +14,4 @@
  *  @see <a href="https://www.cs.auckland.ac.nz/software/AlgAnim/red_black.html">red-black tree</a>
  *  @see <a href="https://www.cs.auckland.ac.nz/software/AlgAnim/red_black.html">wiki</a>
  */
-package treesimple.bst.redblacktree;
+package treesimple.bst.self_balancing_tree.redblacktree;
