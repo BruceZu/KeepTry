@@ -16,43 +16,34 @@
 package sort;
 
 import static array.Common.swap;
+import static array.Common.lessThan;
 
 public class InsertSort {
-    private static <T extends Comparable> boolean lessThan(T i, T j) {
-        return i.compareTo(j) < 0;
-    }
-
-    public static <T extends Comparable> void sortByInsert(T[] arr) {
-        // Input check
-        if (arr == null || arr.length <= 1) {
-            return;
-        }
-        //ascending
-        for (int k = 1; k < arr.length; k++) {
-            if (lessThan(arr[k], arr[k - 1])) {
-                int p = k;
-                T v = arr[k];
-                do {
-                    p--;
-                    arr[p + 1] = arr[p]; // move back
-                } while (p - 1 >= 0 && lessThan(v, arr[p - 1]));
-                arr[p] = v; // find the right place.
-            }
-        }
-    }
-
     /**
+     * Ascending order
      * The runtime is depends on the input. If the input is sorted already its runtime is O(n);
      * It is used for partially-sorted arrays.
      */
     public static <T extends Comparable<T>> void insertSort(T[] arr) {
-        // Input check
         if (arr == null || arr.length <= 1) {
             return;
         }
-        for (int i = 1; i < arr.length; i++) {
-            for (int j = i; j > 0 && lessThan(arr[j], arr[j - 1]); j--) {
-                swap(arr, j, j - 1);
+        insertSort(arr, 0, arr.length - 1);
+    }
+
+    public static <T extends Comparable<T>> void insertSort(T[] arr, int left, int right) {
+        // Input check
+        if (arr == null || arr.length <= 1 || right == left) {
+            return;
+        }
+        T iv;
+        int curIndex;
+        for (int i = left + 1; i <= right; i++) {
+            iv = arr[i];
+            curIndex = i;
+            while (0 < curIndex && lessThan(iv, arr[curIndex - 1])) {
+                swap(arr, curIndex, curIndex - 1);
+                curIndex--;
             }
         }
     }
