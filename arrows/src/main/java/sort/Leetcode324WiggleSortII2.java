@@ -133,6 +133,7 @@ public class Leetcode324WiggleSortII2 {
 
     public static void main(String[] args) {
         int[] nums;
+        // test cases:
         nums = new int[]{8, 7, 10, 9, 6, 5, 3, 2, 4};
         nums = new int[]{8, 7, 10, 6, 9, 5, 3, 2, 4, 1};
         nums = new int[]{1, 5, 1, 1, 6, 4};
