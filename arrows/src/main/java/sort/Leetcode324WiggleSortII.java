@@ -50,15 +50,15 @@ public class Leetcode324WiggleSortII {
      * partitioned array:
      *       array is partitioned by median and the smaller ones without sorted at its left side
      *
-     *  s_b:
-     *       mark the index where currently is a smaller one, swap next bigger one to here
+     *  nextB:
+     *       mark the index where  swap next bigger one to here
      *  i:
      *       used to calculate current index which go along index sequence of
      *       1, 3, 5 ... (current is smaller ones will be allocated to bigger ones)
      *      then  0, 2, 4 ... (current is bigger ones will be allocated to smaller ones)
      *
-     *  b_s:
-     *       mark the index where currently is a bigger one, swap next smaller one to here
+     *  nextS:
+     *       mark the index where swap next smaller one to here
      *
      *  With this method array is wiggled sorted as
      *      in even index (start with 0) will be the smaller ones
@@ -67,18 +67,18 @@ public class Leetcode324WiggleSortII {
     public static void wiggleSortPartitionedArray(int[] arr /* partitioned by Median */) {
         int midV = arr[arr.length - 1 >> 1]; // median or left median
 
-        int s_b = 0;
+        int nextB = 0;
         int i = 0;
-        int b_s = arr.length - 1;
+        int nextS = arr.length - 1;
 
-        while (i <= b_s) {
+        while (i <= nextS) {
             if (arr[indexOf(i, arr)] > midV) {
-                swap(arr, indexOf(i, arr), indexOf(s_b, arr));
+                swap(arr, indexOf(i, arr), indexOf(nextB, arr));
                 i++;
-                s_b++;
+                nextB++;
             } else if (arr[indexOf(i, arr)] < midV) {
-                swap(arr, indexOf(i, arr), indexOf(b_s, arr));
-                b_s--;
+                swap(arr, indexOf(i, arr), indexOf(nextS, arr));
+                nextS--;
             } else {
                 i++;
             }
