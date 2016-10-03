@@ -13,18 +13,18 @@
 // limitations under the License.
 //
 
-/**
- *
- * <pre>
- *
- * What is deadlock
- *
- * how to detect it?
- *
- * how to avoid it
- *
- * Starvation and livelock
- *
- * @see <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/starvelive.html">Starvation and livelock</a>
- */
-package concurrency;
+package java_util_concurrent.countDownLatchCyclicBarrierSemaphore;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class SleepSortTest {
+    @Test(timeout = 30L, expected = Test.None.class)
+    public void testConcurrentHashMap() {
+        List r = SleepSort.sleepSort(Arrays.asList(14, 6, 4, 18, 2, 1, 3, 9));
+        Assert.assertEquals(Arrays.toString(r.toArray()), "[1, 2, 3, 4, 6, 9, 14, 18]");
+    }
+}
