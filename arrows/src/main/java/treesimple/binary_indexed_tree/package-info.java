@@ -1,12 +1,7 @@
 /**
  * <pre>
  *  https://www.youtube.com/watch?v=v_wj_mOAlig
- *
  *  https://en.wikipedia.org/wiki/Fenwick_tree
- *  https://www.topcoder.com/community/data-science/data-science-tutorials/binary-indexed-trees/
- *  http://www.geeksforgeeks.org/binary-indexed-tree-or-fenwick-tree-2/
- *  http://www.cnblogs.com/xudong-bupt/p/3484080.html
- *  https://www.youtube.com/watch?v=kqjOYGc-Wvg
  *
  *  1 what is the BIT for?
  *    It is tree in concept. but it is a array.
