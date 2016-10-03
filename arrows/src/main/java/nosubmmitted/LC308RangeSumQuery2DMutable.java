@@ -16,17 +16,17 @@
 package nosubmmitted;
 
 /**
+ * <pre>
  * 308. Range Sum Query 2D - Mutable
- * https://leetcode.com/problems/range-sum-query-2d-mutable/
- * Difficulty: Hard <pre>
+ * <a href="https://leetcode.com/problems/range-sum-query-2d-mutable/">leetcode </a>
+ * Difficulty: Hard
  * Given a 2D matrix matrix, find the sum of the elements inside the rectangle defined
  * by its upper left corner (row1, col1) and lower right corner (row2, col2).
- * <p/>
- * <p/>
+ *
  * Range Sum Query 2D
  * The above rectangle (with the red border) is defined by (row1, col1) = (2, 1)
  * and (row2, col2) = (4, 3), which contains sum = 8.
- * <p/>
+ *
  * Example:
  * Given matrix = [
  * [3, 0, 1, 4, 2],
@@ -35,7 +35,7 @@ package nosubmmitted;
  * [4, 1, 0, 1, 7],
  * [1, 0, 3, *0, 5]
  * ]
- * <p/>
+ *
  * sumRegion(2, 1, 4, 3) -> 8
  * update(3, 2, 2)
  * sumRegion(2, 1, 4, 3) -> 10
@@ -48,53 +48,17 @@ package nosubmmitted;
  *   |
  *   |
  *   V
- * <p/>
- * Hide Company Tags Google
- * <p/>
- * <p/>
- * Hide Tags Binary Indexed Tree Segment Tree
- *  https://en.wikipedia.org/wiki/Fenwick_tree
- *  https://www.topcoder.com/community/data-science/data-science-tutorials/binary-indexed-trees/
- *  http://www.geeksforgeeks.org/binary-indexed-tree-or-fenwick-tree-2/
- *  http://www.cnblogs.com/xudong-bupt/p/3484080.html
- *  https://www.youtube.com/watch?v=kqjOYGc-Wvg
- * <p/>
- * <p/>
- *  1> build BIT array:
- *    tree[idx] = sum of array[i], i is [(idx - 2^r + 1) ~ idx] ;
- *                                 2^r is the number of 0 of bit format of index, 2^r  = (idx & (-idx));
- *              =  sum of array[i], i is [(idx - (idx & (-idx)) + 1) ~ idx] ;
- * <p/>
- *  2> update BIT array: <pre>
- *     void update (int i,int dx)  {
- *        while (i <=maxlen){ // maxlen is the length of array.
- *          tree[i] += dx;   //add value dx to array[i]
- *          i += (i & -i);
- *        }
- *    }
- * 1>  build BIT array by update it: <pre>
- *      void build () {
- *         int [] tree = new tree[N];
- *         for (int i = 1; i <=N; ++i){
- *            update (i,a[i]);
- *         }
- *      }
- * <p/>
- * 3> range sum query by BIT array:
- *    int getSum (int i) {
- *        int sum = 0;
- *        while (i > 0) {
- *          sum += tree[i];
- *          i -= (i & -i);
- *       }
- *       return sum;
- *    }
- * <p/>
- * <p/>
- * RMQ（Range Minimum/Maximum Query）
- * <p/>
- * <p/>
- * Hide Similar Problems (M) Range Sum Query 2D - Immutable (M) Range Sum Query - Mutable
+ *
+ * Company Tags:
+ *      Google
+ *
+ * Tags:
+ *      Binary Indexed Tree
+ *      Segment Tree
+ *
+ * Similar Problems
+ * (M) Range Sum Query 2D - Immutable
+ * (M) Range Sum Query - Mutable
  */
 public class LC308RangeSumQuery2DMutable {
 // Your NumMatrix object will be instantiated and called as such:

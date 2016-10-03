@@ -140,6 +140,7 @@ public class SimpleAddDeleteBST {
     private static void findAndDelete(Node p, Node cur, Integer delete) {
         if (cur.v == delete) {
             if (cur.left != null) {
+                // todo: bug fix this should be a recursion or loop till replaced by leaf
                 Node pre = cur;
                 Node I = cur.left;
 
@@ -159,6 +160,7 @@ public class SimpleAddDeleteBST {
                 I.v = null;
                 I.left = null;
             } else if (cur.right != null) {
+                // todo: bug fix this should be a recursion or loop till replaced by leaf
                 Node pre = cur;
                 Node I = cur.right;
                 while (I.left != null) {

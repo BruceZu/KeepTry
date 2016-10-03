@@ -35,8 +35,8 @@ import java.util.Arrays;
  *   Company Tags: Facebook
  *   Tags: Sort
  *   Similar Problems
- *      (H) Merge Intervals (M)
- *      Meeting Rooms II
+ *      (H) Merge Intervals
+ *      (M) Meeting Rooms II
  */
 
 public class Leetcode252MeetingRooms {

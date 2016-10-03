@@ -39,15 +39,15 @@ import java.util.Arrays;
  * ==============================================================================
  *     1 given a meeting room, ask the max meeting. meeting with shorter time has high priority.
  *         sort meetings by finish time. 'sorted'
- *         finishTime = sorted[0].finish time
+ *         cur_finishTime = sorted[0].finish time
  *         int meetings =1;
  *         loop 'sorted' from sorted[1]:
- *            if finishTime < i start time (available)
+ *            if cur_finishTime < i start time (available)
  *                  meetings++;
- *                  finishTime = i finish time
+ *                  cur_finishTime = i finish time
  *         return meetings
  *
- *     2 given meetings, ask min meeting room
+ *     2 given meetings, ask min required meeting rooms
  *
  *        sort meetings by start time in a array or list, 'sorted'
  *        heap (PriorityQueue): 'roomsFinishedFirstlyOnHead'
@@ -64,6 +64,7 @@ import java.util.Arrays;
  *        return the number of roomsFinishedFirstlyOnHead.
  *
  * @see <a href ="https://leetcode.com/problems/meeting-rooms-ii/">leetcode</a>
+ * <br><a href ="https://en.wikipedia.org/wiki/Sweep_line_algorithm">  Sweep_line_algorithm</a>
  */
 
 public class Leetcode253MeetingRoomsII {
@@ -92,12 +93,13 @@ public class Leetcode253MeetingRoomsII {
         Arrays.sort(starts);
         Arrays.sort(ends);
         int rooms = 0;
-        int earliestEnded = 0;
+        int cur_earliest_end_index = 0;//index of current earliest ended end time
         for (int i = 0; i < starts.length; i++) {
-            if (starts[i] < ends[earliestEnded])
+            if (starts[i] < ends[cur_earliest_end_index]) {
                 rooms++;
-            else
-                earliestEnded++;
+            } else {
+                cur_earliest_end_index++;
+            }
         }
         return rooms;
     }
