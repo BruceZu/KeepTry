@@ -23,51 +23,58 @@ import java.util.List;
 // Given an integer array of size n, find all elements that appear more than⌊ n/3 ⌋ times.
 // The algorithm should run in linear time and in O(1) space.
 
+/**
+ * <pre>
+ * <br><a href= "https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm">Boyer Moore vote algorithm </a>
+ * <br><a href= "https://gregable.com/2013/10/majority-vote-algorithm-find-majority.html">Boyer Moore vote algorithm </a>
+ */
 public class Leetcode229MajorityElementII {
     public static List<Integer> MajorityElementOf(int[] nums) {
         int numb1 = 0, numb2 = 0;
-        int time1 = 0, time2 = 0;
+        int vote1 = 0, vote2 = 0;
+
         for (int i = 0; i < nums.length; i++) {
-            int n = nums[i];
-            if (time1 == 0) {
-                numb1 = n;
-                time1++;
+            int ni = nums[i];
+
+            if (vote1 == 0) {
+                numb1 = ni;
+                vote1 = 1;
                 continue;
             }
-            if (n == numb1) {
-                time1++;
+            if (ni == numb1) {
+                vote1++;
                 continue;
             }
-            if (time2 == 0) {
-                numb2 = n;
-                time2++;
+            if (vote2 == 0) {
+                numb2 = ni;
+                vote2 = 1;
                 continue;
             }
-            if (n == numb2) {
-                time2++;
+            if (ni == numb2) {
+                vote2++;
                 continue;
             }
-            time1--;
-            time2--;
+            vote1--;
+            vote2--;
         }
 
-        time1 = time2 = 0;
-        for (int j = 0; j < nums.length; j++) {
-            int n = nums[j];
+        // got 2 candidates with bigger counts than others
+        int count1 = 0, count2 = 0;
+        for (int n : nums) {
             if (n == numb1) {
-                time1++;
+                count1++;
                 continue;
             }
             if (n == numb2) {
-                time2++;
+                count2++;
             }
         }
 
         List result = new ArrayList(2);
-        if (time1 > nums.length / 3) {
+        if (count1 > nums.length / 3) {
             result.add(numb1);
         }
-        if (time2 > nums.length / 3) {
+        if (count2 > nums.length / 3) {
             result.add(numb2);
         }
         return result;
