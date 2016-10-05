@@ -91,6 +91,7 @@ public class Leetcode10RegularExpressionMatching {
         }
 
         if (pi + 1 < p.length && p[pi + 1] == '*') {
+
             final int nextPIndex = pi + 2;
             while (si < s.length && (p[pi] == '.' || p[pi] == s[si])) {
                 if (backtracking2(s, si, p, nextPIndex)) {
@@ -100,7 +101,7 @@ public class Leetcode10RegularExpressionMatching {
                 }
             }
             // all possible represent (== relation) is tried
-            return backtracking2(s, si, p, pi + 2); // care
+            return backtracking2(s, si, p, nextPIndex); // care
 
         } else if (p[pi] == '.' || si < s.length && p[pi] == s[si]) {
             return backtracking2(s, si + 1, p, pi + 1);
