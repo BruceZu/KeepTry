@@ -23,6 +23,16 @@
  * how to avoid it
  *
  * Starvation and livelock
+ *  how to avoid starvation:
+ *  if you are using ReentrantLock, create it using parameter fair policy: 'new ReentrantLock(true)'
+ * == Thread vs Process
+ * http://beginnersbook.com/2015/01/what-is-the-difference-between-a-process-and-a-thread-in-java/
+ * https://docs.oracle.com/javase/tutorial/essential/concurrency/procthread.html
+ * {@link process.HookTask }
+ * A thread can communicate with other thread (of the same process) directly by using methods
+ * like wait(), notify(), notifyAll().
+ * A process can communicate with other process by using inter-process communication.
+ *
  * <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html">Thread </a>
  * @see <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/starvelive.html">Starvation and livelock</a>
  */

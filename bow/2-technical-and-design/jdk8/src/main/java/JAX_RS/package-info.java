@@ -11,12 +11,16 @@
  *
  *      Jetty (HTTP)
  *      Jersey (JAX-RS)
+ *
+ *      JAXB - Java Architecture for XML Binding
  *      Jackson (JSON or XML)
+ *      EclipseLink Moxy
+ *
  *      Guava (excellent additions to JDK libraries)
  *      Metrics (real time application monitoring)
  *      Hibernate Validator (input verification)
  *      OAuth (RESTful authentication)
- *
+ * http://stackoverflow.com/questions/36032978/what-is-the-relationship-between-jersey-jaxb-jax-rs-moxy-jackson-eclipselin
  * @see <a href="http://programmers.stackexchange.com/questions/155467/selecting-a-jax-rs-implementation-for-a-new-project">
  * Selecting a JAX-RS implementation for a new project
  * </a>
