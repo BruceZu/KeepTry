@@ -6,7 +6,6 @@ public class CompareStrings {
      * {@link java.lang.String#compareTo(String)}  }
      */
 
-
     /**
      * version like 1.2.3.6
      * version like 1.12.7.11.21

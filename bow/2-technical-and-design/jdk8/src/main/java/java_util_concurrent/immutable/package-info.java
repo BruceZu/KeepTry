@@ -43,4 +43,4 @@
  *
  * @see <a href = "http://stackoverflow.com/questions/5124012/examples-of-immutable-classes"></a>
  */
-package immutable;
+package java_util_concurrent.immutable;

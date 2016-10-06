@@ -113,8 +113,10 @@ public class HookTask {
     }
 
     public static void main(String[] args) {
-        new HookTask(new File(HookTask.class.getResource("hook.sh").getPath()).toPath(),
-                Arrays.asList(new String[]{"valve of the first parameter"}),
-                new File(".")).runHook();
+        HookTask task =
+                new HookTask(new File(HookTask.class.getResource("hook.sh").getPath()).toPath(),
+                        Arrays.asList(new String[]{"valve of the first parameter"}),
+                        new File("."));
+        task.runHook();
     }
 }

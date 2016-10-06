@@ -35,6 +35,11 @@ import java.util.stream.Collectors;
  *  <strong>then returns</strong> its value. Alternatively, you can use a return statement,
  *  A return statement is not an expression; in a lambda expression, you must enclose statements in braces ({}).
  *  However, you do not have to enclose a void method invocation in braces.
+ *  The basic syntax of a lambda is:
+ *      either
+ *           (parameters) -> expression
+ *      or
+ *           (parameters) -> { statements; }
  *
  * Aggregate operations. filter, map, and forEach are aggregate operations.
  * Aggregate operations process elements from a stream, not directly from a collection
