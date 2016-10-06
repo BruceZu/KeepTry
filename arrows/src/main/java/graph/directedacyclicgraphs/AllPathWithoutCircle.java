@@ -42,7 +42,7 @@ public class AllPathWithoutCircle {
             this.outgoings = outgoings;
         }
     }
-
+    /*-------------------------------------------------------------------------------------------------*/
     // note: if there's a circular
     public static Set<String> allPaths(V start, V target) {
         Set<String> r = new HashSet<>();
@@ -58,8 +58,10 @@ public class AllPathWithoutCircle {
         }
 
         if (cur.value.equals(target.value)) {
-            path.append(cur.value);
+            path.append(cur.value); // add this V before add the path to result
+
             r.add(path.toString()); // find a path
+
             path.deleteCharAt(path.length()-1);
             return;
         }
