@@ -56,6 +56,19 @@ class Solution {
     }
 
     /**
+     * <pre>
+     *                                  17
+     *                     /
+     *               11
+     *            /       \
+     *          9         13
+     *        /   \      /       \
+     *       8    10   12        15
+     *                         /    \
+     *                        14    16
+     *
+     * ------8  9 10 11 12 13 14 15 16 17---------------
+     *
      * @return the next smallest number
      */
     public int next() {
