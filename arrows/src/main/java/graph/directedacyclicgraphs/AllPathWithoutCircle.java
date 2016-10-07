@@ -1,5 +1,8 @@
 package graph.directedacyclicgraphs;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,6 +45,7 @@ public class AllPathWithoutCircle {
             this.outgoings = outgoings;
         }
     }
+
     /*-------------------------------------------------------------------------------------------------*/
     // note: if there's a circular
     public static Set<String> allPaths(V start, V target) {
@@ -62,7 +66,7 @@ public class AllPathWithoutCircle {
 
             r.add(path.toString()); // find a path
 
-            path.deleteCharAt(path.length()-1);
+            path.deleteCharAt(path.length() - 1);
             return;
         }
 
@@ -105,7 +109,42 @@ public class AllPathWithoutCircle {
         }
     }
 
+    /**
+     * <pre>
+     * <a href="http://stackoverflow.com/questions/3153337/get-current-working-directory-in-java">current working directory in Java </a>
+     */
     public static void main(String[] args) {
+        try {
+            String current = AllPathWithoutCircle.class.getName();
+            current = current.substring(0, current.lastIndexOf(".", current.length() - 1)).replace(".", "/");
+            String location = AllPathWithoutCircle.class.getProtectionDomain().getCodeSource()
+                    .getLocation().getFile();
+            File f = new File(location + current + "/file.txt");
+            if (f.exists() && f.canRead()) {
+                int lines = 0;
+                BufferedReader br = new BufferedReader(new FileReader(f));
+                while (true) {
+                    String curLine = br.readLine();
+                    if (curLine == null) {
+                        break;
+                    }
+                    lines++;
+                    if (lines == 1) {
+                        String[] fromTo = curLine.split(" ");
+                        System.out.println(String.format("from %s to %s", fromTo[0], fromTo[1]));
+                    } else {
+                        String[] vAndOutgoings = curLine.split(":");
+                        System.out.print("current V is " + vAndOutgoings[0].trim());
+                        String[] outgoings = vAndOutgoings[1].trim().split(" ");
+                        System.out.println(" and its outgoings are: " + Arrays.toString(outgoings));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            //
+        }
+
+        System.out.println("-----");
         test1();
         test2();
     }
