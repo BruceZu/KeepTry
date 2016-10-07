@@ -1,8 +1,11 @@
 package graph.directedacyclicgraphs;
 
+import array.logParse.OnlineParse;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -114,12 +117,9 @@ public class AllPathWithoutCircle {
      * <a href="http://stackoverflow.com/questions/3153337/get-current-working-directory-in-java">current working directory in Java </a>
      */
     public static void main(String[] args) {
+
+        File f = OnlineParse.getLocalFile("file.txt");
         try {
-            String current = AllPathWithoutCircle.class.getName();
-            current = current.substring(0, current.lastIndexOf(".", current.length() - 1)).replace(".", "/");
-            String location = AllPathWithoutCircle.class.getProtectionDomain().getCodeSource()
-                    .getLocation().getFile();
-            File f = new File(location + current + "/file.txt");
             if (f.exists() && f.canRead()) {
                 int lines = 0;
                 BufferedReader br = new BufferedReader(new FileReader(f));
@@ -140,8 +140,8 @@ public class AllPathWithoutCircle {
                     }
                 }
             }
-        } catch (Exception e) {
-            //
+        } catch (IOException e) {
+            System.out.println(e.toString());
         }
 
         System.out.println("-----");

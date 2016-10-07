@@ -2,20 +2,7 @@ package treesimple.bst;
 
 import java.util.Stack;
 
-/**
- * Implement an iterator over a binary search tree (BST).
- * Your iterator will be initialized with the root node of a BST.
- * <pre>
- * The first call to next() will return the smallest number in BST.
- * Calling next() again will return the next smallest number in the BST, and so on.
- *
- * Note: next() and hasNext() should run in average O(1) time and uses O(h) memory,
- * where h is the height of the tree.
- * Try to optimize the additional space complexity apart from the amortized time complexity.
- *
- * @see <a href="https://codelab.interviewbit.com/problems/treeiterator/">codelab</a>
- */
-public class Codelab_BSTIterator {
+public class BSTNextBiggest {
     static class Solution {
 
         private Stack<TreeNode> track;
@@ -25,16 +12,16 @@ public class Codelab_BSTIterator {
             TreeNode node = root;
             while (node != null) { // care
                 track.push(node);
-                node = node.left;
+                node = node.right;
             }
         }
 
-        // whether we have a next smallest number
+        // whether we have a next biggest number
         public boolean hasNext() {
             return !track.isEmpty();
         }
 
-        // the next smallest number
+        //the next biggest number
         public int next() {
 
             if (!hasNext()) {
@@ -44,10 +31,10 @@ public class Codelab_BSTIterator {
             TreeNode node = track.pop();
             int r = node.val;
 
-            node = node.right;
+            node = node.left;
             while (node != null) {
                 track.push(node);
-                node = node.left;
+                node = node.right;
             }
             return r;
         }
@@ -62,5 +49,3 @@ public class Codelab_BSTIterator {
         }
     }
 }
-
-
