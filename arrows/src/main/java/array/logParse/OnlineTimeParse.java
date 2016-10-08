@@ -6,8 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static Common.LinesOf;
-import static Common.getLocalFile;
+import static common_lib.Common.LinesOf;
+import static common_lib.Common.getLocalFile;
 
 public class OnlineTimeParse {
     /**

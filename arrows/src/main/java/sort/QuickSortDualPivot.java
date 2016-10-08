@@ -15,9 +15,9 @@
 
 package sort;
 
-import static Common.greatThan;
-import static Common.lessThan;
-import static Common.swap;
+import static common_lib.Common.greatThan;
+import static common_lib.Common.lessThan;
+import static common_lib.Common.swap;
 import static sort.InsertSort.insertSort;
 
 /**

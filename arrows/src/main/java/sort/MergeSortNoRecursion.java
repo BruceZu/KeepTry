@@ -15,7 +15,7 @@
 
 package sort;
 
-import static Common.mergeInsort;
+import static common_lib.Common.mergeInsort;
 
 public class MergeSortNoRecursion {
 

@@ -18,7 +18,7 @@ package sort;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
-import static Common.mergeInsort;
+import static common_lib.Common.mergeInsort;
 
 public class MergeSortRecursionMultiThreads4 {
     private static class DivideMergeInSortAction extends RecursiveAction {

@@ -17,7 +17,7 @@ package sort;
 
 import java.util.List;
 
-import static Common.mergeInsort;
+import static common_lib.Common.mergeInsort;
 
 /**
  * @see java.util.Arrays#sort(int[])

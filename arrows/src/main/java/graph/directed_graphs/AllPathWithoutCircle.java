@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static Common.LinesOf;
-import static Common.getLocalFile;
+import static common_lib.Common.LinesOf;
+import static common_lib.Common.getLocalFile;
 
 /**
  * <pre>
