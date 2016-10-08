@@ -15,11 +15,11 @@
 
 package sort;
 
-import array.Common;
+import Common;
 
 import java.util.concurrent.CountDownLatch;
 
-import static array.Common.divide;
+import static Common.divide;
 
 public class MergeSortRecursionMultiThreads {
     /**

@@ -15,12 +15,12 @@
 
 package sort;
 
-import array.Common;
+import Common;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
-import static array.Common.divide;
+import static Common.divide;
 
 public class MergeSortRecursionMultiThreads3 {
     /**

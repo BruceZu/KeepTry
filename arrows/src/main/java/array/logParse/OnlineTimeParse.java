@@ -8,24 +8,19 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class OnlineParse {
+import static string.Common.getLocalFile;
+
+public class OnlineTimeParse {
     /**
-     (02/03/2002-14:00:00) :: START
-     (02/03/2002-14:00:00) :: CONNECTED
-     (02/03/2002-14:08:00) :: DISCONNECTED
-     (02/03/2002-14:10:00) :: CONNECTED
-     (02/03/2002-14:15:00) :: SHUTDOWN
+     * (02/03/2002-14:00:00) :: START
+     * (02/03/2002-14:00:00) :: CONNECTED
+     * (02/03/2002-14:08:00) :: DISCONNECTED
+     * (02/03/2002-14:10:00) :: CONNECTED
+     * (02/03/2002-14:15:00) :: SHUTDOWN
      */
-    public static File getLocalFile(String name) {
-        String current = OnlineParse.class.getName();
-        current = current.substring(0, current.lastIndexOf(".", current.length() - 1)).replace(".", "/");
-        String location = OnlineParse.class.getProtectionDomain().getCodeSource()
-                .getLocation().getFile();
-        return new File(location + current + "/" + name);
-    }
 
     public static void main(String[] args) {
-        File f = getLocalFile("log.txt");
+        File f = getLocalFile("log.txt", OnlineTimeParse.class);
         try {
             if (f.exists() && f.canRead()) {
                 BufferedReader br = new BufferedReader(new FileReader(f));

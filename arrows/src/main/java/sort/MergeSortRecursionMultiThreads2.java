@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static array.Common.mergeInsort;
+import static Common.mergeInsort;
 
 public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
     // Runnable is enough, do not need Callable as each thread only work on its elements scope of arr

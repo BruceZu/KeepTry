@@ -13,12 +13,42 @@
 // limitations under the License.
 //
 
-package array;
-
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class Common {
+    /**
+     * <pre>
+     * <a href="http://stackoverflow.com/questions/3153337/get-current-working-directory-in-java">
+     *     current working directory in Java </a>
+     */
+    public static File getLocalFile(String name, Class className) {
+        String current = className.getName();
+        current = current.substring(0, current.lastIndexOf(".", current.length() - 1)).replace(".", "/");
+        String location = className.getProtectionDomain().getCodeSource()
+                .getLocation().getFile();
+        return new File(location + current + "/" + name);
+    }
+
+    // Assume the file exists and readable
+    public static List<String> LinesOf(File f) {
+        List<String> lines = new ArrayList();
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            String curLine;
+            while ((curLine = br.readLine()) != null) {
+                lines.add(curLine);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
 
     public static Integer[] toIntegerArray(int[] ints) {
         if (ints == null) {

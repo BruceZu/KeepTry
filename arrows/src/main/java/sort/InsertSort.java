@@ -15,8 +15,8 @@
 
 package sort;
 
-import static array.Common.swap;
-import static array.Common.lessThan;
+import static Common.swap;
+import static Common.lessThan;
 
 public class InsertSort {
     /**

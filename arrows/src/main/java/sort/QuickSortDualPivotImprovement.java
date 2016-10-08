@@ -15,10 +15,10 @@
 
 package sort;
 
-import static array.Common.greatThan;
-import static array.Common.lessThan;
-import static array.Common.same;
-import static array.Common.swap;
+import static Common.greatThan;
+import static Common.lessThan;
+import static Common.same;
+import static Common.swap;
 import static sort.InsertSort.insertSort;
 
 /**
