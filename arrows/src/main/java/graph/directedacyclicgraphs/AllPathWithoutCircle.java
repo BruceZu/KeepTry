@@ -7,9 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,30 +29,13 @@ import java.util.Set;
  * <a href ="http://discuss.joelonsoftware.com/default.asp?design.4.249152.10">todo: related algorithms</a>
  */
 public class AllPathWithoutCircle {
-    static class V {
-        String value; // assume the value is distinguish. as ID of V.
-        List<V> outgoings = Collections.emptyList(); // neighbors. Default value is empty, as end vertex.
-
-        public V(String v, List<V> outgoings) {
-            this.value = v;
-            this.outgoings = outgoings;
-        }
-
-        public V(String v) {
-            this.value = v;
-        }
-
-        public void setOutgoings(List<V> outgoings) {
-            this.outgoings = outgoings;
-        }
-    }
-
-    /*-------------------------------------------------------------------------------------------------*/
     // note: if there's a circular
     public static Set<String> allPaths(V start, V target) {
         Set<String> r = new HashSet<>();
+
         StringBuilder path = new StringBuilder();
         Set<V> cur_visited = new HashSet<>();
+
         DFSBacktracking(start, target, path, cur_visited, r);
         return r;
     }
