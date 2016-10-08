@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package graph.directedacyclicgraphs;
+package graph.directed_graphs;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,7 +58,7 @@ import java.util.Stack;
  *
  *      vertex v is a neighbor of vertex u, if (u, v) ∈ E, namely, there is an edge from u to v.
  *      it doesn't fail if there's a circular dependency.
- *      Depth-first search takes O(|V | + |E|) time
+ *      Depth-first search takes O(|Vertex | + |E|) time
  *  todo The topological ordering can also be used to quickly compute shortest paths through
  *  a weighted directed acyclic graph.
  *
