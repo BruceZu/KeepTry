@@ -15,16 +15,6 @@
 
 package treesimple.binarytree;
 
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode(int x) {
-        val = x;
-    }
-}
-
 // not find the fast way yet.
 public class Leetcode124BinaryTreeMaximumPathSum {
     // same case is http://www.cnblogs.com/kaituorensheng/p/3555151.html
