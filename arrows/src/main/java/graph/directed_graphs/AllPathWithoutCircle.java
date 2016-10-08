@@ -1,11 +1,6 @@
 package graph.directed_graphs;
 
-import array.logParse.OnlineParse;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static Common.LinesOf;
+import static Common.getLocalFile;
 
 /**
  * <pre>
@@ -99,10 +97,10 @@ public class AllPathWithoutCircle {
          * Given file:
          * ---------
          * A E
-         * A : B C D
-         * B : C
-         * C : E
-         * D : B
+         * A:B C D
+         * B:C
+         * C:E
+         * D:B
          * ---------
          * A________________ C __ E
          * |_________|B
@@ -110,7 +108,7 @@ public class AllPathWithoutCircle {
          *
          */
 
-        File f = OnlineParse.getLocalFile("file.txt", AllPathWithoutCircle.class);
+        File f = getLocalFile("file.txt", AllPathWithoutCircle.class);
         if (!(f.exists() && f.canRead())) {
             //
         }
@@ -147,6 +145,7 @@ public class AllPathWithoutCircle {
         allv.put(toName, to);
 
         for (int i = 1; i < ls.length; i++) {
+            curLine = ls[i];
             String[] vAndOutgoings = curLine.split(":");
             // current vertex
             String vName = vAndOutgoings[0].trim();
@@ -169,19 +168,5 @@ public class AllPathWithoutCircle {
             v.setOutgoings(outs);
         }
         return new Vertex[]{from, to};
-    }
-
-    // Assume the file exists and readable
-    private static List<String> LinesOf(File f) {
-        List<String> lines = new ArrayList();
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-            String curLine;
-            while ((curLine = br.readLine()) != null) {
-                lines.add(curLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lines;
     }
 }
