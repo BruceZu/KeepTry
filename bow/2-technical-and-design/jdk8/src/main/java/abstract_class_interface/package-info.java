@@ -28,7 +28,7 @@
  *        Methods:
  *          defined methods                         Y
  *          constructor                             Y
- *          main()                                  Y
+ *          main()                                  Y                Y
  *
  *        Method Visibility:
  *          static                                  Y                 Y && need method boday
@@ -62,6 +62,7 @@
  *
  *                            same or less restrictive visibility      the exact same visibility (public).
  *       static block                               Y                  N
+ *       static inner class                         Y                  Y
  *
  *   =======
  *   3 :
