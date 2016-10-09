@@ -72,6 +72,14 @@ public class Common {
         arr[j] = tmp;
     }
 
+    public static void swap(int[] arr, int i, int j) {
+        if (arr[i] != arr[j]) {
+            int tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+    }
+
     //   a < b
     public static boolean lessThan(Comparable a, Comparable b) {
         return a.compareTo(b) < 0;

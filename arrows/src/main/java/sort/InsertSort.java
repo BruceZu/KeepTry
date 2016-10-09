@@ -15,8 +15,8 @@
 
 package sort;
 
-import static common_lib.Common.swap;
 import static common_lib.Common.lessThan;
+import static common_lib.Common.swap;
 
 public class InsertSort {
     /**
@@ -42,6 +42,23 @@ public class InsertSort {
             iv = arr[i];
             curIndex = i;
             while (left < curIndex && lessThan(iv, arr[curIndex - 1])) {
+                swap(arr, curIndex, curIndex - 1);
+                curIndex--;
+            }
+        }
+    }
+
+    public static void insertSort(int[] arr, int left, int right) {
+        // Input check
+        if (arr == null || arr.length <= 1 || right == left) {
+            return;
+        }
+        int iv;
+        int curIndex;
+        for (int i = left + 1; i <= right; i++) {
+            iv = arr[i];
+            curIndex = i;
+            while (left < curIndex && iv < arr[curIndex - 1]) {
                 swap(arr, curIndex, curIndex - 1);
                 curIndex--;
             }

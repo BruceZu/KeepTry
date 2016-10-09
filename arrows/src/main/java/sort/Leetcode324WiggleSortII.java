@@ -2,6 +2,8 @@ package sort;
 
 import java.util.Arrays;
 
+import static common_lib.Common.swap;
+
 /**
  * <pre>
  * Note:
@@ -88,14 +90,5 @@ public class Leetcode324WiggleSortII {
     // Get the true iterator order of index in loop of wiggleSortPartitionedArray()
     public static int indexOf(int index, int[] arr) {
         return (index * 2 + 1) % (arr.length | 1);
-    }
-
-    /*-------------------------------common method---------------------------------------------------*/
-    public static void swap(int[] arr, int i, int j) {
-        if (arr[i] != arr[j]) {
-            int tmp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = tmp;
-        }
     }
 }
