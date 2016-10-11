@@ -39,27 +39,20 @@ public class QuickSelect {
     // those less or equal to its value are moved to its left.
     private static int[] partition(int[] arr, int left, int right, int pivotIndex) {
         int pv = arr[pivotIndex];
-
-        swap(arr, pivotIndex, right); // Move pivot to end
-
-        int allocateTo = left;
-        for (int i = left; i <= right - 1; i++) {
-            if (arr[i] < pv) { // less than pivot value
-                swap(arr, i, allocateTo++);
+        // 3-ways partition
+        int swapNextSmallTo = 0;
+        int swapNextBigTo = arr.length - 1;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < pv) {
+                swap(arr, i++, swapNextSmallTo++);
+            } else if (arr[i] == pv) {
+                i++;
+            } else {
+                swap(arr, i, swapNextBigTo--);
             }
         }
 
-        int leftPivotIndex = -1;
-        for (int i = left; i <= right - 1; i++) {
-            if (arr[i] == pv) { // equal to pivot value
-                if (leftPivotIndex == -1) {
-                    leftPivotIndex = allocateTo;
-                }
-                swap(arr, i, allocateTo++);
-            }
-        }
-        swap(arr, right, allocateTo); // Move pivot to its final place
-        return new int[]{leftPivotIndex == -1 ? allocateTo : leftPivotIndex, allocateTo};
+        return new int[]{swapNextSmallTo, swapNextBigTo};
     }
 
     // Returns the index of the n-th smallest element of list within left..right inclusive
