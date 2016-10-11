@@ -136,6 +136,7 @@ public class SimpleAddDeleteBST {
      *            replace the leftest child with its right sub tree(may be null)
      *            replace the 'delete'.v with that of the leftest child.
      *      does not find the 'delete' after recursion all the tree. do nothing.
+     *  todo: relation with balanced tree
      */
     private static void findAndDelete(Node p, Node cur, Integer delete) {
         if (cur.v == delete) {

@@ -1,5 +1,7 @@
 /**
  * JAX-RS: Java API for RESTful Web Services (JAX-RS)
+ * TODO: RESTful error code:
+ *
  * <pre>
  * It is a Java programming language API spec
  * that provides support in creating web services according to the

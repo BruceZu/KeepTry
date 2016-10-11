@@ -36,6 +36,7 @@ public class StartNodeOfCircleInList {
      *                    n      n
      *                    \     /
      *   h - n - n - n ... s - n
+     *   <a href="https://en.wikipedia.org/wiki/Cycle_detection">Floyd's cycle detection algorithm</a>
      */
     public static Node startPoint(Node head) {
         Node oneStep = head;

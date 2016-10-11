@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package jvm;
+package JVM;
 
 import java_util_concurrent.VolatileTest;
 
