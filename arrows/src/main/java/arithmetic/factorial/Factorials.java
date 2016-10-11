@@ -17,13 +17,12 @@ package arithmetic.factorial;
 
 /**
  * <pre>
- * Idea A: doing only half of the multiplication
+ * Idea A: doing only half of the multiplication.
+ * todo:  add is quicker than multiplication?
  * 8! = 1 * 2 * 3 * 4 * 5 * 6 * 7 * 8
- * 8! = (1 * 8) * (2 * 7) * (3 * 6) * (4 * 5)
- * 8! = 8 * (8 + 6 = 14) * (14 + 4 = 18) * (18 + 2 = 20)
- *
- * 9! = 9 * (9 + 7 = 16) * (16 + 5 = 21) * (21 + 3 = 24) * (roundUp(9/2) = 5)
- * or
+ * 8! = (1 * 8) * (2 * 7) * (3 * 6)  * (4 * 5)
+ * 8! = (0 + 8) * (8 + 6) * (14 + 4) * (18 + 2)
+ *                 14        18         20
  * 9! = 8! * 9
  *
  * Idea B: doing factorials with a fourth of the multiplication.
@@ -43,4 +42,34 @@ package arithmetic.factorial;
  * @see <a href="http://re-factor.blogspot.com/2013/11/fast-factorial.html"> other </a>
  */
 public class Factorials {
+
+    public static Long factorialsOf(long i) {
+        if (i <= 0) {
+            return null;
+        }
+        if (i == 1) {
+            return 1l;
+        }
+        long r = 1l;
+        if ((i & 1) == 1) {
+            r *= i;
+            i--;
+        }
+
+        long left = 0, right = i;
+        while (right > 0) { // care
+            r *= (left + right);
+            long nextL = left + right; // care
+            long nextR = right - 2; // care
+            left = nextL;
+            right = nextR;
+        }
+        return r;
+    }
+
+    public static long recursion(long i) {
+        if (i == 1) {
+            return 1;
+        } else return i * recursion(i - 1);
+    }
 }
