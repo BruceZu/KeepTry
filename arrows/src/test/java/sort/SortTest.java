@@ -53,14 +53,7 @@ public class SortTest {
     private Comparable[] sorted;
 
     private Comparable[] clone(Comparable[] arr) {
-        if (arr == null) {
-            return null;
-        }
-        Comparable[] r = new Comparable[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            r[i] = arr[i];
-        }
-        return r;
+        return arr == null ? null : Arrays.copyOf(arr, arr.length);
     }
 
     public SortTest(Comparable[] arr, Comparable[] sorted) {

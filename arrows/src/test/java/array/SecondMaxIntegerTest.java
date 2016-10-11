@@ -21,7 +21,7 @@ import org.junit.Test;
 import static array.SecondMaxInteger.secondMax;
 
 public class SecondMaxIntegerTest {
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 20l, expected = Test.None.class)
     public void testSecondMax() {
         Assert.assertEquals(-1, secondMax(null));
         Assert.assertEquals(-1, secondMax(new int[]{}));
