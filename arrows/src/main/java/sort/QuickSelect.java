@@ -40,9 +40,10 @@ public class QuickSelect {
     private static int[] partition(int[] arr, int left, int right, int pivotIndex) {
         int pv = arr[pivotIndex];
         // 3-ways partition
-        int swapNextSmallTo = 0;
-        int swapNextBigTo = arr.length - 1;
-        for (int i = 0; i < arr.length; i++) {
+        int swapNextSmallTo = left;
+        int swapNextBigTo = right;
+        int i = left;
+        while (i <= swapNextBigTo) {
             if (arr[i] < pv) {
                 swap(arr, i++, swapNextSmallTo++);
             } else if (arr[i] == pv) {
@@ -51,7 +52,6 @@ public class QuickSelect {
                 swap(arr, i, swapNextBigTo--);
             }
         }
-
         return new int[]{swapNextSmallTo, swapNextBigTo};
     }
 
