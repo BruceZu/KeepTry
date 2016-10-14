@@ -15,4 +15,5 @@ public class KthMostFrequentNumber4 {
         System.out.println(Arrays.toString(ntimes));
         return kth <= ntimes.length ? ntimes[ntimes.length - kth].v : null;
     }
+    // Todo: http://www.capacode.com/string/k-most-frequent-items-with-linear-time-solution/
 }
