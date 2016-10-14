@@ -58,6 +58,7 @@ import java.util.Stack;
  *
  *      vertex v is a neighbor of vertex u, if (u, v) ∈ E, namely, there is an edge from u to v.
  *      it doesn't fail if there's a circular dependency.
+ *      <strong> But if it has circle the TopologicalSort will has no meaning</strong>
  *      Depth-first search takes O(|Vertex | + |E|) time
  *  todo The topological ordering can also be used to quickly compute shortest paths through
  *  a weighted directed acyclic graph.
@@ -69,28 +70,26 @@ import java.util.Stack;
 public class TopologicalSort {
     //as do not care edge weight, make the data structure simple.
     class V {
-        Set<V> incomings;
         Set<V> outgoings; // neighbors
     }
 
-    public Stack<V> toposortDFS(Set<V> graph) {
-        Stack<V> r = new Stack<>();
+    public static Stack<V> toposortDFS(Set<V> graph) {
+        Stack<V> r = new Stack();
         Set<V> visited = new HashSet<>();
+
         for (V v : graph) {
-            if (!visited.contains(v)) {
-                toposortDFS(v, r, visited);
-            }
+            toposortDFS(v, r, visited);
         }
         return r;
     }
 
-    private void toposortDFS(V vertex, Stack<V> r, Set<V> visited) {
-        visited.add(vertex);
-        for (V out : vertex.outgoings) {
-            if (!visited.contains(out)) {
+    private static void toposortDFS(V vertex, Stack<V> r, Set<V> visited) {
+        if (!visited.contains(vertex)) {
+            visited.add(vertex);
+            for (V out : vertex.outgoings) {
                 toposortDFS(out, r, visited);
             }
+            r.push(vertex); // care
         }
-        r.push(vertex);
     }
 }
