@@ -17,12 +17,13 @@ public class Leetcode324WiggleSortII2 {
     public static void wiggleSort(int[] nums) {
         /**
          * <pre>
-         *  For even length array. use left median with smaller ones at its left, this is to keep consistent with
-         *  wiggleSortPartitionedArray(). both of them can use right median together.
+         *  For even length array. use left median with smaller ones at its left.
+         *  This is to keep consistent with wiggleSortPartitionedArray().
+         *  both of them can use right median together.
          */
-        int medianIndex = nums.length - 1 >> 1;
+        int leftMedianIndex = nums.length - 1 >> 1;
         // 1
-        introSelectKth(nums, 0, nums.length - 1, medianIndex);
+        introSelectKth(nums, 0, nums.length - 1, leftMedianIndex);
         // 2
         wiggleSortPartitionedArray(nums);
     }
