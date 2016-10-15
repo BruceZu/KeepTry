@@ -25,7 +25,7 @@ public class Leetcode269AlienDictionary3 {
     /**
      * @param words
      * @param outs  empty map from v to its outgoings
-     * @param inNum empty map from v to its incoming num
+     * @param inNum empty map from v to its incoming number
      */
     public static void buildGraph(String[] words,
                                   Map<Character, Set<Character>> outs,
@@ -37,21 +37,23 @@ public class Leetcode269AlienDictionary3 {
             }
         }
         // find edges and update incomes num for vertex
-        for (int wi = 0; wi < words.length - 1; wi++) {
+        for (int wi = 1; wi < words.length; wi++) {
+            String pre = words[wi - 1];
             String cur = words[wi];
-            String next = words[wi + 1];
-            int length = Math.min(cur.length(), next.length());
+
+            int length = Math.min(pre.length(), cur.length());
             boolean notFoundEdge = true;
+
             for (int ci = 0; ci < length; ci++) {
 
-                char curChar = cur.charAt(ci);
-                char nextChar = next.charAt(ci);
+                char curChar = pre.charAt(ci);
+                char nextChar = cur.charAt(ci);
 
                 if (curChar != nextChar) {
                     notFoundEdge = false;
 
                     if (!outs.get(curChar).contains(nextChar)) {
-                        // it has have default value 0;
+                        // it has had the default value 0;
                         inNum.put(nextChar, inNum.get(nextChar) + 1);
                     }
 
@@ -60,7 +62,7 @@ public class Leetcode269AlienDictionary3 {
                     break;
                 }
             }
-            if (notFoundEdge && length < cur.length()) {
+            if (notFoundEdge && length < pre.length()) {
                 throw new InputMismatchException("avoid \"lexicographically\" order");
             }
         }
@@ -68,7 +70,9 @@ public class Leetcode269AlienDictionary3 {
 
     /**
      * Upside: It can check if there is circle. Do not require checking circle before call it
-     * Downside: At first it need provided all vertexes without incoming edges of the graph
+     * Downside:
+     * 1 At first it need provided all vertexes without incoming edges of the graph
+     * 2 It need keep incomings or incoming number
      */
     public static String KahnAlgorithmTopologicalSorting(
             Map<Character, Set<Character>> outs,
@@ -97,5 +101,93 @@ public class Leetcode269AlienDictionary3 {
         }
 
         return result.toString();
+    }
+    /*------------------------------------------------------------------------------------------------------*/
+    public static void main(String[] args) {
+        System.out.println(alienOrder(new String[]{
+                "wrt",
+                "wrf",
+                "er",
+                "ett",
+                "rftt"}));
+        // "wertf"
+
+        System.out.println(alienOrder(new String[]{
+                "wrtkj",
+                "wrt"}));
+        // ""
+        // not lexicographically
+        System.out.println(alienOrder(new String[]{
+                "z",
+                "z"}));
+        // "z"
+        System.out.println(alienOrder(new String[]{
+                "a",
+                "b",
+                "a"}));
+        // ""
+        // circle
+        System.out.println(alienOrder(new String[]{
+                "a",
+                "b",
+                "ca",
+                "cc"}));
+        // "abc"
+        System.out.println(alienOrder(new String[]{
+                "ze",
+                "yf",
+                "xd",
+                "wd",
+                "vd",
+                "ua",
+                "tt",
+                "sz",
+                "rd",
+                "qd",
+                "pz",
+                "op",
+                "nw",
+                "mt",
+                "ln",
+                "ko",
+                "jm",
+                "il",
+                "ho",
+                "gk",
+                "fa",
+                "ed",
+                "dg",
+                "ct",
+                "bb",
+                "ba"}));
+
+        // "z y x w v u t s r q p o n m  l k j i h g f e d c b a "
+        // the second column: only the b->a of the last 2 words is valid.
+
+        System.out.println(alienOrder(new String[]{
+                "dvpzu",
+                "bq",
+                "lwp",
+                "akiljwjdu",
+                "vnkauhh",
+                "ogjgdsfk",
+                "tnkmxnj",
+                "uvwa",
+                "zfe",
+                "dvgghw",
+                "yeyruhev",
+                "xymbbvo",
+                "m",
+                "n"}));
+        // ""
+        // the fist column has circle and
+        // this circle this is not in-came vertex, there is only outgoing vertexes
+        // if this any one other single vertex the graph will be think of this is NOT circle.
+
+        System.out.println(alienOrder(new String[]{
+                "zy",
+                "zx"}));
+        // yxz or zyx
+        // z should be kept
     }
 }

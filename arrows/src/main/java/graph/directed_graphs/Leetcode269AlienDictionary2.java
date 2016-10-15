@@ -4,9 +4,8 @@ import java.util.*;
 
 public class Leetcode269AlienDictionary2 {
     static class V implements Comparable {
-        char i; // assume it can be used as ID
-
-        Set<V> outs = new HashSet();
+        char i; // Assume it can be used as ID
+        Set<V> outs;
 
         @Override
         public int compareTo(Object o) {
@@ -15,11 +14,7 @@ public class Leetcode269AlienDictionary2 {
 
         public V(Character i) {
             this.i = i;
-        }
-
-        public V addOutGoingNeighbor(V neighbor) {
-            outs.add(neighbor);
-            return this;
+            outs = new HashSet(); // Default value
         }
     }
 
@@ -30,53 +25,50 @@ public class Leetcode269AlienDictionary2 {
      *              If the 'words' is not in "lexicographically" order throw Exception
      * @return graph, 1 may has one or more single vertex
      *                2 may have circle
+     *
+     *  O(sum of all words' length)
      */
     public static Collection<V> buildGraph(String[] words) {
         if (words == null || words.length == 0) {
             return Collections.emptySet();
         }
-
-        int maxLength = words[0].length();
-        for (int i = 1; i < words.length; i++) { // o(N)
-            maxLength = Math.max(maxLength, words[i].length());
-        }
-
-        int curPosition = 0;
         Map<Character, V> graph = new HashMap(26);
-        while (curPosition < maxLength) { //O(N*maxLength)
-            Character preChar = null;
-
-            for (int i = 0; i < words.length; i++) {
-                String curStr = words[i];
-                // cur char: no
-                Character curChar = null; // default
-                if (curPosition < curStr.length()) {
-                    // cur char: have
-                    curChar = curStr.charAt(curPosition);
-                    // created Vertex here may become a single Vertex in graph.
-                    // single vertex should be kept in graph of this question.
-                    if (!graph.containsKey(curChar)) {
-                        graph.put(curChar, new V(curChar));
-                    }
-
-                    if (preChar != null && preChar != curChar
-                            && (curPosition == 0 || words[i - 1].substring(0, curPosition).equals(curStr.substring(0, curPosition)))) {
-                        graph.get(preChar).addOutGoingNeighbor(graph.get(curChar));
-                    }
-                } else {// current position out of current word:  curChar = null; // default
-                    if (i > 0) {
-                        String preStr = words[i - 1];
-                        //if it is invalid "lexicographically" order
-                        if (curStr.length() < preStr.length() && preStr.startsWith(curStr)) {
-                            throw new InputMismatchException("avoid \"lexicographically\" order");
-                        }
-                    }
-                }
-                preChar = curChar; // care
-            }
-            curPosition++;
+        String first = words[0];
+        for (int ci = 0; ci < first.length(); ci++) {
+            // created Vertex here may become a single Vertex in graph.
+            // single vertex should be kept in graph of this question.
+            char curc = first.charAt(ci);
+            graph.put(curc, new V(curc));
         }
 
+        for (int wi = 1; wi < words.length; wi++) {
+            String prew = words[wi - 1];
+            String curw = words[wi];
+            // step 1 valid input
+            if (curw.length() < prew.length() && prew.startsWith(curw)) {
+                throw new InputMismatchException("Avoid \"lexicographically\" order");
+            }
+
+            // step 2 keep new vertex
+            for (int ci = 0; ci < curw.length(); ci++) {
+                char curc = curw.charAt(ci);
+                if (!graph.containsKey(curc)) {
+                    graph.put(curc, new V(curc));
+                }
+            }
+            // step 3 find edge
+            int length = Math.min(curw.length(), prew.length());
+            for (int ci = 0; ci < length; ci++) {
+                char prec = prew.charAt(ci);
+                char curc = curw.charAt(ci);
+
+                if (curc != prec) {
+                    graph.get(prec).outs.add(graph.get(curc));
+                    break; // care
+                }
+
+            }
+        }
         return graph.values();
     }
 
@@ -99,8 +91,9 @@ public class Leetcode269AlienDictionary2 {
      * Assume graph
      * 1 may have single vertexes
      * 2 may have circle
-     *
+     * <p>
      * Checking from each vertex using path shadow
+     *
      * @param vertexes
      * @return false if the graph has circle.
      */
@@ -118,7 +111,7 @@ public class Leetcode269AlienDictionary2 {
      * ------------------------------------------------------------------------------------------
      * It can start from any vertex.
      *
-     * @param vertexes  Assume the graph has no circle
+     * @param vertexes Assume the graph has no circle
      * @return topological sorted vertexes in String.
      */
     public static String topologicalSort(Collection<V> vertexes) {
@@ -171,6 +164,7 @@ public class Leetcode269AlienDictionary2 {
                 "ett",
                 "rftt"}));
         // "wertf"
+
 
         System.out.println(alienOrder(new String[]{
                 "wrtkj",

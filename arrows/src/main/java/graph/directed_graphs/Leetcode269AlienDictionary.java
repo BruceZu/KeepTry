@@ -15,7 +15,7 @@
 
 package graph.directed_graphs;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Difficulty: Hard
@@ -40,7 +40,7 @@ import java.util.Arrays;
  * Note:
  *      You may assume all letters are in lowercase.
  *      If the order is invalid, return an empty string.  --> circle, or may not be not in lexicographically sorted order
- *      here may be multiple valid order of letters, return any one of them is fine. --> more 'next' 
+ *      here may be multiple valid order of letters, return any one of them is fine. --> more 'next'
  *
  * Hide Company Tags: Google Airbnb Facebook Twitter Snapchat Pocket Gems
  * Hide Tags: Graph, Topological Sort
@@ -48,78 +48,53 @@ import java.util.Arrays;
  */
 public class Leetcode269AlienDictionary {
 
-    // beat 96.4% this is not the fast one
     /**
-     * The key to this problem is:
-     * <pre>
-     * A topological ordering is possible if and only if the graph has no directed cycles
-     * Let's build a graph and perform a DFS. The following states made things easier.
+     * Use boolean[from][to] edge and  int[] status present graph
      *
-     * visited[i] = -1. Not even exist.
-     * visited[i] = 0. Exist. Non-visited.
-     * visited[i] = 1. Visiting.
-     * visited[i] = 2. Visited.
-     * Similarly, there is another simple BFS version.
-     * This problem is very basic. There are only two steps:
-     *
-     * step 1  Build Graph
-     *
-     * Init indegree[26] for 26ber of links pointing to w[i], adj[26] for neighbors of w[i].
-     * For each first seeing character w[i] with indegree initially-1, mark it as indegree = 0.
-     * For each adjacent words w1 and w2, if w1[i] != w2[i], insert w1[i] -> w2[i] into graph.
-     * Increase indegree[w2[i]] by 1.
-     *
-     * step 2 Topological Sort
-     *
-     * Start from queue filled with indegree = 0 characters (lexicographically earliest).
-     * poll queue, append these 0 indegree guys, and reduce indegree of their neighbors by 1.
-     * If neighbors reduced to indegree = 0, add them back to queue.
-     * Peel level by level until queue is empty.
+     * @param words
+     * @param edge   [from][to]
+     * @param status
      */
-    public String alienOrder(String[] words) {
-        boolean[][] adj = new boolean[26][26];
-        int[] visited = new int[26];
-        buildGraph(words, adj, visited);
+    public static void buildGraph(String[] words, boolean[][] edge, int[] status) {
+        // default init value -1, not even existed in words
+        Arrays.fill(status, -1);
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 26; i++) {
-            if (visited[i] == 0) {                 // unvisited
-                if (!dfs(adj, visited, sb, i)) return "";
-            }
-        }
-        return sb.reverse().toString();
-    }
 
-    public boolean dfs(boolean[][] adj, int[] visited, StringBuilder sb, int i) {
-        visited[i] = 1;                            // 1 = visiting
-        for (int j = 0; j < 26; j++) {
-            if (adj[i][j]) {                        // connected
-                if (visited[j] == 1) return false;  // 1 => 1, cycle
-                if (visited[j] == 0) {              // 0 = unvisited
-                    if (!dfs(adj, visited, sb, j)) return false;
-                }
-            }
-        }
-        visited[i] = 2;                           // 2 = visited
-        sb.append((char) (i + 'a'));
-        return true;
-    }
-
-    public void buildGraph(String[] words, boolean[][] adj, int[] visited) {
-        Arrays.fill(visited, -1);                 // -1 = not even existed
         for (int i = 0; i < words.length; i++) {
-            for (char c : words[i].toCharArray()) visited[c - 'a'] = 0;
+            // step 1 keep all vertex
+            for (char c : words[i].toCharArray()) {
+                // exist in the words
+                status[c - 'a'] = 0;
+            }
             if (i > 0) {
-                String w1 = words[i - 1], w2 = words[i];
-                int len = Math.min(w1.length(), w2.length());
+                String pre = words[i - 1], cur = words[i];
+                // step 2  valid input
+                if (cur.length() < pre.length() && pre.startsWith(cur)) {
+                    throw new InputMismatchException("Avoid \"lexicographically\" order");
+                }
+                // step 3  try to find a edge
+                int len = Math.min(pre.length(), cur.length());
                 for (int j = 0; j < len; j++) {
-                    char c1 = w1.charAt(j), c2 = w2.charAt(j);
-                    if (c1 != c2) {
-                        adj[c1 - 'a'][c2 - 'a'] = true;
+                    char prec = pre.charAt(j), curc = cur.charAt(j);
+                    if (prec != curc) {
+                        edge[prec - 'a'][curc - 'a'] = true;
                         break;
                     }
                 }
             }
         }
+    }
+
+    public static String alienOrder(String[] words) {
+        boolean[][] edges = new boolean[26][26];
+        int[] status = new int[26];
+        try {
+            buildGraph(words, edges, status);
+        } catch (InputMismatchException e) {
+            return "";
+        }
+
+        //todo topological sort
+        return "";
     }
 }
