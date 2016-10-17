@@ -35,27 +35,27 @@ public class Leetcode124BinaryTreeMaximumPathSum {
     // 4 root
     // 5 left + root
     // 6 right + root
-    private static int dfs(TreeNode root) {
+    private static int dfs(TreeNode<Integer> root) {
         if (root.left == null && root.right == null) {
-            return root.val;
+            return root.v;
         }
         if (root.left == null && root.right != null) {
             int rPathMax = dfs(root.right);
             max = rPathMax > max ? rPathMax : max;
-            return Math.max(root.val, rPathMax + root.val);
+            return Math.max(root.v, rPathMax + root.v);
         }
         if (root.right == null && root.left != null) {
             int lPathMax = dfs(root.left);
             max = lPathMax > max ? lPathMax : max;
-            return Math.max(root.val, lPathMax + root.val);
+            return Math.max(root.v, lPathMax + root.v);
         }
         int lPathMax = dfs(root.left);
         int rPathMax = dfs(root.right);
-        int closePathMax = lPathMax + rPathMax + root.val;
+        int closePathMax = lPathMax + rPathMax + root.v;
 
         int innerMax = Math.max(closePathMax, Math.max(lPathMax, rPathMax));
         max = innerMax > max ? innerMax : max;
-        return Math.max(root.val, Math.max(lPathMax + root.val, rPathMax + root.val));
+        return Math.max(root.v, Math.max(lPathMax + root.v, rPathMax + root.v));
     }
 
     public static int maxPathSum2(TreeNode root) {
@@ -63,7 +63,7 @@ public class Leetcode124BinaryTreeMaximumPathSum {
         return max;
     }
 
-    private static int dfs2(TreeNode root) {
+    private static int dfs2(TreeNode<Integer> root) {
         if (root == null) {
             return 0;
             // thus without many 'if else' branches
@@ -75,8 +75,8 @@ public class Leetcode124BinaryTreeMaximumPathSum {
         }
         int lpMax = dfs2(root.left);
         int rpMax = dfs2(root.right);
-        if (lpMax + rpMax + root.val > max) {
-            max = lpMax + rpMax + root.val;
+        if (lpMax + rpMax + root.v > max) {
+            max = lpMax + rpMax + root.v;
         }
 
         // replace max with 0 when the max is negative.
@@ -84,6 +84,6 @@ public class Leetcode124BinaryTreeMaximumPathSum {
         // care about single nodes.
         // 1> As a result there only 3 lines left.
         // 2> It does not affect the result value.
-        return Math.max(0, root.val + Math.max(lpMax, rpMax));
+        return Math.max(0, root.v + Math.max(lpMax, rpMax));
     }
 }

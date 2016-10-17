@@ -18,12 +18,12 @@ package treesimple.binarytree;
 // recursively
 public class Leetcode101SymmetricTree3 {
     public boolean isSymmetric(TreeNode root) {
-        return this.isMirror(root, root);
+        return isMirror(root, root);
     }
 
     private boolean isMirror(TreeNode l, TreeNode r) {
-        while (l != null && r != null) {
-            if (l.val != r.val || !this.isMirror(l.left, r.right)) {
+        while (l != null && r != null) {// both are not null
+            if (!l.v.equals(r.v) || !isMirror(l.left, r.right)) {
                 return false;
             }
             l = l.right;

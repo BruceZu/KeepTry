@@ -54,9 +54,9 @@ public class Leetcode250CountUnivalueSubtrees {
             return true; // what is the "same value"? same as left or null
         }
         boolean match = n.left == null && n.right == null // leaf
-                || n.left != null && n.right != null && n.left.val == n.val && n.right.val == n.val //
-                || n.left != null && n.right == null && n.left.val == n.val //
-                || n.left == null && n.right != null && n.right.val == n.val; //
+                || n.left != null && n.right != null && n.left.v == n.v && n.right.v == n.v //
+                || n.left != null && n.right == null && n.left.v == n.v //
+                || n.left == null && n.right != null && n.right.v == n.v; //
         // same as  (n.left == null || n.left.val == n.val) && (n.right == null || n.right.val == n.val);
         if (postRecursion(n.left, r) && postRecursion(n.right, r) && match) {
             r[0]++;
