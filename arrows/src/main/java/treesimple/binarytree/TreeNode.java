@@ -3,6 +3,33 @@ package treesimple.binarytree;
 import static java.lang.Math.max;
 
 public class TreeNode<E> {
+
+    private static int size(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return 1 + size(root.left) + size(root.right);
+    }
+
+    private static boolean isLeaf(TreeNode n) {
+        return n.left == null && n.right == null;
+    }
+
+    private static int height(TreeNode n) {
+        if (n == null || isLeaf(n)) {
+            return 0;
+        }
+        int subTreeHeight_l = 0;
+        if (n.left != null) {
+            subTreeHeight_l = height(n.left);
+        }
+        int subTreeHeight_r = 0;
+        if (n.right != null) {
+            subTreeHeight_r = height(n.right);
+        }
+        return max(subTreeHeight_l, subTreeHeight_r) + 1;
+    }
+
     private static void allocate(TreeNode<Object> n /* start from root */,
                                  TreeNode<Object> parent,
                                  Object[][] out,
@@ -37,40 +64,6 @@ public class TreeNode<E> {
         }
     }
 
-    private static int size(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        return 1 + size(root.left) + size(root.right);
-    }
-
-    private static boolean isLeaf(TreeNode n) {
-        return n.left == null && n.right == null;
-    }
-
-    private static int height(TreeNode n) {
-        if (n == null || isLeaf(n)) {
-            return 0;
-        }
-        int subTreeHeight_l = 0;
-        if (n.left != null) {
-            subTreeHeight_l = height(n.left);
-        }
-        int subTreeHeight_r = 0;
-        if (n.right != null) {
-            subTreeHeight_r = height(n.right);
-        }
-        return max(subTreeHeight_l, subTreeHeight_r) + 1;
-    }
-
-    E v;
-    TreeNode left;
-    TreeNode right;
-
-    public TreeNode(E x) {
-        v = x;
-    }
-
     public static void drawingInOrder(TreeNode root) {
         if (root == null) {
             System.out.println("tree is null");
@@ -94,5 +87,13 @@ public class TreeNode<E> {
             }
             System.out.println(" ");
         }
+    }
+
+    E v;
+    TreeNode left;
+    TreeNode right;
+
+    public TreeNode(E x) {
+        v = x;
     }
 }
