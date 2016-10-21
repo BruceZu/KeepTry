@@ -55,7 +55,7 @@ public class BSTNextBiggest {
             }
 
             TreeNode parentAlongLeft = null;
-            while (true) {
+            while (true) { // Assume the give node is sure exists in the given BST
                 if (given.val == root.val) {
                     return parentAlongLeft;
                 }
