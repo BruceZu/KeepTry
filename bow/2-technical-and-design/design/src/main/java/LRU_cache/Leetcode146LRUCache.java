@@ -1,93 +1,127 @@
 package LRU_cache;
 
 import java.util.HashMap;
-import java.util.InputMismatchException;
+
+
+/**
+ * Design and implement a data structure for Least Recently Used (LRU) cache.
+ * It should support the following operations: get and set.
+ * <a href="https://leetcode.com/problems/lru-cache/">leetcode</a>
+ */
+
 //with HashMap and DoubleLinkedList
 
-public class Leetcode146LRUCache {
-    class LRUCache {
-        private class Node {
-            Node prev;
-            Node next;
-            Integer key;
-            Integer value;
+class LRUCache {
 
-            private Node() { // used only for sentinel nodes head and tail
+    private class Node {
+        Node prev;
+        Node next;
+        Integer key;
+        Integer value;
 
-            }
+        private Node() { // used only for sentinel nodes head and tail
 
-            public Node(int key, int value) { // make sure the input does not have null key and value, the null be used as
-                // 'not found' in map
-                this.key = key;
-                this.value = value;
-                this.prev = null;
-                this.next = null;
-            }
         }
 
-        private void rm_oldest_from_list_map() {
-            map.remove(old_left.next.key);
-
-            old_left.next = old_left.next.next;
-            old_left.next.prev = old_left;
+        public Node(int key, int value) { // make sure the input does not have null key and value, the null be used as
+            // 'not found' in map
+            this.key = key;
+            this.value = value;
+            this.prev = null;
+            this.next = null;
         }
+    }
 
-        private void updateOrder(int key) {
-            add_to_list_tail(rmFromOrder(key));
-        }
-
-        private Node rmFromOrder(int key) {
-
-            Node current = map.get(key);
-            current.prev.next = current.next;
-            current.next.prev = current.prev;
-            return current;
-        }
-
-        private void add_to_list_tail(Node current) {
-            current.prev = new_right.prev;
-            new_right.prev = current;
-            current.prev.next = current;
-            current.next = new_right;
-        }
-
-        private int capacity;
-        private HashMap<Integer, Node> map = new HashMap<Integer, Node>();
-
+    private class Order {
         // double linked list
-        private Node old_left = new Node();
-        private Node new_right = new Node();
+        private Node old_;
+        private Node _new;
 
-        public LRUCache(int capacity) {
-            this.capacity = capacity;
-            new_right.prev = old_left;
-            old_left.next = new_right;
+        public Order() {
+            old_ = new Node(); // care
+            _new = new Node(); // care
+            old_.next = _new; // care
+            _new.prev = old_; // care
         }
 
-        public Integer get(int key) {
-            if (!map.containsKey(key)) {
-                return null; // leetcode expected it to be -1, thus the value would never be -1;
-            }
-
-            updateOrder(key);
-            return map.get(key).value;
+        private Node rm_oldest() {
+            Node removed = old_.next;
+            remove(removed);
+            return removed;
         }
 
-        public void set(int key, int value) {
-            Integer v = get(key);
-            if (get(key) != null) { // leetcode expected it to be -1, thus the value would never be -1;
-                map.get(key).value = value;
-                return;
-            }
+        private void addNew(Node current) {
+            Node pre = _new.prev;
+            Node next = _new;
 
-            if (map.size() == capacity) {
-                rm_oldest_from_list_map();
-            }
+            pre.next = current;
+            current.next = next;
 
-            Node insert = new Node(key, value);
-
-            map.put(key, insert);
-            add_to_list_tail(insert);
+            next.prev = current;
+            current.prev = pre;
         }
+
+        private void remove(Node n) {
+            Node pre = n.prev;
+            Node next = n.next;
+
+            pre.next = next;
+            next.prev = pre;
+        }
+
+        private void access(Node n) {
+            remove(n);
+            addNew(n);
+        }
+    }
+
+    private int capacity;
+    private HashMap<Integer, Node> map;
+    private Order order;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        map = new HashMap();
+        order = new Order();
+    }
+
+    // get(key) - Get the value (will always be positive) of the key if the key exists in the cache,
+    // otherwise return -1.
+    public Integer get(int key) {
+        Node n = map.get(key);
+        if (n == null) {
+            return null; // leetcode expected it to be -1, thus the value would never be -1;
+        }
+
+        order.access(n);
+        return n.value;
+    }
+
+    // Set or insert the value if the key is not already present.
+    // When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+    public void set(int key, int value) {
+        // set
+        Integer v = get(key);
+        if (get(key) != null) { // leetcode expected it to be -1, thus the value would never be -1;
+            map.get(key).value = value;
+            return;
+        }
+
+        // insert
+        if (map.size() == capacity) {
+            map.remove(order.rm_oldest().key);
+        }
+
+        Node insert = new Node(key, value);
+        map.put(key, insert);
+        order.addNew(insert);
+    }
+}
+
+public class Leetcode146LRUCache {
+    public static void main(String[] args) {
+        LRUCache cache = new LRUCache(5);
+        cache.get(1);
+        cache.set(3, 2);
     }
 }
