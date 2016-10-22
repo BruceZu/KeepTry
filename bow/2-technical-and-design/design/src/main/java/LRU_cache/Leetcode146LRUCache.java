@@ -11,70 +11,69 @@ import java.util.HashMap;
 
 //with HashMap and DoubleLinkedList
 
+class Node {
+    Node prev;
+    Node next;
+    Integer key;
+    Integer value;
+
+    Node() { // used only for sentinel nodes head and tail
+
+    }
+
+    public Node(int key, int value) { // make sure the input does not have null key and value, the null be used as
+        // 'not found' in map
+        this.key = key;
+        this.value = value;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+class Order {
+    // double linked list
+    private Node old_;
+    private Node _new;
+
+    public Order() {
+        old_ = new Node(); // care
+        _new = new Node(); // care
+        old_.next = _new; // care
+        _new.prev = old_; // care
+    }
+
+    Node rm_oldest() {
+        Node removed = old_.next;
+        remove(removed);
+        return removed;
+    }
+
+    void addNew(Node current) {
+        Node pre = _new.prev;
+        Node next = _new;
+
+        pre.next = current;
+        current.next = next;
+
+        next.prev = current;
+        current.prev = pre;
+    }
+
+    void remove(Node n) {
+        Node pre = n.prev;
+        Node next = n.next;
+
+        pre.next = next;
+        next.prev = pre;
+    }
+
+    void access(Node n) {
+        remove(n);
+        addNew(n);
+    }
+}
+
 class LRUCache {
-
-    private class Node {
-        Node prev;
-        Node next;
-        Integer key;
-        Integer value;
-
-        private Node() { // used only for sentinel nodes head and tail
-
-        }
-
-        public Node(int key, int value) { // make sure the input does not have null key and value, the null be used as
-            // 'not found' in map
-            this.key = key;
-            this.value = value;
-            this.prev = null;
-            this.next = null;
-        }
-    }
-
-    private class Order {
-        // double linked list
-        private Node old_;
-        private Node _new;
-
-        public Order() {
-            old_ = new Node(); // care
-            _new = new Node(); // care
-            old_.next = _new; // care
-            _new.prev = old_; // care
-        }
-
-        private Node rm_oldest() {
-            Node removed = old_.next;
-            remove(removed);
-            return removed;
-        }
-
-        private void addNew(Node current) {
-            Node pre = _new.prev;
-            Node next = _new;
-
-            pre.next = current;
-            current.next = next;
-
-            next.prev = current;
-            current.prev = pre;
-        }
-
-        private void remove(Node n) {
-            Node pre = n.prev;
-            Node next = n.next;
-
-            pre.next = next;
-            next.prev = pre;
-        }
-
-        private void access(Node n) {
-            remove(n);
-            addNew(n);
-        }
-    }
-
     private int capacity;
     private HashMap<Integer, Node> map;
     private Order order;
@@ -90,7 +89,7 @@ class LRUCache {
     public Integer get(int key) {
         Node n = map.get(key);
         if (n == null) {
-            return null; // leetcode expected it to be -1, thus the value would never be -1;
+            return -1; // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
         }
 
         order.access(n);
@@ -102,7 +101,7 @@ class LRUCache {
     public void set(int key, int value) {
         // set
         Integer v = get(key);
-        if (get(key) != null) { // leetcode expected it to be -1, thus the value would never be -1;
+        if (get(key) != -1) { // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
             map.get(key).value = value;
             return;
         }
