@@ -64,4 +64,4 @@
  *  @see <a href="http://openjdk.java.net/jeps/180">JEP 180</a>
  *  @see <a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html">Oracle doc</a>
  */
-package hashmap_design;
+package design_HashMap;
