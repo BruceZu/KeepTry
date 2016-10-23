@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package list.sort;
+package sort;
 
 /**
  * <pre>
