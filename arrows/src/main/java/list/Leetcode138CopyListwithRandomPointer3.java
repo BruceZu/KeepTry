@@ -83,7 +83,7 @@ public class Leetcode138CopyListwithRandomPointer3 {
         // TODO: add print() and test case.
     }
 
-    public static void main(String[] args) {
+    private static void test() {
         //  1 -> 2 -> 3 -> 4
         //  |<---|
         //  |-------->|
@@ -103,5 +103,38 @@ public class Leetcode138CopyListwithRandomPointer3 {
 
         RandomListNode copy = copyRandomList(one);
         System.out.println(copy); // For Adding Break Point. The main() will be replaced by test case one print() is ready
+
+    }
+
+    private static void test1() {
+
+        //            |--->|
+        //            <--
+        //  1 -> 2 -> 3 -> 4
+        //  |<---|
+        //  |-------->|
+
+        RandomListNode one = new RandomListNode(1);
+        RandomListNode two = new RandomListNode(2);
+        RandomListNode three = new RandomListNode(3);
+        RandomListNode four = new RandomListNode(4);
+
+        one.next = two;
+        one.random = three;
+
+        two.next = one;
+        two.random = three;
+
+        three.next = four;
+        three.random = three;
+
+        RandomListNode copy = copyRandomList(one);
+        System.out.println(copy); // For Adding Break Point. The main() will be replaced by test case one print() is ready
+
+    }
+
+    public static void main(String[] args) {
+        test();
+        test1();
     }
 }
