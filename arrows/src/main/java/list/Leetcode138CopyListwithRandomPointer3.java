@@ -29,7 +29,8 @@ class RandomListNode {
 }
 
 /**
- * <img src="../../resources/graph_list_have_circle_clone.png" height="400" width="600">
+ * <img src="../../resources/graph_list_have_circle_clone.png" height="400" width="600"><br>
+ * <img src="../../resources/graph_list_have_circle_clone2.png" height="250" width="600">
  * <a href="https://leetcode.com/problems/copy-list-with-random-pointer/">leetcode</a>
  */
 public class Leetcode138CopyListwithRandomPointer3 {
