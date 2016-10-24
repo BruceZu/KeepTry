@@ -17,7 +17,10 @@ package string.supplementary_characters;
 
 import java.nio.charset.Charset;
 
-public class Main {
+/**
+ * <img src="../../../resources/supplementary_characters.png" height="400" width="600"><br>
+ */
+public class SupplementaryCharacters {
     /**
      * <pre>
      * Code points are the numbers that can be used in a coded character set.
@@ -120,10 +123,11 @@ public class Main {
      * routines that convert to and from modified UTF-8 cannot be used when standard UTF-8 is required.
      * {@link string.CovertLetterToNumber}
      * {@link hashtable.Leetcode242ValidAnagram}
-     * @see <a href="http://www.oracle.com/us/technologies/java/supplementary-142654.html"></a>
-     * <a href="https://en.wikibooks.org/wiki/Unicode/Character_reference/D000-DFFF">UTF</a>
-     * <a href="https://en.wikipedia.org/wiki/UTF-16#UCS-2">UTF-16#UCS-2</a>
-     * <a href="http://www.utf8everywhere.org/">UTF8</a>
+     * @see <br> <a href="http://www.oracle.com/us/technologies/java/supplementary-142654.html">supplementary </a>
+     * <br> <a href="https://en.wikibooks.org/wiki/Unicode/Character_reference/D000-DFFF">UTF</a>
+     * <br> <a href="https://en.wikipedia.org/wiki/UTF-16#UCS-2">UTF-16#UCS-2</a>
+     * <br> <a href="http://www.utf8everywhere.org/">UTF8</a>
+     * <br> <a href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane">BMP</a>
      */
     public static void main(String[] args) {
         System.out.println(Charset.defaultCharset());
