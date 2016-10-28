@@ -201,4 +201,25 @@ public class Person {
             });
         }
     }
+
+    // As interface function
+    interface Foo {
+        int exec(int x);
+    }
+
+    class Bar {
+        public Foo action2() {
+            return (x) -> x + 2;
+            /*return new Foo() {
+                @Override
+                public int exec(int x) {
+                    return  x + 2;
+                }
+            };*/
+        }
+    }
+    /**
+     * lambda <a href="http://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-4.html"> link </a>
+     * defender method <a href="http://cr.openjdk.java.net/~briangoetz/lambda/Defender%20Methods%20v4.pdf"> link </a>
+     */
 }
