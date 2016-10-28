@@ -47,6 +47,7 @@ public class TraversalBTusingStack {
         while (!subtrees.empty()) {
             n = subtrees.pop();
             System.out.println(n.v);
+            
             if (n.right != null) {
                 subtrees.push(n.right);
             }
@@ -57,89 +58,50 @@ public class TraversalBTusingStack {
     }
 
     /**
-     * 下黄泉,上穷碧落<pre>
-     * step 1: down to bottom without not breaking where is the start place
-     * step 2: find bottom, process it
+     * <pre>
+     * step 1: get down till reach the start node which has no any subtree
+     * step 2: process it
      * step 3: next one:
-     *          according to post order:
-     *          if bottom have parent:
-     *               if bottom is right child, continue up
-     *               if bottom is left child and no brother, continue up
-     *               if bottom is left child and have right brother. then go to brother.
-     *          else: end up
-     * <p>
+     *            if top of stack is parent then continue pop
+     *            else it is right sibling go to step 1
+     *
      * what is stack for?
-     *   keep track of parents only.
+     *   keep track of parent and right and me (next parent). this is the post order.
      *   @see <a href="http://www.jiuzhang.com/solutions/binary-tree-postorder-traversal/">jiuzhang</a>
      */
     public static void printPostOrder(TreeNode n) {
         if (n == null) {
             return;
         }
-        Stack<TreeNode> parents = new Stack();
-        while (true) {
-            // 1
-            parents.push(n);
+        Stack<TreeNode> rAndP = new Stack();
+        rAndP.push(n);
+        all:
+        while (!rAndP.isEmpty()) {
             while (true) {
-                if (n.left != null) {
-                    n = n.left;
-                } else if (n.right != null) {
-                    n = n.right;
-                } else {
-                    break; //n.left == null &&  n.right == null
+                TreeNode peek = rAndP.peek();
+                if (peek.right == null && peek.left == null) {
+                    break; // reach the start point where the node has no any child sub tree
                 }
-                parents.push(n);
+                if (peek.right != null) {
+                    rAndP.push(peek.right);
+                }
+                if (peek.left != null) {
+                    rAndP.push(peek.left);
+                }
             }
-            // 2
-            parents.pop();
-            System.out.println(n.v);
+            TreeNode top = rAndP.pop();
+            System.out.println(top.v);
 
-            // 3
-            while (!parents.empty() &&
-                    (n == parents.peek().right
-                            || n == parents.peek().left && parents.peek().right == null
-                    )) {
-                n = parents.pop();
-                System.out.println(n.v);
-            }
-
-            if (parents.empty()) {
-                break;
-            }
-            n = parents.peek().right;
-        }
-    }
-
-    public static void printPostOrder2(TreeNode n) {
-        if (n == null) {
-            return;
-        }
-        Stack<TreeNode> s = new Stack();
-        loop:
-        while (true) {
-            if (n.left != null) {
-                s.push(n);
-                n = n.left;
-                continue;
-            }
-            if (n.right != null) {
-                s.push(n);
-                n = n.right;
-                continue;
-            }
-            System.out.println(n.v);
-
-            TreeNode p;
             while (true) {
-                p = s.peek();
-                if (n == p.left && p.right != null) {
-                    n = p.right;
+                if (rAndP.isEmpty()) {
+                    break all;
+                }
+                TreeNode peek = rAndP.peek();
+                if (top == peek.left || top == peek.right) { // it is parent
+                    top = rAndP.pop();
+                    System.out.println(top.v);
+                } else { // it is right sibling
                     break;
-                }
-                n = s.pop();
-                System.out.println(n.v);
-                if (s.empty()) {
-                    break loop;
                 }
             }
         }
@@ -153,15 +115,12 @@ public class TraversalBTusingStack {
      *     use the fish head
      *
      * Data Structure:
-     *   stack and current Node pointer <Strong>which is not got from the top of stack</Strong>.
+     *   stack and current Node pointer <Strong>which is not the peek()</Strong>.
      *
      * How to handle the stack?
-     *   easy push in, hard to handle when and how to pop out.
-     *   Firstly need know the meanings of stack for.
-     * what is the stack for?
      *    save left branches.
      *    keep track from top to down of left branch
-     *    till the end where left sub tree is null.
+     *    till the end where left sub tree is null. the right sub tree may be not null
      *    then according to in order print or process the current node,
      *    then its right subtree if the right subtree is not null
      *
@@ -169,7 +128,7 @@ public class TraversalBTusingStack {
      *    sometimes the left branch is only one node.
      *
      * How to handle stack:
-     *    1 step   track left branch from top to down till the end
+     *    1 step   track left branch from top to start point
      *    2 step   it is branch end, so back up and process the end one
      *             here need check if end up all
      *    3 step   see if continue down to sub right tree, continue track left branch from there
@@ -177,7 +136,7 @@ public class TraversalBTusingStack {
     public static void printInOrder(TreeNode n) {
         Stack<TreeNode> leftBranches = new Stack();
         while (true) {
-            while (n != null) {//1
+            while (n != null) {// 1 to start point where the node should has no left child, but may be have right child
                 leftBranches.push(n);
                 n = n.left;
             }
