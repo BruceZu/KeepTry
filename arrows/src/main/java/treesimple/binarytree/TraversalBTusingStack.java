@@ -47,7 +47,7 @@ public class TraversalBTusingStack {
         while (!subtrees.empty()) {
             n = subtrees.pop();
             System.out.println(n.v);
-            
+
             if (n.right != null) {
                 subtrees.push(n.right);
             }
@@ -77,7 +77,7 @@ public class TraversalBTusingStack {
         rAndP.push(n);
         all:
         while (!rAndP.isEmpty()) {
-            while (true) {
+            while (true) { // get down
                 TreeNode peek = rAndP.peek();
                 if (peek.right == null && peek.left == null) {
                     break; // reach the start point where the node has no any child sub tree
@@ -97,7 +97,7 @@ public class TraversalBTusingStack {
                     break all;
                 }
                 TreeNode peek = rAndP.peek();
-                if (top == peek.left || top == peek.right) { // it is parent
+                if (top == peek.left || top == peek.right) { // 2 get up if it is parent
                     top = rAndP.pop();
                     System.out.println(top.v);
                 } else { // it is right sibling
