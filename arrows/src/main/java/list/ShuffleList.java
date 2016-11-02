@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+
 package list;
 
 // C-7.44 Describe a method for performing a card shuffle of a list of 2n elements, by
