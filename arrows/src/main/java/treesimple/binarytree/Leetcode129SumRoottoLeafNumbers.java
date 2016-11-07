@@ -37,12 +37,12 @@ public class Leetcode129SumRoottoLeafNumbers {
         }
 
         private int sumSubTree(TreeNode n, int sumBefore) {
-            // subtree is null
+            // 2 subtree is null
             if (n == null) {
                 return 0;
             }
             sumBefore = sumBefore * 10 + n.val;
-            // subtree is leaf
+            // 1 subtree is leaf
             if (n.left == null && n.right == null) {
                 return sumBefore;
             }
