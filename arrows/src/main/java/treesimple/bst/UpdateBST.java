@@ -17,7 +17,7 @@ package treesimple.bst;
 
 import java.util.Random;
 
-public class SimpleAddDeleteBST {
+public class UpdateBST {
     static class Node {
         Integer v;
         Node left, right;
