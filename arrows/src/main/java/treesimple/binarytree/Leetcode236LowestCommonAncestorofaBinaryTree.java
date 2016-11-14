@@ -17,7 +17,7 @@ package treesimple.binarytree;
 
 /**
  * 236. Lowest Common Ancestor of a Binary Tree
- * https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
+ * <a href = "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree">leetcode</a>
  * <pre>
  *
  * Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
@@ -38,10 +38,10 @@ package treesimple.binarytree;
  *
  * Subscribe to see which companies asked this question
  *
- * Hide Tags Tree
- * Hide Similar Problems (E) Lowest Common Ancestor of a Binary Search Tree
+ * Tags Tree
+ * Similar Problems (E) Lowest Common Ancestor of a Binary Search Tree
  *
- *     </>
+ * Pocket Gems use it
  */
 public class Leetcode236LowestCommonAncestorofaBinaryTree {
     /**
@@ -54,72 +54,8 @@ public class Leetcode236LowestCommonAncestorofaBinaryTree {
      * }
      */
     class Solution {
-        private boolean done = false;
-        private TreeNode result = null;
-
-        // post order recursive to find and check
-        // if the tree is very deep and the p and q is on the shallow level,
-        // maybe we need bfs is better which need a queue of list,
-        // that means we need more space, it is a trade off.
-        public TreeNode lowestCommonAncestor1(TreeNode node, TreeNode p, TreeNode q) {
-            // input check
-            if (node == null) {
-                return null;
-            }
-
-            // return time
-            // current : what to do before recursive down
-            // current : after return back, how to precess the return value
-            if (done) {
-                return result;
-            }
-
-            TreeNode leftSubTreeResult = null;
-            TreeNode rightSubTreeResult = null;
-            if (node.left != null) {
-                leftSubTreeResult = lowestCommonAncestor1(node.left, p, q);
-            }
-            if (node.right != null) {
-                rightSubTreeResult = lowestCommonAncestor1(node.right, p, q);
-            }
-
-            //  neither node is found
-            if (leftSubTreeResult == null && rightSubTreeResult == null && node != p && node != q) {
-                return null;
-            }
-
-            // find both nodes
-            if (leftSubTreeResult != null && rightSubTreeResult != null
-                    || leftSubTreeResult != null && (node == p || node == q)
-                    || rightSubTreeResult != null && (node == p || node == q)) {
-
-                done = true;
-                return node;
-            }
-
-
-            // find one node
-            if (leftSubTreeResult != null) {
-                return leftSubTreeResult;
-            }
-            if (rightSubTreeResult != null) {
-                return rightSubTreeResult;
-            }
-            return node;
-        }
-
-
-        /**
-         * improved : <pre>
-         * <p>
-         * 1. post order -> pre order . find one from current node then return it at once.
-         * because: if the other node is a one children node, then current node is the result.
-         *          else the other node and current node will be in the left subtree and right subtree.
-         * <p>
-         * 2.  find both, find one, find none logic are merge into one line code
-         * 3.  do not need variable to keep done and result because hard to check which is the result till as last.
-         */
-
+        
+        // post order find one node from current node then return it at once.
         public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
             // input check
             if (root == null) {
@@ -134,6 +70,10 @@ public class Leetcode236LowestCommonAncestorofaBinaryTree {
             TreeNode leftSubTreeResult = lowestCommonAncestor(root.left, p, q);
             TreeNode rightSubTreeResult = lowestCommonAncestor(root.right, p, q);
 
+            //  1  1
+            //  1  0
+            //  0  1
+            //  0  0
             return leftSubTreeResult != null && rightSubTreeResult != null
                     ? root
                     : leftSubTreeResult != null ? leftSubTreeResult : rightSubTreeResult;
