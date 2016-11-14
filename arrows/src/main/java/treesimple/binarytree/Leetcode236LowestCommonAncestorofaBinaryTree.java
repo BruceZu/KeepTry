@@ -54,7 +54,7 @@ public class Leetcode236LowestCommonAncestorofaBinaryTree {
      * }
      */
     class Solution {
-        
+
         // post order find one node from current node then return it at once.
         public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
             // input check

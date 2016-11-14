@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package treesimple.binarytree;
+package treesimple.bst;
 
 public class BalancedBST {
     static class Node {
