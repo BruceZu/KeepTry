@@ -67,16 +67,42 @@ public class Leetcode236LowestCommonAncestorofaBinaryTree {
             }
             // above can be merged into one
 
-            TreeNode leftSubTreeResult = lowestCommonAncestor(root.left, p, q);
-            TreeNode rightSubTreeResult = lowestCommonAncestor(root.right, p, q);
-
-            //  1  1
-            //  1  0
-            //  0  1
-            //  0  0
-            return leftSubTreeResult != null && rightSubTreeResult != null
+            // now root is not null, p, q.
+            TreeNode rl = lowestCommonAncestor(root.left, p, q);
+            TreeNode rr = lowestCommonAncestor(root.right, p, q);
+            return rl != null && rr != null
                     ? root
-                    : leftSubTreeResult != null ? leftSubTreeResult : rightSubTreeResult;
+                    : rl != null ? rl : rr;
+            /**
+             compare to null, not p or q
+
+             1  1
+             1  0
+             0  1
+             0  0
+
+             p, q, null, root
+
+             left  right   return (root, q, p, null)
+             p     q       root
+             p     null    p
+             q     p       root
+             q     null    q
+             root  null    root
+             null  null    null
+             null  p       p
+             null  q       q
+             null  root    root
+             */
+        }
+
+        public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+            if (root == null || root == p || root == q) {
+                return root;
+            }
+            TreeNode left = lowestCommonAncestor2(root.left, p, q);
+            TreeNode right = lowestCommonAncestor2(root.right, p, q);
+            return left == null ? right : right == null ? left : root;
         }
     }
 }
