@@ -29,29 +29,43 @@ package arithmetic;
  * @see <a href="https://en.wikipedia.org/wiki/Integer_factorization#Factoring_algorithms">wiki</a>
  */
 public class LargestPrimeFactor {
-    public static int recursion(long n, int d) {
-        while (n % d != 0) {
-            d++;
+    // d start from 2
+    public static int recursion(long num, int divide) {
+        while (num % divide != 0) {
+            divide++;
         }
-        while (n % d == 0) {
-            n = n / d;
+        // 1. found one factor: current divide value
+
+        while (num % divide == 0) {
+            num = num / divide;
         }
-        if (n == 1) {
-            return d;
+        // 2. case 3 * 3 * 7 * 11; swipe out all current factor 3 -> left  7 * 11
+
+        if (num == 1) {
+            return divide;
         }
-        return recursion(n, d + 1);
+        // 3. left 1, it is end
+
+        return recursion(num, divide + 1);
     }
 
-    public static int iterator(long n) {
-        int max = 2;
-        int d = 2;
-        while (n > 1) {
-            while (n % d == 0) {
-                max = Math.max(max, d);
-                n /= d;
+    public static int LargestPrime_Iterator(long num) {
+        int r = 2;
+        int divide = 2;
+
+        while (num > 1) {
+            while (num % divide == 0) {
+                r = divide; //Math.max(r, divide);
+                num /= divide;
             }
-            d++;
+            divide++;
         }
-        return max;
+        return r;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(LargestPrime_Iterator(600851475143l));
+        System.out.println(recursion(600851475143l, 2));
+        System.out.println(recursion(3 * 3 * 7 * 11, 2));
     }
 }

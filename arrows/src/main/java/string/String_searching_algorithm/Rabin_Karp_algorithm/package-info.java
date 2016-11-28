@@ -37,24 +37,12 @@
  *   In worse case the whole runtime is m + (n-m)*1 + 1*m = n+m
  *   it is O(n+m)
  *
- *   If the hash function is not effective. The worse case runtime is O(nm).
+ * If the hash function is not effective. The worse case runtime is O(nm).
  *
- *   • If a sufficiently large prime number q is used for the
- * hash function, the hashed values of two different
- * patterns will usually be distinct.
- * • If this is the case, searching takes O(N) time, where
- * N is the number of characters in the larger body of
- * text.
- * • It is always possible to construct a scenario with a
- * worst case complexity of O(MN). This, however, is
- * likely to happen only if the prime number q used for
- * hashing is small.
- * =======
- * The Rabin–Karp algorithm is inferior for single pattern searching to
- * Knuth–Morris–Pratt algorithm, Boyer–Moore string search algorithm and other
- * faster single pattern string searching algorithms,
+ * The Rabin–Karp algorithm is inferior for <strong>single pattern searching</strong> to
+ * Knuth–Morris–Pratt, Boyer–Moore and other faster single pattern string searching algorithms,
  * because of its slow worst case behavior.
- * However, it is an algorithm of choice for multiple pattern search.
+ * However, it is an algorithm of choice for <strong>multiple pattern search.</strong>
  * find any of a large number, say k, fixed length (fixed length m) patterns in a text of n length.
  * A practical application of the algorithm is detecting plagiarism.
  * Assume hash table checks whether a substring hash equals any of the pattern hashes in O(1) time.
@@ -72,32 +60,49 @@
  * have to calculate each shift even you know by the fist char or the last char that current substring
  * is not an candidate.
  * <a href="https://en.wikipedia.org/wiki/Rabin_fingerprint">wiki fingerprint</a>
- * ====== It is critical to select base b and modulo p
+ *
+ * ======  critical part is the hash function. it is to select base b and modulo q =================
  *  Without '% q' when the m is very big, comparision will not be done in O(1) time.
- *  Comparison will need O(number if digits) operations.
- *  The number if digits is proportional to the m.
+ *  Comparison will need O(number of digits) operations.
+ *  The number of digits is proportional to the m.
  *
- * this p should be chosen so that it and b are relatively prime;
- * this is easily accomplished by having b or p be prime.
+ *  How to select b and q?
+ *  1 >
+ *  • if a sufficiently large prime number q is used for the
+ * hash function, the hashed values of two different
+ * patterns will usually be distinct. ->   complexity of O(M+N).
+ *  • if the prime number q is small. -> a worst case complexity of O(MN).
  *
+ *  2 >
+ *  base b should be small, it can be 2.
+ *  3 >
+ *  this q should be chosen so that it and b are relatively prime;
+ *  this is easily accomplished by having b or p be prime.
+ *
+ *
+ * case:
+ * // q
  * q = closestPrime(system.getRegisterSize());
  *
- *
- * ====
+ * // hash function
  * long hashOf(String s, long q){
  *      long hash = 0;
  *      for( i = 0; i < s.length; i++){
- *          hash = (2 * hash + s[i] ) % q;
+ *          hash = (2 * hash + s[i] ) % q; // base is 2
  *      }
  *      return hash;
  *  }
  *
- *  rolling hash:
+ * // rolling hash
+ *
  *    n = text length
  *    m = pattern string length
- *    h = 2^(m-1) % q;
  *    hash      = ( s[i] * 2 ^(m-1) + s[i+1] * 2 ^ (m -2) + ... ... + s[i+m-1] ) % q
- *    next hash =  ((hash - s[i] * h)* 2 + s[i+m] % q) % q
+ *    // each one in () should '% q' to avoid the sum being too big to calculate.
+ *
+ *    h                  = 2^(m-1) % q;
+ *
+ *    next hash = ( (hash - s[i] * h)* 2 + s[i+m] % q ) % q
  * ===
  * The mod function (% in Java) is particularly useful
  * in this case due to several of its inherent properties:
@@ -105,9 +110,7 @@
  * - (x mod q) mod q = x mod q
  *
  * ===
- *  It still cannot guarantee
- *    1 if 2 strings are different, computed hash values are also different.
- *    2 if 2 strings are same, computed hash values are also same.
+ *  It still cannot guarantee if 2 strings are different, computed hash values are always different.
  *  Because using Horner's rule can only compare short strings,
  *  for the long string need 'mod q' to avoid overflow, but this may cause collisions.
  *  So still need double check to avoid spurious hits.
