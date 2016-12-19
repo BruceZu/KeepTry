@@ -43,6 +43,10 @@ public class KMP {
      *  and then it uses that table to do an efficient search of the string in O(k).
      *  PMT indicates where we need to look for the start of a new match in the event that the current one ends in a mismatch.
      *  <img src="../../../resources/sub_string_KMP.png" height="450" width="300">
+     *  Note here the arr related str is the one before the no match index of w.
+     *  It is [0, not match index i -1]
+     *  so when the w[0] is not match. moveSteps will be 1. i will be set to be 0;
+     *  This is special case. precess it before call PMT
      */
     static int[] partialMatchTable(char[] arr) {
         if (arr == null || arr.length == 0) {
@@ -51,7 +55,7 @@ public class KMP {
         int[] v = new int[arr.length];
         v[0] = 0;
 
-        for (int vIndex = 1; vIndex < arr.length; vIndex++) {
+        for (int vIndex = 1; vIndex < arr.length; vIndex++) {//vIndex: index before the not match index
             // longer substring first
             for (int subStrStartIndex = 1; subStrStartIndex <= vIndex; subStrStartIndex++) {
                 // filter by both side chars
@@ -75,12 +79,16 @@ public class KMP {
         return v;
     }
 
-    static int valueOfPMT(String pattern, int index) {
+    static int valueOfPMT(String pattern, int indexBeforeNotMatch) {
+        if (indexBeforeNotMatch == -1) {
+            throw new IllegalArgumentException("so when the w[0] is not match. moveSteps will be 1. i will be set to be 0;   " +
+                    " This is special case. precess it before call PMT");
+        }
         int[] pmt = strToPMT.get(pattern);
         if (pmt == null) {
             strToPMT.put(pattern, partialMatchTable(pattern.toCharArray()));
         }
-        return strToPMT.get(pattern)[index];
+        return strToPMT.get(pattern)[indexBeforeNotMatch];
     }
 
     static int moveSteps(String pattern, int notMatchIndex) {
@@ -103,29 +111,30 @@ public class KMP {
             //     return fromIndex;
             // }
         }
-        //m, denoting the position within S where the prospective match for W begins,
-        //i, denoting the index of the currently considered character in W.
+        //m, the beginning index of the current match in S
+        //i, the index of the current character in W
         int m = 0;
         int i = 0;
         while (true) {
-            System.out.print("\n\n");
-            for (int index = 0; index < s.length(); index++) {
-                System.out.print(index % 10);
-            }
-            System.out.println("\n" + s);
-            for (int space = 0; space < m; space++) {
-                System.out.print(" ");
-            }
-            System.out.println(w);
-            for (int space = 0; space < m; space++) {
-                System.out.print(" ");
-            }
-            for (int index = 0; index < w.length(); index++) {
-                System.out.print(index % 10);
-            }
-            System.out.println();
-
-            if (i == w.length()) {// match completely
+            // -------------------
+//            System.out.print("\n\n");
+//            for (int index = 0; index < s.length(); index++) {
+//                System.out.print(index % 10);
+//            }
+//            System.out.println("\n" + s);
+//            for (int space = 0; space < m; space++) {
+//                System.out.print(" ");
+//            }
+//            System.out.println(w);
+//            for (int space = 0; space < m; space++) {
+//                System.out.print(" ");
+//            }
+//            for (int index = 0; index < w.length(); index++) {
+//                System.out.print(index % 10);
+//            }
+//            System.out.println();
+            // -------------------
+            if (i == w.length()) { // match completely
                 return m;
             }
             if (m + i == s.length()) {
@@ -133,22 +142,24 @@ public class KMP {
             }
 
             if (s.charAt(m + i) == w.charAt(i)) {
-                System.out.println(String.format("w %d match s %d", i, m + i));
+                // System.out.println(String.format("w %d match s %d", i, m + i));
                 i++;
             } else {
-                System.out.println(String.format("w %d Does Not match s %d", i, m + i));
+                //System.out.println(String.format("w %d Does Not match s %d", i, m + i));
                 int value;
                 int moveSteps;
                 if (i == 0) {
-                    value = 0; //PMT[-1] =0;
-                    moveSteps = 1;
+                    // when the w[0] is not match. moveStep will be 1. i =0
+                    m++;
+                    //System.out.println("Move steps " + 1);
                 } else {
                     value = valueOfPMT(w, i - 1);
                     moveSteps = i - value;
+
+                    i = valueOfPMT(w, i - 1);
+                    m += moveSteps;
+                    //System.out.println("Move steps " + moveSteps);
                 }
-                System.out.println("Move steps " + moveSteps);
-                m += moveSteps;
-                i = value;
             }
         }
     }
