@@ -41,6 +41,7 @@ public class KMP {
      *
      *  KMP spends a little time precomputing a table (on the order of the size of W[], O(n)),
      *  and then it uses that table to do an efficient search of the string in O(k).
+     *  PMT indicates where we need to look for the start of a new match in the event that the current one ends in a mismatch.
      *  <img src="../../../resources/sub_string_KMP.png" height="450" width="300">
      */
     static int[] partialMatchTable(char[] arr) {
@@ -86,11 +87,11 @@ public class KMP {
         return notMatchIndex - valueOfPMT(pattern, notMatchIndex - 1);
     }
 
-    static int KMP(String str, String pattern) {
-        if (str == null || pattern == null) {
-            throw new IllegalArgumentException("Assume the srouce and pattern str is not null");
+    static int KMP(String s, String w) {
+        if (s == null || w == null) {
+            throw new IllegalArgumentException("Assume the S and W str is not null");
         }
-        if (pattern == "") {
+        if (w == "") {
             return 0;
             // reference:
             //   String.indexOf(char[] source, int sourceOffset, int sourceCount,
@@ -102,27 +103,54 @@ public class KMP {
             //     return fromIndex;
             // }
         }
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == pattern.charAt(0)) {
-                int j = 0;
-                while (j < pattern.length()) {
-                    if (i + j >= str.length()) { // note
-                        return -1;
-                    }
-                    if (pattern.charAt(j) != str.charAt(i + j)) {
-                        break;
-                    }
-                    j++;
-                }
-                if (j == pattern.length()) {
-                    return i;
+        //m, denoting the position within S where the prospective match for W begins,
+        //i, denoting the index of the currently considered character in W.
+        int m = 0;
+        int i = 0;
+        while (true) {
+            System.out.print("\n\n");
+            for (int index = 0; index < s.length(); index++) {
+                System.out.print(index % 10);
+            }
+            System.out.println("\n" + s);
+            for (int space = 0; space < m; space++) {
+                System.out.print(" ");
+            }
+            System.out.println(w);
+            for (int space = 0; space < m; space++) {
+                System.out.print(" ");
+            }
+            for (int index = 0; index < w.length(); index++) {
+                System.out.print(index % 10);
+            }
+            System.out.println();
+
+            if (i == w.length()) {// match completely
+                return m;
+            }
+            if (m + i == s.length()) {
+                return -1; // not found
+            }
+
+            if (s.charAt(m + i) == w.charAt(i)) {
+                System.out.println(String.format("w %d match s %d", i, m + i));
+                i++;
+            } else {
+                System.out.println(String.format("w %d Does Not match s %d", i, m + i));
+                int value;
+                int moveSteps;
+                if (i == 0) {
+                    value = 0; //PMT[-1] =0;
+                    moveSteps = 1;
                 } else {
-                    i += moveSteps(pattern, j);
-                    i--;
+                    value = valueOfPMT(w, i - 1);
+                    moveSteps = i - value;
                 }
+                System.out.println("Move steps " + moveSteps);
+                m += moveSteps;
+                i = value;
             }
         }
-        return -1; // not found
     }
 
     public static void main(String[] args) {
@@ -147,5 +175,6 @@ public class KMP {
         System.out.println(KMP("AAAAB", ""));
         System.out.println(KMP("", ""));
         System.out.println(KMP("", "AA"));
+        System.out.println(KMP("ABC ABCDAB ABCDABCDABDE", "ABCDABD"));
     }
 }
