@@ -79,6 +79,50 @@ public class KMP {
         return v;
     }
 
+    /**
+     * <pre>
+     * "Partial match" table (also known as "failure function")
+     * The table determines how much KMP will increase (variable m) and where it will resume testing (variable i).
+     * The goal of the table is to allow the algorithm not to match any character of S more than once. 
+     * The complexity of the table algorithm is O(k), where k is the length of W
+     *
+     * v of T[i]: the length of the longest prefix start with the w[0], which is also the suffix end with w[current index i]
+     *
+     * if can renew T[i-1], then renew.
+     * else if i-1 处 次最长prefix, also the suffix, exist (its length !=0 ), try to renew
+     * else (its length ==0) compare directly with W[0]
+     * <img src="../../../resources/KMP_partial_T.png" height="450" width="500">
+     * @param w
+     * @return
+     */
+
+    static int[] partialMatchTable2(char[] w) {
+        int[] T = new int[w.length];
+        T[0] = 0;
+        int indexCompareTo = 0;
+        for (int i = 1; i < w.length; i++) {
+            while (true) {
+                if (indexCompareTo == 0) {
+                    if (w[i] == w[0]) {
+                        T[i] = 1;
+                        indexCompareTo++;
+                    } else {
+                        T[i] = 0;
+                    }
+                    break;
+                }
+
+                if (w[indexCompareTo] == w[i]) {
+                    T[i] = indexCompareTo + 1;
+                    indexCompareTo++;
+                    break;
+                }
+                indexCompareTo = T[indexCompareTo - 1]; // Not: use indexCompareTo, not i
+            }
+        }
+        return T;
+    }
+
     static int valueOfPMT(String pattern, int indexBeforeNotMatch) {
         if (indexBeforeNotMatch == -1) {
             throw new IllegalArgumentException("so when the w[0] is not match. moveSteps will be 1. i will be set to be 0;   " +
@@ -86,7 +130,7 @@ public class KMP {
         }
         int[] pmt = strToPMT.get(pattern);
         if (pmt == null) {
-            strToPMT.put(pattern, partialMatchTable(pattern.toCharArray()));
+            strToPMT.put(pattern, partialMatchTable2(pattern.toCharArray()));
         }
         return strToPMT.get(pattern)[indexBeforeNotMatch];
     }
@@ -95,6 +139,7 @@ public class KMP {
         return notMatchIndex - valueOfPMT(pattern, notMatchIndex - 1);
     }
 
+    //  O(n), where n is the length of S
     static int KMP(String s, String w) {
         if (s == null || w == null) {
             throw new IllegalArgumentException("Assume the S and W str is not null");
@@ -115,7 +160,7 @@ public class KMP {
         //i, the index of the current character in W
         int m = 0;
         int i = 0;
-        while (true) {
+        while (true) { //the loop executes at most 2n times
             // -------------------
 //            System.out.print("\n\n");
 //            for (int index = 0; index < s.length(); index++) {
