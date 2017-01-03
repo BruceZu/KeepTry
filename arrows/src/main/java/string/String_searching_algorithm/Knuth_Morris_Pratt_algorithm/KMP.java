@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package string.Knuth_Morris_Pratt_algorithm;
+package string.String_searching_algorithm.Knuth_Morris_Pratt_algorithm;
 
 import com.sun.org.apache.regexp.internal.RE;
 
@@ -42,7 +42,7 @@ public class KMP {
      *  KMP spends a little time precomputing a table (on the order of the size of W[], O(n)),
      *  and then it uses that table to do an efficient search of the string in O(k).
      *  PMT indicates where we need to look for the start of a new match in the event that the current one ends in a mismatch.
-     *  <img src="../../../resources/sub_string_KMP.png" height="450" width="300">
+     *  <img src="../../../../resources/sub_string_KMP.png" height="450" width="300">
      *  Note here the arr related str is the one before the no match index of w.
      *  It is [0, not match index i -1]
      *  so when the w[0] is not match. moveSteps will be 1. i will be set to be 0;
@@ -91,7 +91,7 @@ public class KMP {
      * if can renew T[i-1], then renew.
      * else if i-1 处 次最长prefix, also the suffix, exist (its length !=0 ), try to renew
      * else (its length ==0) compare directly with W[0]
-     * <img src="../../../resources/KMP_partial_T.png" height="450" width="500">
+     * <img src="../../../../resources/KMP_partial_T.png" height="450" width="500">
      * @param w
      * @return
      */
