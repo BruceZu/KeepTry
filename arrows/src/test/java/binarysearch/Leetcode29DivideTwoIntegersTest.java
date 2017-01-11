@@ -19,7 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class Leetcode29DivideTwoIntegersTest {
-    @Test(timeout = 3l, expected = Test.None.class)
+    @Test(timeout = 30l, expected = Test.None.class)
     public void test() {
 
         Assert.assertEquals(Leetcode29DivideTwoIntegers.divide(0, 5), 0);

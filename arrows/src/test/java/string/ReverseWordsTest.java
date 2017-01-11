@@ -44,7 +44,7 @@ public class ReverseWordsTest {
         this.expected =expected;
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 30L, expected = Test.None.class)
     public void testPalindrome() {
         Assert.assertEquals(expected, ReverseWords.reverseWords(test));
     }

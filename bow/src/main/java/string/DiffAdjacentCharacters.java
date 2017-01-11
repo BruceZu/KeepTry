@@ -16,7 +16,6 @@
 package string;
 
 import map.SortMapByValue;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -74,7 +73,7 @@ public class DiffAdjacentCharacters {
 
                                 @Override
                                 public void remove() {
-                                    throw new NotImplementedException();
+                                    throw new UnsupportedOperationException();
                                 }
                             };
                         }
@@ -83,7 +82,7 @@ public class DiffAdjacentCharacters {
 
                 @Override
                 public void remove() {
-                    throw new NotImplementedException();
+                    throw new UnsupportedOperationException();
                 }
             };
         }

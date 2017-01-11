@@ -15,7 +15,6 @@
 
 package tree.binarytree.implementation;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import tree.binarytree.AbstractBinaryTree;
 import tree.binarytree.BinaryTree;
 import tree.binarytree.BinaryTreeNode;
@@ -153,24 +152,24 @@ public class ArrayBasedBinaryTreeImplement<T extends BinaryTreeNode<T, E>, E>
     @Override
     public T insertLeftFor(T n, E e) {
         // TODO: 7/3/16
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void replaceByRightSubTree(T n) {
         // TODO: 7/3/16
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public void replaceByLeftSubTree(T n) {
         // TODO: 7/3/16
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void cutLeaf(T n) {
         // TODO: 7/3/16
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

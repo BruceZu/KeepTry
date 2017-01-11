@@ -15,7 +15,7 @@
 
 package tree.binarytree.bst;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import tree.TreeNode;
 import tree.binarytree.BinaryTree;
 import tree.binarytree.BinaryTreeNode;
@@ -33,7 +33,7 @@ public class BinarySearchTreeImplement<T extends BinaryTreeNode<T, E>, E extends
 
     public BinarySearchTreeImplement(boolean arrayBased) {
         if (arrayBased) {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         } else {
             tree = new BinaryTreeImplement<>();
         }

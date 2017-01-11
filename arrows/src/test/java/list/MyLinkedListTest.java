@@ -15,7 +15,6 @@
 
 package list;
 
-
 import junit.runner.Version;
 import org.junit.After;
 import org.junit.Assert;
@@ -147,7 +146,7 @@ public class MyLinkedListTest {
         assertThat(list.getHead()).isNull();
     }
 
-    @Test(timeout = 20L, expected = Test.None.class)
+    @Test(timeout = 40L, expected = Test.None.class)
     public void addTest() {
         list.addBeforeHead("middle");
         list.addAfter("afterMiddle", 0);

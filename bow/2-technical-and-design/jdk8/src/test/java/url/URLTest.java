@@ -85,7 +85,8 @@ public class URLTest {
         Assert.assertTrue(URLTest.class.getResource("").getPath().endsWith("url/"));
 
         if (classUrl.getProtocol() == "file") {
-            Assert.assertTrue(URLTest.class.getResource("/").getPath().endsWith("practiseProblem/"));
+            String path = URLTest.class.getResource("/").getPath();
+            Assert.assertTrue(path.endsWith("bow/"));
         }
         if (classUrl.getProtocol() == "jar") {
             Assert.assertTrue(URLTest.class.getResource("/").getPath().endsWith("classes/"));
@@ -118,12 +119,13 @@ public class URLTest {
             URL urlOfCodeSrcOfThisDomain = codeSrcOfThisDomain.getLocation();
             if (classUrl.getProtocol() == "file") {
                 Assert.assertTrue(urlOfCodeSrcOfThisDomain.getPath()
-                        .endsWith("/practiseProblem/"));
+                        .endsWith("/bow/"));
             }
 
             if (classUrl.getProtocol() == "jar") {
+                System.out.println(urlOfCodeSrcOfThisDomain.getPath());
                 Assert.assertTrue(urlOfCodeSrcOfThisDomain.getPath()
-                        .endsWith("url.URLTest.jar"));
+                        .endsWith("url.URLTest%23testsjar.jar"));
             }
         }
     }

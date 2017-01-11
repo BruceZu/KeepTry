@@ -141,14 +141,14 @@ public class SocketTest {
         // without this line the port number is automatically allocated from an ephemeral port range by
         // the native method
         // Net.localPort()
-        httpServerConnector.setPort(9090);
+        httpServerConnector.setPort(9999);
 
         ServerConnector httpsServerConnector =
                 new ServerConnector(httpd,
                         null, null, null, 0, 3,
                         new SslConnectionFactory(new SslContextFactory(), "http/1.1"),
                         connectionFactory);
-        httpsServerConnector.setPort(8443);
+        httpsServerConnector.setPort(8888);
 
         httpd.setConnectors(new Connector[]{httpServerConnector, httpsServerConnector});
         return httpd;
@@ -210,7 +210,7 @@ public class SocketTest {
         if (con instanceof ServerConnector) {
             ServerConnector serverCon = (ServerConnector) con;
             String host = serverCon.getHost();
-            Assert.assertEquals(serverCon.getLocalPort(), 9090);
+            Assert.assertEquals(serverCon.getLocalPort(), 9999);
         }
         // 4 sshd
         // http://mina.apache.org/sshd-project/embedding_ssh.html

@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public class R38Test<E> {
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 30L, expected = Test.None.class)
     public void test() {
         DoublyLinkedList2 test = new DoublyLinkedList2();
         Assert.assertSame(test.getMiddle(), null);

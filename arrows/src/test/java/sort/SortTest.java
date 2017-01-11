@@ -61,7 +61,7 @@ public class SortTest {
         this.sorted = sorted;
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 20l, expected = Test.None.class)
     public void selectSortTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -85,7 +85,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 160l, expected = Test.None.class)
     public void mergeSortTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -93,7 +93,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 160l, expected = Test.None.class)
     public void mergeSortTest2() {
         Comparable[] ar = clone(arr);
         // start test
@@ -101,7 +101,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 30l, expected = Test.None.class)
+    @Test(timeout = 100l, expected = Test.None.class)
     public void mergeSortTest3() {
         Comparable[] ar = clone(arr);
         // start test
@@ -109,7 +109,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 60l, expected = Test.None.class)
     public void mergeSortTest4() {
         Comparable[] ar = clone(arr);
         // start test
@@ -117,7 +117,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 20l, expected = Test.None.class)
     public void mergeSortRecursionTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -125,7 +125,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 20l, expected = Test.None.class)
     public void mergeSortNoRecursionTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -133,7 +133,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 30l, expected = Test.None.class)
     public void quickSortTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -149,7 +149,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 20l, expected = Test.None.class)
     public void quickSortDualPivotTest() {
         Comparable[] ar = clone(arr);
         // start test

@@ -17,7 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class R32Test {
-    @Test(timeout = 30L, expected = Test.None.class)
+    @Test(timeout = 140L, expected = Test.None.class)
     public void test() {
         String[] array = new String[]{"a", "b", "c", "d"};
         String[] expected = new String[4];

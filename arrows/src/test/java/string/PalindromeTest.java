@@ -90,7 +90,7 @@ public class PalindromeTest {
                         expected));
     }
 
-    @Test(timeout = 140L, expected = Test.None.class)
+    @Test(timeout = 240L, expected = Test.None.class)
     public void testSpecialPalindrome() {
         s = PalindromeGeneral.cleanAndLowerCase(s);
         expected = PalindromeGeneral.cleanAndLowerCase(expected);

@@ -15,8 +15,6 @@
 
 package deque;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -208,13 +206,13 @@ public class ArrayIDeque<T> implements IDeque<T> {
     @Override
     public boolean removeFirstOccurrence(Object o) {
         // To-do
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean removeLastOccurrence(Object o) {
         // To-do
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

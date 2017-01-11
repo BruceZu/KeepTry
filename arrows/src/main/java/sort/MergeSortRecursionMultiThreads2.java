@@ -15,9 +15,7 @@
 
 package sort;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 import static common_lib.Common.mergeInsort;
 
@@ -54,7 +52,8 @@ public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
         }
     }
 
-    private static ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private static int processors = Runtime.getRuntime().availableProcessors();
+    private static ExecutorService executorService = Executors.newFixedThreadPool(16);
 
     public static <T extends Comparable<T>> void mergeSort(T[] arr) {
         // Input check
@@ -62,8 +61,8 @@ public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
             return;
         }
         try {
-            executorService.submit(new DivideMergeInSort(arr, 0, arr.length - 1, new Comparable[arr.length])).get();
-        } catch (InterruptedException | ExecutionException e) {
+           executorService.submit(new DivideMergeInSort(arr, 0, arr.length - 1, new Comparable[arr.length])).get(5l,TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
         }
     }
