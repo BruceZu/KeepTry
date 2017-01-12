@@ -115,14 +115,16 @@ cook_genrule_npmjs(
     sha1='59d457122a161e42cc1625bbab8179c214b7ac11',
 )
 
-cook_genrule_npmjs(
-    name='crisper',
-    version='2.0.1',
-    sha1='2874a6cc9084b54ab2cd426fd91d8625821a1efc'
-)
+# TODO: Fix BUILD FAILED KeyError: 'time'
+# cook_genrule_npmjs(
+#     name='crisper',
+#     version='2.0.1',
+#     sha1='2874a6cc9084b54ab2cd426fd91d8625821a1efc'
+# )
+#
+# cook_genrule_npmjs(
+#     name='vulcanize',
+#     version='1.14.0',
+#     sha1='94da4765df53c0ce181ba4ce32330312825290b8'
+# )
 
-cook_genrule_npmjs(
-    name='vulcanize',
-    version='1.14.0',
-    sha1='94da4765df53c0ce181ba4ce32330312825290b8'
-)

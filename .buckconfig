@@ -15,3 +15,5 @@
 [cache]
     mode = dir
     dir = ~/.minorminor/buck-cache/local
+[httpserver]
+    port = 0
