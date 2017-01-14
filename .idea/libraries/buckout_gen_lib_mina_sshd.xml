@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="buckout_gen_lib_mina_sshd">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Documents/sawdust/buck-out/gen/lib/mina/core-abi.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/sawdust/buck-out/gen/lib/mina/sshd-abi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

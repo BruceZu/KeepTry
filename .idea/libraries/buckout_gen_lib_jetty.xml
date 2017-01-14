@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="buckout_gen_lib_jetty">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/continuation-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/http-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/io-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/jmx-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/security-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/server-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/servlet-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/servlets-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/jetty/util-abi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

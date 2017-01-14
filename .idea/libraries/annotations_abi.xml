@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="annotations-abi">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/annotations-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guava-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/hamcrest-core-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/junit-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/servlet-api-3_1-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/slf4j-api-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/slf4j-simple-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/truth_lib-abi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,28 +1,51 @@
-# Sawdust
+# KeepTry
 Algorithms + Data Structures.  DIY.
 
 Environment:
 
+Ubuntu 32 bit 16.04.1 LTS (Xenial Xerus)
+git version 2.7.4
+Java
+
 ```
-$ java -version
-java version "1.8.0_101"
-Java(TM) SE Runtime Environment (build 1.8.0_101-b13)
-Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
+$ java  -version
+java version "1.8.0_111"
+Java(TM) SE Runtime Environment (build 1.8.0_111-b14)
+Java HotSpot(TM) Server VM (build 25.111-b14, mixed mode)
+```
+
+Buck
+
+```
 $ buck --version
-buck version e64a2e2ada022f81e42be750b774024469551398
+buck version 899148323299cdcebe27be5a0151f901fdbca117
+```
+
+Node.js
+```
+$ node --version
+v7.4.0
+```
+
+Python
+
+```
 $ python --version
 Python 2.7.11
 ```
 
-Have libs available and run all Junit tests
+Get all required Java libs and run all Junit tests
+
 ```
 $ buck targets | xargs buck build && buck test --all
 ```
+Import it by Intellij IDEA 2016.3 and start enjoy coding
+
 Leetcode
 ```
 $ find . -name LC*.java -o -name  Leetcode*[a-zA-Z1].java | grep -v Test.java |wc -l
 ```
-Welcome ideas, comments and commits. No contribution is too small.
+Welcome ideas, comments and commits.
 
 WebChat  : brucezu
 
