@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="mina">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/buck-out/gen/lib/mina" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/buck-out/gen/lib/mina" recursive="false" />
+  </library>
+</component>

@@ -28,6 +28,6 @@
     <orderEntry type="library" name="firtlevel_in_buckout_gen_lib" level="application" />
     <orderEntry type="library" name="buck_out_gen_lib_second_level_guice" level="project" />
     <orderEntry type="library" name="buckout_gen_lib_jetty" level="project" />
-    <orderEntry type="library" name="buckout_gen_lib_mina_sshd" level="project" />
+    <orderEntry type="library" name="mina" level="project" />
   </component>
 </module>

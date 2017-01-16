@@ -1,3 +1,7 @@
+*.iws
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/tasks.xml
 *.pyc
 out/
 buck-out/
