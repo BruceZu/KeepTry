@@ -18,7 +18,7 @@ package string;
 import java.util.Scanner;
 
 /**
- * It is guaranteed that  and  consist of lowercase English letters.
+ * It is guaranteed that and consist of lowercase English letters.
  *
  * @see <a href="https://www.hackerrank.com/challenges/making-anagrams">hacker rank</a>
  */

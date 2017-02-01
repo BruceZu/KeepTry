@@ -29,15 +29,17 @@ public class HackerrankFindDigits {
 
         char[] digits = String.valueOf(t).toCharArray();
         int r = 0;
-        Set<Integer> divisible = new HashSet();
+        Set<Character> divisibleCharSet = new HashSet();
+
         for (int i = 0; i < digits.length; i++) {
-            if (digits[i] == '0') { // here
+            char curDigitChar = digits[i];
+            if (curDigitChar == '0') { // here
                 continue;
             }
-            if (divisible.contains((int) digits[i])) { // care need (int)
+            if (divisibleCharSet.contains(curDigitChar)) { // care need (int)
                 r++;
-            } else if (t % (digits[i] - '0') == 0) { // here
-                divisible.add((int) digits[i]); // here can just save (int) digits[i]
+            } else if (t % (curDigitChar - '0') == 0) { // here
+                divisibleCharSet.add(curDigitChar); // here can just save (int) digits[i]
                 r++;
             }
         }

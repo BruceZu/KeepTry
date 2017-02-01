@@ -24,34 +24,35 @@ package recursion;import java.util.Scanner;
  *       /      \    /      \    /\
  *      /        \  /        \  /  \
  *     /          \/          \/    \
- *    |_____|   |_____|      |___|       : in came scope
+ *    |_____|   |_____|      |___|       : in come scope
  *
- *  Note:
- *      - each recursion's valid l and r
- *      - there is maxPrice in [l, r], not always means there is in came.
- *        if it is happen to be on l index.
+ *  there is day with higher price than today's price then buy
+ *  sell on the day with highest price compared to today's price.
+ *
  *  Runtime depends on where the max prices index appear, o(n) ~ o(n^2)
  *
  *  @see <a href="https://www.hackerrank.com/challenges/stockmax">hackerrank</a>
  */
 public class HackerrankStockMaximize {
-    static private long incameOf(int[] prices, int l, int r) {
-        int maxPriceIndex = l;
-        for (int i = l + 1; i <= r; i++) {
-            if (prices[i] > prices[maxPriceIndex]) {
-                maxPriceIndex = i;
+    static private long incomeOf(int[] prices, int from, int to) {
+        // find the day with max price compared to the price of 'from' day
+        int maxPriceDay = from;
+        for (int i = from + 1; i <= to; i++) {
+            if (prices[i] > prices[maxPriceDay]) {
+                maxPriceDay = i;
             }
         }
 
-        int maxPrice = prices[maxPriceIndex];
-        long incame = 0;
-        for (int k = l; k < maxPriceIndex; k++) { //
-            incame += maxPrice - prices[k];
+        int maxPrice = prices[maxPriceDay];
+        long income = 0;
+        for (int day = from; day < maxPriceDay; day++) { //
+            income += maxPrice - prices[day];
         }
-        if (maxPriceIndex + 1 < r) {
-            incame += incameOf(prices, maxPriceIndex + 1, r);
+        // left part after the day with the max price
+        if (maxPriceDay + 1 < to) {
+            income += incomeOf(prices, maxPriceDay + 1, to);
         }
-        return incame;
+        return income;
     }
 
     static public void calculateAndPrint(Scanner in) {
@@ -60,7 +61,7 @@ public class HackerrankStockMaximize {
         for (int i = 0; i < size; i++) {
             prices[i] = in.nextInt();
         }
-        System.out.println(incameOf(prices, 0, prices.length - 1));
+        System.out.println(incomeOf(prices, 0, prices.length - 1));
     }
 
     public static void main(String[] args) {

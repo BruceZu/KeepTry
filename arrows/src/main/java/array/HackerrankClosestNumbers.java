@@ -32,11 +32,11 @@ public class HackerrankClosestNumbers {
         for (int i = 0; i < ar.length; i++) {
             ar[i] = s.nextInt();
         }
-        Arrays.sort(ar);
+        Arrays.sort(ar); // O(nlogn)
         int min = Integer.MAX_VALUE;
         int[] r = new int[ar.length * 2];
         int size = 0;
-        for (int i = 1; i < ar.length; i++) {
+        for (int i = 1; i < ar.length; i++) { // n
             int dis = ar[i] - ar[i - 1];
             if (dis < min) {
                 min = dis;

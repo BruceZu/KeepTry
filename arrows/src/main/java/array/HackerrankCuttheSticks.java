@@ -30,7 +30,7 @@ public class HackerrankCuttheSticks {
         int arr[] = new int[n];
         int r = 0;
         int min = Integer.MAX_VALUE;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) { // O(N)
             arr[i] = in.nextInt();
             if (arr[i] != 0) {
                 r++;
@@ -39,7 +39,7 @@ public class HackerrankCuttheSticks {
 
         }
         System.out.println(r);
-        while (true) {
+        while (true) {// O(N)
             r = 0;
             int lastmin = min;
             min = Integer.MAX_VALUE;

@@ -18,7 +18,12 @@ package string;
 import java.util.Scanner;
 
 /**
+ * sentence length at most 1000.  it may contain spaces, lower case and upper
+ * case letters. Lower-case and upper-case instances of a letter are considered the same.
  * only space and 26 letter(lower case and upper case)
+ * Pangrams are sentences constructed by using every letter of the alphabet
+ * at least once
+ *
  * @see <a href="https://www.hackerrank.com/challenges/pangrams">hacker rank</a>
  */
 public class HackerrankPangrams {
@@ -31,8 +36,8 @@ public class HackerrankPangrams {
                 int index = Character.toLowerCase(s.charAt(i)) - 'a';
                 if (!have[index]) {
                     have[index] = true;
-
-                    if (++count == 26) {
+                    count++;
+                    if (count == 26) {
                         System.out.println("pangram");
                         return;
                     }
