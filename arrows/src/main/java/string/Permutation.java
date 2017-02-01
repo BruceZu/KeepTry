@@ -16,19 +16,25 @@
 package string;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Permutation {
 
     /**
      * www.hackerrank.com test used by TrialPay a Visa company
-     * <p>
+     * <pre>
      * For example:
      * isPermutation( "abc", "cba") return true.
      * isPermutation( "abc", "cbe") return false.
-     * <p>
+     *
      * The time complexity for this function should be O(n)
+     *
+     * lower case or not.
+     * A = 65  Z = 90
+     * a = 97  z = 112
+     * use int[] = 112
+     * But it may be not other character
      */
-
     static boolean isPermutation(String a, String b) {
         if (a == null || b == null) {
             return false;
@@ -36,60 +42,24 @@ public class Permutation {
         if (a.length() != b.length()) {
             return false;
         }
-        int maxIndex = 0;
-        for (int i = 0; i < a.length(); i++) {
-            int index = (int) a.charAt(i);
-            if (index > maxIndex) {
-                maxIndex = index;
-            }
-        }
-        for (int i = 0; i < b.length(); i++) {
-            int index = (int) b.charAt(i);
-            if (index > maxIndex) {
-                maxIndex = index;
-            }
-        }
-        int[] v = new int[maxIndex + 1];
-        for (int i = 0; i < a.length(); i++) {
-            v[(int) a.charAt(i)]++;
-        }
-        for (int i = 0; i < b.length(); i++) {
-            if (v[(int) b.charAt(i)] == 0) {
-                return false;
-            }
-            v[(int) b.charAt(i)]--;
-        }
-
-        for (int i = 0; i < maxIndex; i++) {
-            if (v[i] != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    static boolean isPermutation_ok(String a, String b) {
-        if (a == null || b == null) {
-            return false;
-        }
-        if (a.length() != b.length()) {
-            return false;
-        }
-        HashMap<Character, Integer> map = new HashMap(a.length());
+        HashMap<Character, Integer> ACharTimes = new HashMap(a.length());
         for (int i = 0; i < a.length(); i++) {
             char c = a.charAt(i);
-            map.put(c, map.get(c) == null ? 1 : map.get(c) + 1);
+            Integer times = ACharTimes.get(c);
+            ACharTimes.put(c, times == null ? 1 : times + 1);
         }
         for (int i = 0; i < b.length(); i++) {
-            char c = b.charAt(i);
-            if (map.get(c) == null || map.get(c) == 0) {
+            char bChar = b.charAt(i);
+            Integer times = ACharTimes.get(bChar);
+            if (times == null) {
                 return false;
             } else {
-                map.put(c, map.get(c) - 1);
+                ACharTimes.put(bChar, times - 1);
             }
         }
-        for (Character c : map.keySet()) {
-            if (map.get(c) != 0) {
+
+        for (Map.Entry<Character, Integer> cur : ACharTimes.entrySet()) {
+            if (cur.getValue() != 0) {// >0  or <0
                 return false;
             }
         }

@@ -1,0 +1,128 @@
+Session cookie
+A session cookie, also known as an in-memory cookie or transient cookie,
+exists only in temporary memory while the user navigates the website.
+Web browsers normally delete session cookies when the user closes the browser.
+Unlike other cookies, session cookies do not have an expiration date assigned to them,
+which is how the browser knows to treat them as session cookies.
+
+Persistent cookie
+expires at a specific date or after a specific length of time.
+sometimes referred to as tracking cookies because they can be used by advertisers to record information about
+a user's web browsing habits over an extended period of time
+
+Secure cookie
+only be transmitted over an encrypted connection (i.e. HTTPS)
+A cookie is made secure by adding the Secure flag to the cookie.
+
+HttpOnly cookie
+cannot be accessed by client-side APIs, such as JavaScript.
+This restriction eliminates the threat of cookie theft via cross-site scripting (XSS).
+However, the cookie remains vulnerable to cross-site tracing (XST) and cross-site request forgery (XSRF) attacks.
+A cookie is given this characteristic by adding the HttpOnly flag to the cookie.
+
+SameSite cookie
+Google Chrome. can only be sent in requests originating from the same origin as the target domain.
+This restriction mitigates attacks such as cross-site request forgery (XSRF).
+A cookie is given this characteristic by setting the SameSite flag to Strict or Lax.
+
+Third-party cookie
+Normally, a cookie's domain attribute will match the domain that is shown in the web browser's address bar.
+This is called a first-party cookie.
+A third-party cookie, however, belongs to a domain different from the one shown in the address bar.
+This sort of cookie typically appears when web pages feature content from external websites,
+such as banner advertisements. This opens up the potential for tracking the user's browsing history,
+and is often used by advertisers in an effort to serve relevant advertisements to each user.
+
+...Eventually, both of these cookies will be sent to the advertiser when loading their advertisements
+or visiting their website. The advertiser can then use these cookies
+to build up a browsing history of the user across all the websites that have ads from this advertiser.
+
+a single website was setting 10 cookies, with a maximum number of cookies (first- and third-party)
+reaching over 800.
+Most modern web browsers contain privacy settings that can block third-party cookies.
+
+Zombie cookie
+A zombie cookie is a cookie that is automatically recreated after being deleted.
+
+Structure
+Uses: Session management Personalization Tracking
+Implementation: Setting a cookie Cookie attributes(Domain and Path, Expires and Max-Age, Secure and HttpOnly)
+Cookie theft and session hijacking
+
+Most websites use cookies as the only identifiers for user sessions,
+because other methods of identifying web users have limitations and vulnerabilities.
+
+If a website uses cookies as session identifiers, attackers can impersonate users' requests by
+stealing a full set of victims' cookies. From the web server's point of view,
+a request from an attacker then has the same authentication as the victim's requests;
+thus the request is performed on behalf of the victim's session.
+
+Listed here are various scenarios of cookie theft and user session hijacking
+(even without stealing user cookies) which work with websites which
+rely solely on HTTP cookies for user identification.
+
+Network eavesdropping
+Traffic on a network can be intercepted and read by computers on the network other than the sender and receiver
+(particularly over unencrypted open Wi-Fi)
+
+This traffic includes cookies sent on ordinary unencrypted HTTP sessions. Where network traffic is not encrypted,
+This issue can be resolved by securing the communication between the user's computer and the server by
+ employing Transport Layer Security (HTTPS protocol) to encrypt the connection.
+A server can specify the Secure flag while setting a cookie,
+ which will cause the browser to send the cookie only over an encrypted channel, such as an SSL connection
+
+if a web server sets a cookie with a secure attribute from a non-secure connection,
+the cookie can still be intercepted when it is sent to the user by man-in-the-middle attacks.
+
+Publishing false sub-domain: DNS cache poisoning
+
+How to fix? the severity of this attack can be lessened if the target website uses secure cookies.
+In this case, the attacker would have the extra challenge of obtaining the target website's SSL certificate
+from a certificate authority, since secure cookies can only be transmitted over an encrypted connection.
+Without a matching SSL certificate, victims' browsers would display a warning message about the attacker's invalid
+certificate, which would help deter users from visiting the attacker's fraudulent website and sending
+the attacker their cookies.
+
+Cross-site request forgery
+
+For example, Bob might be browsing a chat forum where another user, Mallory, has posted a message.
+Suppose that Mallory has crafted an HTML image element that references an action on Bob's bank's website
+(rather than an image file), e.g.,
+<img src="http://bank.example.com/withdraw?account=bob&amount=1000000&for=mallory">
+If Bob's bank keeps his authentication information in a cookie, and if the cookie hasn't expired,
+then the attempt by Bob's browser to load the image will submit the withdrawal form with his cookie,
+thus authorizing a transaction without Bob's approval.
+
+How to fix?
+
+
+Drawbacks of cookies
+Inaccurate identification
+If more than one browser is used on a computer, each usually has a separate storage area for cookies.
+Hence cookies do not identify a person, but a combination of a user account, a computer, and a web browser.
+Thus, anyone who uses multiple accounts, computers, or browsers has multiple sets of cookies.
+
+Likewise, cookies do not differentiate between multiple users who share the same
+user account, computer, and browser.
+
+Alternatives to cookies
+Some of the operations that can be done using cookies can also be done using other mechanisms.
+1 JSON Web Tokens
+A JSON Web Token (JWT) is a self-contained packet of information that can be used to
+ store user identity and authenticity information.
+ This allows them to be used in place of session cookies.
+ Unlike cookies, which are automatically attached to each HTTP request by the browser,
+ JWTs must be explicitly attached to each HTTP request by the web application.
+2 "window.name" DOM property
+3 "identifier for advertisers" (IDFA).
+4 ETag
+5 Web storage
+The HTML5 standard (which most modern web browsers support to some extent) includes a JavaScript API
+ called Web storage that allows two types of storage: local storage and session storage.
+  Local storage behaves similarly to persistent cookies
+  while session storage behaves similarly to session cookies,
+  except that session storage is tied to an individual tab/window's lifetime (AKA a page session),
+  not to a whole browser session like session cookies.
+6 Browser cache
+
+https://en.wikipedia.org/wiki/HTTP_cookie

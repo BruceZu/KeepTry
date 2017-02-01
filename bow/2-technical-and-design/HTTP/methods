@@ -1,0 +1,69 @@
+GET: retrieve data: viewing something, without changing it.
+     idempotent
+     information can be sent from the browser to the server: in the URL
+     Only ASCII characters allowed
+     Encoding type	application/x-www-form-urlencoded
+POST:send data. may have side effects
+     is used for changing something
+     Parameters are not saved in browser history
+     information can be sent from the browser to the server
+     query string (name/value pairs) is sent in the HTTP message body of a POST request.
+     http://www.w3schools.com/tags/ref_httpmethods.asp
+     Encoding type	application/x-www-form-urlencoded or multipart/form-data for binary data
+     POST is used to create.
+     A POST is not idempotent
+     POST creates a child resource,
+     so POST to /items creates a resources that lives under the /items resource.
+     Eg. /items/1.
+     Sending the same post packet twice will create two resources.
+     Creates A new resource under the /resources URI, or collection.
+     Usually the identifier is returned by the server.
+
+
+PUT  PUT is used to create or update
+     The PUT method requests that the enclosed entity be stored under the supplied Request-URI.
+     PUT is idempotent
+     PUT is for creating or replacing a resource at a URL known by the client.
+     PUT is only a candidate for CREATE where the client already knows the url before the resource is created.
+     Eg. /blogs/nigel/entry/when_to_use_post_vs_put as the title is used as the resource key
+     The RFC reads like this:
+
+     The fundamental difference between the POST and PUT requests is reflected in the different meaning of the
+     Request-URI. The URI in a POST request identifies the resource that will handle the enclosed entity.
+     That resource might be a data-accepting process, a gateway to some other protocol, or a separate entity
+     that accepts annotations. In contrast, the URI in a PUT request identifies the entity enclosed with the request
+      -- the user agent knows what URI is intended and the server MUST NOT attempt to apply the request to some other
+     resource.
+     Note: PUT has mostly been used to update resources (by replacing them in their entireties),
+     but recently there is movement towards using PATCH for updating existing resources,
+     as PUT specifies that it replaces the whole resource. RFC 5789.
+
+https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5
+
+E.g.  POST vs PUT:
+-----------------------------------------------------------------------------------------------------------------
+URI:website.com/users/john/posts/23
+website.com  - whole site
+users        - collection of users
+john         - item of the collection, or a resource
+posts        - collection of posts from john
+23           - post from john with identifier 23, also a resource
+When you use POST you are always refering to a collection, so whenever you say:
+
+POST /users HTTP/1.1
+you are posting a new user to the users collection.
+
+If you go on and try something like this:
+
+POST /users/john HTTP/1.1
+it will work, but semantically you are saying that you want to add a resource to the john collection under the users collection.
+
+Once you are using PUT you are refering to a resource or single item, possibly inside a collection. So when you say:
+
+PUT /users/john HTTP/1.1
+you are telling to the server update, or create if it doesn't exist, the john resource under the users collection.
+-----------------------------------------------------------------------------------------------------------------
+http://restcookbook.com/HTTP%20Methods/put-vs-post/
+
+which one should I use in my RESTful design?
+You do not need to support both PUT and POST.
