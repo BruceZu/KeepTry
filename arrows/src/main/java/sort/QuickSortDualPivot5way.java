@@ -23,7 +23,7 @@ import static sort.InsertSort.insertSort;
 
 /**
  * <pre>
- * Improvement based on {@link QuickSortDualPivot  QuickSortDualPivot},
+ * Improvement based on {@link QuickSortDualPivot3way  QuickSortDualPivot3way},
  * The improved content A and B are in {@link #improvedSelectAndLocateDualPivots(Comparable[], int, int) improvedSelectAndLocateDualPivots()} method
  *
  *  Improvement A:  find element <= pv2 before swap.
@@ -36,7 +36,7 @@ import static sort.InsertSort.insertSort;
  * Replacement of Quicksort in java.util.Arrays with new Dual-Pivot Quicksort
  * </a>
  */
-public class QuickSortDualPivotImprovement {
+public class QuickSortDualPivot5way {
 
     private static <T extends Comparable<T>> void doDualPivotQuickSort(T[] arr, int l, int r) {
         if (l >= r) {
@@ -50,12 +50,12 @@ public class QuickSortDualPivotImprovement {
 
         int[] dualPivots = improvedSelectAndLocateDualPivots(arr, l, r);
         int p1 = dualPivots[0], p2 = dualPivots[1];
-        int greatPv1 = dualPivots[2], lessPv2 = dualPivots[3];
+        int greatThanPv1 = dualPivots[2], lessThanPv2 = dualPivots[3];
 
         doDualPivotQuickSort(arr, l, p1 - 1);
         doDualPivotQuickSort(arr, p2 + 1, r);
         if (lessThan(arr[p1], arr[p2])) {
-            doDualPivotQuickSort(arr, greatPv1, lessPv2);
+            doDualPivotQuickSort(arr, greatThanPv1, lessThanPv2);
         }
     }
 

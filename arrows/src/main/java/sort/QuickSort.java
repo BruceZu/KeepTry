@@ -31,34 +31,35 @@ public class QuickSort {
     /**
      * <pre>
      * Idea:
-     *    select the pivot and swap it with the one the left side firstly,
+     *    select the pivot and swap it to be the left side firstly,
      *    Dance from outer toward inner, firstly dance with the one on the right side, the r,
      *                             if needed swap them to make sure the 2 in ascending order.
      *    Continue to dance toward inner from outer till the pivot is left l == r;
      *
      * @param l   left index included, firstly the selected pivot is put here.
      * @param r   right index included
-     * @return    index of pivot
+     * @return index of pivot
      */
     private static <T extends Comparable<T>> int locatePivotIndex(T[] arr, int l, int r) {
         initPivotUsingMedianOf3(arr, l, r, (l + r) / 2);
-
-        while (l != r) {
-            if (l < r && greatThan(arr[l], arr[r])
-                    ||  r<l && lessThan(arr[l], arr[r])) {
-                swap(arr, l, r);
+        int pivotIndex = l, i = r;
+        T pivot = arr[pivotIndex];
+        while (pivotIndex != i) {
+            if (pivotIndex < i && greatThan(pivot, arr[i])
+                    || i < pivotIndex && lessThan(pivot, arr[i])) {
+                swap(arr, pivotIndex, i);
                 // also swap index variable
-                l ^= r;
-                r ^= l;
-                l ^= r;
+                pivotIndex ^= i;
+                i ^= pivotIndex;
+                pivotIndex ^= i;
             }
-            if (l < r) {
-                r--;
+            if (pivotIndex < i) {
+                i--;
             } else {
-                r++;
+                i++;
             }
         }
-        return l;
+        return pivotIndex;
     }
 
     /**

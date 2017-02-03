@@ -145,7 +145,7 @@ public class SortTest {
     public void quickSort3wayTest() {
         Comparable[] ar = clone(arr);
         // start test
-        QuickSort3way.quickSort3Way(ar);
+        QuickSortOnePivot3way.quickSort3Way(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -153,7 +153,7 @@ public class SortTest {
     public void quickSortDualPivotTest() {
         Comparable[] ar = clone(arr);
         // start test
-        QuickSortDualPivot.quickSortDualPivot(ar);
+        QuickSortDualPivot3way.quickSortDualPivot(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
@@ -162,7 +162,7 @@ public class SortTest {
     public void quickSortDualPivotImprovementTest() {
         Comparable[] ar = clone(arr);
         // start test
-        QuickSortDualPivotImprovement.quickSortDualPivot(ar);
+        QuickSortDualPivot5way.quickSortDualPivot(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 }

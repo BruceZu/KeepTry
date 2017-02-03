@@ -30,7 +30,7 @@ import static sort.InsertSort.insertSort;
  *       QUICK SORT
  *       </a>
  */
-public class QuickSortDualPivot {
+public class QuickSortDualPivot3way {
 
     /**
      * <pre>

@@ -31,7 +31,7 @@ import static sort.InsertSort.insertSort;
  *       wiki: Radix sort
  *   </a>
  */
-public class QuickSort3way {
+public class QuickSortOnePivot3way {
 //    /**
 //     * Ascending order.
 //     * jumping by pivot initialed at left side with the one starts from the right side.
