@@ -221,8 +221,17 @@ public class Common {
      * @param <T>
      */
     public static <T extends Comparable<T>> void initPivotUsingMedianOf3(T[] a, int l, int r, int m) {
+        int mIndex = getPivotIndexUsingMedianOf3(a, l, r, m);
+        if (mIndex != l && a[mIndex] != a[l]) {// Note: their values may be equal
+            swap(a, l, mIndex);
+        }
+
+    }
+
+    // get pivot index by calculate 3 member whose index are left, right and (left+right)/2
+    public static <T extends Comparable<T>> int getPivotIndexUsingMedianOf3(T[] a, int l, int r, int m) {
         if (r == l + 1) {
-            return;
+            return l;
         }
 
         Comparable vl = a[l];
@@ -232,9 +241,6 @@ public class Common {
         int medianIndex = lessThan(vl, vm)
                 ? lessThan(vm, vr) ? m : lessThan(vl, vr) ? r : l
                 : lessThan(vl, vr) ? l : lessThan(vm, vr) ? r : m;
-
-        if (medianIndex != l && a[medianIndex] != vl) {// Note: their values may be equal
-            swap(a, l, medianIndex);
-        }
+        return medianIndex;
     }
 }

@@ -15,10 +15,7 @@
 
 package sort;
 
-import static common_lib.Common.greatThan;
-import static common_lib.Common.initPivotUsingMedianOf3;
-import static common_lib.Common.lessThan;
-import static common_lib.Common.swap;
+import static common_lib.Common.*;
 import static sort.InsertSort.insertSort;
 
 /**
@@ -35,87 +32,105 @@ import static sort.InsertSort.insertSort;
  *   </a>
  */
 public class QuickSort3way {
-    /**
-     * @param l   Left index
-     * @param r   Right index
-     * @return Left and right index of center pivot area
-     */
+//    /**
+//     * Ascending order.
+//     * jumping by pivot initialed at left side with the one starts from the right side.
+//     * the items with same value as pivot firstly be allocated to left/right side area
+//     * then be moved to the center at the end.
+//     *
+//     * @param l Left index
+//     * @param r Right index
+//     * @return Left and right index of center pivot area
+//     */
+//    private static <T extends Comparable<T>> int[] legencyLocatePivotIndex3Way(T[] arr, int l, int r) {
+//        // Improvement
+//        initPivotUsingMedianOf3(arr, l, r, (l + r) / 2);
+//
+//        int lp = l - 1; // right index of left pivots area
+//        int rp = r + 1; // left index of right pivots area
+//        /**<pre>
+//         * meaning of lp and rp:
+//         *
+//         *  pppp, < p ,  p , > p, pppp
+//         *     |                  |
+//         *    lp                 rp
+//         *
+//         *  init value:
+//         *
+//         *       [p a b c d e f]
+//         *     |                 |
+//         *    lp                 rp
+//         *
+//         *  general:
+//         *
+//         *     p p p, 1, 2, p, 6, p, 17, 18, 19, p p p
+//         *         |        |     |              |
+//         *         lp           other            rp
+//         */
+//
+//        // index
+//        int pI = l, curI = r;
+//
+//        while (pI != curI) {// jump near
+//            // equal
+//            if (arr[pI] == arr[curI]) {
+//                // allocate found pivot to side area
+//                if (curI > pI) {
+//                    swap(arr, curI, --rp);
+//                } else { // Note: must 'else', else run both of them.
+//                    swap(arr, curI, ++lp);
+//                }
+//            } else if (pI < curI && greatThan(arr[pI], arr[curI])
+//                    || pI > curI && lessThan(arr[pI], arr[curI])) {
+//                // sort ascending
+//                swap(arr, pI, curI);
+//                // also swap index variable
+//                pI ^= curI;
+//                curI ^= pI;
+//                pI ^= curI;
+//            }
+//            curI = pI < curI ? curI - 1 : curI + 1;
+//        }
+//
+//        /**
+//         * <pre>
+//         *  Now: p, p, p | < p | p | > p | p, p, p
+//         *             |         |         |
+//         *            lp                   rp
+//         */
+//
+//        // Move both sides pivot value into the center
+//        int pr = pI, pl = pI; // center pivots area right index
+//        while (lp != l - 1) {
+//            swap(arr, --pl, lp--);
+//        }
+//
+//        while (rp != r + 1) {
+//            swap(arr, ++pr, rp++);
+//        }
+//
+//        //Now 3 way:
+//        //           <p  |  =p  |   >p
+//        return new int[]{pl, pr};
+//    }
+
     private static <T extends Comparable<T>> int[] locatePivotIndex3Way(T[] arr, int l, int r) {
-        // Improvement
-        initPivotUsingMedianOf3(arr, l, r, (l + r) / 2);
-
-        int lp = l - 1; // right index of left pivots area
-        int rp = r + 1; // left index of right pivots area
-        /**<pre>
-         * meaning of lp and rp:
-         *
-         *  pppp, < p ,  p , > p, pppp
-         *     |                  |
-         *    lp                 rp
-         *
-         *  init value:
-         *
-         *       [p a b c d e f]
-         *     |                 |
-         *    lp                 rp
-         *
-         *  general:
-         *
-         *     p p p, 1, 2, p, 6, p, 17, 18, 19, p p p
-         *         |        |     |              |
-         *         lp           other            rp
-         */
-
-        int p = l, other = r;
-
-        while (p != other) {
-            // equal
-            if (arr[p] == arr[other]) {
-                if (other > p) {
-                    swap(arr, other, --rp);
-                } else { // Note: must 'else', else run both of them.
-                    swap(arr, other, ++lp);
-                }
-            } else if (p < other && greatThan(arr[p], arr[other])
-                    || p > other && lessThan(arr[p], arr[other])) {
-                swap(arr, p, other);
-                // also swap index variable
-                p ^= other;
-                other ^= p;
-                p ^= other;
-            }
-            if (p < other) {
-                other--;
+        T pivot = arr[getPivotIndexUsingMedianOf3(arr, l, r, (l + r) / 2)];
+        int i = l, nextLestIndex = l, nextGreatIndex = r;
+        // partition in 3 ways:  <pivot | pivots | > pivot
+        while (i <= nextGreatIndex) {
+            if (lessThan(arr[i], pivot)) {
+                swap(arr, i, nextLestIndex);
+                i++;
+                nextLestIndex++;
+            } else if (same(pivot, arr[i])) {
+                i++;
             } else {
-                other++;
+                swap(arr, i, nextGreatIndex);
+                nextGreatIndex--;
             }
         }
-
-        /**
-         * <pre>
-         *  Now: p, p, p | < p | p | > p | p, p, p
-         *             |         |         |
-         *            lp                   rp
-         */
-
-
-        // Move both sides pivot value into the center
-        int pr = p; // center pivots area right index
-        if (lp != l - 1) {
-            while (lp >= l) {
-                swap(arr, --p, lp--);
-            }
-        }
-
-        if (rp != r + 1) {
-            while (rp <= r) {
-                swap(arr, ++pr, rp++);
-            }
-        }
-
-        //Now 3 way:
-        //           <p  |  =p  |   >p
-        return new int[]{p, pr};
+        return new int[]{nextLestIndex, nextGreatIndex};
     }
 
     private static <T extends Comparable<T>> void call(T[] arr, int l, int r) {
@@ -141,9 +156,6 @@ public class QuickSort3way {
      * {@link #locatePivotIndex3Way(T[] arr, int l, int r) locatePivotIndex3Way} method.
      * <p>
      * where taking in account the equal relation:
-     * <p>
-     *   1 Move all duplicated pivots to both sides
-     *   2 After loop, at las move them from both sides into center.
      */
     public static <T extends Comparable<T>> void quickSort3Way(T[] arr) {
         // Input check
