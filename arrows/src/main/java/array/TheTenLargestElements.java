@@ -33,8 +33,8 @@ package array;
  * <p/>
  * MergeSort makes O(nlogn)
  * <p/>
- * randomized QuickSort  is O(nlogn)
- * QuickSort is O(n2)  they are probably talking about its worst case complexity.
+ * randomized QuickSortOnePivot2way  is O(nlogn)
+ * QuickSortOnePivot2way is O(n2)  they are probably talking about its worst case complexity.
  */
 //  C436
 public class TheTenLargestElements {

@@ -161,7 +161,7 @@ public class TreeTest {
         assertEquals(h, 5);
     }
 
-    @Test(timeout = 60l, expected = Test.None.class)
+    @Test(timeout = 160l, expected = Test.None.class)
     public void testBinaryTree() {
         BinaryTree bst1 = new BinaryTreeImplement();
         bst1.toBST(Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15));

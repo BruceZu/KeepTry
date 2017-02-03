@@ -137,7 +137,7 @@ public class SortTest {
     public void quickSortTest() {
         Comparable[] ar = clone(arr);
         // start test
-        QuickSort.quickSort(ar);
+        QuickSortOnePivot2way.quickSort(ar);
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 

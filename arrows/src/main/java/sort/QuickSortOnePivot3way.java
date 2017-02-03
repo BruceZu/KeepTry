@@ -152,7 +152,7 @@ public class QuickSortOnePivot3way {
     /**
      * Idea: <pre>
      * Improves quick sort in presence of duplicate keys.
-     * The difference with {@link sort.QuickSort QuickSort} is in the
+     * The difference with {@link QuickSortOnePivot2way QuickSortOnePivot2way} is in the
      * {@link #locatePivotIndex3Way(T[] arr, int l, int r) locatePivotIndex3Way} method.
      * <p>
      * where taking in account the equal relation:
