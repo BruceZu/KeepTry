@@ -77,7 +77,7 @@ public class WinggleSortTest extends TestCase {
         this.sorted = sorted;
     }
 
-    @Test(timeout = 40l, expected = Test.None.class)
+    @Test(timeout = 100l, expected = Test.None.class)
     public void winggleSortTest() {
         int[] ar = toInt(Arrays.copyOf(arr, arr.length));
         // start test

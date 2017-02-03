@@ -58,7 +58,7 @@ public class Leetcode1TwoSumTest {
         this.j = targetAndExpectedResult[2];
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 50L, expected = Test.None.class)
     public void test() {
         int[] r = Leetcode1twoSum.twoSum(array, target);
         Assert.assertEquals(r[0], i);

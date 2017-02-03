@@ -29,7 +29,7 @@ import java.util.jar.JarFile;
 
 public class FileTest {
 
-    @Test(timeout = 60L, expected = Test.None.class)
+    @Test(timeout = 120L, expected = Test.None.class)
     public void tmpFileTest() throws ClassNotFoundException, IOException {
         CodeSource srcjar = FileTest.class.getProtectionDomain().getCodeSource();
         if (srcjar != null) {

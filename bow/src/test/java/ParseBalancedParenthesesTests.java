@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class ParseBalancedParenthesesTests {
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 50L, expected = Test.None.class)
     public void getAllBalancedParenthesesTest() {
         assertThat(ParseBalancedParentheses.parse("()"), equalTo("()"));
         assertThat(ParseBalancedParentheses.parse("((((("), equalTo(""));

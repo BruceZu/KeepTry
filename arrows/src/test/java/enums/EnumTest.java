@@ -32,7 +32,7 @@ public class EnumTest {
         Assert.assertEquals(expected, Enums.createStateSelectList());
     }
 
-    @Test(timeout = 60L, expected = Test.None.class)
+    @Test(timeout = 160L, expected = Test.None.class)
     public void parseSelectedStateTest() {
         Assert.assertEquals("AL", Enums.parseSelectedState("Alabama"));
         Assert.assertEquals("AK", Enums.parseSelectedState("Alaska"));

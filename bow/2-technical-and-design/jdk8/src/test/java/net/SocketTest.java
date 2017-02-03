@@ -174,7 +174,7 @@ public class SocketTest {
         ).injectMembers(this);
     }
 
-    @Test(timeout = 2000L, expected = Test.None.class)
+    @Test(timeout = 8000L, expected = Test.None.class)
     public void portTest() throws ClassNotFoundException, IOException, Exception {
 
         // 1 server socket

@@ -24,7 +24,7 @@ import java.util.HashSet;
 import static array.FirstRepeatedString.firstDuplicate;
 
 public class FirstRepeatedStringTest {
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 50l, expected = Test.None.class)
     public void testFirstRepeatedString() {
         Assert.assertEquals(null, firstDuplicate(null));
         Assert.assertEquals(null, firstDuplicate(new String[]{}));
