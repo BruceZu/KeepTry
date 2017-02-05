@@ -22,18 +22,25 @@ public class NewTreeOfSumOfBiggers2 {
         if (root == null) {
             return;
         }
-        recursion(root);
+
+        // care find the smallest one firstly
+        TreeNodeWithP smallerst = root;
+        while (smallerst.left != null) {
+            smallerst = smallerst.left;
+        }
+
+        recursionFromSmallerst(smallerst);
     }
 
-    // create new BST
-    public static void recursion(TreeNodeWithP node) {
-        TreeNodeWithP next = nextNode(node);
+    // create new BST. precess from the smallest one
+    public static void recursionFromSmallerst(TreeNodeWithP fromNode) {
+        TreeNodeWithP next = nextNode(fromNode);
         if (next != null) {
             int currentNextVal = next.v;
-            recursion(next);
-            node.v = currentNextVal + next.v;
+            recursionFromSmallerst(next);
+            fromNode.v = currentNextVal + next.v;
         } else {
-            node.v = 0; // the last biggest Node value will be 0
+            fromNode.v = 0; // the last biggest Node value will be 0
         }
     }
 
@@ -42,7 +49,7 @@ public class NewTreeOfSumOfBiggers2 {
     // At last:
     // if there exists a parent node whose left child is the place from where we reach out in recursively
     // as the code.
-    // Note: when recursion upside need check if going out of root.
+    // Note: when recursionFromSmallerst upside need check if going out of root.
     public static TreeNodeWithP nextNode(TreeNodeWithP node) {
 
         if (node.right != null) {
@@ -59,5 +66,32 @@ public class NewTreeOfSumOfBiggers2 {
             node = node.parent;
         }
         return null;
+    }
+    //-----------------------------------------------------------------------------------
+    public static void main(String[] args) {
+        TreeNodeWithP root = TreeNodeWithP.testTreeNodeWithP();
+
+        TreeNodeWithP smallerest = root;
+        while (smallerest.left != null) {
+            smallerest = smallerest.left;
+        }
+        //before
+        System.out.println(smallerest.v);
+        TreeNodeWithP next =nextNode(smallerest);
+        while(next!=null){
+            System.out.println(next.v);
+            next =nextNode(next);
+        }
+
+        // update
+        newTreeOf(root);
+
+        // after
+        System.out.println(smallerest.v);
+        next =nextNode(smallerest);
+        while(next!=null){
+            System.out.println(next.v);
+            next =nextNode(next);
+        }
     }
 }

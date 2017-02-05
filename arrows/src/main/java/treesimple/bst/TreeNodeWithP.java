@@ -56,4 +56,51 @@ public class TreeNodeWithP {
     TreeNodeWithP parent;
     TreeNodeWithP left;
     TreeNodeWithP right;
+
+    public TreeNodeWithP(TreeNodeWithP parent, int v) {
+        this.parent = parent;
+        this.v = v;
+    }
+
+    public TreeNodeWithP(int v) {
+        this(null, v);
+    }
+
+    public static TreeNodeWithP testTreeNodeWithP() {
+        /**
+         *  <pre>
+         *                                  17
+         *                     /
+         *               11
+         *            /       \
+         *          9         13
+         *        /   \      /       \
+         *       8    10   12        15
+         *                         /    \
+         *                        14    16
+         *
+         * ------8  9 10 11 12 13 14 15 16 17---------------
+         *
+         */
+        TreeNodeWithP root = new TreeNodeWithP(17);
+        TreeNodeWithP n11 = new TreeNodeWithP(root, 11);
+        TreeNodeWithP n9 = new TreeNodeWithP(n11, 9);
+        TreeNodeWithP n13 = new TreeNodeWithP(n11, 13);
+        TreeNodeWithP n8 = new TreeNodeWithP(n9, 8);
+        TreeNodeWithP n10 = new TreeNodeWithP(n9, 10);
+        TreeNodeWithP n12 = new TreeNodeWithP(n13, 12);
+        TreeNodeWithP n15 = new TreeNodeWithP(n13, 15);
+        TreeNodeWithP n14 = new TreeNodeWithP(n15, 14);
+        TreeNodeWithP n16 = new TreeNodeWithP(n15, 16);
+        root.left = n11;
+        n11.left = n9;
+        n11.right = n13;
+        n9.left = n8;
+        n9.right = n10;
+        n13.left = n12;
+        n13.right = n15;
+        n15.left = n14;
+        n15.right = n16;
+        return root;
+    }
 }
