@@ -80,25 +80,22 @@ class SolutionB {
             return n;
         }
 
-        TreeNode parentAlongLeft = null;
+        TreeNode successorParentCandidator = null;
         // Assume the give node is sure exists in the given BST
-        while (true) {
-            if (node.val == root.val) {
-                return parentAlongLeft;
-            }
-
-            if (node.val < root.val) {
+        while (node.val != root.val) {
+            if (node.val > root.val) {
                 // before change to the left child. keep cur node as parent candidator.
-                parentAlongLeft = root;
+                successorParentCandidator = root;
                 root = root.left;
             } else {
                 root = root.right;
             }
         }
+        return successorParentCandidator;
     }
 }
 
-public class NextBiggestNodeInBST {
+public class SuccessorInBST {
     /**
      * when the TreeNode has parent pointer
      * <pre>
