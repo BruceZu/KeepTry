@@ -23,14 +23,14 @@ public class Leetcode215KthLargestElementinanArray3 {
 
     private static int quickSelect(int[] nums, int kIndex) {
         int l = 0, r = nums.length - 1;
-        while (true) {
-            if (l == r) {
+        while (true) { // care
+            if (l == r) { // care: quick select will end up with 1:  where l == r == k
                 return nums[l];
             }
             int locatedPivotIndex
                     = partitionInDesendingOrder(nums, l, r, getPivotIndexUsingMedianOf3(nums, l, r));
             if (locatedPivotIndex == kIndex)
-                return nums[locatedPivotIndex];
+                return nums[locatedPivotIndex]; // care: quick select will end up with 2: pivot index = k index
             else if (locatedPivotIndex > kIndex)
                 r = locatedPivotIndex - 1;
             else
