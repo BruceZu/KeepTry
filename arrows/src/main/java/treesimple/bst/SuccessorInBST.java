@@ -21,10 +21,10 @@ import java.util.Stack;
 // root node of BST is provided only.
 // Descending order or ascending order.
 // This is a Descending order case.
-class SolutionA {
+class BSTIterator {
     private Stack<TreeNode> nodesStack; // Descending order top down
 
-    public SolutionA(TreeNode root) {
+    public BSTIterator(TreeNode root) {
         nodesStack = new Stack<>();
         TreeNode node = root;
         while (node != null) { // care
@@ -59,7 +59,7 @@ class SolutionA {
     /*---------------------------------------------------------------------------------------------------------*/
     public static void main(String[] args) {
         TreeNode root = TreeNode.testTree();
-        SolutionA i = new SolutionA(root);
+        BSTIterator i = new BSTIterator(root);
         while (i.hasNext()) {
             System.out.println(i.next());
         }
