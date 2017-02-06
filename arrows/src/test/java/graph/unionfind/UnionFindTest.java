@@ -23,41 +23,23 @@ import java.util.Random;
 public class UnionFindTest {
     @Test(timeout = 10L, expected = Test.None.class)
     public void testUnion() {
-        UnionFind uf = new UnionFind();
+        UnionFind uf = new UnionFind(new String[]{""});
         Random r = new Random();
         int id = r.nextInt(100);
-        Assert.assertTrue(id == uf.findRoot(id));
+        Assert.assertTrue(id == uf.rootOf(id));
 
         uf.union(1, 2);
-        Assert.assertTrue(uf.findRoot(2) == uf.findRoot(1));
-        Assert.assertEquals(1, uf.treeHeight(1));
-        Assert.assertEquals(1, uf.treeHeight(2));
+        Assert.assertTrue(uf.rootOf(2) == uf.rootOf(1));
 
         uf.union(4, 5);
-        Assert.assertTrue(uf.findRoot(4) == uf.findRoot(5));
-        Assert.assertEquals(1, uf.treeHeight(4));
-        Assert.assertEquals(1, uf.treeHeight(5));
+        Assert.assertTrue(uf.rootOf(4) == uf.rootOf(5));
 
-        Assert.assertTrue(uf.findRoot(4) != uf.findRoot(1));
+        Assert.assertTrue(uf.rootOf(4) != uf.rootOf(1));
         uf.union(1, 5);
-        Assert.assertTrue(uf.findRoot(4) == uf.findRoot(1));
-
-        Assert.assertEquals(2, uf.treeHeight(1));
-        Assert.assertEquals(2, uf.treeHeight(2));
-        Assert.assertEquals(2, uf.treeHeight(4));
-        Assert.assertEquals(2, uf.treeHeight(5));
+        Assert.assertTrue(uf.rootOf(4) == uf.rootOf(1));
 
         uf.union(7, 8);
-        Assert.assertEquals(1, uf.treeHeight(7));
-        Assert.assertEquals(1, uf.treeHeight(8));
-
         uf.union(1, 8);
-        Assert.assertEquals(2, uf.treeHeight(7));
-        Assert.assertEquals(2, uf.treeHeight(8));
-        Assert.assertEquals(2, uf.treeHeight(1));
-        Assert.assertEquals(2, uf.treeHeight(2));
-        Assert.assertEquals(2, uf.treeHeight(4));
-        Assert.assertEquals(2, uf.treeHeight(5));
 
         uf.union(10, 11);
         uf.union(12, 13);
@@ -81,42 +63,23 @@ public class UnionFindTest {
 
         uf.union(23, 43);// height of 4
 
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(11));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(12));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(13));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(11));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(12));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(13));
 
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(20));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(21));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(22));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(23));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(20));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(21));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(22));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(23));
 
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(30));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(31));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(32));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(33));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(30));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(31));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(32));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(33));
 
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(40));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(41));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(42));
-        Assert.assertTrue(uf.findRoot(10) == uf.findRoot(43));
-
-        Assert.assertEquals(4, uf.treeHeight(10));
-        Assert.assertEquals(4, uf.treeHeight(11));
-        Assert.assertEquals(4, uf.treeHeight(12));
-        Assert.assertEquals(4, uf.treeHeight(13));
-
-        Assert.assertEquals(4, uf.treeHeight(20));
-        Assert.assertEquals(4, uf.treeHeight(21));
-        Assert.assertEquals(4, uf.treeHeight(22));
-        Assert.assertEquals(4, uf.treeHeight(23));
-
-        Assert.assertEquals(4, uf.treeHeight(30));
-        Assert.assertEquals(4, uf.treeHeight(31));
-        Assert.assertEquals(4, uf.treeHeight(32));
-        Assert.assertEquals(4, uf.treeHeight(33));
-
-        Assert.assertEquals(4, uf.treeHeight(40));
-        Assert.assertEquals(4, uf.treeHeight(41));
-        Assert.assertEquals(4, uf.treeHeight(42));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(40));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(41));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(42));
+        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(43));
     }
 }

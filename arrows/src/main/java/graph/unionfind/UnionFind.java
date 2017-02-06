@@ -17,103 +17,63 @@ package graph.unionfind;
 
 /**
  * <pre>
- * disjoint-set data structure
+ *     scenario: disjoint sets. e.g. islands, groups of machines
+ *     data structure:
+ *                int[] or HashMap to keep:
+ *                       1 mapping relation: index is node id/tag -> value is nextNodeIdOf node's id/tag it is pointing to.
+ *                       2 all nodes' id/tag: 0 ~ array length -1
+ *     operations:
+ *            search: root(int nodeId)
+ *                    root node id represents the id of its set / island/ group of machine
+ *                    this method is used to check if 2 given nodes are in the same set/island/group of machine.
+ *            update: union(int nodeAid, int nodeBid)
+ *                    if 2 given nodes are not in the same set/island/group of machine.
+ *                    link together their sets/islands/groups of machine
+ *                    for performance concern, link the one with lower tree height to the other.
+ *                    but if the root() implements Pass Compress, just link any one to the other,
+ *                    and need not to maintain the tree height.
  *
- * 1 Tag nodes to ids from 0
- * 2 Using Array to map index(id) to next node id
- * 3 Checking 2 nodes in same tree by compare their end/root
- * 4 Union by point one node's end/root to that of another
- * 5 Improvement:
- *     a. Link lower height tree to higher tree
- *     b. Pass compress. make the tree height to be 1 at last.
+ * with Pass Compress the tree will be updated eventually to be end up with tree height of 1.
+ *        n1
+ *      / |  \
+ *  n2 n3 .... n7 n8
+ *
  */
 public class UnionFind {
 
-    /**
-     * Assume the element of ids is:
-     * 1 distinguish
-     * 2  >=0
-     * 3 that mas element value is ids.length - 1.
-     * In a short word, it is the result of tagging nodes.
-     */
-    private final int[] next;
-    private int[] treeHeight;
+    // Assume all nodes have been tagged with digits,
+    // So: ids are distinguish, 0 ~ n-1,
+    private final int[] nextNodeIdOf;
 
-    /**
-     * <pre>
-     * Just make it easy. only 100 nodes and their ids are ready.
-     * Initially let each node as a tree, the root/end is itself.
-     * bad case runtime O(logN).
-     *
-     *              n
-     *          /  / |
-     *        n   n  n
-     *      / |   |
-     *     n  n   n
-     *     |
-     *     n
-     *
-     *  root ---- bottom     N( nodes number)   tree height (logN)
-     *        1                1      2^0         0
-     *       1 1               2      2^1         1
-     *      1 2 1              4      2^2         2
-     *     1 3 3 1             8      2^3         3
-     *    1 4 6 4 1            16     2^4         4
-     */
-    public UnionFind() {
-        next = new int[100];
-        treeHeight = new int[next.length];
-        for (int i = 0; i < 100; i++) {
-            next[i] = i;
-            treeHeight[i] = 0;
-        }
-    }
-
+    // Tag nodes with digits,
     public UnionFind(String[] nodes) {
-        // todo: Tag the nodes firstly.
-        // The nodes may be too big to load into memory
-        this.next = null;
-        this.treeHeight = null;
-    }
-
-    /**
-     * <pre>
-     * Each loop, break up 1/2 path and height of the id being searched
-     * By firstly update the next mapping before next update id.
-     * todo: how to update the height of tree after path compression
-     */
-    public int findRoot(int id) {
-        while (id != next[id]) {
-            next[id] = next[next[id]];
-            id = next[id];
+        // Just make a easy cases, only 100 nodes.
+        // Initially let each node point to itself, circle, to form a tree
+        // so the root/end is itself. Each node represents a islands/groups of machines
+        //
+        // if the root points to any other node in its islands/groups of machines.
+        // it will be a graph like a black hole shape. It has only one circle, as for any node there is
+        // only one 'come out' edge.
+        nextNodeIdOf = new int[100];
+        for (int i = 0; i < 100; i++) {
+            nextNodeIdOf[i] = i;
         }
-        return id;
     }
 
-    /**
-     * <pre>
-     * 1> let the smaller tree connect to the bigger one.
-     *
-     * 2> Once a root pint to another root, this root is not root anymore
-     * and its tree height value has no meaning any more
-     * so it is better to let its tree height value to be -1.
-     */
+    // Pass Compress: in each search, break up 1/2 path.
+    public int rootOf(int nodeId) {
+        while (nodeId != nextNodeIdOf[nodeId]) {
+            nextNodeIdOf[nodeId] = nextNodeIdOf[nextNodeIdOf[nodeId]];
+            nodeId = nextNodeIdOf[nodeId];
+        }
+        return nodeId;
+    }
+
     public void union(int ida, int idb) {
-        int roota = findRoot(ida);
-        int rootb = findRoot(idb);
+        int roota = rootOf(ida);
+        int rootb = rootOf(idb);
         if (roota != rootb) {
-            if (treeHeight[roota] < treeHeight[rootb]) {
-                next[roota] = rootb;
-            } else if (treeHeight[rootb] < treeHeight[roota]) {
-                next[rootb] = roota;
-            } else {
-                next[roota] = rootb;
-                treeHeight[rootb]++;
-            }
+            nextNodeIdOf[roota] = rootb;
         }
-    }
-
-    public int treeHeight(int id) {
-        return treeHeight[findRoot(id)];
     }
 }

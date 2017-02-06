@@ -15,48 +15,66 @@
 
 package graph.unionfind;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * <pre>
- * Google Interview Question for SDE1s
- * Idea:
- *  1. Find independent graphs ( each graph with at least/most one circle)
- *  2. Categorize independent graph into three:
- *      1). graph that doesn't contain node1
- *      2). graph that contain node 1, but doesn't have a node point to it
- *      3). graph that contain node 1, but do have a node point to it
- *  3. so the total number is: 1) + 2)
+ * Google Interview Question for SDE is
+ * <a href="https://www.careercup.com/question?id=5840928073842688">career cup</a>
  *
- *  how to find a independent graph or how to describe a independent graph ?
- *     using a map 'graphs' to keep node -> visited node, any part of the graph circle.
- *     using a new 'visited' set. for each node to check:
- *           each node in 'graphs'.keySet()? pass : put it in 'visited'.
- *           check node's outgoing node, in 'graphs'.keySet()
- *                                       ? pass
- *                                       : in 'visited'
- *                                              ? put(node, outgoing node) to 'graphs'
- *                                              : put in 'visited'
- *  how to distinguish 2) and 3)? check V(tag=1).in ==null
  *
- *             2  3
- *             |  |
- *              ----> 4 -> 5 -> 6
- *                          ^    |
- *                          |___ 7          map(7 -> 5) or  map(5 -> 6) or  map(6 -> 7)
- *
- *                   9
- *                   |
- *             10 -----> 8 -> 1 ->
- *                            ^   |
- *                            |___|         map(1 -> 1)
- *
- * @see <a href="https://www.careercup.com/question?id=5840928073842688">career cup</a>
+ * objective is to form a tree with node 1 as the root.
+ * Resolution Idea: Union Find.
  */
 public class CareercupGoodNodes {
-    class V {
-        int tag;
-        Set<V> ins;
-        V out;
+    public static int getMinimumNumber(int[] nextNodeIdOf) {
+        int minimumNumber = 0;
+        if (nextNodeIdOf[0] != 0) {// assume node 1's id is 0
+            minimumNumber++;
+            nextNodeIdOf[0] = 0;
+        }
+
+        minimumNumber += rootsOf(nextNodeIdOf) - 1;//all the connected components except for the one that contains 1
+        return minimumNumber;
+    }
+
+    // number of connected components
+    // all the connected components except for the one that contains 1
+    // if it is back-hole shape graph, not a tree.
+    // need to break its circle at the circle's any edge
+    // to translate it into a tree.
+    public static int rootsOf(int[] nextNodeIdOf) {
+        Set<Integer> result = new HashSet<>();
+        for (int i = 0; i < nextNodeIdOf.length; i++) {
+            int cur = i;
+            int next = nextNodeIdOf[i];
+
+            Set<Integer> visited = new HashSet<>();
+            visited.add(i);
+            while (cur != next) {
+                if (visited.contains(next)) {// black hole shape graph. every node always points to other one.
+                    nextNodeIdOf[cur] = cur;
+                    break; // care
+                } else {
+                    visited.add(next); // care: add it to visited set
+                }
+
+                cur = next;
+                next = nextNodeIdOf[cur]; // care update current node id and next node id
+            }
+            result.add(cur);
+        }
+        return result.size();
+    }
+
+    // -------------------------------------------------------
+    public static void main(String[] args) {
+        int[] nextNodeIdOf = new int[]{0, 1, 2, 3, 4};
+        System.out.println(getMinimumNumber(nextNodeIdOf));
+        nextNodeIdOf = new int[]{4, 4, 4, 4, 4};
+        System.out.println(getMinimumNumber(nextNodeIdOf));
+        nextNodeIdOf = new int[]{1, 2, 0, 1, 2, 0, 7, 7};
+        System.out.println(getMinimumNumber(nextNodeIdOf));
     }
 }
