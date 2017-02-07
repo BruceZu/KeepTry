@@ -15,6 +15,8 @@
 
 package string.supplementary_characters;
 
+import hash.Leetcode242ValidAnagram;
+
 import java.nio.charset.Charset;
 
 /**
@@ -122,7 +124,7 @@ public class SupplementaryCharacters {
      * The Java Native Interface
      * routines that convert to and from modified UTF-8 cannot be used when standard UTF-8 is required.
      * {@link string.CovertLetterToNumber}
-     * {@link hashtable.Leetcode242ValidAnagram}
+     * {@link Leetcode242ValidAnagram}
      * @see <br> <a href="http://www.oracle.com/us/technologies/java/supplementary-142654.html">supplementary </a>
      * <br> <a href="https://en.wikibooks.org/wiki/Unicode/Character_reference/D000-DFFF">UTF</a>
      * <br> <a href="https://en.wikipedia.org/wiki/UTF-16#UCS-2">UTF-16#UCS-2</a>

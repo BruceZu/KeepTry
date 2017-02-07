@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package graph.unionfind;
+package unionfind;
 
 import java.util.HashSet;
 import java.util.Set;

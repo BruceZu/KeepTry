@@ -13,12 +13,16 @@
 // limitations under the License.
 //
 
-package graph.unionfind;
+package hash;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+/**
+ * <a href="https://leetcode.com/problems/longest-consecutive-sequence/">LeetCode</a>
+ */
 public class Leetcode128LongestConsecutiveSequence {
-
     // get the number of longest sequence in the give array
     //
     // if a given num is in a sequence, sure it will 搭边.and 搭 only the 边
@@ -30,13 +34,13 @@ public class Leetcode128LongestConsecutiveSequence {
         for (int num : nums) {
             if (!lengthOf.containsKey(num)) {
                 int leftBorder = num - 1, rightBoarder = num + 1;
-                int leftSequenceLength = lengthOf.containsKey(leftBorder) ? lengthOf.get(leftBorder) : 0;
-                int rightSequenceLength = lengthOf.containsKey(rightBoarder) ? lengthOf.get(rightBoarder) : 0;
+                int l = lengthOf.containsKey(leftBorder) ? lengthOf.get(leftBorder) : 0;
+                int r = lengthOf.containsKey(rightBoarder) ? lengthOf.get(rightBoarder) : 0;
 
-                int currentSequenceLength = leftSequenceLength + 1 + rightSequenceLength;
+                int currentSequenceLength = l + 1 + r;
                 lengthOf.put(num, currentSequenceLength);
-                lengthOf.put(num - leftSequenceLength, currentSequenceLength);
-                lengthOf.put(num + rightSequenceLength, currentSequenceLength);
+                lengthOf.put(num - l, currentSequenceLength);
+                lengthOf.put(num + r, currentSequenceLength);
 
                 result = Math.max(result, currentSequenceLength);
             } else {
@@ -47,8 +51,38 @@ public class Leetcode128LongestConsecutiveSequence {
         return result;
     }
 
+    // ---------------------------------------------
     public static void main(String[] args) {
         System.out.println(longestConsecutive(new int[]{1, 6, 4, 2, 5, 3}));
+    }
+
+    public int longestConsecutive2(int[] nums) {
+        Set<Integer> set = new HashSet<Integer>();
+        for (int num : nums) {
+            set.add(num);
+        }
+
+        int result = 0;
+        for (int n : nums) {
+            int currentSequenceLength = 0;
+            if (set.isEmpty()) {
+                break;
+            }
+
+            int nValue = n;
+            while (set.remove(nValue--)) {
+                currentSequenceLength++;
+            }
+
+            nValue = n;
+            while (set.remove(++nValue)) {
+                currentSequenceLength++;
+            }
+
+            result = Math.max(currentSequenceLength, result);
+        }
+
+        return result;
     }
 }
 
