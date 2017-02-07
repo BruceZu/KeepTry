@@ -40,26 +40,21 @@ package greedy;
  *      }
  */
 public class Leetcode55JumpGame {
-
     public boolean canJump(int[] nums) {
-        if (nums == null || nums.length <= 1) {
+        if (nums.length == 1) {
             return true;
         }
-        int atlest = 1;
-        for (int i = nums.length - 2; i >= 0; i--) {
-            if (nums[i] >= atlest) {
-                continue;
+        int i = nums.length - 2;
+        int requiredMinimumSteps = 1;
+        while (i > 0) {
+            if (nums[i] >= requiredMinimumSteps) {
+                requiredMinimumSteps = 1;
+            } else {
+                requiredMinimumSteps++;
             }
-            while (i >= 0 && nums[i] < atlest) {
-                atlest++;
-                i--;
-            }
-            if (i == -1) {
-                return false;
-            }
-            atlest = 1;
+            i--;
         }
-        return atlest == 1;
+        return requiredMinimumSteps <= nums[0];
     }
 }
 

@@ -17,14 +17,15 @@ package greedy;
 
 public class Leetcode55JumpGame3 {
     public static boolean canJump(int[] nums) {
-        int gt = 0; // greedyTo
-        for (int cur = 0; cur < nums.length; cur++) {
-            if (gt < cur) {
+        int reachToAtmostByFar = nums[0];
+        for (int i = 1; i <= nums.length - 2; i++) {
+            if (i <= reachToAtmostByFar) {
+                reachToAtmostByFar = Math.max(reachToAtmostByFar, i + nums[i]);
+            } else {
                 return false;
             }
-            int curgt = cur + nums[cur];
-            gt = curgt > gt ? curgt : gt;
         }
-        return true;
+        return reachToAtmostByFar >= nums.length - 1;
     }
 }
+
