@@ -37,64 +37,52 @@ package greedy;
  *  Tags Array Greedy
  *
  *  ================================================================
- *   idea BFS
- *
- *   make it simple
  *   current jumped scope left index = last jumped scope right index +1
- *
- *  if A[0]=3, A[2]=3;
- *
- *
- *  array A[0]  A[1]  A[2]  A[3]  A[4]
- *  index   0     1     2     3     4
- *         []   [              ]
- *  jumps  0          1
  *
  *  DP idea see {@link Leetcode45JumpGameII2}
  */
 public class Leetcode45JumpGameII {
+    // assume that you can always reach the last index.
     public static int jump(int[] A) {
         if (A.length <= 1) {
             return 0;
         }
 
         int jumps = 1;
-        int curJpReachL = 1, curJpReachR = A[0]; // first jump
-        if (curJpReachR >= A.length - 1) {
+        int l = 1, r = A[0]; //BFS: pre all possible jump reached 'NEW' scope, 'NEW' means out of the left old scope.
+        if (r >= A.length - 1) {
             return 1;
         }
 
-        int index, next;
         while (true) {
-            next = 0;
-            index = curJpReachL;
-            while (index <= curJpReachR) {
-                next = Math.max(next, index + A[index]);
-                if (next >= A.length - 1) {
+            int nextR = -1;
+            for (int cur = l; cur <= r; cur++) {
+                nextR = Math.max(nextR, cur + A[cur]);
+                if (nextR >= A.length - 1) {
                     return jumps + 1;
                 }
-                index++;
             }
+            // next
             jumps++;
-            curJpReachL = curJpReachR + 1;
-            curJpReachR = next;
+            l = r + 1;
+            r = nextR;
         }
     }
 
     // simple
     public static int jump2(int[] A) {
-        int jumps = 0;
-        int right = 0;
-        int nextRight = 0;
+        int jumpTimes = 0;
+        int lastOfCurJumpCandidators = 0;
+        int possibleReachedTo = 0;
 
         for (int i = 0; i <= A.length - 1; i++) {
-            if (i > right) {
-                jumps++;
-                right = nextRight;
+            if (i > lastOfCurJumpCandidators) {
+                jumpTimes++;
+                lastOfCurJumpCandidators = possibleReachedTo;
             }
-            nextRight = nextRight > i + A[i] ? nextRight : i + A[i];
-            //if (nextRight >= A.length - 1) return A.length == 1 ? 0 : jumps + 1;   // just for performance
+            int reachedToFromCur = i + A[i];
+            possibleReachedTo = reachedToFromCur > possibleReachedTo ? reachedToFromCur : possibleReachedTo;
         }
-        return jumps;
+        return jumpTimes;
     }
 }
