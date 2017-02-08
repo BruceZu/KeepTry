@@ -15,18 +15,34 @@
 
 package treesimple.heap;
 
+/**
+ * <pre>
+ *      e
+ *    e   e
+ *  e e   e e
+ *
+ *  parent index = i
+ *  left child index = 2*i + 1
+ *  right child index = 2*i + 2
+ *
+ *  T[]:
+ *  ( e )( e e ) ( e e e e ) ( e e e  e e  e  e  e )
+ *    0    1 2     3 4 5 6     7 8 9 10 11 12 13 14
+ *
+ * @param <T>
+ */
 public class Heap<T extends Comparable> {
     private final static int LIMITED_SIZE = Integer.MAX_VALUE >> 2;
     private T[] data;
-    int nextIndex = 0;
+    int nextInsertIndex = 0;
 
     private void enlargeSize() {
-        if (nextIndex >= LIMITED_SIZE) {
+        if (nextInsertIndex >= LIMITED_SIZE) {
             throw new ArrayIndexOutOfBoundsException("reach the limit of heap size " + LIMITED_SIZE);
         }
-        int enlargedSize = Math.min(LIMITED_SIZE, nextIndex << 2);
+        int enlargedSize = Math.min(LIMITED_SIZE, nextInsertIndex << 2);
         T[] enlarged = (T[]) new Comparable[enlargedSize];
-        System.arraycopy(data, 0, enlarged, 0, nextIndex);
+        System.arraycopy(data, 0, enlarged, 0, nextInsertIndex);
         data = enlarged;
     }
 
@@ -42,41 +58,40 @@ public class Heap<T extends Comparable> {
      * - check data size
      * - append the e to the end of data
      * - sort
-     * -- compare with parent, keep swap if(p less than I and it is max, p greater or sameas I and it is min).
+     * -- compare with parent, keep swap if(p less than I and it is max, p greater or same as I and it is min).
      * -- till condition is not match or to the root of the head, the index is 0;
      * -  return the max/min
      *
      * @param e
-     * @param max order by ascending order, root is the max one, or descending order with mix at root
+     * @param maxAtTop order by ascending order, root is the max one, or descending order with mix at root
      * @return max/min element of heap
      */
-    public T add(T e, boolean max) {
-        if (nextIndex == data.length) {
+    public T add(T e, boolean maxAtTop) {
+        if (nextInsertIndex == data.length) {
             enlargeSize();
         }
 
-        data[nextIndex++] = e;
-        int addedIndex = nextIndex - 1;
+        data[nextInsertIndex++] = e;
+        int eIndex = nextInsertIndex - 1;
 
         while (true) {
-            int pIndex = (addedIndex & 1) == 1 ? (addedIndex - 1) / 2 : (addedIndex - 2) / 2;
-            if (pIndex == -1) {
+            int parentIndex = (eIndex & 1) == 1 ? (eIndex - 1) / 2 : (eIndex - 2) / 2;
+            if (parentIndex == -1) {
                 break;
             }
 
-            T p = data[pIndex];
-            T I = data[addedIndex];
+            T p = data[parentIndex];
+            T I = data[eIndex];
             boolean pIsSmall = p.compareTo(I) < 0;
             boolean pIsBig = p.compareTo(I) > 0;
-            if (max && pIsSmall || !max && pIsBig) {
+            if (maxAtTop && pIsSmall || !maxAtTop && pIsBig) {
                 T tmp = p;
-                data[pIndex] = I;
-                data[addedIndex] = p;
-                addedIndex = pIndex;
+                data[parentIndex] = I;
+                data[eIndex] = p;
+                eIndex = parentIndex;
                 continue;
             }
-
-            break;
+            break; // same as parent or be in order as expected
         }
         return data[0];
     }
@@ -84,7 +99,7 @@ public class Heap<T extends Comparable> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        while (i < nextIndex - 1) {
+        while (i < nextInsertIndex - 1) {
             sb.append(data[i++]).append(", ");
         }
         sb.append(data[i++]);
@@ -107,20 +122,20 @@ public class Heap<T extends Comparable> {
      */
 
     public T delete(boolean max) {
-        if (nextIndex == 0) {
+        if (nextInsertIndex == 0) {
             return null;
         }
         T re = data[0];
-        data[0] = data[nextIndex - 1];
-        data[nextIndex - 1] = null;
-        nextIndex--;
+        data[0] = data[nextInsertIndex - 1];
+        data[nextInsertIndex - 1] = null;
+        nextInsertIndex--;
 
         int IIndex = 0;
         while (true) {
             int lIndex = 2 * IIndex + 1;
             int rIndex = 2 * IIndex + 2;
-            boolean hasL = nextIndex > lIndex;
-            boolean hasR = nextIndex > rIndex;
+            boolean hasL = nextInsertIndex > lIndex;
+            boolean hasR = nextInsertIndex > rIndex;
             if (!hasL) {
                 return re;
             }
