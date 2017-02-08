@@ -21,25 +21,26 @@ public class Leetcode146LRUCache2 {
     class LRUCache {
         private class MockHashMap {
             private class Entry {
-                Node n;
+                SearchedResult searched;
                 Entry next;
 
-                Entry(Node n) {
-                    this.n = n;
+                Entry(SearchedResult n) {
+                    this.searched = n;
                 }
             }
 
+            // hash
             private int index(int key) {
                 return key % bucks.length;
             }
 
-            Entry[] bucks;
+            private Entry[] bucks;
 
             public MockHashMap(int capacity) {
                 bucks = new Entry[capacity];
             }
 
-            public Node get(int key) {
+            public SearchedResult get(int key) {
                 int index = index(key);
                 Entry entry = bucks[index];
 
@@ -48,8 +49,8 @@ public class Leetcode146LRUCache2 {
                 }
 
                 while (entry != null) {
-                    if (entry.n.key == key) {
-                        return entry.n;
+                    if (entry.searched.key == key) {
+                        return entry.searched;
                     }
                     entry = entry.next;
                 }
@@ -57,7 +58,7 @@ public class Leetcode146LRUCache2 {
             }
 
             // Assume the added entry is new one.
-            public void put(int k, Node v) {
+            public void putNew(int k, SearchedResult v) {
                 Entry added = new Entry(v);
 
                 int index = index(k);
@@ -70,14 +71,14 @@ public class Leetcode146LRUCache2 {
             }
 
             // Assume the entry to be removed exists
-            public void remove(int key) {
+            public void removeOld(int key) {
                 int index = index(key);
                 Entry pre = bucks[index];
-                if (pre.n.key == key) {
+                if (pre.searched.key == key) {
                     bucks[index] = pre.next;
                     return;
                 }
-                while (pre.next.n.key != key) {
+                while (pre.next.searched.key != key) {
                     pre = pre.next;
                 }
                 pre.next = pre.next.next;
@@ -85,26 +86,26 @@ public class Leetcode146LRUCache2 {
         }
 
         private int capacity;
-        private MockHashMap map;
-        private Order order;
+        private MockHashMap searchedBy;
+        private SortedSearchResults sorted;
         private int size;
 
         public LRUCache(int capacity) {
             this.capacity = capacity;
-            map = new MockHashMap(capacity);
-            order = new Order();
+            searchedBy = new MockHashMap(capacity);
+            sorted = new SortedSearchResults();
             size = 0;
         }
 
         // get(key) - Get the value (will always be positive) of the key if the key exists in the cache,
         // otherwise return -1.
         public Integer get(int key) {
-            Node n = map.get(key);
+            SearchedResult n = searchedBy.get(key);
             if (n == null) {
                 return -1; // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
             }
 
-            order.access(n);
+            sorted.accessed(n);
             return n.value;
         }
 
@@ -114,19 +115,20 @@ public class Leetcode146LRUCache2 {
             // set
             Integer v = get(key);
             if (get(key) != -1) { // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
-                map.get(key).value = value;
+                // update existing one
+                searchedBy.get(key).value = value; // update from map is enough.
                 return;
             }
 
             // insert
             if (size == capacity) {
-                map.remove(order.rm_oldest().key);
+                searchedBy.removeOld(sorted.removeOldest().key);
                 size--;
             }
 
-            Node insert = new Node(key, value);
-            map.put(key, insert);
-            order.addNew(insert);
+            SearchedResult newResult = new SearchedResult(key, value);
+            searchedBy.putNew(key, newResult);
+            sorted.addNew(newResult);
             size++;
         }
     }

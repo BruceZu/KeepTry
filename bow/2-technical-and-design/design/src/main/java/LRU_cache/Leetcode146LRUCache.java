@@ -24,20 +24,18 @@ import java.util.HashMap;
  * <a href="https://leetcode.com/problems/lru-cache/">leetcode</a>
  */
 
-//with HashMap and DoubleLinkedList
-
-class Node {
-    Node prev;
-    Node next;
+class SearchedResult {
+    SearchedResult prev;
+    SearchedResult next;
     Integer key;
     Integer value;
 
-    Node() { // used only for sentinel nodes head and tail
+    SearchedResult() { // used only for sentinel sortedSearched head and tail
 
     }
 
-    public Node(int key, int value) { // make sure the input does not have null key and value, the null be used as
-        // 'not found' in map
+    public SearchedResult(int key, int value) { // make sure the input does not have null key and value, the null be used as
+        // 'not found' in searchedBy
         this.key = key;
         this.value = value;
         this.prev = null;
@@ -45,93 +43,96 @@ class Node {
     }
 }
 
-class Order {
-    // double linked list
-    private Node old_;
-    private Node _new;
+class SortedSearchResults {
+    // double linked list, with it to know which should be removed
+    private SearchedResult olderSentinel;
+    private SearchedResult recentSentinel;
 
-    public Order() {
-        old_ = new Node(); // care
-        _new = new Node(); // care
-        old_.next = _new; // care
-        _new.prev = old_; // care
-    }
-
-    Node rm_oldest() {
-        Node removed = old_.next;
-        remove(removed);
-        return removed;
-    }
-
-    void addNew(Node current) {
-        Node pre = _new.prev;
-        Node next = _new;
-
-        pre.next = current;
-        current.next = next;
-
-        next.prev = current;
-        current.prev = pre;
-    }
-
-    void remove(Node n) {
-        Node pre = n.prev;
-        Node next = n.next;
+    private void remove(SearchedResult n) {
+        SearchedResult pre = n.prev;
+        SearchedResult next = n.next;
 
         pre.next = next;
         next.prev = pre;
     }
 
-    void access(Node n) {
+    public SortedSearchResults() {
+        //  left olderSentinel <->recentSentinel  right
+        olderSentinel = new SearchedResult();
+        recentSentinel = new SearchedResult();
+        olderSentinel.next = recentSentinel;
+        recentSentinel.prev = olderSentinel;
+    }
+
+    SearchedResult removeOldest() {
+        SearchedResult removed = olderSentinel.next;
+        remove(removed);
+        return removed;
+    }
+
+    void addNew(SearchedResult newResult) {
+        SearchedResult pre = recentSentinel.prev;
+        SearchedResult next = recentSentinel;
+
+        pre.next = newResult;
+        newResult.next = next;
+
+        next.prev = newResult;
+        newResult.prev = pre;
+    }
+
+    void accessed(SearchedResult n) {
         remove(n);
         addNew(n);
     }
 }
 
+// with HashMap and DoubleLinkedList
 class LRUCache {
     private int capacity;
-    private HashMap<Integer, Node> map;
-    private Order order;
+    private HashMap<Integer, SearchedResult> searchedBy;
+    private SortedSearchResults sortedSearched;
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        map = new HashMap();
-        order = new Order();
+        searchedBy = new HashMap();
+        sortedSearched = new SortedSearchResults();
     }
 
     // get(key) - Get the value (will always be positive) of the key if the key exists in the cache,
     // otherwise return -1.
     public Integer get(int key) {
-        Node n = map.get(key);
+        SearchedResult n = searchedBy.get(key);
         if (n == null) {
             return -1; // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
         }
 
-        order.access(n);
+        sortedSearched.accessed(n);
         return n.value;
     }
 
-    // Set or insert the value if the key is not already present.
+    // set or insert the value if the key is not already present.
     // When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
     public void set(int key, int value) {
         // set
         Integer v = get(key);
         if (get(key) != -1) { // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
-            map.get(key).value = value;
+            searchedBy.get(key).value = value;
             return;
         }
 
         // insert
-        if (map.size() == capacity) {
-            map.remove(order.rm_oldest().key);
+        if (searchedBy.size() == capacity) {
+            searchedBy.remove(sortedSearched.removeOldest().key);
         }
 
-        Node insert = new Node(key, value);
-        map.put(key, insert);
-        order.addNew(insert);
+        SearchedResult newNode = new SearchedResult(key, value);
+        searchedBy.put(key, newNode);
+        sortedSearched.addNew(newNode);
     }
 }
 
+// -------------------------------------------------------------------------------------
 public class Leetcode146LRUCache {
     public static void main(String[] args) {
         LRUCache cache = new LRUCache(5);
