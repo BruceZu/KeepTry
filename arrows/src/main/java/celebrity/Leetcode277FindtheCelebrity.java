@@ -27,7 +27,7 @@ public class Leetcode277FindtheCelebrity {
     // a knows b then a is not celebrity,
     // a does not know b then b is not celebrity.
     //  case:  a know b, b know a; return -1
-    //  case:  a des not know b, b des not know a. return -1; 
+    //  case:  a does not know b, b does not know a. return -1;
     public int findCelebrity(int n) {
         int candidator = 0;
         for (int to = 1; to < n; to++) {
