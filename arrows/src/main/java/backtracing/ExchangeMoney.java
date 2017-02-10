@@ -23,100 +23,108 @@ import java.util.Arrays;
  * US coins: 1 25 50
  *
  * greedy can not work, e.g. [50， 10， 3], 62
- *
- * care:
- *    do not change the 'left' variable between recursion, it will used for next turn in the loop.
- *    next recursion from current i ----> make sure the resolutions is not repeated as a set or collection.
- *
- *
- * performance :
- * sort array in ascending order then we can
- * check current left with conins[i], break early.
  */
 public class ExchangeMoney {
-    //Combinations
-    private static void recursionWithDescendingArray(int[] conins, int left, int from, int[] result, int counts) {
-        if (left == 0) {
-            result[0] = result[0] > counts ? counts : result[0];
+
+    static int minumNumberOfChanges = Integer.MAX_VALUE;
+
+    // e.g. 20,  5, 10, 1.  do not need remember the 'from' index
+    private static void recursionWithNoSortedArray(int[] coinValueOf, int leftNeedToChange, int numberOfChangedCoins) {
+        if (leftNeedToChange == 0) {
+            minumNumberOfChanges = minumNumberOfChanges > numberOfChangedCoins
+                    ? numberOfChangedCoins
+                    : minumNumberOfChanges;
             return;
         }
 
-        for (int i = from; i < conins.length; i++) {
-            if (left < conins[i]) {
-                continue;
-            }
-            recursionWithDescendingArray(conins, left - conins[i], i, result, counts + 1); // care "left - conins[i]"
-        }
-    }
-
-    //Permutations
-    private static void recursionWithNoSortedArray(int[] conins, int left, int[] result, int counts) {
-        if (left == 0) {
-            result[0] = result[0] > counts ? counts : result[0];
-
-            return;
-        }
-
-        for (int i = 0; i < conins.length; i++) {
-            if (left < conins[i]) {
+        for (int i = 0; i < coinValueOf.length; i++) {
+            if (leftNeedToChange < coinValueOf[i]) {
                 continue;
             }
 
-            recursionWithNoSortedArray(conins, left - conins[i], result, counts + 1); // care "left - conins[i]"
+            recursionWithNoSortedArray(coinValueOf,
+                    leftNeedToChange - coinValueOf[i],
+                    numberOfChangedCoins + 1); // care "left - conins[i]"
         }
     }
 
-    //Combinations
-    private static void recursionWithAscendingArray(int[] conins, int left, int from, int[] result, int counts) {
-        if (left == 0) {
-            result[0] = result[0] > counts ? counts : result[0];
+    // e.g. 1, 5, 10, 20, do not need remember the 'from' index, each loop from index 0 to try
+    private static void recursionWithAscendingArray(int[] coinValueOf,
+                                                    int leftNeedToChange,
+                                                    int numberOfChangedCoins) {
+        if (leftNeedToChange == 0) {
+            minumNumberOfChanges = minumNumberOfChanges > numberOfChangedCoins
+                    ? numberOfChangedCoins
+                    : minumNumberOfChanges;
             return;
         }
 
-        for (int i = from; i < conins.length; i++) {
-            if (left < conins[i]) {
-                break;
+        for (int i = 0; i < coinValueOf.length; i++) {
+            if (leftNeedToChange < coinValueOf[i]) {
+                break; // stop this way
             }
-            recursionWithAscendingArray(conins, left - conins[i], i, result, counts + 1); // care "left - conins[i]"
+            recursionWithAscendingArray(coinValueOf,
+                    leftNeedToChange - coinValueOf[i],
+                    numberOfChangedCoins + 1); // care "left - conins[i]"
+        }
+    }
+
+    // e.g. 20, 10, 5, 1
+    private static void recursionWithDescendingArray(int[] coinValueOf,
+                                                     int leftNeedToChange,
+                                                     int from, // this is optional
+                                                     int numberOfChangedCoins) {
+        if (leftNeedToChange == 0) {
+            minumNumberOfChanges = minumNumberOfChanges > numberOfChangedCoins
+                    ? numberOfChangedCoins
+                    : minumNumberOfChanges;
+            return;
+        }
+
+        for (int i = from; i < coinValueOf.length; i++) { // without the from, it still works
+            if (coinValueOf[i] > leftNeedToChange) {
+                continue; // try next coin
+            }
+            recursionWithDescendingArray(coinValueOf,
+                    leftNeedToChange - coinValueOf[i],
+                    i,
+                    numberOfChangedCoins + 1);
         }
     }
 
     public static void main(String[] args) {
-        int[] r = new int[1];
-        r[0] = Integer.MAX_VALUE;
-
         int sum = 18;
         int[] coins = new int[]{10, 5, 4, 1};
 
-        recursionWithDescendingArray(coins, sum, 0, r, 0);
-        System.out.println(r[0]);
+        recursionWithDescendingArray(coins, sum, 0, 0);
+        System.out.println(minumNumberOfChanges);
 
-        r[0] = Integer.MAX_VALUE;
+        minumNumberOfChanges = Integer.MAX_VALUE;
         Arrays.sort(coins);
-        recursionWithAscendingArray(coins, sum, 0, r, 0);
-        System.out.println(r[0]);
+        recursionWithAscendingArray(coins, sum, 0);
+        System.out.println(minumNumberOfChanges);
 
-        r[0] = Integer.MAX_VALUE;
+        minumNumberOfChanges = Integer.MAX_VALUE;
         coins = new int[]{5, 4, 10, 1};
-        recursionWithNoSortedArray(coins, sum, r, 0);
-        System.out.println(r[0]);
+        recursionWithNoSortedArray(coins, sum, 0);
+        System.out.println(minumNumberOfChanges);
 
         //
         System.out.println("-------------");
-        r[0] = Integer.MAX_VALUE;
+        minumNumberOfChanges = Integer.MAX_VALUE;
         coins = new int[]{50, 3, 10};
         sum = 62;
-        recursionWithNoSortedArray(coins, sum, r, 0);
-        System.out.println(r[0]);
+        recursionWithNoSortedArray(coins, sum, 0);
+        System.out.println(minumNumberOfChanges);
 
-        r[0] = Integer.MAX_VALUE;
+        minumNumberOfChanges = Integer.MAX_VALUE;
         coins = new int[]{50, 10, 3};
-        recursionWithDescendingArray(coins, sum, 0, r, 0);
-        System.out.println(r[0]);
+        recursionWithDescendingArray(coins, sum, 0, 0);
+        System.out.println(minumNumberOfChanges);
 
-        r[0] = Integer.MAX_VALUE;
+        minumNumberOfChanges = Integer.MAX_VALUE;
         Arrays.sort(coins);
-        recursionWithAscendingArray(coins, sum, 0, r, 0);
-        System.out.println(r[0]);
+        recursionWithAscendingArray(coins, sum, 0);
+        System.out.println(minumNumberOfChanges);
     }
 }
