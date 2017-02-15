@@ -58,13 +58,13 @@ public class Leetcode42TrappingRainWater {
         }
         int l = 0;
         int r = arr.length - 1;
-        int re = 0;
+        int result = 0;
 
         while (l < r) {
             if (arr[l] <= arr[r]) {
                 int next = l + 1;
                 while (next < r && arr[next] <= arr[l]) {
-                    re += arr[l] - arr[next];
+                    result += arr[l] - arr[next];
                     next++;
 
                 }
@@ -72,13 +72,13 @@ public class Leetcode42TrappingRainWater {
             } else {
                 int pre = r - 1;
                 while (l < pre && arr[pre] <= arr[r]) {
-                    re += arr[r] - arr[pre];
+                    result += arr[r] - arr[pre];
                     pre--;
 
                 }
                 r = pre;
             }
         }
-        return re;
+        return result;
     }
 }
