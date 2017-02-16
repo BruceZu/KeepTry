@@ -15,7 +15,7 @@
 
 package sort;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * <pre>
@@ -64,6 +64,12 @@ public class Leetcode252MeetingRooms {
             }
         }
         return true;
+    }
+
+    Character findFirstSingleChar(String str) {
+         LinkedHashMap a;
+
+        return null;
     }
 }
 

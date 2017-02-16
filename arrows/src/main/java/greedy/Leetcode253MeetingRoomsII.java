@@ -37,36 +37,34 @@ import java.util.Arrays;
  *      (H) Merge Intervals
  *      (E) Meeting Rooms
  * ==============================================================================
- *     1 given a meeting room, ask the max meeting. meeting with shorter time has high priority.
- *         sort meetings by finish time. 'sorted'
- *         cur_finishTime = sorted[0].finish time
+ *     1 given a meeting room, ask the max meetings. meeting with shorter time has high priority.
+ *         sort meetings by finish time. 'sorted'  // O(nlogn)
+ *         cur_class_finishTime = sorted[0].finish time
  *         int meetings =1;
  *         loop 'sorted' from sorted[1]:
- *            if cur_finishTime < i start time (available)
+ *            if cur_class_finishTime < i start time (available)
  *                  meetings++;
  *                  cur_finishTime = i finish time
  *         return meetings
  *
- *     2 given meetings, ask min required meeting rooms
+ *     2 given meetings, ask required min meeting rooms
  *
- *        sort meetings by start time in a array or list, 'sorted'
+ *        sort meetings by start time in a array or list, 'sorted'   // O(nlogn)
  *        heap (PriorityQueue): 'roomsFinishedFirstlyOnHead'
  *                              keep meeting room and finish time of the last meeting there, add sorted[0] in to
  *                              roomsFinishedFirstlyOnHead.
  *        loop sorted from sorted[1]:
  *             if head of roomsFinishedFirstlyOnHead's finish time < i meeting start time
  *                room enough, take it:
- *                      pop the head of roomsFinishedFirstlyOnHead,
- *                      mark it by i,
- *                      add the head into roomsFinishedFirstlyOnHead again ( for sort)
+ *                      pop the head of roomsFinishedFirstlyOnHead, // care!!
+ *                      add the i into roomsFinishedFirstlyOnHead again ( for sort)
  *             else:
  *                need add a meeting room: add i in roomsFinishedFirstlyOnHead.
  *        return the number of roomsFinishedFirstlyOnHead.
  *
  * @see <a href ="https://leetcode.com/problems/meeting-rooms-ii/">leetcode</a>
- * <br><a href ="https://en.wikipedia.org/wiki/Sweep_line_algorithm">  Sweep_line_algorithm</a>
+ * <br><a href ="https://en.wikipedia.org/wiki/Sweep_line_algorithm">Sweep_line_algorithm</a>
  */
-
 public class Leetcode253MeetingRoomsII {
     class Interval {
         int start;
@@ -75,32 +73,33 @@ public class Leetcode253MeetingRoomsII {
 
     /**
      * <pre>
-     *  sort meetings by start time as any meeting must be satisfied.
-     *  loop sorted:
-     *  if current meeting need start before the earliest finish time:
-     *      need another meeting room,
+     *  sort meetings by start time and end time.
+     *  as any meeting must be satisfied, loop the sorted class by start time:
+     *  if current meeting need start before the time when the first empty classroom can be got.
+     *  (among all the going on classes, the end time of the one which stops early that others)
+     *      provide another meeting room,
      *  else
-     *      just use the meeting room where the meeting has earliest finish time
-     *      and update 'earliest finish time'
+     *      just use empty room.
+     *      and update 'time to get an empty class room' to be the next one, as they are sorted.
      */
     public int minMeetingRooms(Interval[] meetings) {
-        int[] starts = new int[meetings.length];
-        int[] ends = new int[meetings.length];
+        int[] sortedByStartTime = new int[meetings.length];
+        int[] sortedByEndTime = new int[meetings.length];
         for (int i = 0; i < meetings.length; i++) {
-            starts[i] = meetings[i].start;
-            ends[i] = meetings[i].end;
+            sortedByStartTime[i] = meetings[i].start;
+            sortedByEndTime[i] = meetings[i].end;
         }
-        Arrays.sort(starts);
-        Arrays.sort(ends);
-        int rooms = 0;
-        int cur_earliest_end_index = 0;//index of current earliest ended end time
-        for (int i = 0; i < starts.length; i++) {
-            if (starts[i] < ends[cur_earliest_end_index]) {
-                rooms++;
+        Arrays.sort(sortedByStartTime);
+        Arrays.sort(sortedByEndTime);
+        int roomNumber = 0;
+        int j = 0; //index of class with current earliest end time
+        for (int i = 0; i < sortedByStartTime.length; i++) {
+            if (sortedByStartTime[i] < sortedByEndTime[j]) {
+                roomNumber++;
             } else {
-                cur_earliest_end_index++;
+                j++;
             }
         }
-        return rooms;
+        return roomNumber;
     }
 }
