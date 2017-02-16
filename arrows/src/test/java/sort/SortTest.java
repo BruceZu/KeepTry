@@ -69,7 +69,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 100l, expected = Test.None.class)
     public void insertSortTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -77,7 +77,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 100l, expected = Test.None.class)
     public void testSortTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -85,7 +85,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 160l, expected = Test.None.class)
+    @Test(timeout = 260l, expected = Test.None.class)
     public void mergeSortTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -141,7 +141,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 100l, expected = Test.None.class)
     public void quickSort3wayTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -158,7 +158,7 @@ public class SortTest {
     }
 
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 100l, expected = Test.None.class)
     public void quickSortDualPivotImprovementTest() {
         Comparable[] ar = clone(arr);
         // start test

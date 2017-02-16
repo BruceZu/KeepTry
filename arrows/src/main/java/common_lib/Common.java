@@ -170,20 +170,17 @@ public class Common {
      *
      * @param ar  array
      * @param l   left index, included.
-     * @param mid index
+     * @param mid index.  it maybe (l+r)/2 , or maybe not. e.g. the stump of array in the loop way of merge sort.
      * @param r   right index, included.
      * @param tmp In one thread. this tmp array is provided for performance concern in recursion.
      *            without `new` more tmp arrays.
      */
     public static void mergeInsort(Comparable[] ar, int l, int mid, int r, Comparable[] tmp) {
-        // System.out.format("\nmerge %s : index scope[%s, %s] and  index scope [%s, %s]", Arrays.toString(ar), l, mid, mid + 1, r);
-
-        // Input check
-        if (l >= r) {
+        if (l >= r) { //input check
             return;
         }
 
-        // Improved
+        // Improved, when it is already sorted in order
         if (lessThan(ar[mid], ar[mid + 1])) {
             return;
         }
@@ -192,20 +189,15 @@ public class Common {
             tmp[i] = ar[i];
         }
         // Start merge in sort. Rewrite arr from l
-        int i = l, j = mid + 1;
+        int li = l, ri = mid + 1;
         int k = l;
-        while (true) {
-            if (i == mid + 1 && j == r + 1) {
-                /* Both have no member */
-                break;
-            } else if (i <= mid && (
-                    j == r + 1 || j <= r && lessThan(tmp[i], tmp[j]))) {
-                ar[k++] = tmp[i++];
-            } else { // Without else, k will trigger java.lang.ArrayIndexOutOfBoundsException
-                ar[k++] = tmp[j++];
+        while (!(li == mid + 1 && ri == r + 1)) { /* Both have no member */
+            if (li <= mid && (ri == r + 1 || ri <= r && lessThan(tmp[li], tmp[ri]))) {
+                ar[k++] = tmp[li++];
+            } else {
+                ar[k++] = tmp[ri++];
             }
         }
-        // System.out.format(" -->   %s \n", Arrays.toString(ar));
     }
 
     /**

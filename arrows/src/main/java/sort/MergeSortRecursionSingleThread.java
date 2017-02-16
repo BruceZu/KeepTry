@@ -34,7 +34,7 @@ public class MergeSortRecursionSingleThread {
      */
     private static <T extends Comparable<T>> void call(T[] arr, int l, int r, T[] tmp) {
         if (l == r) {
-            // stop recursion
+            // stop recursion when there is only element.
             return;
         }
 
