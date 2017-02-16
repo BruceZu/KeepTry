@@ -3,7 +3,6 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/aopalliance-abi.jar!/" />
       <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/guice-assistedinject-abi.jar!/" />
-      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/guice-servlet-abi.jar!/" />
       <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/guice_library-abi.jar!/" />
       <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/javax-inject-abi.jar!/" />
     </CLASSES>

@@ -9,9 +9,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
     </content>
+    <orderEntry type="library" exported="" scope="TEST" name="junit-junit-4.12" level="project" />
+    <orderEntry type="library" exported="" name="firtlevel_in_buckout_gen_lib" level="application" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="annotations-abi" level="project" />
-    <orderEntry type="library" name="firtlevel_in_buckout_gen_lib" level="application" />
+    <orderEntry type="library" exported="" name="annotations-abi" level="project" />
   </component>
 </module>

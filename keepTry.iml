@@ -3,8 +3,9 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
+    <orderEntry type="library" exported="" scope="TEST" name="junit-junit-4.12" level="project" />
+    <orderEntry type="library" exported="" name="firtlevel_in_buckout_gen_lib" level="application" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="firtlevel_in_buckout_gen_lib" level="application" />
   </component>
 </module>

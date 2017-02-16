@@ -14,6 +14,8 @@
       <sourceFolder url="file://$MODULE_DIR$/2-technical-and-design/jdk8/src/test/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="false" />
     </content>
+    <orderEntry type="library" scope="TEST" name="junit-junit-4.12" level="project" />
+    <orderEntry type="library" name="firtlevel_in_buckout_gen_lib" level="application" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
@@ -25,7 +27,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="firtlevel_in_buckout_gen_lib" level="application" />
     <orderEntry type="library" name="buck_out_gen_lib_second_level_guice" level="project" />
     <orderEntry type="library" name="buckout_gen_lib_jetty" level="project" />
     <orderEntry type="library" name="mina" level="project" />
