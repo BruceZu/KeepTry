@@ -28,8 +28,7 @@ package array;
  *
  * Because nums[0] + nums[1] = 2 + 7 = 9,
  * return [0, 1].
- * UPDATE (2016/2/13):
- * The return format had been changed to zero-based indices. Please read the above updated description carefully.
+ * The return format is zero-based indices.
  *
  * tags Array Hash Table
  * Similar Problems (M)
@@ -37,51 +36,17 @@ package array;
  *      4Sum (M)
  *      Two Sum II - Input array is sorted (E)
  *      Two Sum III - Data structure design
- *
- *
  *   ===============================================================================================
- *
- *     1  k is one element of array,
- *          a[k] = a[i] + a[j],  i, j < k
- *          ask all pairs of i and j
- *     2  K is given
- *
- *     3  there 2 array a, b, K is given
- *          ask i and j,  K = a[i] + b[j]
- *          ask all pair of i and j
- *
  *     Idea: 1 HashTable {@link Leetcode1twoSum2 }  O(N)
- *           2 same like, using a array, value as index, array[value] is value's index
- *           cons: for [0, 8 , 8 , 8], 16, can find all pairs, the index (1, 3)
- *                      0  1   2   3
- *               Note:
- *                  value may < 0
- *                  target - value may < 0
- *                  e.g.
- *                  test case 1 :  [0, 4, 3, 0], 0
- *                           min: 0
- *                           max: 4
- *                           k-min = 0
- *                           k-max =-4
- *                           array: 0~8
- *                           mi = -4
- *
- *                  test case 2 :  [5,75,25]   , 100
- *                           min: 5
- *                           max: 75
- *                           k-min: 95
- *                           k-max:5
- *                           array: 0~90
- *                           mi:5
- *           3   O(nlogn)  {@link Leetcode1twoSum3}
- *               sort
- *               2 pointer or binary search
+ *           2 same like, using a array. assume the value is integer, value maybe <0.
+ *           3 O(nlogn)  {@link Leetcode1twoSum3}
+ *               sort (O(nlogn)). then using 2 pointer or binary search
  *               map to original index, (Cons: this is not always right. can not work for all pairs)
  *               [1,8,2,8,4,8], 16
  *               after sort:
  *               [1,2,4,8,8,8]
  *
- *    performance improvement from 2 ms to 1ms with probability of 80% on Aug 16, 2016
+ *    performance improvement
  *       -A: replace Integer[] with int[].
  *         this will require make sure map[nums[0]]!=0.
  *         bit manipulation is better than +/- operation according to leetcode test data.
@@ -115,6 +80,8 @@ public class Leetcode1twoSum {
         for (int i = 0; i < nums.length; i++) {
             int key = target - nums[i];
             if (map[key] != null) {
+                // assume that each input would have <strong>exactly one</strong>solution.
+                // assume the array is not sorted
                 return new int[]{map[key], i};
             } else {
                 map[nums[i] - mi] = i;
