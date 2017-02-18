@@ -16,13 +16,13 @@
 package backtracing;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * <pre>
  * Difficulty: Medium
- * Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+ * Given a set of candidate numbers (C) and a target number (T),
+ * find all unique combinations in C where the candidate numbers sums to T.
  *
  * The same repeated number may be chosen from C unlimited number of times.
  *
@@ -35,85 +35,29 @@ import java.util.List;
  * [7],
  * [2, 2, 3]
  * ]
- *
- * Tags Array Backtracking
- *
- *    loop     solution  target
- *                        7
- *    2 3 6 7  | 2       |5
- *    2 3 6 7  | 2 2     |3
- *    2 3 6 7  | 2 2 2   |1
- *    2 3 6 7  | 2 2 2 2 |-1 back
- *
- *                        7
- *    2 3 6 7  | 2       |5
- *    2 3 6 7  | 2 2     |3
- *    2 3 6 7  | 2 2 3   |0  ok back
- *    2 3 6 7  |
- *
- *                        7
- *    2 3 6 7  | 2       |5
- *    2 3 6 7  | 2 3     |2
- *    2 3 6 7  | 2 3 3   |-1 back
- *    2 3 6 7  |
- *
- *                        7
- *    2 3 6 7  | 2       |5
- *    2 3 6 7  | 2 6     |-1 back
- *    2 3 6 7  |
- *    2 3 6 7  |
- *
- *                        7
- *    2 3 6 7  | 3       |4
- *    2 3 6 7  | 3 3     |1
- *    2 3 6 7  | 3 3 3   |-2 back
- *    2 3 6 7  |
- *
- *                        7
- *    2 3 6 7  | 3       |4
- *    2 3 6 7  | 3 6     |-2 back
- *    2 3 6 7  |
- *    2 3 6 7  |
- *                        7
- *    2 3 6 7  | 6       |1
- *    2 3 6 7  | 6       |-5 back
- *    2 3 6 7  |
- *    2 3 6 7  |
- *                        7
- *    2 3 6 7  | 7       |0 0k back
- *    2 3 6 7  |
- *    2 3 6 7  |
- *    2 3 6 7  |
- *
- *    over
- *
  * @see <a href="https://leetcode.com/problems/combination-sum/">link</a></a>
  */
 public class Leetcode39CombinationSum {
-    private void select(int[] c /* candidates*/, int remain, int target, List<List<Integer>> all, List<Integer> s/*solution*/) {
-        for (int i = remain; i < c.length; i++) {
-            int v = c[i];
-            if (v > target) {
-                return;
-            }
-            s.add(v);
-
-            if (target == v) {
-                all.add(new ArrayList(s));
-                s.remove(s.size() - 1);
-                return;
-            }
-
-            select(c, i, target - v, all, s);
-            s.remove(s.size() - 1);
-        }
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        // int put check
+        List<List<Integer>> result = new ArrayList();
+        selectOne(candidates, target, result, new <Integer>ArrayList(), 0, 0);
+        return result;
     }
 
-    public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        Arrays.sort(candidates);
+    private void selectOne(int[] candidates, int target, List<List<Integer>> result, List<Integer> cur, int sum, int from) {
+        if (sum == target) {
+            result.add(new ArrayList(cur));
+            return;
+        }
+        if (sum > target) {
+            return;
+        }
 
-        List<List<Integer>> all = new ArrayList<>();
-        select(candidates, 0, target, all, new ArrayList<Integer>());
-        return all;
+        for (int i = from; i < candidates.length; i++) {
+            cur.add(candidates[i]);
+            selectOne(candidates, target, result, cur, sum + candidates[i], i);// from i
+            cur.remove(cur.size() - 1);
+        }
     }
 }
