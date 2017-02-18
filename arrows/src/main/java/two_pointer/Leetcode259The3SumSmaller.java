@@ -39,7 +39,7 @@ import java.util.Arrays;
  * Hide Tags: Array, Two Pointers
  * Hide Similar Problems: (M) 3Sum (M) 3Sum Closest
  */
-public class LC259The3SumSmaller {
+public class Leetcode259The3SumSmaller {
 
     // As it is the number of index triplets i, j, k
     // with 0 <= i < j < k < n that satisfy the condition nums[i] + nums[j] + nums[k] < target.

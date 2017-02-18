@@ -15,9 +15,7 @@
 
 package two_pointer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * <pre>
@@ -43,9 +41,12 @@ public class Leetcode15_3Sum {
      * --
      * 3sum -> 2sum:
      * sort + 2 pointer, O(n*n)
-     * sort + set or map, O(n*n).  can not work here, as there maybe duplicated element
+     * sort + set or map, O(n*n).
+     *     can not work here, as there maybe duplicated element
+     *     need care the duplicated, keep times, and care the order, the index.
      * sort + binary search, O(nlogn) ~O(n*n)
      */
+
     public static void main(String[] args) {
         threeSum(new int[]{-1, 0, 1, 2, -1, -4}); // 2 results
         threeSum(new int[]{3, 0, -2, -1, 1, 2}); // 3 results
