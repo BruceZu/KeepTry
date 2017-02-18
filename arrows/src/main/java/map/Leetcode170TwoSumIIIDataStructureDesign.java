@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package two_pointer;
+package map;
 
 import java.util.*;
 
