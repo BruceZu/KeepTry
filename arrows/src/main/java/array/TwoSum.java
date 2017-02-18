@@ -24,28 +24,28 @@ import java.util.Arrays;
  * algorithm?
  */
 public class TwoSum {
-    private static boolean find(int[] nums, long k, int[] ids) {
+    private static boolean find(int[] nums, long k, int[] array) {
         // walk from both sides towards center.
         // index[0] keep left side index, index[1] keep right side index,
         // runtime O(N)
-        int l = ids[0];
-        int r = ids[1];
+        int l = array[0];
+        int r = array[1];
         if (l == r) {
-            ids[0] = -1;
-            ids[1] = -1;
+            array[0] = -1;
+            array[1] = -1;
             return false;
         }
         if (nums[l] + nums[r] == k) {
-            ids[0]++;
-            ids[1]++;
+            array[0]++;
+            array[1]++;
             return true;
         }
         if (nums[l] + nums[r] < k) {
-            ids[0]++;
+            array[0]++;
         } else {
-            ids[1]--;
+            array[1]--;
         }
-        return find(nums, k, ids);
+        return find(nums, k, array);
     }
 
     public static boolean twoSum(final int[] nums, int target) {

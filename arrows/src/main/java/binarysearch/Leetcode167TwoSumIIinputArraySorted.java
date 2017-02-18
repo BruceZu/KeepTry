@@ -15,6 +15,7 @@
 
 package binarysearch;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +73,7 @@ public class Leetcode167TwoSumIIinputArraySorted {
     // target  100; [1 3 5 7 9 ..... 47 49 50 52 54 .... 94 96 98]
     // target  5; [0,0,0,0 0,0,0,0,2,3,9,9,9,9,9,9,9,9,9,9,9,9,9,9]
     //
-    public int[] twoSum(int[] numbers, int target) {
+    public static int[] twoSum(int[] numbers, int target) {
         // input checking
         int candidateL = 0;
         int candidateLv = numbers[0];
@@ -82,7 +83,7 @@ public class Leetcode167TwoSumIIinputArraySorted {
 
         int searchFrom;
         int searchTo;
-        while (true) {
+        while (true) { //assume each input would have exactly one solution, so without validing the scope of search from and to, candidate l and candidate r
             // find the index of the right candidate with remaining value
             searchFrom = candidateL + 1; // not use the same element twice
             searchTo = candidateR - 1;
@@ -105,7 +106,8 @@ public class Leetcode167TwoSumIIinputArraySorted {
         }
     }
 
-    public int binarySeachIndex(int[] nums, int l, int r, long RemainingCandidate) {
+    //    Arrays.binarySearch()
+    public static int binarySeachIndex(int[] nums, int l, int r, long RemainingCandidate) {
         while (l < r) {
             int mid = (l + r) / 2;
             if (nums[mid] > RemainingCandidate) {
