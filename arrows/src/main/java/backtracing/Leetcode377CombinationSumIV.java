@@ -15,36 +15,75 @@
 
 package backtracing;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <a href="https://leetcode.com/problems/combination-sum-iv/?tab=Description">Leetcode</a>
+ * Follow up:
+ * What if negative numbers are allowed in the given array?
+ * How does it change the problem?
+ * What limitation we need to add to the question to allow negative numbers?
  */
 public class Leetcode377CombinationSumIV {
-    private static int result = 0;
-    // backtracking
-    // DP
-    // improvement : sort and checking the scope 
-    public static int combinationSum4(int[] nums, int target) {
-        selectOne(nums, target, 0);
-        return result;
+    //-------------------------------DP left to right --------------
+    // O(target ^ nums.length)
+    static public int combinationSum4_(int[] nums, int target) {
+        int[] numOfSumsOf = new int[target + 1]; // cache, default is 0
+        numOfSumsOf[0] = 1;
+        for (int i = 1; i <= target; i++) {
+            for (int iNum = 0; iNum < nums.length; iNum++) {
+                if (i - nums[iNum] >= 0) {
+                    numOfSumsOf[i] += numOfSumsOf[i - nums[iNum]];
+                }
+            }
+        }
+        return numOfSumsOf[target];
     }
 
-    private static void selectOne(int[] nums, int target, int curSum) {
-        if (curSum == target) {
-            result++;
-            return; // care
-        }
-        if (curSum > target) {
-            return;
-        }
+    //-------------------------------   DP  recursion ------------------------
+    // cache: static private Map<Integer, Integer> numberOfSumsOf = new HashMap();
+    // sort maybe help to improve performance
+    static public int combinationSum4(int[] nums, int target) {
+        int numberOfSums_default_0 = 0; //
         for (int i = 0; i < nums.length; i++) {
-            selectOne(nums, target, curSum + nums[i]);
+            if (target == nums[i]) {
+                numberOfSums_default_0 += 1;
+            } else if (target > nums[i]) { // assume all number is positive
+                numberOfSums_default_0 += combinationSum4(nums, target - nums[i]);
+            }
+        }
+        return numberOfSums_default_0;
+    }
+
+    //---------------------------    backtracking  ------------------------
+    // O(target ^ nums.length)
+    static class BackTracking {
+        private static int result = 0;
+
+        // improvement : sort and checking the scope
+        public static int combinationSum4(int[] nums, int target) {
+            selectOne(nums, target, 0);
+            return result;
+        }
+
+        private static void selectOne(int[] nums, int target, int curSum) {
+            if (curSum == target) {
+                result++;
+                return; // care
+            }
+            if (curSum > target) {
+                return;
+            }
+            for (int i = 0; i < nums.length; i++) {
+                selectOne(nums, target, curSum + nums[i]);
+            }
         }
     }
 
+    // ----------------------------------
     public static void main(String[] args) {
-        System.out.println( combinationSum4(new int[]{},1));
+        // System.out.println(combinationSum4(new int[]{}, 1));
+        System.out.println(combinationSum4(new int[]{1, 2, 3}, 4));
     }
 }
