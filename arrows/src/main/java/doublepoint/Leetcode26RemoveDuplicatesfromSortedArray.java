@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array.doublepoint;
+package doublepoint;
 
 /**
  * Do not allocate extra space for another array, you must do this in place with constant memory.

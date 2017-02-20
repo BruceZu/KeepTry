@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array.doublepoint;
+package doublepoint;
 
 /**
  * Difficulty: Easy

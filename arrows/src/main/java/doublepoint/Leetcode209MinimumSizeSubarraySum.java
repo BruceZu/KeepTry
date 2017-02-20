@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array.doublepoint;
+package doublepoint;
 
 /**
  * <a href="https://leetcode.com/problems/minimum-size-subarray-sum/">leetcode</a>

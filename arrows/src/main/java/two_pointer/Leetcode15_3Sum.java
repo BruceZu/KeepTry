@@ -94,10 +94,10 @@ public class Leetcode15_3Sum {
             while (j < k) {
                 if (nums[i] + nums[j] + nums[k] == 0) {
                     result.add(Arrays.asList(nums[i], nums[j], nums[k]));
-                    j++;
-                    while (j < k && nums[j] == nums[j - 1]) { // or move k
+                    while (j < k && nums[j] == nums[j + 1]) { // or move k
                         j++;
                     }
+                    j++;
                 } else if (nums[i] + nums[j] + nums[k] > 0) {
                     k--;
                 } else {

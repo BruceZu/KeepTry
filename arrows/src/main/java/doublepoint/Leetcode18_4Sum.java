@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package binarysearch;
+package doublepoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,9 +29,9 @@ import java.util.List;
  * duplicates, -> sort (nlogn), then ...
  */
 
-public class Leetcode454_4SumII {
+public class Leetcode18_4Sum {
     /**
-     * O(N^3)
+     * Two pointer: O(N^3)
      * performance improvement: bounder checking to save loop times
      * || num[i] * 4 > target
      * || num[i] + num[num.length - 1] * 3 < target
@@ -54,9 +54,9 @@ public class Leetcode454_4SumII {
                     int sum = num[i] + num[j] + num[L] + num[R];
                     if (sum == target) {
                         ans.add(Arrays.asList(num[i], num[j], num[L], num[R]));
-                        while (L < R && num[L] == num[L + 1]) L++;
+                        // while (L < R && num[L] == num[L + 1]) L++; // move one pointer is enough
                         while (L < R && num[R] == num[R - 1]) R--;
-                        L++;
+                        // L++;
                         R--;
                     } else if (sum < target) L++;
                     else R--;
