@@ -13,12 +13,22 @@
 // limitations under the License.
 //
 
-package sort;
+package tree.binarytree;
 
-/**
- * See {@link  tree.heap.Heap#add(Comparable, boolean)} and {@link  tree.heap.Heap#delete(boolean)}
- */
-public class HeapSort {
-    public void f(String[] args) {
+// recursively
+public class Leetcode101SymmetricTree3 {
+    public boolean isSymmetric(TreeNode root) {
+        return isMirror(root, root);
+    }
+
+    private boolean isMirror(TreeNode l, TreeNode r) {
+        while (l != null && r != null) {// both are not null
+            if (!l.v.equals(r.v) || !isMirror(l.left, r.right)) {
+                return false;
+            }
+            l = l.right;
+            r = r.left;
+        }
+        return l == r;
     }
 }

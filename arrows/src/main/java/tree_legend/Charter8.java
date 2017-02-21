@@ -13,12 +13,17 @@
 // limitations under the License.
 //
 
-package sort;
+package tree_legend;
 
-/**
- * See {@link  tree.heap.Heap#add(Comparable, boolean)} and {@link  tree.heap.Heap#delete(boolean)}
- */
-public class HeapSort {
-    public void f(String[] args) {
-    }
+public class Charter8 {
+
 }
+
+// Notes:
+// - Why JDK does not have a Tree class.
+//   java.util.TreeSet
+//   java.util.TreeMap
+
+// What is the Force or Power of tree?
+
+

@@ -13,12 +13,19 @@
 // limitations under the License.
 //
 
-package sort;
+package tree_legend.binarytree;
+
+import tree_legend.TreeNode;
 
 /**
- * See {@link  tree.heap.Heap#add(Comparable, boolean)} and {@link  tree.heap.Heap#delete(boolean)}
+ * A binary tree is proper if each node has either
+ * zero or two children.<p>
+ * Some people also refer to such trees as being full binary trees.<p>
+ * Thus, in a proper binary tree, every internal node has exactly two children.<p>
+ * A binary tree that is not proper is improper.
  */
-public class HeapSort {
-    public void f(String[] args) {
-    }
+public interface BinaryTreeNode<T extends BinaryTreeNode<T, E>, E> extends TreeNode<T, E> {
+    T getLeft();
+
+    T getRight();
 }

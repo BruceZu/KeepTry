@@ -13,12 +13,20 @@
 // limitations under the License.
 //
 
-package sort;
+package tree_legend;
 
-/**
- * See {@link  tree.heap.Heap#add(Comparable, boolean)} and {@link  tree.heap.Heap#delete(boolean)}
- */
-public class HeapSort {
-    public void f(String[] args) {
-    }
+
+import java.util.List;
+
+public interface TreeNode<SELF extends TreeNode<SELF, E>, E> {
+
+    E getElement();
+
+    SELF getParent();
+
+    int childrenSize(); // direct children
+
+    List<SELF> getChildren(); // direct children
+
+    boolean updateElement(E e);
 }

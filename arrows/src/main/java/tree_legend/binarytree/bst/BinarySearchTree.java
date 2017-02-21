@@ -13,12 +13,25 @@
 // limitations under the License.
 //
 
-package sort;
+package tree_legend.binarytree.bst;
 
-/**
- * See {@link  tree.heap.Heap#add(Comparable, boolean)} and {@link  tree.heap.Heap#delete(boolean)}
- */
-public class HeapSort {
-    public void f(String[] args) {
-    }
+import tree_legend.binarytree.BinaryTree;
+import tree_legend.binarytree.BinaryTreeNode;
+
+public interface BinarySearchTree<T extends BinaryTreeNode<T, E>, E extends Comparable<E>> extends BinaryTree {
+    /**
+     * Add a node to the bst, return the root of new bst
+     *
+     * @param e
+     * @return
+     */
+    T add(E e);
+
+    /**
+     * Delete a node to the bst, return the root of new bst
+     *
+     * @param e
+     * @return
+     */
+    T delete(E e);
 }

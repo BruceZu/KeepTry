@@ -13,12 +13,7 @@
 // limitations under the License.
 //
 
-package sort;
-
 /**
- * See {@link  tree.heap.Heap#add(Comparable, boolean)} and {@link  tree.heap.Heap#delete(boolean)}
+ * used for LRU cache?
  */
-public class HeapSort {
-    public void f(String[] args) {
-    }
-}
+package tree.binary_search_tree.splaytree;
