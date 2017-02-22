@@ -15,8 +15,11 @@
 
 package doublepoint;
 
+import java.util.Stack;
+
 /**
  * <pre>
+ *
  * 42. Trapping Rain Water
  * Difficulty: Hard
  * Given n non-negative integers representing an elevation map where the width of each bar is 1,
@@ -79,6 +82,36 @@ public class Leetcode42TrappingRainWater {
                 r = pre;
             }
         }
+        return result;
+    }
+
+    /**
+     * using stack
+     *
+     * @param height
+     * @return
+     */
+    static public int trap2(int[] height) {
+        if (height == null || height.length == 0) {
+            return 0;
+        }
+
+        int result = 0;
+        Stack<Integer> descendingBottomUpHeightIndex = new Stack();
+        for (int i = 0; i < height.length; i++) {
+            while (!descendingBottomUpHeightIndex.isEmpty()
+                    && height[i] > height[descendingBottomUpHeightIndex.peek()]) {
+                int topLowestIndex = descendingBottomUpHeightIndex.pop();
+                if (!descendingBottomUpHeightIndex.isEmpty()) { // 三缺一不存水.
+                    int curTopLowestIndex = descendingBottomUpHeightIndex.peek();
+                    int width = i - curTopLowestIndex - 1;
+                    int waterHeigh = Math.min(height[i], height[curTopLowestIndex]) - height[topLowestIndex];
+                    result += width * waterHeigh;
+                }
+            }
+            descendingBottomUpHeightIndex.push(i);
+        }
+
         return result;
     }
 }
