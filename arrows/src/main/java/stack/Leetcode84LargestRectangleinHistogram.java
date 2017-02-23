@@ -22,7 +22,32 @@ import java.util.Stack;
  * <a href="http://www.informatik.uni-ulm.de/acm/Locals/2003/html/judge.html"></a>
  */
 public class Leetcode84LargestRectangleinHistogram {
+
     /**
+     * performance: use an array to simulate the stack
+     * @param heightOfBarAt
+     * @return
+     */
+    static int largestRectangleArea2(int[] heightOfBarAt) {
+        Stack<Integer> ascendingBarsIndex = new Stack<>();
+        int max_area = 0;
+        for (int iIndex = 0; iIndex <= heightOfBarAt.length; iIndex++) {
+            int iHeight = iIndex == heightOfBarAt.length ? 0
+                    : heightOfBarAt[iIndex];
+            while (!ascendingBarsIndex.isEmpty()
+                    && heightOfBarAt[ascendingBarsIndex.peek()] > iHeight) {
+
+                int height = heightOfBarAt[ascendingBarsIndex.pop()];
+                int width = ascendingBarsIndex.isEmpty() ? iIndex : iIndex - ascendingBarsIndex.peek() - 1;
+                max_area = Math.max(height * width, max_area);
+            }
+            ascendingBarsIndex.push(iIndex);
+        }
+        return max_area;
+    }
+
+    /**
+     * -----------------------------------------legend---------------------------------------------------
      * <pre>
      * Stack is used to calculate the width used to calculate area.
      * It saves index of bar, and only those bars whose height <= next bar.
@@ -77,25 +102,6 @@ public class Leetcode84LargestRectangleinHistogram {
             int width = ascendingBarsIndex.isEmpty() ? heightOfBarAt.length : heightOfBarAt.length - ascendingBarsIndex.peek() - 1;
             int area = height * width;
             max_area = max_area < area ? area : max_area;
-        }
-        return max_area;
-    }
-
-    // save code line
-    static int largestRectangleArea2(int[] heightOfBarAt) {
-        Stack<Integer> ascendingBarsIndex = new Stack<>();
-        int max_area = 0;
-        for (int iIndex = 0; iIndex <= heightOfBarAt.length; iIndex++) {
-            int iHeight = iIndex == heightOfBarAt.length ? 0
-                    : heightOfBarAt[iIndex];
-            while (!ascendingBarsIndex.isEmpty()
-                    && heightOfBarAt[ascendingBarsIndex.peek()] > iHeight) {
-                int height = heightOfBarAt[ascendingBarsIndex.pop()];
-                int width = ascendingBarsIndex.isEmpty() ? iIndex : iIndex - ascendingBarsIndex.peek() - 1;
-                int area = height * width;
-                max_area = max_area < area ? area : max_area;
-            }
-            ascendingBarsIndex.push(iIndex);
         }
         return max_area;
     }
