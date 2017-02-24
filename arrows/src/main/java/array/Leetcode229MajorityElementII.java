@@ -34,23 +34,23 @@ public class Leetcode229MajorityElementII {
         int vote1 = 0, vote2 = 0;
 
         for (int i = 0; i < nums.length; i++) {
-            int ni = nums[i];
+            int iv = nums[i];
 
             if (vote1 == 0) {
-                numb1 = ni;
+                numb1 = iv;
                 vote1 = 1;
                 continue;
             }
-            if (ni == numb1) {
+            if (iv == numb1) {
                 vote1++;
                 continue;
             }
             if (vote2 == 0) {
-                numb2 = ni;
+                numb2 = iv;
                 vote2 = 1;
                 continue;
             }
-            if (ni == numb2) {
+            if (iv == numb2) {
                 vote2++;
                 continue;
             }
