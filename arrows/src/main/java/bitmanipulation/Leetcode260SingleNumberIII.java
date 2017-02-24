@@ -62,8 +62,9 @@ package bitmanipulation;
  *             xor & (-xor)
  *             or
  *             xor & (~(xor -1))
- *
- *      3 get X and Y by XOR with each group
+ *      why it can be used to divide the 2 member into 2 groups?
+ *          on this bit column others xor result will be 0, so 1 is caused by these 2 numbers.
+ *      3 get X and Y by xor 'divideBy' with each group
  *
  *     Note:
  *          step 3 start from index of 0
@@ -92,6 +93,7 @@ public class Leetcode260SingleNumberIII {
 
     /**
      * <pre>
+     * <a href="http://www.geeksforgeeks.org/find-the-two-repeating-elements-in-a-given-array/">Geeksforgeeks</a>
      * Find the two repeating elements in a given array
      * You are given an array of n+2 elements.
      * All elements of the array are in range <strong>1 to n</strong>. (means all are positive number)
@@ -105,10 +107,10 @@ public class Leetcode260SingleNumberIII {
      *
      * A:
      *    1  xor from <strong>1 to n</strong>;  and each element of array.  now xor = X^Y
-     *       1 2 3 4 5;
-     *       1 2 3 4 5; 4 2
-     *         |   |    | |
-     *    2  divide above into 2 groups;  ...
+     *       1~n: 1 2 3 4 5;
+     *       arr: 1 2 3 4 5; 4 2
+     *              |   |    | |
+     *    2  divide above 1~n and arr into 2 groups;
      *
      * B:
      *    X*Y
@@ -124,7 +126,39 @@ public class Leetcode260SingleNumberIII {
      *     2  check for sign
      *     3  at last restore the sign.
      */
-    public static void printRepeated2Num(int[] nums) {
+    static void printRepeating(int arr[]) {
+        int n = arr.length - 2;
 
+        int xor = arr[0];
+        for (int i = 1; i < arr.length; i++)
+            xor ^= arr[i];
+        for (int i = 1; i <= n; i++)
+            xor ^= i;
+
+        int dividBy = (xor & ~(xor - 1));
+
+        int x = 0, y = 0;
+        for (int i = 0; i < arr.length; i++) {
+            int a = arr[i] & dividBy;
+            if (a != 0)
+                x = x ^ arr[i];
+            else
+                y = y ^ arr[i];
+        }
+        for (int i = 1; i <= n; i++) {
+            int a = i & dividBy;
+            if (a != 0)
+                x = x ^ i;
+            else
+                y = y ^ i;
+        }
+
+        System.out.println(x + " " + y);
+    }
+
+    /* Driver program to test the above function */
+    public static void main(String[] args) {
+        int arr[] = {4, 2, 4, 5, 2, 3, 1};
+        printRepeating(arr);
     }
 }
