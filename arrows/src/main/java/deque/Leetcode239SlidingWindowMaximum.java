@@ -33,11 +33,6 @@ import java.util.Deque;
  *          Remove redundant elements and the queue should store only elements that need to be considered.
  *
  * Tag:  Heap (Priority Queue)
- * Hide Similar Problems
- * (H) Minimum Window Substring
- * (E) Min Stack
- * (H) Longest Substring with At Most Two Distinct Characters
- * (H) Paint House II
  *  =============================================================================
  *     keep index of element. skill 1
  *     before add current element's index do:
@@ -51,24 +46,31 @@ import java.util.Deque;
  * @see <a href="https://leetcode.com/problems/sliding-window-maximum/">leetcode</a>
  */
 public class Leetcode239SlidingWindowMaximum {
+    /**
+     * O(N)
+     * if using Heap, it will be O(?)
+     */
     public int[] maxSlidingWindow(int[] nums, int k) {
         // corner case check
         if (nums == null || nums.length == 0) {
             return nums;
         }
         int[] r = new int[nums.length - k + 1];
-        Deque<Integer> q = new ArrayDeque(k);
+        Deque<Integer> indexOfWindowDesencdingOrder = new ArrayDeque(k);
         for (int i = 0; i < nums.length; i++) {
-            if (!q.isEmpty() && q.peek() < i - (k - 1)) {
-                q.poll();
+            int indexNeedToMoveFromWindow = i - k;
+            if (!indexOfWindowDesencdingOrder.isEmpty() &&
+                    indexOfWindowDesencdingOrder.peek() == indexNeedToMoveFromWindow) {
+                indexOfWindowDesencdingOrder.poll();// may be it has been move out of the window already
             }
 
-            while (!q.isEmpty() && nums[q.peekLast()] < nums[i]) {
-                q.pollLast();
+            while (!indexOfWindowDesencdingOrder.isEmpty() &&
+                    nums[indexOfWindowDesencdingOrder.peekLast()] < nums[i]) {
+                indexOfWindowDesencdingOrder.pollLast();
             }
-            q.offerLast(i); // keep index
+            indexOfWindowDesencdingOrder.offerLast(i); // keep index
             if (i >= k - 1) {
-                r[i - (k - 1)] = nums[q.peek()]; // value
+                r[i - (k - 1)] = nums[indexOfWindowDesencdingOrder.peek()]; // value
             }
         }
         return r;
@@ -80,18 +82,18 @@ public class Leetcode239SlidingWindowMaximum {
             return nums;
         }
         int[] r = new int[nums.length - k + 1];
-        Deque<Integer> q = new ArrayDeque(k);
+        Deque<Integer> indexOfWindowAscendingOrder = new ArrayDeque(k);
         for (int i = 0; i < nums.length; i++) {
-            if (!q.isEmpty() && q.peek() < i - (k - 1)) {
-                q.poll();
+            if (!indexOfWindowAscendingOrder.isEmpty() && indexOfWindowAscendingOrder.peek() < i - (k - 1)) {
+                indexOfWindowAscendingOrder.poll();
             }
 
-            while (!q.isEmpty() && nums[q.peekLast()] > nums[i]) { // only update here
-                q.pollLast();
+            while (!indexOfWindowAscendingOrder.isEmpty() && nums[indexOfWindowAscendingOrder.peekLast()] > nums[i]) { // only update here
+                indexOfWindowAscendingOrder.pollLast();
             }
-            q.offerLast(i); // keep index
+            indexOfWindowAscendingOrder.offerLast(i); // keep index
             if (i >= k - 1) {
-                r[i - (k - 1)] = nums[q.peek()]; // value
+                r[i - (k - 1)] = nums[indexOfWindowAscendingOrder.peek()]; // value
             }
         }
         return r;
