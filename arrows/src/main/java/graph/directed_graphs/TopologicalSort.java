@@ -16,6 +16,7 @@
 package graph.directed_graphs;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
@@ -38,14 +39,14 @@ import java.util.Stack;
  *      L:  list that will contain the result. initialized by an empty list.
  *      S: container (it can be set, queue, stack) of all nodes with no incoming edges. find out all of them firstly.
  *
- *    Algorithm:
+ *    Algorithm: BFS
  *      while S is non-empty do
  *          remove a node n from S.
- *          insert n into L, and remove each edge e from n to this outs. if a give out of n has no ins anymore, then
+ *          insert n into L, and remove each edge e from n to this outs, if a give out of n has no ins anymore, then
  *          push this out in S.
  *
  *      if S is empty and graph still has edges left
- *          return error (graph has at least onecycle)
+ *          return error (graph has at least one cycle)
  *      else
  *          return L (a topologically sorted order)
  *
@@ -53,7 +54,7 @@ import java.util.Stack;
  *           need find out all S firstly.
  *           need update the V
  *
- *     pros: can detect circle.
+ *     pros: can detect circle. do not need "visited" Set to check circle
  *
  *      todo A variation of Kahn's algorithm that breaks ties lexicographically forms a key component
  *      of the Coffman–Graham algorithm for parallel scheduling and layered graph drawing.
@@ -63,8 +64,11 @@ import java.util.Stack;
  *  data structure:
  *    Set<V> all nodes
  *    V class:  only outs
- *    Stack:  to keep the result
- *    Set: visited.
+ *    Stack:  to keep the result 倒退时放入
+ *    Set: visited. avoid duplicated at merge point.
+ *         不是用来checking circle
+ *         (using isInCurVisitedPath checking circle see
+ *         {@link graph.directed_graphs.Leetcode207CourseSchedule#hasCircle(int, List[], boolean[])}
  *
  *    algorithm:
  *      post order + DFS
@@ -75,9 +79,9 @@ import java.util.Stack;
  *  todo The topological ordering can also be used to quickly compute shortest paths through
  *  a weighted directed acyclic graph.
  *
- *  @see <a href="https://en.wikipedia.org/wiki/Topological_sorting"> wiki </a>
- *  @see <a href="https://www.youtube.com/watch?v=ddTC4Zovtbc"> DFS from youtube </a>
- *  @see <a href="http://www.cse.cuhk.edu.hk/~taoyf/course/2100sum11/lec14.pdf"> DFS </a>
+ *   <a href="https://en.wikipedia.org/wiki/Topological_sorting"> wiki </a>
+ *   <a href="https://www.youtube.com/watch?v=ddTC4Zovtbc"> DFS from youtube </a>
+ *   <a href="http://www.cse.cuhk.edu.hk/~taoyf/course/2100sum11/lec14.pdf"> DFS </a>
  *
  *  --- circle ---
  *   o
@@ -98,7 +102,6 @@ import java.util.Stack;
  *   o   o
  *    \ /
  *     o
- *
  */
 public class TopologicalSort {
     //as do not care edge weight, make the data structure simple.
