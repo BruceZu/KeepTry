@@ -17,6 +17,9 @@ package graph.directed_graphs;
 
 import java.util.*;
 
+/**
+ * <a href="https://leetcode.com/problems/course-schedule/?tab=Description">LeetCode</a>
+ */
 public class Leetcode207CourseSchedule {
 
     /**
@@ -112,7 +115,7 @@ public class Leetcode207CourseSchedule {
         isInVisitedPath[course] = false;
         return false;
     }
-    
+
     // ----------------------------------------------------------------------------------------------------------------
     public static void main(String[] args) {
         int numCourse = 4;
