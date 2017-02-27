@@ -63,7 +63,7 @@ public class DeckOfPokerCardsTest {
         return null;
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 110l, expected = Test.None.class)
     public void testConstructor() {
         Assert.assertEquals(expected, new DeckOfPokerCards().toString());
     }

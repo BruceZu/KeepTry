@@ -38,7 +38,7 @@ public class URLTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 110L, expected = Test.None.class)
     public void classForTest() throws ClassNotFoundException {
         expectedException.expect(ClassNotFoundException.class);
         expectedException.expectMessage("URLTest.class");
@@ -46,13 +46,13 @@ public class URLTest {
         Assert.fail("should not reach this");
     }
 
-    @Test(timeout = 10L, expected = ClassNotFoundException.class)
+    @Test(timeout = 110L, expected = ClassNotFoundException.class)
     public void classForTest2() throws ClassNotFoundException {
         Class.forName("URLTest.class");
         Assert.fail("should not reach this");
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 110L, expected = Test.None.class)
     public void classForTest3() {
         try {
             Class.forName("URLTest.class");
@@ -61,7 +61,7 @@ public class URLTest {
         }
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 110L, expected = Test.None.class)
     public void classLoaderTest() throws ClassNotFoundException {
         Class self = Class.forName("url.URLTest");
 
@@ -70,7 +70,7 @@ public class URLTest {
         Assert.assertEquals(self.getClassLoader(), URLTest.class.getClassLoader());
     }
 
-    @Test(timeout = 60L, expected = Test.None.class)
+    @Test(timeout = 160L, expected = Test.None.class)
     public void getResourceTest() throws ClassNotFoundException, IOException {
         // ClassLoader.getResource()
         // The name should not have a leading “/”.

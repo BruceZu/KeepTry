@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SleepSortTest {
-    @Test(timeout = 30L, expected = Test.None.class)
+    @Test(timeout = 300L, expected = Test.None.class)
     public void testConcurrentHashMap() {
         List r = SleepSort.sleepSort(Arrays.asList(14, 6, 4, 18, 2, 1, 3, 9));
         Assert.assertEquals(Arrays.toString(r.toArray()), "[1, 2, 3, 4, 6, 9, 14, 18]");
