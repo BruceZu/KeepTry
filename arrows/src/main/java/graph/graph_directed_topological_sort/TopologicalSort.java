@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2017 The keepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package graph.directed_graphs;
+package graph.graph_directed_topological_sort;
 
 import java.util.HashSet;
 import java.util.List;
@@ -68,7 +68,7 @@ import java.util.Stack;
  *    Set: visited. avoid duplicated at merge point.
  *         不是用来checking circle
  *         (using isInCurVisitedPath checking circle see
- *         {@link graph.directed_graphs.Leetcode207CourseSchedule#hasCircle(int, List[], boolean[])}
+ *         {@link Leetcode207CourseSchedule#hasCircle(int, List[], boolean[])}
  *
  *    algorithm:
  *      post order + DFS
@@ -110,21 +110,21 @@ public class TopologicalSort {
     }
 
     // Assume this is not circle
-    public static Stack<V> topoSort(Set<V> graph) {
+    public static Stack<V> topoSort(Set<V> vs) {
         Stack<V> r = new Stack();
         Set<V> visited = new HashSet<>();
 
-        for (V v : graph) {
+        for (V v : vs) {
             dfsPosterOrder(v, r, visited);
         }
         return r;
     }
 
-    private static void dfsPosterOrder(V vertex, Stack<V> r, Set<V> visited) {
-        if (!visited.contains(vertex)) {
-            visited.add(vertex);
+    private static void dfsPosterOrder(V vertex, Stack<V> r, Set<V> black) {
+        if (!black.contains(vertex)) {
+            black.add(vertex);
             for (V out : vertex.outgoings) {
-                dfsPosterOrder(out, r, visited);
+                dfsPosterOrder(out, r, black);
             }
             r.push(vertex); // post order
         }

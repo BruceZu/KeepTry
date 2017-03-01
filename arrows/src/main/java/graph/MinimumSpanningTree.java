@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package tree;
+package graph;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -259,7 +259,6 @@ public class MinimumSpanningTree {
         }
 
         /*
-
            2    3
         (0)--(1)--(2)
         |    / \   |
@@ -267,7 +266,6 @@ public class MinimumSpanningTree {
         | /      \ |
         (3)-------(4)
              9
-
        */
         int[][] graph = new int[][]{{0, 2, 0, 6, 0},
                 {2, 0, 3, 8, 5},
@@ -282,5 +280,3 @@ public class MinimumSpanningTree {
                     graph[i][rootOf[i]]);
     }
 }
-
-

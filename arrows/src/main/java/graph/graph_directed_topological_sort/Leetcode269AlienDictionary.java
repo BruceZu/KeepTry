@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2017 The keepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package graph.directed_graphs;
+package graph.graph_directed_topological_sort;
 
 import java.util.*;
 
@@ -52,32 +52,27 @@ public class Leetcode269AlienDictionary {
      * Use boolean[from][to] edge and  int[] status present graph
      *
      * @param words
-     * @param edge   [from][to]
-     * @param status
+     * @param edge           [from][to]
+     * @param isExistInWords
      */
-    public static void buildGraph(String[] words, boolean[][] edge, int[] status) {
-        // default init value -1, not even existed in words
-        Arrays.fill(status, -1);
-
+    public static void buildGraph(String[] words, boolean[][] edge, boolean[] isExistInWords) {
 
         for (int i = 0; i < words.length; i++) {
-            // step 1 keep all vertex
             for (char c : words[i].toCharArray()) {
-                // exist in the words
-                status[c - 'a'] = 0;
+                isExistInWords[c - 'a'] = true;
             }
-            if (i > 0) {
-                String pre = words[i - 1], cur = words[i];
-                // step 2  valid input
-                if (cur.length() < pre.length() && pre.startsWith(cur)) {
+            if (i > 0) {// start from second word
+                String preW = words[i - 1], curW = words[i];
+                // 2  validate input
+                if (curW.length() < preW.length() && preW.startsWith(curW)) {
                     throw new InputMismatchException("Avoid \"lexicographically\" order");
                 }
-                // step 3  try to find a edge
-                int len = Math.min(pre.length(), cur.length());
+                // 3  find at most one edge per word
+                int len = Math.min(preW.length(), curW.length());
                 for (int j = 0; j < len; j++) {
-                    char prec = pre.charAt(j), curc = cur.charAt(j);
-                    if (prec != curc) {
-                        edge[prec - 'a'][curc - 'a'] = true;
+                    char preC = preW.charAt(j), curC = curW.charAt(j);
+                    if (preC != curC) {
+                        edge[preC - 'a'][curC - 'a'] = true;
                         break;
                     }
                 }
@@ -87,9 +82,9 @@ public class Leetcode269AlienDictionary {
 
     public static String alienOrder(String[] words) {
         boolean[][] edges = new boolean[26][26];
-        int[] status = new int[26];
+        boolean[] isExistInWords = new boolean[26];
         try {
-            buildGraph(words, edges, status);
+            buildGraph(words, edges, isExistInWords);
         } catch (InputMismatchException e) {
             return "";
         }

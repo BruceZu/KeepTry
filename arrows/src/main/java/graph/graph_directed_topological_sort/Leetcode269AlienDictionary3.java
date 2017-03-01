@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2017 The keepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,12 +13,11 @@
 // limitations under the License.
 //
 
-package graph.directed_graphs;
+package graph.graph_directed_topological_sort;
 
 import java.util.*;
 
 /**
- * Use 2 HashMap to form Graph
  * Use Kahn's Algorithm Topological Sorting
  */
 public class Leetcode269AlienDictionary3 {
@@ -26,92 +25,80 @@ public class Leetcode269AlienDictionary3 {
         if (words == null || words.length == 0) {
             return "";
         }
-        Map<Character, Set<Character>> outs = new HashMap();
-        Map<Character, Integer> inNum = new HashMap();
+        Map<Character, Set<Character>> vToFollowings = new HashMap();
+        Map<Character, Integer> vToPresNumber = new HashMap();
         try {
-            buildGraph(words, outs, inNum);
+            buildGraph(words, vToFollowings, vToPresNumber);
         } catch (InputMismatchException e) {
             return "";
         }
 
-        return KahnAlgorithmTopologicalSorting(outs, inNum);
+        return KahnTopologicalSort(vToFollowings, vToPresNumber);
     }
 
-    /**
-     * @param words
-     * @param outs  empty map from v to its outgoings
-     * @param inNum empty map from v to its incoming number
-     */
     public static void buildGraph(String[] words,
-                                  Map<Character, Set<Character>> outs,
-                                  Map<Character, Integer> inNum) {
+                                  Map<Character, Set<Character>> vToFollowings,
+                                  Map<Character, Integer> vToPresNumber) {
         for (String s : words) {
             for (char c : s.toCharArray()) {
-                inNum.put(c, 0); //default value 0, just keep all vertexes
-                outs.put(c, new HashSet()); //default value empty set, just make it easy to handle in following
+                vToPresNumber.put(c, 0);
+                vToFollowings.put(c, new HashSet()); // make it easy to handle in following
             }
         }
-        // find edges and update incomes num for vertex
-        for (int wi = 1; wi < words.length; wi++) {
-            String pre = words[wi - 1];
-            String cur = words[wi];
 
-            int length = Math.min(pre.length(), cur.length());
+        for (int i = 1; i < words.length; i++) {
+            String preW = words[i - 1];
+            String curW = words[i];
+
+            int length = Math.min(preW.length(), curW.length());
             boolean notFoundEdge = true;
 
-            for (int ci = 0; ci < length; ci++) {
+            for (int j = 0; j < length; j++) {
 
-                char curChar = pre.charAt(ci);
-                char nextChar = cur.charAt(ci);
+                char preC = preW.charAt(j);
+                char curC = curW.charAt(j);
 
-                if (curChar != nextChar) {
+                if (preC != curC) {
                     notFoundEdge = false;
 
-                    if (!outs.get(curChar).contains(nextChar)) {
+                    if (!vToFollowings.get(preC).contains(curC)) {
                         // it has had the default value 0;
-                        inNum.put(nextChar, inNum.get(nextChar) + 1);
+                        vToPresNumber.put(curC, vToPresNumber.get(curC) + 1);
                     }
 
-                    outs.get(curChar).add(nextChar);
-
+                    vToFollowings.get(preC).add(curC);
                     break;
                 }
             }
-            if (notFoundEdge && length < pre.length()) {
+            if (notFoundEdge && length < preW.length()) {
                 throw new InputMismatchException("avoid \"lexicographically\" order");
             }
         }
     }
 
-    /**
-     * Upside: It can check if there is circle. Do not require checking circle before call it
-     * Downside:
-     * 1 At first it need provided all vertexes without incoming edges of the graph
-     * 2 It need keep incomings or incoming number
-     */
-    public static String KahnAlgorithmTopologicalSorting(
-            Map<Character, Set<Character>> outs,
-            Map<Character, Integer> inNum) {
-        // initial vertexes without incoming edge
-        Queue<Character> startsVertex = new ArrayDeque<>();
-        for (char c : inNum.keySet()) {
-            if (inNum.get(c) == 0) {
-                startsVertex.add(c);
+    public static String KahnTopologicalSort(
+            Map<Character, Set<Character>> vToFollowings,
+            Map<Character, Integer> vToPresNumber) {
+
+        Queue<Character> queue = new ArrayDeque<>();
+        for (char vID : vToPresNumber.keySet()) {
+            if (vToPresNumber.get(vID) == 0) {
+                queue.add(vID);
             }
         }
-        // topological sorting
+
         StringBuilder result = new StringBuilder();
-        while (!startsVertex.isEmpty()) {
-            char start = startsVertex.remove();
-            result.append(start);
-            for (char out : outs.get(start)) {
-                inNum.put(out, inNum.get(out) - 1);
-                if (inNum.get(out) == 0) {
-                    startsVertex.add(out);
+        while (!queue.isEmpty()) {
+            char v = queue.remove();
+            result.append(v);
+            for (char follow : vToFollowings.get(v)) {
+                vToPresNumber.put(follow, vToPresNumber.get(follow) - 1);
+                if (vToPresNumber.get(follow) == 0) {
+                    queue.add(follow);
                 }
             }
         }
-        if (result.length() != inNum.size()) {
+        if (result.length() != vToPresNumber.size()) { // have circle in directed graph
             return "";
         }
 

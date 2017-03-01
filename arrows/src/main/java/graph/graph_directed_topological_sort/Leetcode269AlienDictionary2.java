@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2017 The keepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
 // limitations under the License.
 //
 
-package graph.directed_graphs;
+package graph.graph_directed_topological_sort;
 
 import java.util.*;
 
 public class Leetcode269AlienDictionary2 {
     static class V implements Comparable {
         char i; // Assume it can be used as ID
-        Set<V> outs;
+        Set<V> followings;
 
         @Override
         public int compareTo(Object o) {
@@ -29,7 +29,7 @@ public class Leetcode269AlienDictionary2 {
 
         public V(Character i) {
             this.i = i;
-            outs = new HashSet(); // Default value
+            followings = new HashSet(); // Default value
         }
     }
 
@@ -56,29 +56,29 @@ public class Leetcode269AlienDictionary2 {
             graph.put(curc, new V(curc));
         }
 
-        for (int wi = 1; wi < words.length; wi++) {
-            String prew = words[wi - 1];
-            String curw = words[wi];
+        for (int i = 1; i < words.length; i++) {
+            String preW = words[i - 1];
+            String curW = words[i];
             // step 1 valid input
-            if (curw.length() < prew.length() && prew.startsWith(curw)) {
+            if (curW.length() < preW.length() && preW.startsWith(curW)) {
                 throw new InputMismatchException("Avoid \"lexicographically\" order");
             }
 
             // step 2 keep new vertex
-            for (int ci = 0; ci < curw.length(); ci++) {
-                char curc = curw.charAt(ci);
+            for (int ci = 0; ci < curW.length(); ci++) {
+                char curc = curW.charAt(ci);
                 if (!graph.containsKey(curc)) {
                     graph.put(curc, new V(curc));
                 }
             }
-            // step 3 find edge
-            int length = Math.min(curw.length(), prew.length());
+            // step 3 find at most one edge
+            int length = Math.min(curW.length(), preW.length());
             for (int ci = 0; ci < length; ci++) {
-                char prec = prew.charAt(ci);
-                char curc = curw.charAt(ci);
+                char prec = preW.charAt(ci);
+                char curc = curW.charAt(ci);
 
                 if (curc != prec) {
-                    graph.get(prec).outs.add(graph.get(curc));
+                    graph.get(prec).followings.add(graph.get(curc));
                     break; // care
                 }
 
@@ -88,14 +88,14 @@ public class Leetcode269AlienDictionary2 {
     }
 
     /*------------------------------------------------------------------------------------------*/
-    static boolean hasCircle(V v, Set<V> shadow) {
-        if (shadow.add(v)) {
-            for (V o : v.outs) {
-                if (hasCircle(o, shadow)) {
+    static boolean hasCircle(V v, Set<V> grey) {
+        if (grey.add(v)) {
+            for (V o : v.followings) {
+                if (hasCircle(o, grey)) {
                     return true;
                 }
             }
-            shadow.remove(v);
+            grey.remove(v);
             return false;
         } else {
             return true;
@@ -104,54 +104,40 @@ public class Leetcode269AlienDictionary2 {
 
     /**
      * Assume graph
-     * 1 may have single vertexes
+     * 1 may have some single vertexes
      * 2 may have circle
-     * <p>
-     * Checking from each vertex using path shadow
-     *
-     * @param vertexes
-     * @return false if the graph has circle.
      */
-    static boolean noCircle(Collection<V> vertexes) {
-        Set<V> visited = new HashSet();
-        for (V v : vertexes) {
-            if (hasCircle(v, visited)) {
+    static boolean noCircle(Collection<V> vs) {
+        Set<V> grey = new HashSet();
+        for (V v : vs) {
+            if (hasCircle(v, grey)) {
                 return false;
             }
         }
         return true;
     }
 
-    /**
-     * ------------------------------------------------------------------------------------------
-     * It can start from any vertex.
-     *
-     * @param vertexes Assume the graph has no circle
-     * @return topological sorted vertexes in String.
-     */
-    public static String topologicalSort(Collection<V> vertexes) {
-        if (vertexes == null) {
+    //------------------------------------------------------------------------------------------
+    public static String topologicalSort(Collection<V> vs) {
+        if (vs == null) {
             return "";
         }
-        Set<V> visited = new HashSet<>(vertexes.size());
-        StringBuilder r = new StringBuilder();
+        Set<V> black = new HashSet<>(vs.size());
+        StringBuilder r = new StringBuilder(); // or using stack
 
-        for (V v : vertexes) {
-            DFSNeighbors(v, visited, r);
+        for (V v : vs) {
+            topologicalSortDFS(v, black, r);
         }
 
         return r.reverse().toString(); // care
     }
 
-    /**
-     * @param v       current vertex
-     * @param visited all visited Vertexes of graph
-     * @param r       used to keep current order line of Vertexes
-     */
-    public static void DFSNeighbors(V v, Set<V> visited, StringBuilder r) {
-        if (visited.add(v)) { // care
-            for (V neighbor : v.outs) {
-                DFSNeighbors(neighbor, visited, r);
+    public static void topologicalSortDFS(V v,
+                                          Set<V> black,
+                                          StringBuilder r) {
+        if (black.add(v)) { // care
+            for (V follow : v.followings) {
+                topologicalSortDFS(follow, black, r);
             }
             r.append(v.i); // like stack. deep first
         }

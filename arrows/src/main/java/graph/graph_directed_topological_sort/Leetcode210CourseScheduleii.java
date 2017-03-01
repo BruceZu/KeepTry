@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package graph.directed_graphs;
+package graph.graph_directed_topological_sort;
 
 import org.omg.CORBA.INTERNAL;
 import org.omg.PortableInterceptor.INACTIVE;
