@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2017 The keepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
 // limitations under the License.
 //
 
-package nosubmmitted;
+package tree.binary_search_tree;
 
 
 /**
  * 333. Largest BST Subtree
- * <p/>
+ * <pre>
  * https://leetcode.com/problems/largest-bst-subtree/
- * <p/>
+
  * Given a binary tree, find the largest subtree which is a Binary Search Tree (BST), where largest means subtree with largest number of nodes in it.
- * <p/>
+
  * Note:
  * A subtree must include all of its descendants.
  * Here's an example:
@@ -34,15 +34,15 @@ package nosubmmitted;
  * The Largest BST Subtree in this case is the highlighted one.
  * The return value is the subtree's size, which is 3.
  * Hint:
- * <p/>
+
  * You can recursively use algorithm similar to 98. Validate Binary Search Tree at each node of the tree, which will result in O(nlogn) time complexity.
  * Follow up:
  * Can you figure out ways to solve it with O(n) time complexity?
- * <p/>
+
  * Hide Company Tags Microsoft
  * Hide Tags Tree
  */
-public class LC333LargestBSTSubtree {
+public class Leetcode333LargestBSTSubtree {
     class TreeNode {
         int val;
         TreeNode left;
@@ -52,6 +52,7 @@ public class LC333LargestBSTSubtree {
             val = x;
         }
     }
+
     int r = 0;
 
     /**
