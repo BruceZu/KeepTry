@@ -21,6 +21,7 @@ import java.util.Stack;
 public class Leetcode85MaximalRectangle {
     /**
      * <pre>
+     *     <a href="https://leetcode.com/problems/maximal-rectangle/?tab=Description"> LeetCode </a>
      * performance improvement:
      * keep both of calculating the max area and updating the heights[] together step by step.
      *
@@ -38,11 +39,11 @@ public class Leetcode85MaximalRectangle {
         int rows = matrix.length;
 
         int[] heights = new int[cols];
-        for (int i = 0; i < cols; i++) {
+        for (int i = 0; i < cols; i++) { // first line
             if (matrix[0][i] == '1') heights[i] = 1;
         }
 
-        int result = maximalRectangleOf(heights);
+        int result = maximalRectangleOf(heights); // first line
         for (int r = 1; r < rows; r++) {
             setHeightsWithBottomRowOf(matrix, r, heights);
             result = Math.max(result, maximalRectangleOf(heights));
@@ -155,11 +156,11 @@ public class Leetcode85MaximalRectangle {
         }
         int rows = matrix.length;
         int cols = matrix[0].length;
-        int[] recLBi = new int[cols]; // rectangle left bounder index, included
-        int[] recRBi = new int[cols]; // rectangle right bounder index, excluded
-        int[] recMaxHeight = new int[cols]; // rectangle height
-        Arrays.fill(recRBi, Integer.MAX_VALUE);
-        Arrays.fill(recLBi, -1);
+        int[] recLeftBi = new int[cols];    // 以该点为底的连续的1的高决定的向左边和右边最大能延展的 rectangle's left bounder index, included
+        int[] recRightBi = new int[cols];   // 以该点为底的连续的1的高决定的向左边和右边最大能延展的 rectangle's right bounder index, excluded
+        int[] recMaxHeight = new int[cols]; // 以该点为底的连续的1的高决定的向左边和右边最大能延展的 rectangle 的高
+        Arrays.fill(recRightBi, Integer.MAX_VALUE);
+        Arrays.fill(recLeftBi, -1);
         int MaxRectangleArea = 0;
 
         for (int r = 0; r < rows; r++) {
@@ -168,9 +169,9 @@ public class Leetcode85MaximalRectangle {
                 recMaxHeight[i] = matrix[r][i] == '1' ? recMaxHeight[i] + 1 : 0;
                 //---
                 if (matrix[r][i] == '1') {// need calculate. get the right most one:
-                    recLBi[i] = Math.max(recLBi[i], nextLeftBounderIndexCandidate);
+                    recLeftBi[i] = Math.max(recLeftBi[i], nextLeftBounderIndexCandidate);
                 } else { // 0 do not need calculate,
-                    recLBi[i] = -1; // no height ,set to default 0 used for next row if next row this column is 1.
+                    recLeftBi[i] = -1; // no height ,set to default 0 used for next row if next row this column is 1.
                     nextLeftBounderIndexCandidate = i + 1; // update
                 }
             }
@@ -178,15 +179,15 @@ public class Leetcode85MaximalRectangle {
             int nextRightBounderIndexCandidate = cols; //
             for (int i = cols - 1; i >= 0; i--) {
                 if (matrix[r][i] == '1') {
-                    recRBi[i] = Math.min(recRBi[i], nextRightBounderIndexCandidate);
+                    recRightBi[i] = Math.min(recRightBi[i], nextRightBounderIndexCandidate);
                 } else { //
-                    recRBi[i] = Integer.MAX_VALUE;
+                    recRightBi[i] = Integer.MAX_VALUE;
                     nextRightBounderIndexCandidate = i;
                 }
             }
 
             for (int col = 0; col < cols; col++) {
-                int currentRectangleArea = (recRBi[col] - recLBi[col]) * recMaxHeight[col];
+                int currentRectangleArea = (recRightBi[col] - recLeftBi[col]) * recMaxHeight[col];
                 MaxRectangleArea = Math.max(MaxRectangleArea, currentRectangleArea);
             }
         }
