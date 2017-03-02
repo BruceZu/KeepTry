@@ -15,12 +15,8 @@
 
 package tree.binary_search_tree;
 
-import org.omg.PortableInterceptor.INACTIVE;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Optional;
-import java.util.Stack;
 
 /**
  * <a href="https://leetcode.com/problems/validate-binary-search-tree/?tab=Description">LeetCode</a>
@@ -98,9 +94,49 @@ public class Leetcode98ValidateBinarySearchTree {
     }
 
     static private boolean _isValidBST(TreeNode root, int[] lAndR) {
+        int[] lAndROfLeft = new int[2];
+        int[] lAndROfRight = new int[2];
+
+        if (root.left == root.right && root.left == null) {// leaf
+            lAndR[0] = lAndR[1] = root.val;
+            return true;
+        }
+        if (root.left == null) {// one child right
+            if (_isValidBST(root.right, lAndROfRight) && root.val < lAndROfRight[0]) {
+                lAndR[0] = root.val;
+                lAndR[1] = lAndROfRight[1];
+                return true;
+            }
+            return false;
+        }
+        if (root.right == null) { // one child left
+            if (_isValidBST(root.left, lAndROfLeft) && lAndROfLeft[1] < root.val) {
+                lAndR[0] = lAndROfLeft[0];
+                lAndR[1] = root.val;
+                return true;
+            }
+            return false;
+        }
+
+        if (_isValidBST(root.left, lAndROfLeft) && _isValidBST(root.right, lAndROfRight)
+                && lAndROfLeft[1] < root.val && root.val < lAndROfRight[0]) { // 2 children
+            lAndR[0] = lAndROfLeft[0];
+            lAndR[1] = lAndROfRight[1];
+            return true;
+        }
+        return false;
+    }
+    //-------------------------------------------legend
+    static public boolean _isValidBST_legend(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return _isValidBST_legend(root, new int[2]);
+    }
+
+    static private boolean _isValidBST_legend(TreeNode root, int[] lAndR) {
         int[] lAndRForLeft = new int[2];
         int[] lAndRForRight = new int[2];
-        boolean leftIsBST, rightIsBST;
 
         // right end
         if (root.val == Integer.MAX_VALUE) {
@@ -112,7 +148,7 @@ public class Leetcode98ValidateBinarySearchTree {
                 return true;
             }
 
-            if (_isValidBST(root.left, lAndRForLeft) && lAndRForLeft[1] < root.val) {
+            if (_isValidBST_legend(root.left, lAndRForLeft) && lAndRForLeft[1] < root.val) {
                 lAndR[0] = lAndRForLeft[0];
                 lAndR[1] = root.val;
                 return true;
@@ -130,7 +166,7 @@ public class Leetcode98ValidateBinarySearchTree {
                 return true;
             }
 
-            if (_isValidBST(root.right, lAndRForRight) && root.val < lAndRForRight[0]) {
+            if (_isValidBST_legend(root.right, lAndRForRight) && root.val < lAndRForRight[0]) {
                 lAndR[0] = root.val;
                 lAndR[1] = lAndRForLeft[0];
                 return true;
@@ -139,12 +175,13 @@ public class Leetcode98ValidateBinarySearchTree {
         }
 
         // common
+        boolean leftIsBST, rightIsBST;
         if (root.left == null) {
             lAndRForLeft[0] = root.val;
             lAndRForLeft[1] = root.val - 1;
             leftIsBST = true;
         } else {
-            leftIsBST = _isValidBST(root.left, lAndRForLeft);
+            leftIsBST = _isValidBST_legend(root.left, lAndRForLeft);
         }
         // if (!leftIsBST) return false; // performance
         if (root.right == null) {
@@ -152,7 +189,7 @@ public class Leetcode98ValidateBinarySearchTree {
             lAndRForRight[0] = root.val + 1;
             rightIsBST = true;
         } else {
-            rightIsBST = _isValidBST(root.right, lAndRForRight);
+            rightIsBST = _isValidBST_legend(root.right, lAndRForRight);
         }
 
         if (leftIsBST
@@ -185,17 +222,20 @@ public class Leetcode98ValidateBinarySearchTree {
         TreeNode root = new TreeNode(1);
         root.left = new TreeNode(2);
         root.right = new TreeNode(3);
+        System.out.println(_isValidBST_legend(root));
         System.out.println(_isValidBST(root));
         System.out.println(isValidBST(root));
         System.out.println(isValidBST_InOrder(root));
 
         root = new TreeNode(2147483647);
+        System.out.println(_isValidBST_legend(root));
         System.out.println(_isValidBST(root));
         System.out.println(isValidBST(root));
         System.out.println(isValidBST_InOrder(root));
 
         root = new TreeNode(-2147483648);
         root.left = new TreeNode(-2147483648);
+        System.out.println(_isValidBST_legend(root));
         System.out.println(_isValidBST(root));
         System.out.println(isValidBST(root));
         System.out.println(isValidBST_InOrder(root));
@@ -206,12 +246,24 @@ public class Leetcode98ValidateBinarySearchTree {
         root.right = new TreeNode(15);
         root.right.left = new TreeNode(6);
         root.right.right = new TreeNode(20);
+        System.out.println(_isValidBST_legend(root));
         System.out.println(_isValidBST(root));
         System.out.println(isValidBST(root));
         System.out.println(isValidBST_InOrder(root));
         // [2147483647,null,2147483647]
         root = new TreeNode(2147483647);
         root.right = new TreeNode(2147483647);
+        System.out.println(_isValidBST_legend(root));
+        System.out.println(_isValidBST(root));
+        System.out.println(isValidBST(root));
+        System.out.println(isValidBST_InOrder(root));
+
+        // [25,-22,60,null,null,36]
+        root = new TreeNode(25);
+        root.left = new TreeNode(-22);
+        root.right = new TreeNode(60);
+        root.right.left= new TreeNode(36);
+        System.out.println(_isValidBST_legend(root));
         System.out.println(_isValidBST(root));
         System.out.println(isValidBST(root));
         System.out.println(isValidBST_InOrder(root));
