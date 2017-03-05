@@ -21,13 +21,13 @@ public class MergeSortNoRecursion {
 
     /**
      * Merge sort an array without recursion. no thread safe
-     * <p>
-     * Idea: <pre>
+     * <pre>
+     * Idea:
      * 1>   decide the size of sub array from 1, then 2, 4 ,8, 16 .... while the size <= arr.length()
      * 2>   with each size, loop arr from left:
      *   21>     calculate the index of 2 sub arrays: [l, mid] and [mid+1, r]
      *   22>     merge them in sort
-     * <p>
+     * <a href="http://softwareengineering.stackexchange.com/questions/297160/why-is-mergesort-olog-n">O(NLOGN)</a>
      */
     public static <T extends Comparable<T>> void mergeSortNoRecursion(T[] arr) {
         // Input check
