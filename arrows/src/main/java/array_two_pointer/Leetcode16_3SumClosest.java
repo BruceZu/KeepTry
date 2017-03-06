@@ -13,11 +13,8 @@
 // limitations under the License.
 //
 
-package two_pointer;
+package array_two_pointer;
 
-import sun.rmi.server.InactiveGroupException;
-
-import java.math.BigInteger;
 import java.util.Arrays;
 
 /**

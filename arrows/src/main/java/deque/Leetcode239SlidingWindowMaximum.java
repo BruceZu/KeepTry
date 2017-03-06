@@ -56,21 +56,21 @@ public class Leetcode239SlidingWindowMaximum {
             return nums;
         }
         int[] r = new int[nums.length - k + 1];
-        Deque<Integer> indexOfWindowDesencdingOrder = new ArrayDeque(k);
+        Deque<Integer> windowDesencdIndex = new ArrayDeque(k);
         for (int i = 0; i < nums.length; i++) {
             int indexNeedToMoveFromWindow = i - k;
-            if (!indexOfWindowDesencdingOrder.isEmpty() &&
-                    indexOfWindowDesencdingOrder.peek() == indexNeedToMoveFromWindow) {
-                indexOfWindowDesencdingOrder.poll();// may be it has been move out of the window already
+            if (!windowDesencdIndex.isEmpty() &&
+                    windowDesencdIndex.peek() == indexNeedToMoveFromWindow) {
+                windowDesencdIndex.poll();// may be it has been move out of the window already
             }
 
-            while (!indexOfWindowDesencdingOrder.isEmpty() &&
-                    nums[indexOfWindowDesencdingOrder.peekLast()] < nums[i]) {
-                indexOfWindowDesencdingOrder.pollLast();
+            while (!windowDesencdIndex.isEmpty() &&
+                    nums[windowDesencdIndex.peekLast()] < nums[i]) {
+                windowDesencdIndex.pollLast();
             }
-            indexOfWindowDesencdingOrder.offerLast(i); // keep index
+            windowDesencdIndex.offerLast(i); // keep index
             if (i >= k - 1) {
-                r[i - (k - 1)] = nums[indexOfWindowDesencdingOrder.peek()]; // value
+                r[i - (k - 1)] = nums[windowDesencdIndex.peek()]; // value
             }
         }
         return r;

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package two_pointer;
+package array_two_pointer;
 
 public class Leetcode5LongestPalindromicSubstring {
     class Solution {
