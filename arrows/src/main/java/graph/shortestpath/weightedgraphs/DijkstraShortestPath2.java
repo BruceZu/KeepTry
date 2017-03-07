@@ -40,7 +40,7 @@ import static graph.shortestpath.weightedgraphs.DijkstraShortestPath.getShortest
  */
 public class DijkstraShortestPath2 {
 
-    public static boolean calculateShortestPath(Set<Node> graph, Node end) {
+    public static boolean hashShortestPath(Set<Node> graph, Node end) {
         Queue<Node> unSettled = new PriorityQueue();
 
         for (Node n : graph) {
@@ -55,19 +55,19 @@ public class DijkstraShortestPath2 {
                 return true;
             }
             for (Node neighbor : toBeSttled.distanceToAdjacentNode.keySet()) {
-                int alt = toBeSttled.tentativeShortestDistanceFromStart
-                        + toBeSttled.distanceToAdjacentNode.get(neighbor);
-                if (alt < 0) {
-                    alt = Integer.MAX_VALUE;
-                }
-                if (alt < neighbor.tentativeShortestDistanceFromStart) {
-                    neighbor.tentativeShortestDistanceFromStart = alt;
-                    neighbor.predecessorNode = toBeSttled;
+                if (unSettled.contains(neighbor)) {
+                    int alt = toBeSttled.tentativeShortestDistanceFromStart
+                            + toBeSttled.distanceToAdjacentNode.get(neighbor);
+                    if (alt < 0) {
+                        alt = Integer.MAX_VALUE;
+                    }
+                    if (alt < neighbor.tentativeShortestDistanceFromStart) {
+                        neighbor.tentativeShortestDistanceFromStart = alt;
+                        neighbor.predecessorNode = toBeSttled;
 
-                   if(unSettled.contains(neighbor)){
-                       unSettled.remove(neighbor);
-                       unSettled.offer(neighbor);
-                   }
+                        unSettled.remove(neighbor);
+                        unSettled.offer(neighbor);
+                    }
                 }
             }
         }
@@ -78,7 +78,7 @@ public class DijkstraShortestPath2 {
     // calculate shortest path from start node to end node
     // if there is not path between them, return false.
     public static String shortestPath(Set<Node> graph, Node start, Node end) {
-        boolean hasPath = calculateShortestPath(graph, end);
+        boolean hasPath = hashShortestPath(graph, end);
         if (hasPath) {
             return getShortestPath(end);
         } else {

@@ -15,9 +15,6 @@
 
 package graph.shortestpath.weightedgraphs;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 /**
@@ -47,8 +44,8 @@ import java.util.*;
  *                         'predecessor node' is null.
  *
  * Set<Node>:  settled nodes, have found the shortest paths from start node to these nodes .
- * Heap<Node>: sortedBorder, keep nodes under evaluating. a border between settled node and left nodes. Set<Node> borders
- *             is for performance concern.
+ * Heap<Node>: sortedBorder, keep nodes under evaluating. a border between settled node and left nodes.
+ * // Set<Node> borders is for performance concern.
  * Stack<Node> or StringBuilder:  used to calculate the shortest path.
  *
  * Algorithm:
@@ -67,19 +64,16 @@ import java.util.*;
  */
 
 public class DijkstraShortestPath {
-    private static boolean calculateShortestPath(Node start, Node end) {
-        Queue<Node> sortedBorderNodes = new PriorityQueue(); // top is with shortest distance from start
-        Set<Node> borderNodes = new HashSet<>();
-        
-        Set<Node> settled = new HashSet();
+    private static boolean hasShortestPath(Node start, Node end) {
+        Queue<Node> borderHeap = new PriorityQueue(); // top is with shortest distance from start
+        Set<Node> doneSet = new HashSet();
 
-        sortedBorderNodes.offer(start);
+        borderHeap.offer(start);
         while (true) {
-            if (sortedBorderNodes.isEmpty()) {
+            if (borderHeap.isEmpty()) {
                 return false;
             }
-            Node toBeSettled = sortedBorderNodes.poll();
-            borderNodes.remove(toBeSettled);
+            Node toBeSettled = borderHeap.poll();
 
             // uniform-cost search
             if (toBeSettled.tentativeShortestDistanceFromStart == Integer.MAX_VALUE) {
@@ -91,7 +85,7 @@ public class DijkstraShortestPath {
             }
             // update neighbors tentative shortest distance from start
             for (Node neighbor : toBeSettled.distanceToAdjacentNode.keySet()) {
-                if (!settled.contains(neighbor)) {
+                if (!doneSet.contains(neighbor)) {
                     int viaCur =
                             toBeSettled.tentativeShortestDistanceFromStart
                                     + toBeSettled.distanceToAdjacentNode.get(neighbor);
@@ -102,15 +96,17 @@ public class DijkstraShortestPath {
                         neighbor.tentativeShortestDistanceFromStart = viaCur;
                         neighbor.predecessorNode = toBeSettled;
                     }
-                    if (!borderNodes.contains(neighbor)) {   //it maybe has been there. avoid repeating calculate
-                        sortedBorderNodes.offer(neighbor);
-                        borderNodes.add(neighbor);
-                    }
+                    // if it has been in the border
+                    //     if it is updated:  remove and offer again
+                    //     else:  need not touch it
+                    // else: offer 
+                    borderHeap.remove(neighbor);
+                    borderHeap.offer(neighbor);
                 }
 
             }
             // settled
-            settled.add(toBeSettled);
+            doneSet.add(toBeSettled);
         }
     }
 
@@ -130,7 +126,7 @@ public class DijkstraShortestPath {
     // calculate shortest path from start node to end node
     // if there is not path between them, return false.
     public static String shortestPath(Node start, Node end) {
-        boolean hasPath = calculateShortestPath(start, end);
+        boolean hasPath = hasShortestPath(start, end);
         if (hasPath) {
             return getShortestPath(end);
         } else {
