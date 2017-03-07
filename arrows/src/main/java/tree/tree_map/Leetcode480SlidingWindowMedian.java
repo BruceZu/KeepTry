@@ -64,7 +64,7 @@ public class Leetcode480SlidingWindowMedian {
     static public double[] medianSlidingWindow3(int[] nums, int k) {
         double[] result = new double[nums.length - k + 1];
         int size = 0;
-        PriorityQueue<Integer> top = new PriorityQueue<>((a, b) -> (int) ((double) b - a)); // use double then back to int
+        PriorityQueue<Integer> top = new PriorityQueue<>((a, b) -> -a.compareTo(b)); // use double then back to int
         PriorityQueue<Integer> bottom = new PriorityQueue<>();
         int i = 0;
         // Initialize the heaps
