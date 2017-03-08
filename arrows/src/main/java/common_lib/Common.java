@@ -168,25 +168,25 @@ public class Common {
      * 2> not thread safe.
      * 3> l < r
      *
-     * @param ar  array
+     * @param array  array
      * @param l   left index, included.
      * @param mid index.  it maybe (l+r)/2 , or maybe not. e.g. the stump of array in the loop way of merge sort.
      * @param r   right index, included.
      * @param tmp In one thread. this tmp array is provided for performance concern in recursion.
      *            without `new` more tmp arrays.
      */
-    public static void mergeInsort(Comparable[] ar, int l, int mid, int r, Comparable[] tmp) {
+    public static void mergeInsort(Comparable[] array, int l, int mid, int r, Comparable[] tmp) {
         if (l >= r) { //input check
             return;
         }
 
         // Improved, when it is already sorted in order
-        if (lessThan(ar[mid], ar[mid + 1])) {
+        if (lessThan(array[mid], array[mid + 1])) {
             return;
         }
 
         for (int i = l; i <= r; i++) {
-            tmp[i] = ar[i];
+            tmp[i] = array[i];
         }
         // Start merge in sort. Rewrite arr from l
         int li = l, ri = mid + 1;
@@ -194,9 +194,9 @@ public class Common {
         while (!(li == mid + 1 && ri == r + 1)) { /* Both have no member. or while( li <=mid || ri<=r ) */
             // if (li <= mid && (ri == r + 1 || ri <= r && lessThan(tmp[li], tmp[ri]))) {
             if (ri == r + 1 || li <= mid && lessThan(tmp[li], tmp[ri])) {
-                ar[k++] = tmp[li++];
+                array[k++] = tmp[li++];
             } else {
-                ar[k++] = tmp[ri++];
+                array[k++] = tmp[ri++];
             }
         }
     }

@@ -19,7 +19,7 @@ package tree;
  * <pre>
  *
  * <a href="https://mp.weixin.qq.com/s?__biz=MzA5MzE4MjgyMw==&mid=2649456390&idx=1&sn=4f8f435c0eeae9cb8979b661328a17a1&chksm=887e110ebf099818a07f08feefc89b4bc8bae04226bde297a536915989a7026409a7b0fabc60&mpshare=1&scene=1&srcid=02081HVAdJAoYyuF282ujk1d&pass_ticket=5KbuZh1EUpN1bPNkbu7WyLd0wtkztobWef2o19epVo2bXXUD7S%2Bz030lkmT8W6%2Bc#rd">
- *     LeetCode</a>
+ *     Segment tree</a>
  * <a href="http://infotechgems.blogspot.com/2011/11/java-collections-performance-time.html">java-collections-performance-time</a>
  */
 public class SegmentTree {
