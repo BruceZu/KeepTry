@@ -191,8 +191,9 @@ public class Common {
         // Start merge in sort. Rewrite arr from l
         int li = l, ri = mid + 1;
         int k = l;
-        while (!(li == mid + 1 && ri == r + 1)) { /* Both have no member */
-            if (li <= mid && (ri == r + 1 || ri <= r && lessThan(tmp[li], tmp[ri]))) {
+        while (!(li == mid + 1 && ri == r + 1)) { /* Both have no member. or while( li <=mid || ri<=r ) */
+            // if (li <= mid && (ri == r + 1 || ri <= r && lessThan(tmp[li], tmp[ri]))) {
+            if (ri == r + 1 || li <= mid && lessThan(tmp[li], tmp[ri])) {
                 ar[k++] = tmp[li++];
             } else {
                 ar[k++] = tmp[ri++];

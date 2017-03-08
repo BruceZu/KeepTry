@@ -47,8 +47,7 @@ import java.util.Deque;
  */
 public class Leetcode239SlidingWindowMaximum {
     /**
-     * O(N)
-     * if using Heap, it will be O(?)
+     * O(NK)
      */
     public int[] maxSlidingWindow(int[] nums, int k) {
         // corner case check
@@ -56,21 +55,21 @@ public class Leetcode239SlidingWindowMaximum {
             return nums;
         }
         int[] r = new int[nums.length - k + 1];
-        Deque<Integer> windowDesencdIndex = new ArrayDeque(k);
+        Deque<Integer> descenIndex = new ArrayDeque(k);
         for (int i = 0; i < nums.length; i++) {
             int indexNeedToMoveFromWindow = i - k;
-            if (!windowDesencdIndex.isEmpty() &&
-                    windowDesencdIndex.peek() == indexNeedToMoveFromWindow) {
-                windowDesencdIndex.poll();// may be it has been move out of the window already
+            if (!descenIndex.isEmpty() &&
+                    descenIndex.peek() == indexNeedToMoveFromWindow) {
+                descenIndex.poll();// may be it has been move out of the window already
             }
 
-            while (!windowDesencdIndex.isEmpty() &&
-                    nums[windowDesencdIndex.peekLast()] < nums[i]) {
-                windowDesencdIndex.pollLast();
+            while (!descenIndex.isEmpty() &&
+                    nums[descenIndex.peekLast()] < nums[i]) {// O(K)
+                descenIndex.pollLast();
             }
-            windowDesencdIndex.offerLast(i); // keep index
+            descenIndex.offerLast(i); // keep index
             if (i >= k - 1) {
-                r[i - (k - 1)] = nums[windowDesencdIndex.peek()]; // value
+                r[i - (k - 1)] = nums[descenIndex.peek()]; // value
             }
         }
         return r;

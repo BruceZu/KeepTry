@@ -27,12 +27,12 @@ public class MergeSortRecursionSingleThread {
     /**
      * Merge sort array arr's scope [l, r].
      *
-     * @param arr array
+     * @param array array
      * @param l   left bound index, included.
      * @param r   right bound index, included.
      * @param tmp with it, do not need new tmp array every time when mergeInsort and care its length
      */
-    private static <T extends Comparable<T>> void call(T[] arr, int l, int r, T[] tmp) {
+    private static <T extends Comparable<T>> void call(T[] array, int l, int r, T[] tmp) {
         if (l == r) {
             // stop recursion when there is only element.
             return;
@@ -40,10 +40,10 @@ public class MergeSortRecursionSingleThread {
 
         int mid = (l + r) / 2;
 
-        call(arr, l, mid, tmp);
-        call(arr, mid + 1, r, tmp);
+        call(array, l, mid, tmp);
+        call(array, mid + 1, r, tmp);
 
-        mergeInsort(arr, l, mid, r, tmp);
+        mergeInsort(array, l, mid, r, tmp);
     }
 
     /**

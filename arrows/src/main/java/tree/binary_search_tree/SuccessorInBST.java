@@ -21,6 +21,7 @@ import java.util.Stack;
 // root node of BST is provided only.
 // Descending order or ascending order.
 // This is a Descending order case.
+//  O(n)
 class BSTIterator {
     private Stack<TreeNode> nodesStack; // Descending order top down
 
@@ -84,7 +85,7 @@ class SolutionB {
         // Assume the give node is sure exists in the given BST
         while (node.val != root.val) {
             if (node.val > root.val) {
-                // before change to the left child. keep cur node as parent candidator.
+                // before change to the left child. keep cur node as parent candidate.
                 successorParentCandidator = root;
                 root = root.left;
             } else {
