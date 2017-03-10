@@ -22,14 +22,16 @@ import java.util.Arrays;
  * <pre>
  *  https://www.youtube.com/watch?v=v_wj_mOAlig
  *  https://en.wikipedia.org/wiki/Fenwick_tree
+ *  https://www.topcoder.com/community/data-science/data-science-tutorials/binary-indexed-trees/
  *
  *  1 BIT array 每个数存的是什么.
  *     binary tree array[0]从来不用。 或者说BIT array 的index 值是 1 based的
  *     其他数存的是原来数组的一个range sum：
  *     如binary tree array[12]
  *                12 = 0b1100
- *                最后一个bit‘1’对应的十进制数是 2 =  x-(x&(x-1))
+ *                最后一个bit‘1’对应的十进制数是 2 =   x & (-x)
  *                从原数组中数出2个数： 从第12个数既array【11】开始，含，向左数2个，求和存入 binary tree array[12]
+ *                 x - ( x & (-x))
  *
  *  2  原数组从第一个数开始到index i的数的和，用 binary tree array 怎么算？ 算法复杂度是多少
  *     如求 原数组index 0 到 index 12 这13个数的和
@@ -39,7 +41,7 @@ import java.util.Arrays;
  *              0b1000                0b1100              0b1101
  *
  *      各个index 求法： 13： 0b1101自己算一个，用  x&(x-1) 求前边一个知道为0停止。
- *      算法复杂度 是 o(1ogn)
+ *      算法复杂度 是 O(1ogn)
  *
  *     <img src="../../../resources/BIT_sum13.png" height="400" width="600">
  *     <img src="../../../resources/BIT_sum7.png" height="400" width="600">
@@ -55,7 +57,7 @@ import java.util.Arrays;
  *       下一个是 0b1110
  *       下一个是0b10000
  *       直到出界为止
- *       算法复杂度 是 o(1ogn)
+ *       算法复杂度 是 O(1ogn)
  *       x + ( x & (-x))
  *
  *  Notes:
@@ -75,10 +77,9 @@ public class BinaryIndexedTree {
     }
 
     public void add(int i_1_based, int delta) {
-        int idx = i_1_based;
-        while (idx < bitree.length) {
-            bitree[idx] += delta;
-            idx += idx & -idx;
+        while (i_1_based < bitree.length) {
+            bitree[i_1_based] += delta;
+            i_1_based += i_1_based & -i_1_based;
         }
     }
 
