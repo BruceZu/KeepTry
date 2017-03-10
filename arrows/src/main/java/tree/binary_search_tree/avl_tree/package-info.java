@@ -16,4 +16,4 @@
 /**
  *
  */
-package tree.binary_search_tree.avltree;
+package tree.binary_search_tree.avl_tree;

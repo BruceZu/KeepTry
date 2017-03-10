@@ -64,7 +64,7 @@ public class Leetcode315CountofSmallerNumbersAfterSelf4 {
                 }
                 parent = parent.left;
             } else {
-                way2 += parent.way1Num + 1;
+                way2 += parent.way1Num + 1; // (elements in the parent's left subtree) plus one (the parent element itself).
                 if (parent.right == null) {
                     parent.right = new BSTNode(cur);
                     smallNumThanElementAtIndexOf[i] = way2;
