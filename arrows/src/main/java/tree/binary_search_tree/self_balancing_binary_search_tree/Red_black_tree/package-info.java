@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2017 The keepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,4 +29,4 @@
  *  @see <a href="https://www.cs.auckland.ac.nz/software/AlgAnim/red_black.html">red-black tree</a>
  *  @see <a href="https://www.cs.auckland.ac.nz/software/AlgAnim/red_black.html">wiki</a>
  */
-package tree.binary_search_tree.self_balancing_tree.redblacktree;
+package tree.binary_search_tree.self_balancing_binary_search_tree.Red_black_tree;

@@ -14,6 +14,7 @@
 //
 
 /**
- * used for LRU cache?
+ * used for LRU cache.
+ * https://en.wikipedia.org/wiki/Splay_tree
  */
 package tree.binary_search_tree.splaytree;

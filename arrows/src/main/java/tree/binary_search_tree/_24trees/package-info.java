@@ -26,5 +26,7 @@
  *  A node v is external if v has no children.
  *  A node v is internal if it has one or more children.
  *  External nodes are also known as leaves.
+ *
+ *  https://en.wikipedia.org/wiki/Tree_rotation
  */
 package tree.binary_search_tree._24trees;
