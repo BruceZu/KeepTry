@@ -97,7 +97,7 @@ public class Leetcode98ValidateBinarySearchTree {
         int[] lAndROfLeft = new int[2];
         int[] lAndROfRight = new int[2];
 
-        if (root.left == root.right && root.left == null) {// leaf
+        if (root.left == null && root.right == null) {// leaf
             lAndR[0] = lAndR[1] = root.val;
             return true;
         }
