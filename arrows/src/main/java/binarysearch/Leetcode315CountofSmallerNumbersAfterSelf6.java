@@ -19,9 +19,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+// Binary index tree this is the best solution see
+// http://www.programmercoach.com/2017/03/programming-interview-pearls-count.html
 public class Leetcode315CountofSmallerNumbersAfterSelf6 {
-    // Binary index tree this is the best solution see
-    // http://www.programmercoach.com/2017/03/programming-interview-pearls-count.html
     // O(nlogn)
     public List<Integer> countSmaller(int[] nums) {
         if (nums == null || nums.length == 0) {

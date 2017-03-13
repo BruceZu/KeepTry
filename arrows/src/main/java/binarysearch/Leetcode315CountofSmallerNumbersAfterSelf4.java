@@ -21,7 +21,7 @@ import java.util.List;
 
 class BSTNode {
     final int v;
-    int way1Num;   // left Sub tree nodes account
+    int leftSubTreeNodesNum;   // left Sub tree nodes account
 
     BSTNode left;
     BSTNode right;
@@ -56,7 +56,7 @@ public class Leetcode315CountofSmallerNumbersAfterSelf4 {
         int way2 = 0;
         while (true) {
             if (cur <= parent.v) {
-                parent.way1Num++;
+                parent.leftSubTreeNodesNum++;
                 if (parent.left == null) {
                     parent.left = new BSTNode(cur);
                     smallNumThanElementAtIndexOf[i] = way2;
@@ -64,7 +64,7 @@ public class Leetcode315CountofSmallerNumbersAfterSelf4 {
                 }
                 parent = parent.left;
             } else {
-                way2 += parent.way1Num + 1; // (elements in the parent's left subtree) plus one (the parent element itself).
+                way2 += parent.leftSubTreeNodesNum + 1; // (elements in the parent's left subtree) plus one (the parent element itself).
                 if (parent.right == null) {
                     parent.right = new BSTNode(cur);
                     smallNumThanElementAtIndexOf[i] = way2;

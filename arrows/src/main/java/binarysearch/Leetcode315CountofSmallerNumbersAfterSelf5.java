@@ -36,10 +36,10 @@ public class Leetcode315CountofSmallerNumbersAfterSelf5 {
             parent = new BSTNode(array[index]);
             numOfNodeSmallerThanNodeAtIndexOf[index] = way2Num;
         } else if (array[index] <= parent.v) {
-            parent.way1Num++;
+            parent.leftSubTreeNodesNum++;
             parent.left = insert(parent.left, index, way2Num, numOfNodeSmallerThanNodeAtIndexOf, array);
         } else {
-            parent.right = insert(parent.right, index, way2Num + parent.way1Num + 1,
+            parent.right = insert(parent.right, index, way2Num + parent.leftSubTreeNodesNum + 1,
                     numOfNodeSmallerThanNodeAtIndexOf, array);
         }
         return parent;

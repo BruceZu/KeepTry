@@ -142,5 +142,48 @@ public class KMP {
         System.out.println(KMP("ABC ABCDAB ABCDABCDABDE", "ABCDABD")); // 15
         System.out.println(KMP("CGTGCCTACTTACTTACTTACTTACGCGAA", "CTTACTTAC"));//8
         System.out.println(KMP("BBBBBBBBBB", "ABBBB"));//-1
+        System.out.println(index_slowSolution("dddddddddd", "ddddds"));
+    }
+    /**
+     * <pre>
+     * haystack = "hello world"
+     * needle = "world"
+     * return 6
+     *
+     * haystack length is m
+     * needle length is n
+     * O(n*(m-n))
+     *
+     * Give a worse case
+     *
+     * @param haystack
+     * @param needle
+     * @return index of the char from where the needle appears for the fist time.
+     */
+    public static int index_slowSolution(String haystack, String needle) {
+        // check corner cases
+        if (haystack == null || needle == null) {
+            return -1;
+        }
+        //
+        int max = haystack.length() - needle.length();
+        for (int i = 0; i <= max; i++) { // care it is <= not <
+            char curC = haystack.charAt(i);
+            if (curC == needle.charAt(0)) {
+
+                boolean found = true;
+                for (int j = 1; j < needle.length(); j++) {
+                    if (needle.charAt(j) != haystack.charAt(i + j)) {
+                        found = false;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 }
