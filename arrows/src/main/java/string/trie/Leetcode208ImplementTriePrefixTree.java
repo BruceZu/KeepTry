@@ -41,36 +41,54 @@ package string.trie;
  */
 public class Leetcode208ImplementTriePrefixTree {
 
-}
 
-class TrieNode {
-    // Initialize your data structure here.
-    public TrieNode() {
+    public class Trie {
+        class TrieNode {
+            // public char v;
+            public boolean isThereWordEnduphere;
+            public TrieNode[] nexts = new TrieNode[26]; // Assume only consist of lowercase letters a-z
+        }
+        private TrieNode root;
 
-    }
-}
+        public Trie() {
+            root = new TrieNode();
+        }
 
-class Trie {
-    private TrieNode root;
+        public void insert(String word) {
+            TrieNode node = root;
+            for (int i = 0; i < word.length(); i++) {
+                char v = word.charAt(i);
+                int index = v - 'a';
+                if (node.nexts[index] == null) {
+                    node.nexts[index] = new TrieNode();
+                }
+                node = node.nexts[index];
+            }
+            node.isThereWordEnduphere = true;
+        }
 
-    public Trie() {
-        root = new TrieNode();
-    }
+        public boolean search(String word) {
+            TrieNode reach = reachOfTrieAlongWith(word);
+            return reach != null && reach.isThereWordEnduphere;
+        }
 
-    // Inserts a word into the trie.
-    public void insert(String word) {
+        public boolean startsWith(String prefix) {
+            return reachOfTrieAlongWith(prefix) != null;
+        }
 
-    }
-
-    // Returns if the word is in the trie.
-    public boolean search(String word) {
-        return true;
-    }
-
-    // Returns if there is any word in the trie
-    // that starts with the given prefix.
-    public boolean startsWith(String prefix) {
-        return true;
+        // search() and startsWith() can abstract out a common method.
+        private TrieNode reachOfTrieAlongWith(String word) {
+            TrieNode node = root;
+            for (int i = 0; i < word.length(); i++) {
+                char v = word.charAt(i);
+                int index = v - 'a';
+                if (node.nexts[index] == null) {
+                    return null;
+                }
+                node = node.nexts[index];
+            }
+            return node;
+        }
     }
 }
 
