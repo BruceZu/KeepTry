@@ -15,6 +15,8 @@
 
 package array;
 
+import java.util.Arrays;
+
 /**
  * 243. Shortest Word Distance
  * Esay
@@ -40,45 +42,46 @@ package array;
  *   elements maybe duplicated. ["a","a","b","b"], "a","b"
  */
 public class Leetcode243ShortestWordDistance {
-    // 3ms
+    // O(N)
     public int shortestDistance1(String[] words, String A, String B) {
-        int p1 = -1, p2 = -1; // index for A and B
-        int dis = Integer.MAX_VALUE;
+        int latestIndexOfA = -1, latestIndexOfB = -1; // data structure
+        int result = Integer.MAX_VALUE;
         for (int i = 0; i < words.length; i++) {
             if (words[i].equals(A)) {
-                p1 = i;
+                latestIndexOfA = i;
             } else if (words[i].equals(B)) {
-                p2 = i;
+                latestIndexOfB = i;
             } else {
                 continue;
             }
-            if (p1 != -1 && p2 != -1) {
-                dis = dis < Math.abs(p1 - p2) ? dis : Math.abs(p1 - p2);
+
+            if (latestIndexOfA != -1 && latestIndexOfB != -1) {
+                int curDistance = Math.abs(latestIndexOfA - latestIndexOfB);
+                result = result < curDistance ? result : curDistance;
             }
         }
-        return dis;
+        return result;
     }
 
     /**
      * start from each word1, to find word2 in both forward and backward direction,
      * use min to record the answer.
-     * 2ms. depends on leetcode test case.
      */
     public static int shortestDistance(String[] words, String A, String B) {
-        int dis = Integer.MAX_VALUE;
+        int result = Integer.MAX_VALUE;
         for (int i = 0; i < words.length; i++) {
             if (words[i].equals(A)) {
-                int steps = 1;
+                int jumps = 1;
                 while (true) {
-                    int l = i - steps, r = i + steps;
-                    if (l >= 0 && words[l].equals(B) || r < words.length && words[r].equals(B)) {
-                        dis = dis < steps ? dis : steps;
+                    int lIndexOfB = i - jumps, rIndexOfB = i + jumps;
+                    if (lIndexOfB >= 0 && words[lIndexOfB].equals(B) || rIndexOfB < words.length && words[rIndexOfB].equals(B)) {
+                        result = result < jumps ? result : jumps;
                         break;
                     }
-                    steps++;
+                    jumps++;
                 }
             }
         }
-        return dis;
+        return result;
     }
 }

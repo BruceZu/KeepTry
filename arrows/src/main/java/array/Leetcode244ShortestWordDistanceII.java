@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2017 The keepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package nosubmmitted;
+package array;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,6 @@ import java.util.HashMap;
 /**
  * 244. Shortest Word Distance II
  * https://leetcode.com/problems/shortest-word-distance-ii/
- * <p/>
  * <pre>
  * Difficulty: Medium
  * This is a follow up of Shortest Word Distance.
@@ -44,57 +43,45 @@ import java.util.HashMap;
  * Hide Company Tags: LinkedIn
  * Hide Tags: Hash Table, Design
  * Hide Similar Problems: (E) Merge Two Sorted Lists (E) Shortest Word Distance (M) Shortest Word Distance III
- *
- * </pre>
  */
-public class LC244ShortestWordDistanceII {
+public class Leetcode244ShortestWordDistanceII {
     // Your WordDistance object will be instantiated and called as such:
     // WordDistance wordDistance = new WordDistance(words);
     // wordDistance.shortest("word1", "word2");
     // wordDistance.shortest("anotherWord1", "anotherWord2");
     class WordDistance {
 
-        /**
-         * the fast one beat 99%
-         */
+        private HashMap<String, ArrayList<Integer>> indexexOf;
 
-        private HashMap<String, ArrayList<Integer>> map;
-
-        /**
-         * beat 97.07
-         *
-         * @param words The idea is to store unique words into a HashMap,
-         *              where the value of the HashMap is a list of locations of all of the same words.
-         */
+        // unique words  -> locations
         public WordDistance(String[] words) {
-            map = new HashMap<String, ArrayList<Integer>>();
-            for (int i = 0, L = words.length; i < L; i++) {
-                if (!map.containsKey(words[i])) {
-                    ArrayList<Integer> list = new ArrayList<Integer>();
-                    list.add(i);
-                    map.put(words[i], list);
+            indexexOf = new HashMap<>();
+            for (int i = 0; i < words.length; i++) {
+                if (!indexexOf.containsKey(words[i])) {
+                    ArrayList<Integer> indexes = new ArrayList<>();
+                    indexes.add(i);
+                    indexexOf.put(words[i], indexes);
                 } else
-                    map.get(words[i]).add(i);
+                    indexexOf.get(words[i]).add(i);
             }
         }
 
         public int shortest(String word1, String word2) {
-            ArrayList<Integer> list1 = map.get(word1);
-            ArrayList<Integer> list2 = map.get(word2);
-            int size1 = list1.size();
-            int size2 = list2.size();
-            int shortest = 0x7fffffff;
-            int i = 0, j = 0;
-            while (i < size1 && j < size2) {
+            ArrayList<Integer> sortedIndexesA = indexexOf.get(word1);
+            ArrayList<Integer> sortedIndexesB = indexexOf.get(word2);
+
+            int shortest = Integer.MAX_VALUE;
+            int iiA = 0, iiB = 0;
+            while (iiA < sortedIndexesA.size() && iiB < sortedIndexesB.size()) {
                 if (shortest == 1) return shortest;
-                int w1 = list1.get(i);
-                int w2 = list2.get(j);
-                if (w1 < w2) {
-                    shortest = w2 - w1 < shortest ? w2 - w1 : shortest;
-                    ++i;
-                } else {
-                    shortest = w1 - w2 < shortest ? w1 - w2 : shortest;
-                    ++j;
+                int indexA = sortedIndexesA.get(iiA);
+                int indexB = sortedIndexesB.get(iiB);
+                if (indexA < indexB) {
+                    shortest = indexB - indexA < shortest ? indexB - indexA : shortest;
+                    ++iiA;
+                } else { // > or ==
+                    shortest = indexA - indexB < shortest ? indexA - indexB : shortest;
+                    ++iiB;
                 }
             }
             return shortest;
