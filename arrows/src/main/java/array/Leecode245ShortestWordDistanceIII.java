@@ -42,87 +42,58 @@ package array;
  * </pre>
  */
 public class Leecode245ShortestWordDistanceIII {
-
-
-    /**
-     * the fast one beat 99%  no shared code
-     */
-
-    /**
-     * beat 85%
-     */
+    //
     public int shortestWordDistance(String[] words, String word1, String word2) {
-        int res = Integer.MAX_VALUE, m = -1, n = -1;
+        int result = Integer.MAX_VALUE, indexW1 = -1, indexW2 = -1;
 
         if (word1.equals(word2)) {
             for (int i = 0; i < words.length; i++) {
                 if (words[i].equals(word1)) {
-
-                    if (m == -1) {
-                        m = i;
-                    } else {
-                        res = Math.min(res, i - m);
-                        m = i;
+                    if (indexW1 != -1) {
+                        result = Math.min(result, i - indexW1);
                     }
-
+                    indexW1 = i;
                 }
             }
         } else {
             for (int i = 0; i < words.length; i++) {
                 if (words[i].equals(word1)) {
-                    m = i;
-                    if (m != -1 && n != -1) {
-                        res = Math.min(res, Math.abs(m - n));
-                    }
+                    indexW1 = i;
+                } else if (words[i].equals(word2)) {
+                    indexW2 = i;
                 }
 
-                if (words[i].equals(word2)) {
-                    n = i;
-                    if (m != -1 && n != -1) {
-                        res = Math.min(res, Math.abs(m - n));
-                    }
+                if (indexW1 != -1 && indexW2 != -1) {
+                    result = Math.min(result, Math.abs(indexW1 - indexW2));
                 }
             }
         }
-        return res;
-
+        return result;
     }
 
-    /**
-     * same speed
-     */
-    public int shortestWordDistance2(String[] words, String word1, String word2) {
-        int len = words.length, min = Integer.MAX_VALUE;
 
-        if (!word1.equals(word2)) {//if work for shortest word distance, only using the code of if clause
-            int index = -1;
-            for (int i = 0; i < len; i++) {
-                if (words[i].equals(word1) || words[i].equals(word2)) {
-                    if (index != -1 && !words[i].equals(words[index]))
-                        min = Math.min(min, i - index);
-                    index = i;
+    // same idea. just save a parameter
+    public int shortestWordDistance2(String[] words, String word1, String word2) {
+        int min = Integer.MAX_VALUE;
+        int indexW1or2 = -1;
+        if (word1.equals(word2)) {//if work for shortest word distance, only using the code of if clause
+            for (int i = 0; i < words.length; i++) {
+                if (words[i].equals(word1)) {
+                    if (indexW1or2 != -1)
+                        min = Math.min(min, i - indexW1or2);
+                    indexW1or2 = i;
                 }
             }
         } else {//deal with the cases that are the same parameters
-            int index = -1;
-            for (int i = 0; i < len; i++) {
-                if (words[i].equals(word1)) {
-                    if (index != -1)
-                        min = Math.min(min, i - index);
-                    index = i;
+            for (int i = 0; i < words.length; i++) {
+                String curW = words[i];
+                if (curW.equals(word1) || curW.equals(word2)) {
+                    if (indexW1or2 != -1 && !curW.equals(words[indexW1or2]))
+                        min = Math.min(min, i - indexW1or2);
+                    indexW1or2 = i;
                 }
             }
         }
         return min;
     }
-    /**
-     * other idea
-     * In this post, Stefan's solutions are very concise. However,
-     * I found that the following solution only runs 280ms on OJ,
-     * which beats all other java solutions so far. It is fast because
-     * it only checks word1.equals(word2) once at the beginning.
-     * I wonder in real practice, do we prefer cleaner code or faster solution
-     * if we cannot achieve both with one solution?
-     * I hope people who have more industrial experience could give some adivce.
-     */
 }
