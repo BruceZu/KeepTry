@@ -30,52 +30,39 @@ import list.ListNode;
  * Tags Linked List
  */
 public class Leetcode206ReverseLinkedList {
+    static class Node {
+        int v;
+        Node next;
 
-    /**
-     * <pre>
-     * before loop :
-     *
-     *         pre cur next
-     *          |   |   |
-     *   null <-n <-n   ?
-     *
-     * The right steps in order is 1 2 3,  from left to right.
-     *
-     *    pre = cur
-     *    cur = next
-     *    next = next.next
-     *
-     *             pre cur next
-     *              |   |   |
-     *   null <-n <-n   n ->?
-     *
-     *   before next loop it is, step 4: cur.next = pre;
-     *             pre cur next
-     *              |   |   |
-     *   null <-n <-n <-n   ?
-     *
-     *  Error:
-     *      2 before 1
-     *      3 before 2
-     */
-    public class Solution {
-        public ListNode reverseList(ListNode head) {
-            if (head == null || head.next == null) {
-                return head;
-            }
-            ListNode pre = head;
-            ListNode cur = head.next;
-            ListNode next = head.next.next;
-            pre.next = null;
-            cur.next = pre;
-            while (next != null) {
-                pre = cur;  // 1
-                cur = next; // 2
-                next = next.next; // 3
-
-                cur.next = pre; //4
-            }
-            return cur;
+        Node(int v) {
+            this.v = v;
         }
+    }
+
+    static public Node reverse(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        Node pre = null;
+        Node cur = head;
+        Node next;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre; // cur -> null
+            pre = cur;  //
+            cur = next;
+
+        }
+        return pre;
+    }
+
+    public static void main(String[] args) {
+        Node one = new Node(1);
+        one.next = new Node(2);
+        one.next.next = new Node(3);
+        one = reverse(one);
+        System.out.print(one.v);
+        System.out.print(one.next.v);
+        System.out.print(one.next.next.v);
     }
 }
