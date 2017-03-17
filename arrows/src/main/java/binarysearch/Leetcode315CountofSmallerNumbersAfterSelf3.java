@@ -56,12 +56,11 @@ public class Leetcode315CountofSmallerNumbersAfterSelf3 {
             int l = 0, ri = 0;
             while (l < ofL.length || ri < ofR.length) {
                 if (ri == ofR.length || l < ofL.length && nums[ofL[l]] <= nums[ofR[ri]]) {
-                    idxes[l + ri] = ofL[l];
                     smallNumThanElementAt[ofL[l]] += ri; //ri is just those right-to-left jumps.
-                    l++;
+
+                    idxes[l + ri] = ofL[l++];
                 } else {
-                    idxes[l + ri] = ofR[ri];
-                    ri++;
+                    idxes[l + ri] = ofR[ri++];
                 }
             }
         }

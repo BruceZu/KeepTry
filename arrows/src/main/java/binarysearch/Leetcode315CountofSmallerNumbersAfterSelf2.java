@@ -47,7 +47,7 @@ public class Leetcode315CountofSmallerNumbersAfterSelf2 {
     // O(nlogn)
     static private V_I[] mergeSortWithTrackingSmaller(V_I[] sortingArray, int[] smallNumThanElementAt) {
         int half = sortingArray.length / 2;
-        if (half > 0) {// divide until to 1 element
+        if (half > 0) {// divide until cannot divide any more when one 1 element.
 
             V_I[] ofL = new V_I[half];
             for (int i = 0; i < ofL.length; i++) {
