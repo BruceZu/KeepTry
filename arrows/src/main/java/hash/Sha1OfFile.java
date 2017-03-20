@@ -20,6 +20,20 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * <pre>
+ * <a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a>
+ * <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">Cryptographic_hash_function</a>
+ * "SHA-1 is no longer considered secure against well-funded opponents. In 2005, cryptanalysts found
+ * attacks on SHA-1 suggesting that the algorithm might not be secure enough for ongoing use,[4]
+ * and since 2010 many organizations have recommended its replacement by SHA-2 or SHA-3.[5][6][7]
+ * Microsoft,[8] Google,[9] Apple[10] and Mozilla[11][12][13] have all announced that
+ * their respective browsers will stop accepting SHA-1 SSL certificates by 2017.
+ *
+ * On February 23, 2017 CWI Amsterdam and Google announced they had performed a collision
+ * attack against SHA-1,[14][15] publishing two dissimilar PDF files which produce
+ * the same SHA-1 hash as proof of concept.[16]"
+ */
 public class Sha1OfFile {
     private static String calcSHA1(File file) throws
             IOException, NoSuchAlgorithmException {

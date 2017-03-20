@@ -16,6 +16,7 @@
 package array_presum;
 
 import java.util.Arrays;
+import java.util.function.IntBinaryOperator;
 
 /**
  * <pre>
@@ -30,7 +31,7 @@ public class Leetcode327CountofRangeSum {
      * the subproblem C: find the ones out of
      * visited in pre-sum array that are within the given range.
      * It involves searching on "dynamic searching space"; Using BST, BIT...
-     * 
+     *
      * applying the partition recurrence relation,
      * subproblem C:
      * for each element in the left half, find the ones in the right half that match the given range,
@@ -38,7 +39,7 @@ public class Leetcode327CountofRangeSum {
      */
     static public int countRangeSum(int[] nums, int lower, int upper) {
         if (nums == null || nums.length == 0) return 0;
-
+        // Arrays.parallelPrefix(nums, (l, r) -> l + r);
         long[] preSum = new long[nums.length]; // long
         preSum[0] = nums[0];
         for (int i = 1; i < nums.length; ++i) { // so need check
