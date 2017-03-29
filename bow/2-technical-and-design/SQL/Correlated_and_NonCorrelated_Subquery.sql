@@ -1,0 +1,2 @@
+--Correlated and NonCorrelated Subquery
+--http://javarevisited.blogspot.com/2012/07/subquery-example-in-sql-correlated-vs.html

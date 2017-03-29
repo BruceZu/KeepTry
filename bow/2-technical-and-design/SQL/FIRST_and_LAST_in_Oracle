@@ -1,0 +1,44 @@
+--FIRST and LAST in Oracle
+--https://docs.oracle.com/cd/B19306_01/server.102/b14200/functions056.htm
+--http://stackoverflow.com/questions/20145952/partition-by-with-and-without-keep-in-oracle
+
+CREATE TABLE salemen (name, sal, deptno) AS
+SELECT 'a', 1, 1 FROM DUAL
+UNION ALL SELECT 'b', 1, 1 FROM DUAL
+UNION ALL SELECT 'c', 1, 1 FROM DUAL
+UNION ALL SELECT 'd', 2, 1 FROM DUAL
+UNION ALL SELECT 'e', 3, 1 FROM DUAL
+UNION ALL SELECT 'f', 3, 1 FROM DUAL
+UNION ALL SELECT 'g', 4, 2 FROM DUAL
+UNION ALL SELECT 'h', 4, 2 FROM DUAL
+UNION ALL SELECT 'i', 5, 2 FROM DUAL
+UNION ALL SELECT 'j', 5, 2 FROM DUAL;
+
+SELECT DISTINCT
+  deptno,name,sal,
+  MIN(sal)  KEEP (DENSE_RANK FIRST ORDER BY sal)  OVER (PARTITION BY deptno) AS min_sal_first_sal,
+  MAX(sal)  KEEP (DENSE_RANK FIRST ORDER BY sal)  OVER (PARTITION BY deptno) AS max_sal_first_sal,
+  MIN(name) KEEP (DENSE_RANK FIRST ORDER BY sal)  OVER (PARTITION BY deptno) AS min_name_first_sal,
+  MAX(name) KEEP (DENSE_RANK FIRST ORDER BY sal)  OVER (PARTITION BY deptno) AS max_name_first_sal,
+  MIN(name) KEEP (DENSE_RANK LAST  ORDER BY sal)  OVER (PARTITION BY deptno) AS min_name_last_sal,
+  MAX(name) KEEP (DENSE_RANK LAST  ORDER BY sal)  OVER (PARTITION BY deptno) AS max_name_last_sal
+FROM salemen
+order by deptno
+
+DEPTNO	NAME	SAL	MIN_SAL_FIRST_SAL	MAX_SAL_FIRST_SAL	MIN_NAME_FIRST_SAL	MAX_NAME_FIRST_SAL	MIN_NAME_LAST_SAL	MAX_NAME_LAST_SAL
+1	a	1	1	1	a	c	e	f
+1	b	1	1	1	a	c	e	f
+1	c	1	1	1	a	c	e	f
+1	d	2	1	1	a	c	e	f
+1	e	3	1	1	a	c	e	f
+1	f	3	1	1	a	c	e	f
+2	g	4	4	4	g	h	i	j
+2	h	4	4	4	g	h	i	j
+2	i	5	4	4	g	h	i	j
+2	j	5	4	4	g	h	i	j
+
+--http://sqlfiddle.com/#!4/3d765f/5
+
+
+--first_value, last_value and nth_value()
+--https://www.techonthenet.com/oracle/functions/nth_value.php

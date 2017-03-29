@@ -1,0 +1,3 @@
+--semi join, anti join, cross-join
+--https://blog.jooq.org/2015/10/13/semi-join-and-anti-join-should-have-its-own-syntax-in-sql/
+--http://www.w3resource.com/oracle/joins/oracle-cross-join.php
