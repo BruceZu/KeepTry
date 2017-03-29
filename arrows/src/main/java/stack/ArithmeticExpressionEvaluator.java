@@ -13,24 +13,27 @@
 // limitations under the License.
 //
 
-package tree.binarytree;
+package stack;
 
-/**
- * <pre>
- * a + b - e * f * g
- * ->
- * "a b + e f * g * -"
- *
- * 1 + 2 - 3 * 4 / 5
- * ( 1 * ( 2 + 2 ) - ( 3 - 4 ) / 5 )
- *
- *
- * https://en.wikipedia.org/wiki/Binary_expression_tree
- * http://penguin.ewu.edu/class/cscd300/Topic/ExpressionTree/index.html
- * http://stackoverflow.com/questions/4589951/parsing-an-arithmetic-expression-and-building-a-tree-from-it-in-java
- * https://theantlrguy.atlassian.net/wiki/display/ANTLR3/Five+minute+introduction+to+ANTLR+3
- * http://www.geeksforgeeks.org/expression-tree/
- */
-public class ArithmeticExpressionTree {
-    // todo
+public class ArithmeticExpressionEvaluator {
+    /**
+     * <pre>
+     * a + b - e * f * g
+     * ->
+     * "a b + e f * g * -"
+     *
+     * 1 + 2 - 3 * 4 / 5
+     * ( 1 * ( 2 + 2 ) - ( 3 - 4 ) / 5 )
+     *
+     * http://codinghelmet.com/?path=exercises/expression-evaluator
+     *
+     * 1> table of boolean[][].
+     * 2> using 2 stacks
+     * 3> single-digit number and multi-digit number in arithmetic expression
+     * 4> wrap with open/close parenthesis
+     * 5> close parenthesis action.
+     */
+    int evaluate(String[] arithmeticExpression) {
+        return 0; // todo
+    }
 }
