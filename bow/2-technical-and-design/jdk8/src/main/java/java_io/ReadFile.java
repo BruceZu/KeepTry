@@ -26,9 +26,16 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.util.Scanner;
 
+
 public class ReadFile {
     /**
      * <pre>
+     *
+     *     File         vs Object
+     *     InputStream  vs Reader
+     *     OutputStream vs Writer
+     *
+     *
      * Conclusions
      * For the best Java read performance, there are four things to remember:
      * Minimize I/O operations by reading an array at a time, not a byte at a time.
