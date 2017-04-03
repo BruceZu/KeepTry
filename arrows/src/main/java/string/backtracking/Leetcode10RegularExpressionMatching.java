@@ -47,25 +47,23 @@ package string.backtracking;
  * s= "",     p= ".*"
  * s= "aaab", p="a*b"
  *
+ *
+ *   0 :  boundary checking
+ *        note as * can be 0 so: when only str is over not means it is false.
  *   1 before compare current char of each other.
  *    <strong>firstly checking the next char</strong> in 'p' to see if it is exist and it is *
- *           is so:
- *              check if it is representable:
- *                        .*
- *                        or
- *                        both current chars in 'p' and 's' are same
- *                  if so: means backtracking all possible:
- *                      for .* :  represent 0, 1, ... till the last member.
- *                      for [any char]*  represent 0, 1, ... till the last [any char].
- *                  after try all possible, if still failed. e.g.
- *                  //  aaab,  a*b
- *                         |     |
- *                  try next one after [any char] in s. by pi+2 in p.
- *             else no representable, take the * in .* or [any char]* as zero.
- *                 e.g. // cba, a*.ba
- *  2  else check current char is '.' || current chars are same
+ *            if so:
+ *               when * means 0, it means match and continue next pair checking: char after * with cur char in str.
+ *               if false:
+ *                  checking cur char in str is same with cur char in pattern :
+ *                  if same means  * can be 1 or 2 .... and it is match for current checking
+ *                                 next pair from chur after * and next char in str.
+ *                  else means * can not work any more without the support from str current char, as all possible
+ *                  options are checked without success result, return false and backtracking is over for current *.
+ *  2  from now on it is not case of * so need plus the boundary checking for str which is opened for * case.
+ *  3  else check current char is '.' || current chars are same
  *            then continue
- *  3  else false;
+ *          else false;
  *
  *
  * Note: bounder check
@@ -81,46 +79,58 @@ package string.backtracking;
 
 public class Leetcode10RegularExpressionMatching {
 
-    // 44 ms beat 37%
-    private static boolean backtracking2(char[] s, int si, char[] p, final int pi) {
-        if (si == s.length && pi == p.length) {
+    private static boolean compare_cur_char_backtrackingStarCase(char[] str, int index, char[] ptern, final int i) {
+        // boundary checking plus
+        if (i == ptern.length && index == str.length) {
             return true;
         }
-        if (pi == p.length) {
+        if (i == ptern.length) { // * may means 0. e.g. 'a', 'ab*'
             return false;
         }
 
-        if (pi + 1 < p.length && p[pi + 1] == '*') {
-
-            final int nextPIndex = pi + 2;
-            while (si < s.length && (p[pi] == '.' || p[pi] == s[si])) {
-                if (backtracking2(s, si, p, nextPIndex)) {
-                    return true;
-                } else {
-                    si++; //care
+        // check cur char pair
+        char curCharInPattern = ptern[i];
+        if (i + 1 < ptern.length && ptern[i + 1] == '*') {
+            final int indexOfPostStarChar = i + 2;
+            // when * means 0 , same and continue next pair
+            if (compare_cur_char_backtrackingStarCase(str, index, ptern, indexOfPostStarChar)) {
+                return true;
+            } else {
+                // backtracking happen
+                while (index < str.length && (str[index] == curCharInPattern || curCharInPattern == '.')) {
+                    ++index;
+                    if (compare_cur_char_backtrackingStarCase(str, index, ptern, indexOfPostStarChar)) {
+                        return true;
+                    }
                 }
+                return false; // all possible options are checked
             }
-            // all possible represent (== relation) is tried
-            return backtracking2(s, si, p, nextPIndex); // care
+        }
 
-        } else if (p[pi] == '.' || si < s.length && p[pi] == s[si]) {
-            return backtracking2(s, si + 1, p, pi + 1);
-        } else {
+        if (index == str.length) { // plus boundary checking.
+            return false;
+        }
+
+        if (str[index] == curCharInPattern || curCharInPattern == '.') {//else can be saved
+            return compare_cur_char_backtrackingStarCase(str, index + 1, ptern, i + 1);
+        } else {//else can be saved
             return false;
         }
     }
 
-    public static boolean isMatch(String s, String p) {
-        if (s == null) {
+    public static boolean isMatch(String str, String p) {
+        if (str == null) {
             return false;
         }
-        if (s.equals(p) || p == ".*") {
-            return true;
-        }
-        return backtracking2(s.toCharArray(), 0, p.toCharArray(), 0);
+        //       performance improve only
+//        if (str.equals(p) || p == ".*") {
+//            return true;
+//        }
+        return compare_cur_char_backtrackingStarCase(str.toCharArray(), 0, p.toCharArray(), 0);
     }
 
     public static void main(String[] args) {
+        System.out.println(isMatch("aa", "a*"));
         System.out.println(isMatch("aaab", "a*b"));
     }
 }
