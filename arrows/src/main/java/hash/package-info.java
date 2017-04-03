@@ -14,7 +14,20 @@
 //
 
 /**
- *  https://github.com/carrotsearch/hppc/wiki/Scatter-Or-Hash
- *  https://github.com/carrotsearch/hppc/blob/master/hppc-examples/src/test/java/com/carrotsearch/hppc/examples/HppcExample_006_HashAndScatterMaps.java
+ * https://github.com/carrotsearch/hppc/wiki/Scatter-Or-Hash
+ * https://github.com/carrotsearch/hppc/blob/master/hppc-examples/src/test/java/com/carrotsearch/hppc/examples/HppcExample_006_HashAndScatterMaps.java
+ * How to handle Collisions?
+ * 1) Separate Chaining-> HashMap
+ * 2) Open Addressing （closed hashing）-> Hash Table
+ *     https://en.wikipedia.org/wiki/Open_addressing
+ *     https://en.wikipedia.org/wiki/Hash_table#Collision_resolution
+ *     http://quiz.geeksforgeeks.org/hashing-set-3-open-addressing/
+ *
+ *     There are literally thousands of named hashing functions.
+ *     Some are secure, but comparatively slow to calculate.
+ *     Some are very fast, but have more collisions.
+ *     Some are close to perfectly uniformly distributed, but very hard to implement.
+ *
+ *     If there’s one rule in programming it’s this: there will always be trade-offs.
  */
 package hash;
