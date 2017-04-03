@@ -15,65 +15,13 @@
 
 package java_enum;
 
-import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.EnumSet;
 
 import static java_enum.EnumValue.Money.DIME;
 import static java_enum.EnumValue.Money.PENNY;
 
-
-class DoubleCheckedLockingSingleton {
-    static private volatile DoubleCheckedLockingSingleton INSTANCE;
-
-    private DoubleCheckedLockingSingleton() {
-    }
-
-    static public DoubleCheckedLockingSingleton getInstance() {
-        if (INSTANCE == null) {
-            synchronized (DoubleCheckedLockingSingleton.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new DoubleCheckedLockingSingleton();
-                }
-            }
-        }
-        return INSTANCE;
-    }
-}
-
-class Singleton {
-    private static final Singleton INSTANCE = new Singleton();
-
-    private Singleton() {
-    }
-
-    // static factory method
-    public static Singleton getSingleton() {
-        return INSTANCE;
-    }
-}
-
-/**
- * Enum Singleton handles lot of stuff for you e.g.
- * controlled instance creation,
- * Serialization safety
- * thread-safe, You don’t need to worry about double checked locking and volatile variable anymore.
- */
-enum EasySingleton implements Serializable {
-    INSTANCE;
-    // once you implement serializable interface they are no longer remain Singleton
-    // because readObject() method always return a new instance just like constructor in Java.
-    // you can avoid that by using readResolve() method and discarding newly created instance
-    // by replacing with Singeton as shwon in below example, witn Enum Singleton, Serialization is guarnateed by JVM.
-
-    //readResolve to prevent another instance of Singleton
-    private Object readResolve() {
-        return INSTANCE;
-    }
-}
-
 interface Strategy {
-
     int execute(int a, int b);
 }
 
@@ -223,7 +171,7 @@ public class EnumValue {
         // This arrangement is also very extensible and manageable because you can
         // introduce new EnumSet implementation without breaking client code.
 
-         //  RegularEnumSet uses long variable, which is a 64 bit data type,
+        //  RegularEnumSet uses long variable, which is a 64 bit data type,
         // it can only hold that much of element. That's why when an empty EnumSet is created
         // using EnumSet.noneOf() method, it choose RegularEnumSet if key universe
         // (number of enum instances in Key Enum) is less than or equal to 64 and
