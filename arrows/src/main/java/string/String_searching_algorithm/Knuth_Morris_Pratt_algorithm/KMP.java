@@ -29,11 +29,11 @@ import java.util.Arrays;
 public class KMP {
     /**
      * <pre>
-     * get Partial Match Table of pattern w
-     * assume w length is at least 1.
-     * assume w does not contain supplementary character
+     * get Partial Match Table of pattern str
+     * assume str length is at least 1.
+     * assume str does not contain supplementary character
      * <img src="../../../../resources/KMP_partial_T.png" height="450" width="500">
-     * O(k), where k is the length of pattern W
+     * O(k), where k is the length of pattern str
      *
      *
      * "Partial match" table (also known as "failure function")
@@ -46,104 +46,125 @@ public class KMP {
      * it is also the length of the longest suffix end up with w[i] (including).
      *
      * Use of "Partial match" table:
-     * get the value of "Partial match" table of pattern 'W' at index of 'indexBeforeNotMatch':
+     * get the value of "Partial match" table of pattern 'str' at index of 'indexBeforeNotMatch':
      * PMT[indexBeforeNotMatch]
      * where 'indexBeforeNotMatch' should not be -1:
-     * when the w[0] is not match. moveSteps will be 1.
+     * when the str[0] is not match. moveSteps will be 1.
      * This is special case. precess it before using PMT
      */
-    static int[] getPartialMatchTable(String pattern) {
-        char[] w = pattern.toCharArray();
-        int[] PMT = new int[w.length];
+    static int[] getPartialMatchTable(String str) {
+        char[] chars = str.toCharArray();
+        int[] table = new int[chars.length];
 
-        PMT[0] = 0;
-        for (int i = 1; i < w.length; i++) {
-            int indexTryToRenew = PMT[i - 1]; // length of partial_match(i-1)
-            while (true) {
-                if (w[i] == w[indexTryToRenew]) { // try renew
-                    PMT[i] = indexTryToRenew + 1;
+        table[0] = 0;
+        for (int i = 1; i < chars.length; i++) {
+            int len = table[i - 1]; // length of the previous longest prefix suffix before i.
+            while (true) {// compare
+                if (chars[i] == chars[len]) { // try to renew
+                    table[i] = len + 1;
                     break;
                 }
-                if (indexTryToRenew == 0) { // can not go back
-                    PMT[i] = 0;
+                if (len == 0) { // can not go back
+                    table[i] = 0;
                     break;
                 }
-                indexTryToRenew = PMT[indexTryToRenew - 1];
+                len = table[len - 1]; // loop: go back
             }
         }
-        return PMT;
+        return table;
     }
 
+    static int[] computePartialMatchTable(String str) {
+        char[] chars = str.toCharArray();
+        int[] table = new int[chars.length];
 
-    // get the index of s where find the first match of give w string.
-    // O(n), where n is the length of S
-    static int KMP(String s, String w) {
-        if (s == null || w == null) {
+        table[0] = 0;
+        int i = 1;
+        int len = 0;  // length of the previous longest prefix suffix
+        while (i < chars.length) {
+            if (chars[i] == chars[len]) {
+                table[i] = len + 1;
+                i++;
+                len++;
+            } else { // (pat[i] != pat[len])
+                if (len == 0) { // if (len == 0)
+                    table[i] = 0;
+                    i++;
+                } else {
+                    len = table[len - 1];
+                }
+            }
+        }
+        return table;
+    }
+
+    // get the index of str where find the first match of give str string.
+    // O(n), where n is the length of text
+    static int KMP(String text, String str) {
+        if (str == null || text == null) {
             throw new IllegalArgumentException("Assume the S and W str is not null");
         }
-        if (w == "") {
+        if (str.isEmpty()) {
             return 0;
         }
 
-        int[] PMT = getPartialMatchTable(w);
-        int startInS = 0; // in S, the beginning index to compare with W
-        int wi = 0; // in W, the index of the current character
-        while (true) { // the loop executes at most 2 * S.length() times
-            if (wi == w.length()) { // match completely
-                return startInS;
+        int PMTable[] = computePartialMatchTable(str);
+        int i = 0; // in text
+        int j = 0; // in str
+        while (true) {
+            if (j == str.length()) {
+                return i - j;
             }
-            if (startInS + wi == s.length()) {
-                return -1; // not found
+            if (i == text.length()) {
+                return -1;
             }
-            // continue compare
-            if (s.charAt(startInS + wi) == w.charAt(wi)) {
-                wi++;
-            } else { // Does Not match, need move
-                if (wi == 0) { // do not use "Partial match" table
-                    startInS++;
-                } else {
-                    int indexCompareFromW = PMT[wi - 1];
-                    int moveSteps = wi - indexCompareFromW;
-
-                    wi = indexCompareFromW;
-                    startInS += moveSteps;
-                }
+            if (str.charAt(j) == text.charAt(i)) {
+                i++;
+                j++;
+            } else {
+                if (j == 0) i++;
+                else j = PMTable[j - 1];
             }
         }
     }
 
     // -----------------------------------------------------------------------------------------------------
-    static int moveSteps(String w, int notMatchIndex) {
-        return notMatchIndex - getPartialMatchTable(w)[notMatchIndex - 1];
+
+    static int legend_KMP(String text, String str) {
+        if (text == null || str == null) {
+            throw new IllegalArgumentException("Assume the S and W str is not null");
+        }
+        if (str.isEmpty()) {
+            return 0;
+        }
+
+        int[] PMT = getPartialMatchTable(str);
+        int start = 0; // in text
+        int j = 0; // in str
+        while (true) { // the loop executes at most 2 * str.length() times
+            if (j == str.length()) { // match completely
+                return start;
+            }
+            if (start + j == text.length()) {
+                return -1; // not found
+            }
+            //compare
+            if (text.charAt(start + j) == str.charAt(j)) {
+                j++;
+            } else {
+                if (j == 0) { // do not use "Partial match" table
+                    start++;
+                } else {
+                    int indexCompareFromW = PMT[j - 1];
+                    int moveSteps = j - indexCompareFromW;
+
+                    j = indexCompareFromW;
+                    start += moveSteps;
+                }
+            }
+        }
     }
 
-    public static void main(String[] args) {
-        // PMT
-        System.out.println(Arrays.toString(getPartialMatchTable("A"))); // [0]
-        System.out.println(Arrays.toString(getPartialMatchTable("AA"))); //  [0, 1]
-        System.out.println(Arrays.toString(getPartialMatchTable("AB"))); // [0, 0]
-        System.out.println(Arrays.toString(getPartialMatchTable("ABCAB"))); //  [0, 0, 0, 1, 2]
-        // move steps
-        System.out.println("----");
-        System.out.println(moveSteps("AB", 1)); // 1
-        System.out.println(moveSteps("AAB", 2)); // 1
-        System.out.println(moveSteps("ABX", 2)); // 2
-        System.out.println(moveSteps("ABCABN", 5)); // 3
-        System.out.println("----");
-        // KMP
-        System.out.println(KMP("ABCABD", "CA")); // 2
-        System.out.println(KMP("ABAABAAC", "CA")); // -1
-        System.out.println(KMP("ABAABAAC", "ABAAC")); // 3
-        System.out.println(KMP("ABYABYABYABZ", "ABYABYABZ")); // 3
-        System.out.println(KMP("AAAAB", "AAAB")); // 1
-        System.out.println(KMP("AAAAB", "")); // 0
-        System.out.println(KMP("", "")); // 0
-        System.out.println(KMP("", "AA")); // -1
-        System.out.println(KMP("ABC ABCDAB ABCDABCDABDE", "ABCDABD")); // 15
-        System.out.println(KMP("CGTGCCTACTTACTTACTTACTTACGCGAA", "CTTACTTAC"));//8
-        System.out.println(KMP("BBBBBBBBBB", "ABBBB"));//-1
-        System.out.println(index_slowSolution("dddddddddd", "ddddds"));
-    }
     /**
      * <pre>
      * haystack = "hello world"
@@ -160,10 +181,13 @@ public class KMP {
      * @param needle
      * @return index of the char from where the needle appears for the fist time.
      */
-    public static int index_slowSolution(String haystack, String needle) {
+    public static int forceWay(String haystack, String needle) {
         // check corner cases
         if (haystack == null || needle == null) {
             return -1;
+        }
+        if (needle.isEmpty()) {
+            return 0;
         }
         //
         int max = haystack.length() - needle.length();
