@@ -17,9 +17,7 @@ package stack.intervals;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
@@ -130,5 +128,31 @@ public class Intervals {
 
     public static void main(String[] args) {
         System.out.println(merge(new Interval[]{new Interval(1, 3), new Interval(2, 4), new Interval(5, 7), new Interval(6, 8)}));
+    }
+
+    // O(nlogn)
+    public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> result = new ArrayList();
+        if (intervals == null || intervals.size() == 0) {
+            return result;
+        }
+        int len = intervals.size();
+        int[] start = new int[len];
+        int[] end = new int[len];
+        for (int i = 0; i < len; i++) {
+            start[i] = intervals.get(i).start;
+            end[i] = intervals.get(i).end;
+        }
+        Arrays.sort(start);
+        Arrays.sort(end);
+
+        int pos = 0;
+        for (int i = 0; i < len; i++) {
+            if (i == len - 1 || start[i + 1] > end[i]) {
+                result.add(new Interval(start[pos], end[i]));
+                pos = i + 1;
+            }
+        }
+        return result;
     }
 }
