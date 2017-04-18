@@ -15,11 +15,7 @@
 
 package JDBC;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * <pre>
@@ -28,16 +24,79 @@ import java.sql.SQLException;
  *
  * ResultSet returned by prepared statement execution is of "TYPE_FORWARD_ONLY"
  * but can be customized by using overloaded method of prepareStatement().
+ *
+ * https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html
+ * Parameter Mode IN: Formal parameter cannot be assigned a value in the stored procedure?
  */
 public class JDBC_PreparedStatement {
-    public static void main(String args[]) throws SQLException {
-        Connection con = DriverManager.getConnection("mysql:\\localhost:1520", "root", "root");
-        PreparedStatement preStatement = con.prepareStatement("select distinct loan_type from loan where bank=?");
-        preStatement.setString(1, "Citibank");
+    public static void main(String args[]) {
+        try (
+                Connection con = DriverManager.getConnection(
+                        "mysql:\\localhost:1520",
+                        "root",
+                        "root");
 
-        ResultSet result = preStatement.executeQuery();
-        while (result.next()) {
-            System.out.println("Loan Type: " + result.getString("loan_type"));
+        ) {
+            String queryDrop =
+                    "DROP PROCEDURE IF EXISTS SHOW_SUPPLIERS";
+
+            String createProcedure =
+                    "create procedure SHOW_SUPPLIERS() " +
+                            "begin " +
+                            "select SUPPLIERS.SUP_NAME, " +
+                            "COFFEES.COF_NAME " +
+                            "from SUPPLIERS, COFFEES " +
+                            "where SUPPLIERS.SUP_ID = " +
+                            "COFFEES.SUP_ID " +
+                            "order by SUP_NAME; " +
+                            "end";
+            // sql statement without parameter
+            Statement stmtDrop = con.createStatement();
+            stmtDrop.execute(queryDrop);
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(createProcedure);
+
+
+            // sql statement
+            String sql = "select distinct loan_type from loan where bank=?";
+
+            PreparedStatement preStatement = con.prepareStatement(sql);
+            preStatement.setString(1, "Citibank");
+
+            ResultSet result = preStatement.executeQuery();
+            while (result.next()) {
+                System.out.println("Loan Type: " + result.getString("loan_type"));
+            }
+
+            // procedure
+            CallableStatement cs = null;
+            cs = con.prepareCall("{call SHOW_SUPPLIERS}");
+            ResultSet rs = cs.executeQuery();
+
+            // procedure with parameter
+            createProcedure =
+                    "create procedure GET_SUPPLIER_OF_COFFEE(" +
+                            "IN coffeeName varchar(32), " +
+                            "OUT supplierName varchar(40)) " +
+                            "begin " +
+                            "select SUPPLIERS.SUP_NAME into " +
+                            "supplierName " +
+                            "from SUPPLIERS, COFFEES " +
+                            "where SUPPLIERS.SUP_ID = " +
+                            "COFFEES.SUP_ID " +
+                            "and coffeeName = COFFEES.COF_NAME; " +
+                            "select supplierName; " +
+                            "end";
+
+            // .....
+
+            cs =  con.prepareCall("{call GET_SUPPLIER_OF_COFFEE(?, ?)}");
+            cs.setString(1, "coffeeNameArg");
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.executeQuery();
+
+            String supplierName = cs.getString(2);
+        } catch (Exception e) {
         }
     }
 }
