@@ -26,7 +26,7 @@ public class Node implements Comparable {
     String name;
     Map<Node, Integer> distanceToAdjacentNode; //immediate neighbors
 
-    int tentativeShortestDistanceFromStart;
+    Integer tentativeShortestDistanceFromStart;
     Node predecessorNode;
 
     public Node(String name, Map<Node, Integer> distanceToAdjacentNode) {
@@ -45,6 +45,20 @@ public class Node implements Comparable {
 
     @Override
     public int compareTo(@NotNull Object o) {
-        return this.tentativeShortestDistanceFromStart - ((Node) o).tentativeShortestDistanceFromStart;
+        Node with = (Node) o;
+        return this.equals(with)
+                ? 0
+                : this.tentativeShortestDistanceFromStart.compareTo(with.tentativeShortestDistanceFromStart);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Node with = (Node) obj;
+        return this.name.equals(with.name);
     }
 }

@@ -62,11 +62,11 @@ import java.util.*;
  *
  * @see <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Algorithm"> wiki</a>
  */
-
+// O(N)
 public class DijkstraShortestPath {
     private static boolean hasShortestPath(Node start, Node end) {
         Queue<Node> borderHeap = new PriorityQueue(); // top is with shortest distance from start
-        Set<Node> doneSet = new HashSet();
+        Set<Node> doneSet = new HashSet(); // avoid undirect graph's repeat; avoid directed graph's circle
 
         borderHeap.offer(start);
         while (true) {
@@ -96,11 +96,11 @@ public class DijkstraShortestPath {
                         neighbor.tentativeShortestDistanceFromStart = viaCur;
                         neighbor.predecessorNode = toBeSettled;
                     }
-                    // if it has been in the border
+                    // if it is already in the border
                     //     if it is updated:  remove and offer again
                     //     else:  need not touch it
                     // else: offer 
-                    borderHeap.remove(neighbor);
+                    borderHeap.remove(neighbor); // O(N)
                     borderHeap.offer(neighbor);
                 }
 
