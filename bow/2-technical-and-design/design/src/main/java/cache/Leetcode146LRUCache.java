@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package LRU_cache;
+package cache;
 
 import java.util.HashMap;
 
@@ -24,17 +24,17 @@ import java.util.HashMap;
  * <a href="https://leetcode.com/problems/lru-cache/">leetcode</a>
  */
 
-class SearchedResult {
-    SearchedResult prev;
-    SearchedResult next;
+class Node {
+    Node prev;
+    Node next;
     Integer key;
     Integer value;
 
-    SearchedResult() { // used only for sentinel sortedSearched head and tail
+    Node() { // used only for sentinel sortedSearched head and tail
 
     }
 
-    public SearchedResult(int key, int value) { // make sure the input does not have null key and value, the null be used as
+    public Node(int key, int value) { // make sure the input does not have null key and value, the null be used as
         // 'not found' in searchedBy
         this.key = key;
         this.value = value;
@@ -43,36 +43,36 @@ class SearchedResult {
     }
 }
 
-class SortedSearchResults {
+class DoubleList {
     // double linked list, with it to know which should be removed
-    private SearchedResult olderSentinel;
-    private SearchedResult recentSentinel;
+    private Node olderSentinelLeft;
+    private Node recentSentinelRight;
 
-    private void remove(SearchedResult n) {
-        SearchedResult pre = n.prev;
-        SearchedResult next = n.next;
+    private void remove(Node n) {
+        Node pre = n.prev;
+        Node next = n.next;
 
         pre.next = next;
         next.prev = pre;
     }
 
-    public SortedSearchResults() {
-        //  left olderSentinel <->recentSentinel  right
-        olderSentinel = new SearchedResult();
-        recentSentinel = new SearchedResult();
-        olderSentinel.next = recentSentinel;
-        recentSentinel.prev = olderSentinel;
+    public DoubleList() {
+        olderSentinelLeft = new Node();
+        recentSentinelRight = new Node();
+
+        olderSentinelLeft.next = recentSentinelRight;
+        recentSentinelRight.prev = olderSentinelLeft;
     }
 
-    SearchedResult removeOldest() {
-        SearchedResult removed = olderSentinel.next;
+    Node removeOldest() {
+        Node removed = olderSentinelLeft.next;
         remove(removed);
         return removed;
     }
 
-    void addNew(SearchedResult newResult) {
-        SearchedResult pre = recentSentinel.prev;
-        SearchedResult next = recentSentinel;
+    void addNew(Node newResult) {
+        Node pre = recentSentinelRight.prev;
+        Node next = recentSentinelRight;
 
         pre.next = newResult;
         newResult.next = next;
@@ -81,7 +81,7 @@ class SortedSearchResults {
         newResult.prev = pre;
     }
 
-    void accessed(SearchedResult n) {
+    void accessed(Node n) {
         remove(n);
         addNew(n);
     }
@@ -90,24 +90,24 @@ class SortedSearchResults {
 // with HashMap and DoubleLinkedList
 class LRUCache {
     private int capacity;
-    private HashMap<Integer, SearchedResult> searchedBy;
-    private SortedSearchResults sortedSearched;
+    private HashMap<Integer, Node> map;
+    private DoubleList list;
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        searchedBy = new HashMap();
-        sortedSearched = new SortedSearchResults();
+        map = new HashMap();
+        list = new DoubleList();
     }
 
     // get(key) - Get the value (will always be positive) of the key if the key exists in the cache,
     // otherwise return -1.
     public Integer get(int key) {
-        SearchedResult n = searchedBy.get(key);
+        Node n = map.get(key);
         if (n == null) {
             return -1; // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
         }
 
-        sortedSearched.accessed(n);
+        list.accessed(n);
         return n.value;
     }
 
@@ -117,18 +117,18 @@ class LRUCache {
         // set
         Integer v = get(key);
         if (get(key) != -1) { // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
-            searchedBy.get(key).value = value;
+            map.get(key).value = value;
             return;
         }
 
         // insert
-        if (searchedBy.size() == capacity) {
-            searchedBy.remove(sortedSearched.removeOldest().key);
+        if (map.size() == capacity) {
+            map.remove(list.removeOldest().key);
         }
 
-        SearchedResult newNode = new SearchedResult(key, value);
-        searchedBy.put(key, newNode);
-        sortedSearched.addNew(newNode);
+        Node newNode = new Node(key, value);
+        map.put(key, newNode);
+        list.addNew(newNode);
     }
 }
 

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package LRU_cache;
+package cache;
 
 // mock HashMap, maintenance the size in LRUCache
 // others parts are same as Leetcode146LRUCache
@@ -21,10 +21,10 @@ public class Leetcode146LRUCache2 {
     class LRUCache {
         private class MockHashMap {
             private class Entry {
-                SearchedResult searched;
+                Node searched;
                 Entry next;
 
-                Entry(SearchedResult n) {
+                Entry(Node n) {
                     this.searched = n;
                 }
             }
@@ -40,7 +40,7 @@ public class Leetcode146LRUCache2 {
                 bucks = new Entry[capacity];
             }
 
-            public SearchedResult get(int key) {
+            public Node get(int key) {
                 int index = index(key);
                 Entry entry = bucks[index];
 
@@ -58,7 +58,7 @@ public class Leetcode146LRUCache2 {
             }
 
             // Assume the added entry is new one.
-            public void putNew(int k, SearchedResult v) {
+            public void putNew(int k, Node v) {
                 Entry added = new Entry(v);
 
                 int index = index(k);
@@ -87,20 +87,20 @@ public class Leetcode146LRUCache2 {
 
         private int capacity;
         private MockHashMap searchedBy;
-        private SortedSearchResults sorted;
+        private DoubleList sorted;
         private int size;
 
         public LRUCache(int capacity) {
             this.capacity = capacity;
             searchedBy = new MockHashMap(capacity);
-            sorted = new SortedSearchResults();
+            sorted = new DoubleList();
             size = 0;
         }
 
         // get(key) - Get the value (will always be positive) of the key if the key exists in the cache,
         // otherwise return -1.
         public Integer get(int key) {
-            SearchedResult n = searchedBy.get(key);
+            Node n = searchedBy.get(key);
             if (n == null) {
                 return -1; // it should be null, but leetcode expected it to be -1, thus the value would never be -1;
             }
@@ -126,7 +126,7 @@ public class Leetcode146LRUCache2 {
                 size--;
             }
 
-            SearchedResult newResult = new SearchedResult(key, value);
+            Node newResult = new Node(key, value);
             searchedBy.putNew(key, newResult);
             sorted.addNew(newResult);
             size++;
