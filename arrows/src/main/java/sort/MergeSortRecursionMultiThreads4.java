@@ -15,12 +15,17 @@
 
 package sort;
 
+import common_lib.Common;
+import common_lib.Merger;
+
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
 import static common_lib.Common.mergeInsort;
 
 public class MergeSortRecursionMultiThreads4 {
+    static private Merger merger = new Common();
+
     private static class DivideMergeInSortAction extends RecursiveAction {
         private final Comparable[] arr, tmp;
         private final int l, r;
@@ -35,7 +40,7 @@ public class MergeSortRecursionMultiThreads4 {
             invokeAll(new DivideMergeInSortAction(arr, l, mid, tmp),
                     new DivideMergeInSortAction(arr, mid + 1, r, tmp));
 
-            mergeInsort(arr, l, mid, r, tmp);
+            merger.mergeInsort(arr, l, mid, r, tmp);
         }
 
         public DivideMergeInSortAction(Comparable[] arr, int l, int r, Comparable[] tmp) {

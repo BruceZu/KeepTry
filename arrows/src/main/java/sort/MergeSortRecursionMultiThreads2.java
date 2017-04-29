@@ -15,11 +15,16 @@
 
 package sort;
 
+import common_lib.Common;
+import common_lib.Merger;
+
 import java.util.concurrent.*;
 
 import static common_lib.Common.mergeInsort;
 
 public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
+    static private Merger merger = new Common();
+
     // Runnable is enough, do not need Callable as each thread only work on its elements scope of arr
     private static class DivideMergeInSort implements Runnable {
         private Comparable[] arr, tmp;
@@ -41,7 +46,7 @@ public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
                 e.printStackTrace();
             }
 
-            mergeInsort(arr, l, mid, r, tmp);
+            merger.mergeInsort(arr, l, mid, r, tmp);
         }
 
         public DivideMergeInSort(Comparable[] arr, int l, int r, Comparable[] tmp) {
@@ -61,7 +66,7 @@ public class MergeSortRecursionMultiThreads2<T extends Comparable<T>> {
             return;
         }
         try {
-           executorService.submit(new DivideMergeInSort(arr, 0, arr.length - 1, new Comparable[arr.length])).get(5l,TimeUnit.SECONDS);
+            executorService.submit(new DivideMergeInSort(arr, 0, arr.length - 1, new Comparable[arr.length])).get(5l, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
         }

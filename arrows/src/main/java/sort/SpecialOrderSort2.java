@@ -15,6 +15,8 @@
 
 package sort;
 
+import common_lib.Merger;
+
 import java.util.Arrays;
 
 import static common_lib.Common.greatThan;
@@ -49,37 +51,9 @@ public class SpecialOrderSort2 {
         }
     }
 
-    // O(NlogN) runtime, O(N) space.
-    static public <T extends Comparable<T>> void SortInSpecialDescendingOrder(T[] arr) {
-        if (arr == null || arr.length <= 1) return;
-
-        Comparable[] temp = new Comparable[arr.length]; // space O(N)
-
-        int len = 1;
-        // O(NlgN)
-        while (len < arr.length) {
-            int l = 0;
-            int m = l + len - 1;
-            int end;
-            // -> [l, m] and [m+1, end]
-
-            while (m < arr.length - 1) {
-                end = l + 2 * len - 1;
-                end = Math.min(end, arr.length - 1);
-
-                mergeInSpecialDescendingOrder(arr, l, m, end, temp);
-
-                l = l + 2 * len;
-                m = l + len - 1;
-            }
-
-            len = len << 1;
-        }
-    }
-
     static public void SpecialOrderSort(Integer[] A) {
         if (A == null || A.length <= 1) return;
-        SortInSpecialDescendingOrder(A); // O(NlogN)
+        new MergeSortNoRecursion(SpecialOrderSort2::mergeInSpecialDescendingOrder).mergeSortNoRecursion(A); // O(NlogN)
     }
 
     // ---------------------------------------------------------------------------------

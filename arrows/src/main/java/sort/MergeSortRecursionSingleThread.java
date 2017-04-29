@@ -15,6 +15,9 @@
 
 package sort;
 
+import common_lib.Common;
+import common_lib.Merger;
+
 import java.util.List;
 
 import static common_lib.Common.mergeInsort;
@@ -24,13 +27,15 @@ import static common_lib.Common.mergeInsort;
  * @see java.util.Collections#sort(List)
  */
 public class MergeSortRecursionSingleThread {
+    static private Merger merger = new Common();
+
     /**
      * Merge sort array arr's scope [l, r].
      *
      * @param array array
-     * @param l   left bound index, included.
-     * @param r   right bound index, included.
-     * @param tmp with it, do not need new tmp array every time when mergeInsort and care its length
+     * @param l     left bound index, included.
+     * @param r     right bound index, included.
+     * @param tmp   with it, do not need new tmp array every time when mergeInsort and care its length
      */
     private static <T extends Comparable<T>> void call(T[] array, int l, int r, T[] tmp) {
         if (l == r) {
@@ -43,7 +48,7 @@ public class MergeSortRecursionSingleThread {
         call(array, l, mid, tmp);
         call(array, mid + 1, r, tmp);
 
-        mergeInsort(array, l, mid, r, tmp);
+        merger.mergeInsort(array, l, mid, r, tmp);
     }
 
     /**

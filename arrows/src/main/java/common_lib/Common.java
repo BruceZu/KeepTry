@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Common {
+public class Common implements Merger {
     /**
      * <pre>
      * <a href="http://stackoverflow.com/questions/3153337/get-current-working-directory-in-java">
@@ -162,46 +162,6 @@ public class Common {
     }
 
     /**
-     * For a given array, sort its sub array [l, r]
-     * Assume
-     * 1> [l, mid] and [mid+1, r] are sorted already.
-     * 2> not thread safe.
-     * 3> l < r
-     *
-     * @param array  array
-     * @param l   left index, included.
-     * @param mid index.  it maybe (l+r)/2 , or maybe not. e.g. the stump of array in the loop way of merge sort.
-     * @param r   right index, included.
-     * @param tmp In one thread. this tmp array is provided for performance concern in recursion.
-     *            without `new` more tmp arrays.
-     */
-    public static void mergeInsort(Comparable[] array, int l, int mid, int r, Comparable[] tmp) {
-        if (l >= r) { //input check
-            return;
-        }
-
-        // Improved, when it is already sorted in order
-        if (lessThan(array[mid], array[mid + 1])) {
-            return;
-        }
-
-        for (int i = l; i <= r; i++) {
-            tmp[i] = array[i];
-        }
-        // Start merge in sort. Rewrite arr from l
-        int li = l, ri = mid + 1;
-        int k = l;
-        while (!(li == mid + 1 && ri == r + 1)) { /* Both have no member. or while( li <=mid || ri<=r ) */
-            // if (li <= mid && (ri == r + 1 || ri <= r && lessThan(tmp[li], tmp[ri]))) {
-            if (ri == r + 1 || li <= mid && lessThan(tmp[li], tmp[ri])) {
-                array[k++] = tmp[li++];
-            } else {
-                array[k++] = tmp[ri++];
-            }
-        }
-    }
-
-    /**
      * Improvement of selecting the pivot.
      * <pre> Idea:
      * 1  Select the median value:  lv<= mv  <= rv.
@@ -235,5 +195,46 @@ public class Common {
                 ? lessThan(vm, vr) ? m : lessThan(vl, vr) ? r : l
                 : lessThan(vl, vr) ? l : lessThan(vm, vr) ? r : m;
         return medianIndex;
+    }
+
+    /**
+     * For a given array, sort its sub array [l, r]
+     * Assume
+     * 1> [l, mid] and [mid+1, r] are sorted already.
+     * 2> not thread safe.
+     * 3> l < r
+     *
+     * @param array array
+     * @param l     left index, included.
+     * @param mid   index.  it maybe (l+r)/2 , or maybe not. e.g. the stump of array in the loop way of merge sort.
+     * @param r     right index, included.
+     * @param tmp   In one thread. this tmp array is provided for performance concern in recursion.
+     *              without `new` more tmp arrays.
+     */
+    @Override
+    public void mergeInsort(Comparable[] array, int l, int mid, int r, Comparable[] tmp) {
+        if (l >= r) { //input check
+            return;
+        }
+
+        // Improved, when it is already sorted in order
+        if (lessThan(array[mid], array[mid + 1])) {
+            return;
+        }
+
+        for (int i = l; i <= r; i++) {
+            tmp[i] = array[i];
+        }
+        // Start merge in sort. Rewrite arr from l
+        int li = l, ri = mid + 1;
+        int k = l;
+        while (!(li == mid + 1 && ri == r + 1)) { /* Both have no member. or while( li <=mid || ri<=r ) */
+            // if (li <= mid && (ri == r + 1 || ri <= r && lessThan(tmp[li], tmp[ri]))) {
+            if (ri == r + 1 || li <= mid && lessThan(tmp[li], tmp[ri])) {
+                array[k++] = tmp[li++];
+            } else {
+                array[k++] = tmp[ri++];
+            }
+        }
     }
 }

@@ -15,9 +15,15 @@
 
 package sort;
 
-import static common_lib.Common.mergeInsort;
+import common_lib.Common;
+import common_lib.Merger;
 
 public class MergeSortNoRecursion {
+    static private Merger merger = new Common();
+
+    public MergeSortNoRecursion(Merger merger) {
+        this.merger = merger;
+    }
 
     /**
      * Merge sort an array without recursion. no thread safe
@@ -29,7 +35,8 @@ public class MergeSortNoRecursion {
      *   22>     merge them in sort
      * <a href="http://softwareengineering.stackexchange.com/questions/297160/why-is-mergesort-olog-n">O(NLOGN)</a>
      */
-    public static <T extends Comparable<T>> void mergeSortNoRecursion(T[] arr) {
+    // O(NlogN) runtime, O(N) space.
+    static public <T extends Comparable<T>> void mergeSortNoRecursion(T[] arr) {
         if (arr == null || arr.length <= 1) return;
 
         Comparable[] temp = new Comparable[arr.length]; // space O(N)
@@ -46,7 +53,7 @@ public class MergeSortNoRecursion {
                 end = l + 2 * len - 1;
                 end = Math.min(end, arr.length - 1);
 
-                mergeInsort(arr, l, m, end, temp);
+                merger.mergeInsort(arr, l, m, end, temp);
 
                 l = l + 2 * len;
                 m = l + len - 1;
