@@ -15,13 +15,7 @@
 
 package hash;
 
-import com.google.common.collect.Lists;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Note: All inputs will be in lower-case.
