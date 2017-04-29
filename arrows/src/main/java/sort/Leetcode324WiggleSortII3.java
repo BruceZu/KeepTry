@@ -17,7 +17,7 @@ package sort;
 
 import java.util.Arrays;
 
-public class Leetcode324WinggleSortII3 {
+public class Leetcode324WiggleSortII3 {
     public void wiggleSort2(int[] nums) {
         Arrays.sort(nums); // O(NlgN)
         int n = nums.length, mid = n % 2 == 0 ? n / 2 - 1 : n / 2;

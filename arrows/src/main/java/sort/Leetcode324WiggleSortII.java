@@ -16,6 +16,7 @@
 package sort;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import static common_lib.Common.swap;
 
@@ -56,9 +57,7 @@ import static common_lib.Common.swap;
  */
 public class Leetcode324WiggleSortII {
     public static void wiggleSort(int[] nums) {
-        // 1
         Arrays.sort(nums); // o(NlgN)
-        // 2
         wiggleSortPartitionedArrayIn3ways(nums, nums[nums.length - 1 >> 1]);// median or left median
     }
 
@@ -72,18 +71,18 @@ public class Leetcode324WiggleSortII {
      *  With this method array is wiggled sorted as 3 way ->
      *  in order of biggers( -> odd index), mideans, smallers ( -> even index)
      */
-    public static void wiggleSortPartitionedArrayIn3ways(int[] A /* partitioned by Median */, int midV) {
+    public static void wiggleSortPartitionedArrayIn3ways(int[] A, int midV) {
         int b = 0; // next Biger Sequence. Ascending
         int i = 0; // sequence of current . Ascending
         int s = A.length - 1;// next Smaller Sequence. Descending
 
         while (i <= s) {
-            if (A[index(i, A)] > midV) {
-                swap(A, index(i, A), index(b, A));// wiggle order
+            if (A[wiggleIndex(i, A)] > midV) {
+                swap(A, wiggleIndex(i, A), wiggleIndex(b, A));// wiggle order
                 i++;
                 b++;
-            } else if (A[index(i, A)] < midV) {
-                swap(A, index(i, A), index(s, A));
+            } else if (A[wiggleIndex(i, A)] < midV) {
+                swap(A, wiggleIndex(i, A), wiggleIndex(s, A));
                 s--;
             } else {
                 i++;
@@ -93,7 +92,7 @@ public class Leetcode324WiggleSortII {
 
     // Get the true iterator order of index, the wiggle order index, in loop of wiggleSortPartitionedArray()
     // wiggle order: Jump over or skip one index each time
-    public static int index(int i, int[] arr) {
+    public static int wiggleIndex(int i, int[] arr) {
         // 1, 3 ,5 ,....0,2,4,...
         // odd          even
         // bigger       smaller
@@ -101,10 +100,9 @@ public class Leetcode324WiggleSortII {
     }
 
     public static void main(String[] args) {
-        // 2, 3, 6, 7; 9, 9, 9 ; 11, 12, 13, 15
-        int[] num = new int[]{9, 12, 15, 6, 9, 2, 7, 3, 11, 13, 9};
-        wiggleSortPartitionedArrayIn3ways(num, 9);
-        System.out.println(Arrays.toString(num)); //[9, 13, 9, 15, 7, 11, 3, 12, 6, 9, 2]
-        wiggleSortPartitionedArrayIn3ways(new int[]{1, 2, 3, 3, 4}, 3);
+        // test cases
+        //  2, 3, 6, 7; 9, 9, 9 ; 11, 12, 13, 15;  midv : 9
+        //  9, 12, 15, 6, 9, 2, 7, 3, 11, 13, 9;   midv : 9
+        //  1, 2, 3, 3, 4; midv : 3
     }
 }
