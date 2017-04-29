@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Concurrent_Algorithms/Concurrent_Algorithms.iml" filepath="$PROJECT_DIR$/Concurrent_Algorithms/Concurrent_Algorithms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Distributed_Algorithms/Distributed_Algorithms.iml" filepath="$PROJECT_DIR$/Distributed_Algorithms/Distributed_Algorithms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ParallelAlgorithms/ParallelAlgorithms.iml" filepath="$PROJECT_DIR$/ParallelAlgorithms/ParallelAlgorithms.iml" />
       <module fileurl="file://$PROJECT_DIR$/arrows/arrows.iml" filepath="$PROJECT_DIR$/arrows/arrows.iml" />
       <module fileurl="file://$PROJECT_DIR$/bow/bow.iml" filepath="$PROJECT_DIR$/bow/bow.iml" />
       <module fileurl="file://$PROJECT_DIR$/keepTry.iml" filepath="$PROJECT_DIR$/keepTry.iml" />
