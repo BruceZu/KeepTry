@@ -122,7 +122,7 @@ public class TreeTest {
         //           null
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 80l, expected = Test.None.class)
     public void testHeight() {
         Tree t = new AbstractTree() {
             @Override

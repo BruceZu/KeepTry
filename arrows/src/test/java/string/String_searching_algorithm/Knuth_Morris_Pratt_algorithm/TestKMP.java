@@ -53,7 +53,7 @@ public class TestKMP {
         this.expected = (Integer) expected;
     }
 
-    @Test(timeout = 30L, expected = Test.None.class)
+    @Test(timeout = 100L, expected = Test.None.class)
     public void testKMP() {
         Assert.assertEquals(expected, KMP.KMP(txt, str));
         Assert.assertEquals(expected, KMP.legend_KMP(txt, str));

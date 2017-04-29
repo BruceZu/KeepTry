@@ -38,7 +38,7 @@ public class EntiesTest {
         es = new Entries(length);
     }
 
-    @Test(timeout = 20L, expected = Test.None.class)
+    @Test(timeout = 80L, expected = Test.None.class)
     public void addElementInDescending() throws Exception {
         boolean descending = true;
         for (int i = 0; i <= length; i++) {
@@ -56,7 +56,7 @@ public class EntiesTest {
         assertThat(es.toString()).isEqualTo(expected.toString());
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 80L, expected = Test.None.class)
     public void addElementInAscending() throws Exception {
         boolean descending = true;
         for (int i = length; i >= 0; i--) {
@@ -74,7 +74,7 @@ public class EntiesTest {
         assertThat(es.toString()).isEqualTo(expected.toString());
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 80L, expected = Test.None.class)
     public void deleteOneElement() throws Exception {
         boolean descending = true;
         for (int i = 0; i <= length; i++) {

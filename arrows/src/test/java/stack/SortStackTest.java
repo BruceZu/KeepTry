@@ -29,7 +29,7 @@ public class SortStackTest {
         return s;
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 80L, expected = Test.None.class)
     public void testBubbleSort() {
         SortStack ss = new SortStack();
 
