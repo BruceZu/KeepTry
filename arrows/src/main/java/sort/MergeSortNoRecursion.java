@@ -30,29 +30,29 @@ public class MergeSortNoRecursion {
      * <a href="http://softwareengineering.stackexchange.com/questions/297160/why-is-mergesort-olog-n">O(NLOGN)</a>
      */
     public static <T extends Comparable<T>> void mergeSortNoRecursion(T[] arr) {
-        // Input check
-        if (arr == null || arr.length <= 1) { // Note: arr may be empty array: {}
-            return;
-        }
-        Comparable[] helper = new Comparable[arr.length];
+        if (arr == null || arr.length <= 1) return;
 
-        int arrLastIndex = arr.length - 1;
-        int subArraySize = 1;
-        while (subArraySize <= arr.length) {
+        Comparable[] temp = new Comparable[arr.length]; // space O(N)
+
+        int len = 1;
+        // O(NlgN)
+        while (len < arr.length) {
             int l = 0;
-            int mid = l + subArraySize - 1;
-            int rAfterMerge = mid + subArraySize;
-            // -> [l, mid] and [mid+1, r]
+            int m = l + len - 1;
+            int end;
+            // -> [l, m] and [m+1, end]
 
-            while (mid < arrLastIndex) { // adjust when the len is very big or at the end of arr.
-                rAfterMerge = rAfterMerge <= arrLastIndex ? rAfterMerge : arrLastIndex;
-                mergeInsort(arr, l, mid, rAfterMerge, helper);
+            while (m < arr.length - 1) {
+                end = l + 2 * len - 1;
+                end = Math.min(end, arr.length - 1);
 
-                l = rAfterMerge + 1;
-                mid = l + subArraySize - 1;
-                rAfterMerge = mid + subArraySize;
+                mergeInsort(arr, l, m, end, temp);
+
+                l = l + 2 * len;
+                m = l + len - 1;
             }
-            subArraySize = subArraySize << 1;
+
+            len = len << 1;
         }
     }
 }
