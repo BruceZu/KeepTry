@@ -26,7 +26,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.util.Scanner;
 
-
 public class ReadFile {
     /**
      * <pre>
@@ -254,5 +253,4 @@ public class ReadFile {
             // Fix me
         }
     }
-
 }

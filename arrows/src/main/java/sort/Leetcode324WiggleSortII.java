@@ -26,11 +26,13 @@ import static common_lib.Common.swap;
  * ====================================
  *
  * step 1.
- * Adjust the array to make the smaller number on the <strong>left </strong> side of median.
- * numbers in both sides of median need not be sorted.
+ * find the median (or left median) value
  *
  * step 2.
- * wiggle sort to make  nums[0] < nums[1] > nums[2] < nums[3]....
+ * wiggle sort with the median value to make nums[0] < nums[1] > nums[2] < nums[3]....
+ * loop along the order:  odd index, even index to do  separation in 3 ways
+ * biggers, medieans, smallers, thus biggers will be at odd index and smallers will be at even index
+ * and medians will be separated too by wiggle index.
  *
  * Follow up:
  *   1 Can you do it in O(n) time and/or in-place with O(1) extra space?
@@ -57,7 +59,7 @@ public class Leetcode324WiggleSortII {
         // 1
         Arrays.sort(nums); // o(NlgN)
         // 2
-        wiggleSortPartitionedArray(nums);
+        wiggleSortPartitionedArrayIn3ways(nums, nums[nums.length - 1 >> 1]);// median or left median
     }
 
     /**
@@ -65,45 +67,44 @@ public class Leetcode324WiggleSortII {
      * o(n) time, o(1) extra space
      *
      * partitioned array:
-     *       array is partitioned by median and the smaller ones without sorted at its left side
-     *
-     *  nextB:
-     *       mark the index where  swap next bigger one to here
-     *  i:
-     *       used to calculate current index which go along index sequence of
-     *       1, 3, 5 ... (current is smaller ones will be allocated to bigger ones)
-     *      then  0, 2, 4 ... (current is bigger ones will be allocated to smaller ones)
-     *
-     *  nextS:
-     *       mark the index where swap next smaller one to here
-     *
-     *  With this method array is wiggled sorted as
-     *      in even index (start with 0) will be the smaller ones
-     *      in odd index  (start with 1) will be the bigger ones
+     *       array where the smallers and biggers are separated by median without sorted on both sides
+     * midV:  median or left median value
+     *  With this method array is wiggled sorted as 3 way ->
+     *  in order of biggers( -> odd index), mideans, smallers ( -> even index)
      */
-    public static void wiggleSortPartitionedArray(int[] arr /* partitioned by Median */) {
-        int midV = arr[arr.length - 1 >> 1]; // median or left median
+    public static void wiggleSortPartitionedArrayIn3ways(int[] A /* partitioned by Median */, int midV) {
+        int b = 0; // next Biger Sequence. Ascending
+        int i = 0; // sequence of current . Ascending
+        int s = A.length - 1;// next Smaller Sequence. Descending
 
-        int nextB = 0;
-        int i = 0;
-        int nextS = arr.length - 1;
-
-        while (i <= nextS) {
-            if (arr[indexOf(i, arr)] > midV) {
-                swap(arr, indexOf(i, arr), indexOf(nextB, arr));
+        while (i <= s) {
+            if (A[index(i, A)] > midV) {
+                swap(A, index(i, A), index(b, A));// wiggle order
                 i++;
-                nextB++;
-            } else if (arr[indexOf(i, arr)] < midV) {
-                swap(arr, indexOf(i, arr), indexOf(nextS, arr));
-                nextS--;
+                b++;
+            } else if (A[index(i, A)] < midV) {
+                swap(A, index(i, A), index(s, A));
+                s--;
             } else {
                 i++;
             }
         }
     }
 
-    // Get the true iterator order of index in loop of wiggleSortPartitionedArray()
-    public static int indexOf(int index, int[] arr) {
-        return (index * 2 + 1) % (arr.length | 1);
+    // Get the true iterator order of index, the wiggle order index, in loop of wiggleSortPartitionedArray()
+    // wiggle order: Jump over or skip one index each time
+    public static int index(int i, int[] arr) {
+        // 1, 3 ,5 ,....0,2,4,...
+        // odd          even
+        // bigger       smaller
+        return (i * 2 + 1) % (arr.length | 1);
+    }
+
+    public static void main(String[] args) {
+        // 2, 3, 6, 7; 9, 9, 9 ; 11, 12, 13, 15
+        int[] num = new int[]{9, 12, 15, 6, 9, 2, 7, 3, 11, 13, 9};
+        wiggleSortPartitionedArrayIn3ways(num, 9);
+        System.out.println(Arrays.toString(num)); //[9, 13, 9, 15, 7, 11, 3, 12, 6, 9, 2]
+        wiggleSortPartitionedArrayIn3ways(new int[]{1, 2, 3, 3, 4}, 3);
     }
 }

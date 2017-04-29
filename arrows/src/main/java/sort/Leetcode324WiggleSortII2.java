@@ -15,7 +15,7 @@
 
 package sort;
 
-import static sort.Leetcode324WiggleSortII.wiggleSortPartitionedArray;
+import static sort.Leetcode324WiggleSortII.wiggleSortPartitionedArrayIn3ways;
 import static sort.QuickSelect.introSelectKth;
 
 /**
@@ -40,7 +40,7 @@ public class Leetcode324WiggleSortII2 {
         // 1
         introSelectKth(nums, 0, nums.length - 1, leftMedianIndex);
         // 2
-        wiggleSortPartitionedArray(nums);
+        wiggleSortPartitionedArrayIn3ways(nums,nums[leftMedianIndex]);
     }
 
     /** test cases:
