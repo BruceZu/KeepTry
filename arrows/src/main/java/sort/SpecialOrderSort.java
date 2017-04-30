@@ -26,7 +26,7 @@ public class SpecialOrderSort {
     //special order of index like 0, 2, 4, 5, 3, 1
     public static int specialIndex(int i, int len) {
         int d = 2 * i;
-        return d < len ? d : (len & 1) == 0 ? len - 1 - d % len : len - d % (len - 1);
+        return d < len ? d : (len & 1) == 0 ? len - 1 - d % len : 2 * len - d - 1;
     }
 
     // sort array in special order like Max, Min, second Max, second Min,....
@@ -46,8 +46,9 @@ public class SpecialOrderSort {
     // ---------------------------------------------------------------------------------
     public static void main(String[] args) {
         // test cases
-        //  6, 5, 4, 3, 2, 1
-        Integer[] num = new Integer[]{6, 5, 4, 3, 2, 1};
+        //  6, 4, 2, 3, 1, 5
+        //  6, 4, 2, 3, 1, 5, 7
+        Integer[] num = new Integer[]{6, 4, 2, 3, 1, 5};
         System.out.println(Arrays.toString(specialSort(num)));
     }
 }
