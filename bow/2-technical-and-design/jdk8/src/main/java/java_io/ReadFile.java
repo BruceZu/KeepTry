@@ -30,7 +30,7 @@ public class ReadFile {
     /**
      * <pre>
      *
-     *     File         vs Object
+     *     File         vs Object vs Data
      *     InputStream  vs Reader
      *     OutputStream vs Writer
      *
