@@ -41,7 +41,7 @@ public class Sha1OfFile {
         MessageDigest sha1 = MessageDigest.getInstance("SHA-1"); // todo algorithm here??
         try (InputStream input = new FileInputStream(file)) {
 
-            byte[] buffer = new byte[8192];
+            byte[] buffer = new byte[1024 * 8];
             int len = input.read(buffer);
 
             while (len != -1) {
