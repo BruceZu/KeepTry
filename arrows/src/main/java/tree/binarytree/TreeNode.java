@@ -79,6 +79,14 @@ public class TreeNode<E> {
         }
     }
 
+    E v;
+    TreeNode left;
+    TreeNode right;
+
+    public TreeNode(E x) {
+        v = x;
+    }
+
     public static void drawingInOrder(TreeNode root) {
         if (root == null) {
             System.out.println("tree is null");
@@ -102,13 +110,5 @@ public class TreeNode<E> {
             }
             System.out.println(" ");
         }
-    }
-
-    E v;
-    TreeNode left;
-    TreeNode right;
-
-    public TreeNode(E x) {
-        v = x;
     }
 }
