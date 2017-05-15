@@ -83,18 +83,18 @@ public class Leetcode253MeetingRoomsII {
      *      and update 'time to get an empty class room' to be the next one, as they are sorted.
      */
     public int minMeetingRooms(Interval[] meetings) {
-        int[] sortedByStartTime = new int[meetings.length];
-        int[] sortedByEndTime = new int[meetings.length];
+        int[] sortedStarts = new int[meetings.length];
+        int[] sortedEnds = new int[meetings.length];
         for (int i = 0; i < meetings.length; i++) {
-            sortedByStartTime[i] = meetings[i].start;
-            sortedByEndTime[i] = meetings[i].end;
+            sortedStarts[i] = meetings[i].start;
+            sortedEnds[i] = meetings[i].end;
         }
-        Arrays.sort(sortedByStartTime);
-        Arrays.sort(sortedByEndTime);
+        Arrays.sort(sortedStarts);
+        Arrays.sort(sortedEnds);
         int roomNumber = 0;
         int j = 0; //index of class with current earliest end time
-        for (int i = 0; i < sortedByStartTime.length; i++) {
-            if (sortedByStartTime[i] < sortedByEndTime[j]) {
+        for (int i = 0; i < sortedStarts.length; i++) {
+            if (sortedStarts[i] < sortedEnds[j]) {
                 roomNumber++;
             } else {
                 j++;
