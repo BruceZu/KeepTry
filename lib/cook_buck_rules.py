@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from tools.npmjs_defs import CACHED_NPMJS_PATH, npmjs_file_name, npmjs_url
-
+with allow_unsafe_import():
+    import sys
+    from os.path import abspath, dirname
+    sys.path.append(dirname(dirname(abspath(__file__))))
+    from tools.npmjs_defs import CACHED_NPMJS_PATH, npmjs_file_name, npmjs_url
 
 # The npmjs is with nested deps as the result created by `npm install --production` (npm@2.9.1)
 def cook_genrule_npmjs(
@@ -39,7 +38,6 @@ def cook_genrule_npmjs(
         cmd=' '.join(cmd),
         out=npmjs_file_name(name, version),
     )
-
 
 def cook_prebuilt_jar(
         name,

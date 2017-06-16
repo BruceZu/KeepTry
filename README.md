@@ -18,7 +18,7 @@ Buck
 
 ```
 $ buck --version
-buck version 899148323299cdcebe27be5a0151f901fdbca117
+buck version d16adb2b57199b1d139eb817c44a2e248c4cda50
 ```
 
 Node.js
