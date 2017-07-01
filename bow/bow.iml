@@ -15,7 +15,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="false" />
     </content>
     <orderEntry type="library" scope="TEST" name="junit-junit-4.12" level="project" />
-    <orderEntry type="library" name="firtlevel_in_buckout_gen_lib" level="application" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
@@ -27,8 +26,33 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="buck_out_gen_lib_second_level_guice" level="project" />
-    <orderEntry type="library" name="buckout_gen_lib_jetty" level="project" />
     <orderEntry type="library" name="mina" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/redist/annotations-java8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../buck-out/gen/lib/guice/guice_library#class-abi/guice_library-abi.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../buck-out/gen/lib/jetty/server#class-abi/server-abi.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
