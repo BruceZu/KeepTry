@@ -94,19 +94,15 @@ public class HackerrankLastMaxmum {
 
         int curEnd = 0;
         long curSum = sortedStarts[0].heigh;
-        Set<Block> sumBackEnd = new HashSet();
-        sumBackEnd.add(sortedStarts[0]);
         long max = sortedStarts[0].heigh;
 
         for (int i = 1; i < caseCount; i++) {
             Block bi = sortedStarts[i];
             while (sortedEnds[curEnd].end < bi.start) {
-                sumBackEnd.remove(sortedEnds[curEnd]);
                 curSum -= sortedEnds[curEnd].heigh;
                 curEnd++;
             }
             curSum += bi.heigh;
-            sumBackEnd.add(bi);
             max = Math.max(max, curSum);
         }
         System.out.print(max);
