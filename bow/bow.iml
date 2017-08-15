@@ -14,7 +14,6 @@
       <sourceFolder url="file://$MODULE_DIR$/2-technical-and-design/jdk8/src/test/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="false" />
     </content>
-    <orderEntry type="library" scope="TEST" name="junit-junit-4.12" level="project" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
@@ -54,5 +53,15 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="junit-junit-4.12" level="project" />
+    <orderEntry type="library" name="hamcrest-core-abi" level="project" />
+    <orderEntry type="library" name="sshd-sshd-core-1.0.0" level="project" />
+    <orderEntry type="library" name="server-jetty-server-9.2.14.v20151106" level="project" />
+    <orderEntry type="library" name="javax-inject-abi" level="project" />
+    <orderEntry type="library" name="util-jetty-util-9.2.14.v20151106" level="project" />
+    <orderEntry type="library" name="guice-assistedinject-guice-assistedinject-4.0" level="project" />
+    <orderEntry type="library" name="slf4j-api-slf4j-api-1.7.13" level="project" />
+    <orderEntry type="library" name="guava-guava-18.0" level="project" />
+    <orderEntry type="library" name="io-jetty-io-9.2.14.v20151106" level="project" />
   </component>
 </module>
