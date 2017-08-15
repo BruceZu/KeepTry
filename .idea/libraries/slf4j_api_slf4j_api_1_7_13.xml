@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="slf4j-api-slf4j-api-1.7.13">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/__slf4j-api__/slf4j-api-slf4j-api-1.7.13.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

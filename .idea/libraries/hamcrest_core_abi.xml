@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="hamcrest-core-abi">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/hamcrest-core#class-abi/hamcrest-core-abi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

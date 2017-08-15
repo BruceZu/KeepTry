@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="guava-guava-18.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guava__download_bin/guava-guava-18.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
