@@ -16,11 +16,16 @@
 package abstract_class_interface;
 
 import java.io.Serializable;
-
+//                public final|abstract|static
+// field  default   1      1             1
+// method default   1            1
+// illegal combination: static/abstract
+// illegal combination:  final/abstract
 public interface My_Interface extends Serializable, Cloneable {
     // fields:
     //       default:  final static
-    final static String my_name = ""; // must initialize field value.
+    static final String my_name = ""; // must initialize field value.
+    String field = "a";
 
     // method:
     //      default: public abstract
