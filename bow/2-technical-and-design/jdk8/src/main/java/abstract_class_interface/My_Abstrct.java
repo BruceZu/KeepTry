@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 public abstract class My_Abstrct implements My_Interface, Cloneable, Serializable {
     static String my_name; // you can initialize its value later
+    private String field;
 
     static {
         my_name = "";
