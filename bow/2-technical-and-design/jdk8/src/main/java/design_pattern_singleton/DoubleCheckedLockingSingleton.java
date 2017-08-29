@@ -35,16 +35,16 @@ import java.security.PrivilegedAction;
  * by only locking critical section of code, the code which creates instance of Singleton class.
  */
 public class DoubleCheckedLockingSingleton implements Cloneable, Serializable {
-    // static
+
     static private volatile DoubleCheckedLockingSingleton INSTANCE;
 
 
     // static
     static public DoubleCheckedLockingSingleton getInstance() {
-        if (INSTANCE == null) {// one out of synchronized
+        if (INSTANCE == null) {
             // lock on class
             synchronized (DoubleCheckedLockingSingleton.class) {
-                if (INSTANCE == null) { // on in the synchronized
+                if (INSTANCE == null) {
 //                    1. using SecurityManager
 //                    http://technonstop.com/java-singleton-reflection-and-lazy-initialization
 //                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
