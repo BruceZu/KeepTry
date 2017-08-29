@@ -1,0 +1,42 @@
+include_defs(
+    '//lib/cook_buck_rules.py'
+)
+
+GROUP_ID = 'javax.mail'
+VERSION = '4.0.0'
+
+cook_prebuilt_jar(
+    name = 'JavaMail-API-compat',
+    group_id = GROUP_ID,
+    artifact_id = 'mail',
+    version = '1.4.7',
+    bin_sha1 = '9add058589d5d85adeb625859bf2c5eeaaedf12d',
+    src_sha1 = 'bb76e5678cdb3e7488bb5578a8461e82fba5fe36',
+    visibility = [
+        'PUBLIC'
+    ],
+)
+
+cook_prebuilt_jar(
+    name = 'javax-JavaMail-API-jar',
+    group_id = GROUP_ID,
+    artifact_id = 'javax.mail-api',
+    version = '1.6.0',
+    bin_sha1 = '1941270d3b04ded5bdc274351450b4afe47be080',
+    src_sha1 = '0552a5e5ac0065e971d81da096565d52ba6fbe85',
+    visibility = [
+        'PUBLIC'
+    ],
+)
+
+cook_prebuilt_jar(
+    name = 'JavaMail-API-jar',
+    group_id = GROUP_ID,
+    artifact_id = 'mailapi',
+    version = '1.4.3',
+    bin_sha1 = '124600e35d9031da50e5f67661ffa741541f8f6a',
+    src_sha1 = 'c84b0b9535d2ffe70b8323ba9a433e0a991fa411',
+    visibility = [
+        'PUBLIC'
+    ],
+)
