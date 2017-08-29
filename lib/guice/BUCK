@@ -6,61 +6,75 @@ GROUP_ID = 'com.google.inject'
 VERSION = '4.0'
 
 cook_prebuilt_jar(
-    name='aopalliance',
-    group_id='aopalliance',
-    artifact_id='aopalliance',
-    version='1.0',
-    bin_sha1='0235ba8b489512805ac13a8f9ea77a1ca5ebe3e8',
-    src_sha1='4a4b6d692e17846a9f3da036438a7ac491d3c814',
-    visibility=['//lib/guice:guice_library'],
+    name = 'aopalliance',
+    group_id = 'aopalliance',
+    artifact_id = 'aopalliance',
+    version = '1.0',
+    bin_sha1 = '0235ba8b489512805ac13a8f9ea77a1ca5ebe3e8',
+    src_sha1 = '4a4b6d692e17846a9f3da036438a7ac491d3c814',
+    visibility = [
+        '//lib/guice:guice_library'
+    ],
 )
 
 cook_prebuilt_jar(
-    name='guice_library',
-    group_id=GROUP_ID,
-    artifact_id='guice',
-    version=VERSION,
-    bin_sha1='0f990a43d3725781b6db7cd0acf0a8b62dfd1649',
-    src_sha1='961359f8352b791c6443a207c847e25d6d3ca7cd',
-    deps=[':aopalliance'],
-    visibility=['PUBLIC'],
+    name = 'guice_library',
+    group_id = GROUP_ID,
+    artifact_id = 'guice',
+    version = VERSION,
+    bin_sha1 = '0f990a43d3725781b6db7cd0acf0a8b62dfd1649',
+    src_sha1 = '961359f8352b791c6443a207c847e25d6d3ca7cd',
+    deps = [
+        ':aopalliance'
+    ],
+    visibility = [
+        'PUBLIC'
+    ],
 )
 
 cook_prebuilt_jar(
-    name='javax-inject',
-    group_id='javax.inject',
-    artifact_id='javax.inject',
-    version='1',
-    bin_sha1='6975da39a7040257bd51d21a231b76c915872d38',
-    src_sha1='a00123f261762a7c5e0ec916a2c7c8298d29c400',
-    visibility=['PUBLIC'],
+    name = 'javax-inject',
+    group_id = 'javax.inject',
+    artifact_id = 'javax.inject',
+    version = '1',
+    bin_sha1 = '6975da39a7040257bd51d21a231b76c915872d38',
+    src_sha1 = 'a00123f261762a7c5e0ec916a2c7c8298d29c400',
+    visibility = [
+        'PUBLIC'
+    ],
 )
 
 java_library(
-    name='guice',
-    exported_deps=[
+    name = 'guice',
+    exported_deps = [
         ':guice_library',
         ':javax-inject',
     ],
-    visibility=['PUBLIC'],
+    visibility = [
+        'PUBLIC'
+    ],
 )
 
 cook_prebuilt_jar(
-    name='guice-assistedinject',
-    group_id='com.google.inject.extensions',
-    artifact_id='guice-assistedinject',
-    version=VERSION,
-    bin_sha1='8fa6431da1a2187817e3e52e967535899e2e46ca',
-    src_sha1='579c00df760815a369a396e7877cb6c3441b4328',
-    deps=[':guice'],
+    name = 'guice-assistedinject',
+    group_id = 'com.google.inject.extensions',
+    artifact_id = 'guice-assistedinject',
+    version = VERSION,
+    bin_sha1 = '8fa6431da1a2187817e3e52e967535899e2e46ca',
+    src_sha1 = '579c00df760815a369a396e7877cb6c3441b4328',
+    deps = [
+        ':guice'
+    ],
 )
 
 cook_prebuilt_jar(
-    name='guice-servlet',
-    group_id='com.google.inject.extensions',
-    artifact_id='guice-servlet',
-    version=VERSION,
-    bin_sha1='4503da866f4c402b5090579b40c1c4aaefabb164',
-    src_sha1='77a4d597ce10109cf32a006a11f6d76b18b8afb5',
-    deps=[':guice'],
+    name = 'guice-servlet',
+    group_id = 'com.google.inject.extensions',
+    artifact_id = 'guice-servlet',
+    version = VERSION,
+    bin_sha1 = '4503da866f4c402b5090579b40c1c4aaefabb164',
+    src_sha1 = '77a4d597ce10109cf32a006a11f6d76b18b8afb5',
+    deps = [
+        ':guice'
+    ],
 )

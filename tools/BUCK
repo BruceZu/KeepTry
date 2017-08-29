@@ -1,29 +1,29 @@
 python_binary(
-  name = 'download_file',
-  main = 'download_file.py',
-  deps = [
-    ':npmjs_defs',
-    ':util'
-  ],
-  visibility = [
-    'PUBLIC'
-  ]
+    name = 'download_file',
+    main = 'download_file.py',
+    deps = [
+        ':npmjs_defs',
+        ':util'
+    ],
+    visibility = [
+        'PUBLIC'
+    ]
 )
 
 python_library(
-  name = 'util',
-  srcs = [
-    'util.py',
-    '__init__.py'
-  ]
+    name = 'util',
+    srcs = [
+        'util.py',
+        '__init__.py'
+    ]
 )
 
 python_library(
-  name = 'npmjs_defs',
-  srcs = [
-    'npmjs_defs.py'
-  ],
-  deps = [
-    ':util'
-  ]
+    name = 'npmjs_defs',
+    srcs = [
+        'npmjs_defs.py'
+    ],
+    deps = [
+        ':util'
+    ]
 )
