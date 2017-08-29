@@ -24,19 +24,19 @@ public abstract class My_Abstrct implements My_Interface, Cloneable, Serializabl
         my_name = "";
     }
 
-    public My_Abstrct() {
-    }
+    public My_Abstrct() {}
 
-    public My_Abstrct(int i) {
-    }
+    private My_Abstrct(String str) {}
 
-    public static void main(String[] args) {
-    }
+    My_Abstrct(Object str) {}
+
+    public My_Abstrct(int i) {}
+
+    public static void main(String[] args) {}
 
     protected abstract String child_name(int name);
 
-    final static synchronized strictfp void action() {
-    }
+    static final synchronized strictfp void action() {}
 
     transient volatile int b;
 }
