@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="JavaMail-API-compat-mail-1.4.7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/mail/__JavaMail-API-compat__/JavaMail-API-compat-mail-1.4.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
