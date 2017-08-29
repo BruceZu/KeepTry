@@ -18,12 +18,30 @@ package design_pattern_singleton;
 import java.io.Serializable;
 
 /**
- * Enum Singleton handles lot of stuff for you e.g.
- * controlled instance creation,
- * Serialization safety
- * thread-safe.
- * You don’t need to worry about double checked locking and volatile variable anymore.
+ * Enum Singleton handles lot of stuff for you e.g. controlled instance creation, Serialization
+ * safety thread-safe. You don’t need to worry about double checked locking and volatile variable
+ * anymore.
  */
 public enum EnumSingleton implements Serializable {
-    INSTANCE;
+  INSTANCE;
+}
+
+interface MyInterface {
+  void doItA();
+}
+
+enum IMPLEMENTATION implements MyInterface {
+  INSTANCE {
+    @Override
+    public void doItA() {}
+  };
+
+  public static MyInterface getInstance() {
+    return IMPLEMENTATION.INSTANCE;
+  }
+
+  public static void main(String[] args) {
+    MyInterface myinterface = IMPLEMENTATION.getInstance();
+    myinterface.doItA();
+  }
 }
