@@ -63,5 +63,8 @@
     <orderEntry type="library" name="slf4j-api-slf4j-api-1.7.13" level="project" />
     <orderEntry type="library" name="guava-guava-18.0" level="project" />
     <orderEntry type="library" name="io-jetty-io-9.2.14.v20151106" level="project" />
+    <orderEntry type="library" name="JavaMail-API-compat-mail-1.4.7" level="project" />
+    <orderEntry type="library" name="JavaMail-API-jar-mailapi-1.4.3" level="project" />
+    <orderEntry type="library" name="javax-JavaMail-API-jar-javax.mail-api-1.6.0" level="project" />
   </component>
 </module>
