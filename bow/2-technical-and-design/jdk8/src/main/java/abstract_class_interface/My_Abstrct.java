@@ -18,12 +18,17 @@ package abstract_class_interface;
 import java.io.Serializable;
 
 public abstract class My_Abstrct implements My_Interface, Cloneable, Serializable {
+    private interface myInnerInterface {
+        void okayToDo();
+    }
+
     static String my_name; // you can initialize its value later
     private String field;
 
     static {
         my_name = "";
     }
+    // constructor
 
     public My_Abstrct() {}
 
@@ -32,6 +37,7 @@ public abstract class My_Abstrct implements My_Interface, Cloneable, Serializabl
     My_Abstrct(Object str) {}
 
     public My_Abstrct(int i) {}
+    //
 
     public static void main(String[] args) {}
 

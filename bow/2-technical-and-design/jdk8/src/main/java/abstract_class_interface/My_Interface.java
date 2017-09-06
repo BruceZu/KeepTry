@@ -34,7 +34,12 @@ public interface My_Interface extends Serializable, Cloneable {
     //          static  <---conflict--->  final
     public abstract String getMy_name();
 
+    interface myInnerInterface {}
+    // Object.clone();
+    // Cloneable
+
     static String my_method() {
+
         return my_name;
     }
 }
