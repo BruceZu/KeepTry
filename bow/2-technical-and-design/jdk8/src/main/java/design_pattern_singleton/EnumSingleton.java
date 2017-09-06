@@ -15,6 +15,9 @@
 
 package design_pattern_singleton;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 
 /**
@@ -23,25 +26,65 @@ import java.io.Serializable;
  * anymore.
  */
 public enum EnumSingleton implements Serializable {
-  INSTANCE;
+    INSTANCE;
+    private Logger log = LoggerFactory.getLogger(EnumSingleton.class);
+
+    EnumSingleton() {
+        log.info("initial");
+    }
 }
 
 interface MyInterface {
-  void doItA();
+    String str = "";
+
+    int get();
+
+    void set(int i);
 }
 
 enum IMPLEMENTATION implements MyInterface {
-  INSTANCE {
+    INSTANCE {
+        @Override
+        public void set(int i) {
+            log2.info("set b");
+            b = i;
+        }
+    };
+
+    private Logger log = LoggerFactory.getLogger(IMPLEMENTATION.class);
+    private static Logger log2 = LoggerFactory.getLogger(IMPLEMENTATION.class);
+
+    IMPLEMENTATION() {
+        log.info("initial");
+    }
+
+    private static int b;
+    private int a;
+
+    public static MyInterface getInstance() {
+        return IMPLEMENTATION.INSTANCE;
+    }
+
+    public static void main(String[] args) {
+        try {
+            Class.forName("design_pattern_singleton.EnumSingleton").newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        //        MyInterface myinterface = IMPLEMENTATION.getInstance();
+        //        myinterface.set(1);
+        //        System.out.println(myinterface.get());
+        //        MyInterface myinterface2 = IMPLEMENTATION.getInstance();
+        //        myinterface.set(1);
+        //        System.out.println(myinterface2.get());
+        //        myinterface2.set(2);
+        //        System.out.println(myinterface.get());
+    }
+
     @Override
-    public void doItA() {}
-  };
-
-  public static MyInterface getInstance() {
-    return IMPLEMENTATION.INSTANCE;
-  }
-
-  public static void main(String[] args) {
-    MyInterface myinterface = IMPLEMENTATION.getInstance();
-    myinterface.doItA();
-  }
+    public int get() {
+        return a;
+    }
 }
