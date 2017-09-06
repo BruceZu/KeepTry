@@ -15,14 +15,8 @@
 
 package design_pattern_singleton;
 
-import sun.reflect.CallerSensitive;
-
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.ReflectPermission;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 /**
  * <pre>
@@ -36,23 +30,22 @@ import java.security.PrivilegedAction;
  */
 public class DoubleCheckedLockingSingleton implements Cloneable, Serializable {
 
-    static private volatile DoubleCheckedLockingSingleton INSTANCE;
-
+    private static volatile DoubleCheckedLockingSingleton INSTANCE;
 
     // static
-    static public DoubleCheckedLockingSingleton getInstance() {
+    public static DoubleCheckedLockingSingleton getInstance() {
         if (INSTANCE == null) {
             // lock on class
             synchronized (DoubleCheckedLockingSingleton.class) {
                 if (INSTANCE == null) {
-//                    1. using SecurityManager
-//                    http://technonstop.com/java-singleton-reflection-and-lazy-initialization
-//                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
-//                        public Object run() {
+                    //                    1. using SecurityManager
+                    //                    http://technonstop.com/java-singleton-reflection-and-lazy-initialization
+                    //                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    //                        public Object run() {
                     INSTANCE = new DoubleCheckedLockingSingleton();
-//                            return null;
-//                        }
-//                    });
+                    //                            return null;
+                    //                        }
+                    //                    });
 
                 }
             }
@@ -64,13 +57,15 @@ public class DoubleCheckedLockingSingleton implements Cloneable, Serializable {
     private DoubleCheckedLockingSingleton() throws UnsupportedOperationException {
         // 2 Reflection can access private fields and methods,
         // which opens a threat of another instance
-//        1. using SecurityManager
-//        http://docs.oracle.com/javase/tutorial/security/index.html
-//        ReflectPermission perm = new ReflectPermission("suppressAccessChecks", "");
-//        AccessController.checkPermission(perm);
+        //        1. using SecurityManager
+        //        http://docs.oracle.com/javase/tutorial/security/index.html
+        //        ReflectPermission perm = new ReflectPermission("suppressAccessChecks", "");
+        //        AccessController.checkPermission(perm);
 
-//        2. using StackTrace
-        UnsupportedOperationException e = new UnsupportedOperationException("This is singleton");
+        //        2. using StackTrace
+        UnsupportedOperationException e =
+                new UnsupportedOperationException(
+                        "This is singleton. reject reflection operation!");
         StackTraceElement[] elements = e.getStackTrace();
         if (elements.length >= 2) {
             String caller = elements[1].getClassName();
@@ -82,7 +77,6 @@ public class DoubleCheckedLockingSingleton implements Cloneable, Serializable {
         // construct ....
     }
 
-
     // 3
     @Override
     protected Object clone() throws CloneNotSupportedException {
@@ -90,19 +84,35 @@ public class DoubleCheckedLockingSingleton implements Cloneable, Serializable {
     }
 
     /**
-     * 4
-     * You can prevent this by using readResolve() method,
-     * since during serialization readObject() is used to
-     * create instance and it return new instance every time
-     * but by using readResolve you can replace it with original Singleton instance.
-     * I have shared code on how to do it in my post Enum as Singleton in Java.
-     * This is also one of the reason I have said that
-     * use Enum to create Singleton because
-     * serialization of enum is taken care by JVM and it provides guaranteed of that.
+     * 4 You can prevent this by using readResolve() method, since during serialization readObject()
+     * is used to create instance and it return new instance every time but by using readResolve you
+     * can replace it with original Singleton instance. I have shared code on how to do it in my
+     * post Enum as Singleton in Java. This is also one of the reason I have said that use Enum to
+     * create Singleton because serialization of enum is taken care by JVM and it provides
+     * guaranteed of that.
      * http://stackoverflow.com/questions/1168348/java-serialization-readobject-vs-readresolve
      */
-
     private Object readResolve() throws ObjectStreamException {
         return INSTANCE;
+    }
+
+    public static void main(String[] args) {
+        String classname = "design_pattern_singleton.DoubleCheckedLockingSingleton";
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) classLoader = DoubleCheckedLockingSingleton.class.getClassLoader();
+        try {
+            Class c = classLoader.loadClass(classname);
+            c.newInstance();
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            Class.forName(classname).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
