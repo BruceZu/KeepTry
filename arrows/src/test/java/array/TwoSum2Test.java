@@ -46,7 +46,7 @@ public class TwoSum2Test {
         this.j = targetAndExpectedResult[2];
     }
 
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 30L, expected = Test.None.class)
     public void test() {
         int[] result = TwoSum2.check(array);
         Assert.assertEquals(result[2], k);
