@@ -16,14 +16,15 @@
 package java_util_concurrent.countDownLatchCyclicBarrierSemaphore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 public class SleepSort {
     // non-negative integers
-    public static List sleepSort(List<Integer> num) {
-        final List r = new ArrayList();
+    public static List<Integer> sleepSort(List<Integer> num) {
+        final List<Integer> r = Collections.synchronizedList(new ArrayList());
         CountDownLatch start = new CountDownLatch(1);
         CountDownLatch finish = new CountDownLatch(num.size());
         /* barrier is redundant here*/
@@ -39,9 +40,9 @@ public class SleepSort {
                 private CountDownLatch start;
                 private CountDownLatch finish;
                 private CyclicBarrier barrier;
-                private long n;
+                private Integer n;
 
-                public Runnable set(long n, CountDownLatch start, CountDownLatch finish, CyclicBarrier barrier) {
+                public Runnable set(Integer n, CountDownLatch start, CountDownLatch finish, CyclicBarrier barrier) {
                     this.n = n;
                     this.start = start;
                     this.finish = finish;

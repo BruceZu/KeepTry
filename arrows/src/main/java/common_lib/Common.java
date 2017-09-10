@@ -135,28 +135,33 @@ public class Common implements Merger {
     }
 
     /**
-     * Merge arrays l and r into array re
-     * Note: Assume l.length() + r.length() == re.length()
+     * Merge arrays l and r into array re Note: Assume l.length() + r.length() == re.length()
      *
-     * @param l  sorted left half
-     * @param r  sorted right half
+     * @param l sorted left half
+     * @param r sorted right half
      * @param re result
      */
     public static void mergeInsort(Comparable[] l, Comparable[] r, Comparable[] re) {
         // System.out.format("\nmerge %s and %s\n", Arrays.toString(l), Arrays.toString(r));
-        int i = 0, j = 0; // in loop the current index of l and r
-        int k = 0;
-        while (true) {
-            if (i == l.length && j == r.length) {
-                break;
-            } else if (i < l.length && (
-                    j == r.length || j < r.length && lessThan(l[i], r[j])
-            )) {
-                re[k++] = l[i++];
+//        int i = 0, j = 0; // in loop the current index of l and r
+//        int k = 0;
+//        while (true) {
+//                if (i == l.length && j == r.length) {
+//                        break;
+//                    } else if (i < l.length && (
+//                                j == r.length || j < r.length && lessThan(l[i], r[j])
+//                                )) {
+//                        re[k++] = l[i++];
+//
+//                            } else { // Without else, k will trigger java.lang.ArrayIndexOutOfBoundsException
+//                        re[k++] = r[j++];
+//                    }
 
-            } else { // Without else, k will trigger java.lang.ArrayIndexOutOfBoundsException
-                re[k++] = r[j++];
-            }
+        for (int i = 0, j = 0, k = 0; k < re.length; k++) {
+            re[k] =
+                    i < l.length && (j == r.length || j < r.length && lessThan(l[i], r[j]))
+                            ? l[i++]
+                            : r[j++];
         }
         // System.out.format("\n     -->   %s\n", Arrays.toString(re));
     }

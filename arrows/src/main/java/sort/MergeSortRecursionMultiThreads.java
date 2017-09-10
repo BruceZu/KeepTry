@@ -18,6 +18,7 @@ package sort;
 import common_lib.Common;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static common_lib.Common.divide;
 
@@ -36,6 +37,8 @@ public class MergeSortRecursionMultiThreads {
      * stop recursion and return to wait merge in sort directly
      *
      */
+    private static AtomicInteger numberOfThreads = new AtomicInteger();
+
     public static <T extends Comparable<T>> void mergeSort(T[] arr) {
         // Input check
         if (arr == null || arr.length <= 1) {
@@ -46,20 +49,20 @@ public class MergeSortRecursionMultiThreads {
 
         // 2 Sort each halves
         final CountDownLatch cdLatch = new CountDownLatch(2);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mergeSort(halves[0]);
-                cdLatch.countDown();
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mergeSort(halves[1]);
-                cdLatch.countDown();
-            }
-        }).start();
+        new Thread(
+                        () -> {
+                            mergeSort(halves[0]);
+                            numberOfThreads.getAndAdd(1);
+                            cdLatch.countDown();
+                        })
+                .start();
+        new Thread(
+                        () -> {
+                            mergeSort(halves[1]);
+                            numberOfThreads.getAndAdd(1);
+                            cdLatch.countDown();
+                        })
+                .start();
 
         // 3 Merge them back into one.
         try {
@@ -68,5 +71,10 @@ public class MergeSortRecursionMultiThreads {
             e.printStackTrace();
         }
         Common.mergeInsort(halves[0], halves[1], arr);
+    }
+
+    public static void main(String[] args) {
+        mergeSort(new Integer[] {3, 6, 8, 6, 1, 2, 90, 44});
+        System.out.println(numberOfThreads.get());
     }
 }
