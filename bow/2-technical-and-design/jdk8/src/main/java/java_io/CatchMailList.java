@@ -45,7 +45,7 @@ public class CatchMailList {
     //    maillist_old.txt
 
     private static final String MAIL_PATH =
-            "/home/bzu/Desktop/noteSublines-Mapping-what/interview/";
+            "/home/bzu/Desktop/3inchesBloodArrow/interview/";
     private static final String MAILS_OLD = MAIL_PATH + "maillist_old.txt";
     private static final String MAILS_2007_OLD = MAIL_PATH + "maillist_2007_old.txt";
 
@@ -84,11 +84,11 @@ public class CatchMailList {
         for (int page = 0; page < 6; page++) {
             String url = isSenior ? URL_2007 : URL;
             url += String.format("&page_number=%d", page);
-            System.out.println(url);
+            // System.out.println(url);
             URLConnection connection = new URL(url).openConnection();
             connection.setRequestProperty("Cookie", COOKIE);
             try (BufferedReader in =
-                    new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                         new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
                     Matcher m = p.matcher(inputLine);
@@ -105,8 +105,8 @@ public class CatchMailList {
 
     private static Set<String> getOldCandidates(boolean isSenior) {
         try (BufferedReader br =
-                new BufferedReader(
-                        new FileReader(new File(isSenior ? MAILS_2007_OLD : MAILS_OLD)))) {
+                     new BufferedReader(
+                             new FileReader(new File(isSenior ? MAILS_2007_OLD : MAILS_OLD)))) {
 
             Set<String> mails = new HashSet<>();
             String line;
@@ -158,8 +158,8 @@ public class CatchMailList {
         String pathToAppend = isSenior ? MAILS_2007_OLD : MAILS_OLD;
         boolean append = true;
         try (PrintWriter pw =
-                new PrintWriter(
-                        new BufferedWriter(new FileWriter(new File(pathToAppend), append)))) {
+                     new PrintWriter(
+                             new BufferedWriter(new FileWriter(new File(pathToAppend), append)))) {
             pw.append(newCandidates);
             pw.flush();
             pw.close();
@@ -213,21 +213,59 @@ public class CatchMailList {
         }
     }
 
-    public static void main(String args[]) throws Exception {
-        boolean isSeniore = false, dryrun = true;
-        boolean append = false, keepCur = false;
+    public static void whereAre(String mails) {
+        try {
+            Set<String> candiCS = currentCandidates(true);
+            Set<String> candiCJ = currentCandidates(true);
+            Set<String> candiOS = getOldCandidates(false);
+            Set<String> candiOJ = getOldCandidates(false);
+            String[] they = mails.split(",");
+            for (String c : they) {
+                if (candiCS.contains(c)) {
+                    System.out.println(c + " in the current progressing of Senior position");
+                } else if (candiCJ.contains(c)) {
+                    System.out.println(c + " in the current progressing of Junior position");
+                } else if (candiOS.contains(c)) {
+                    System.out.println(c + " in processed for the Senior position");
+                } else if (candiOJ.contains(c)) {
+                    System.out.println(c + " in processed for the Junior position");
+                } else {
+                    String curS = currentNewCandiates(true);
+                    if (curS.contains(c)) {
+                        System.out.println(c + " is in the current process for position of  Senior");
+                    } else {
+                        String curJ = currentNewCandiates(false);
+                        if (curJ.contains(c)) {
 
-        String toCurs = currentNewCandiates(isSeniore);
-        System.out.println("new candidates: \n" + toCurs);
-        mailOA(toCurs, dryrun, isSeniore);
-        if (toCurs.contains("john.zhang320@gmail.com")) {
-            System.out.println("Find him");
+                            System.out.println(c + " is in the current process for position of Junior");
+                        } else {
+                            System.out.println(c + "maybe not in resume DB or is not pick up because this resume does not match the standard");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    private static void recruiting(boolean isSenior, boolean dryrun, boolean append, boolean keepCur) throws Exception {
+        String toCurs = currentNewCandiates(isSenior);
+        System.out.println("new candidates: \n" + toCurs);
+
+        mailOA(toCurs, dryrun, isSenior);
         if (append) {
-            appendToOldCandidatesEails(toCurs, isSeniore);
+            appendToOldCandidatesEails(toCurs, isSenior);
         }
         if (keepCur) {
-            keepCurCandidatesEails(toCurs, isSeniore);
+            keepCurCandidatesEails(toCurs, isSenior);
         }
+    }
+
+    public static void main(String args[]) throws Exception {
+        String they = "zhyue@umich.edu,shawnxxy@hotmail.com,liukahn@hotmail.com";
+        whereAre(they);
+        
+        // recruiting(false, true, false, false);
     }
 }
