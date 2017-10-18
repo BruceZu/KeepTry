@@ -17,8 +17,8 @@ package numberPartitioning;
 
 import java.util.Arrays;
 
-public class Partition2 {
-  // Time complexity:O() n is nums.length ???
+public class Leetcode698PartitiontoKEqualSumSubsets6 {
+  // Time complexity:O(?)  ??
   // Space complexity:O(k)
   public static boolean separate(int[] nums, int k) {
     if (nums == null || nums.length == 0 || k < 1 || k > nums.length) return false;
@@ -80,6 +80,7 @@ public class Partition2 {
     nums = new int[] {2, 2, 2, 1, 1, 1};
     k = 3;
     System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+
     System.out.println(" -- false -- ");
     nums = new int[] {3, 1, 1, 2, 1, 1};
     k = 7;
@@ -92,6 +93,15 @@ public class Partition2 {
     System.out.println(separate(nums, k) == true ? "Can  " : "No ");
     nums = new int[] {3, 1, 1, 2, 1, 1};
     k = 2;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums =
+        new int[] {
+          5, 5, 5, 5, 5,
+          5, 5, 5, 5, 5,
+          5, 5, 5, 5, 5,
+          5
+        };
+    k = 5;
     System.out.println(separate(nums, k) == true ? "Can  " : "No ");
   }
 }
