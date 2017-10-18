@@ -17,12 +17,14 @@ package numberPartitioning;
 
 import java.util.Arrays;
 
-public class Partition3 {
+public class Leetcode698PartitiontoKEqualSumSubsets7
+{
 
   // Time complexity:0(k^n), n is nums length
   // Space complexity: (n)
   public static boolean separate(int[] nums, int k) {
-    if (nums.length < k) return false;
+    if (nums == null || nums.length == 0 || k < 1 || k > nums.length) return false;
+
     if (k == 1) return true;
 
     int sum = Arrays.stream(nums).sum();
@@ -51,6 +53,45 @@ public class Partition3 {
   public static void main(String[] args) {
     int[] nums = new int[] {1, 2, 3, 4, 5, 6};
     int k = 3;
+    System.out.println(" -- okay -- ");
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums = new int[] {4, 2, 2, 3, 6, 6, 1};
+    k = 4;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums = new int[] {2, 1, 2, 2, 1, 1};
+    k = 3;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums = new int[] {2, 2, 2, 2, 2, 2};
+    k = 3;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums = new int[] {3, 1, 1, 2, 1, 1};
+    k = 3;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums = new int[] {2, 2, 2, 1, 1, 1};
+    k = 3;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+
+    System.out.println(" -- false -- ");
+    nums = new int[] {3, 1, 1, 2, 1, 1};
+    k = 7;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums = new int[] {3, 1, 1, 2, 1, 1};
+    k = 0;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums = null;
+    k = 2;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums = new int[] {3, 1, 1, 2, 1, 1};
+    k = 2;
+    System.out.println(separate(nums, k) == true ? "Can  " : "No ");
+    nums =
+        new int[] {
+          5, 5, 5, 5, 5,
+          5, 5, 5, 5, 5,
+          5, 5, 5, 5, 5,
+          5
+        };
+    k = 5;
     System.out.println(separate(nums, k) == true ? "Can  " : "No ");
   }
 }
