@@ -19,27 +19,27 @@ import java.util.Arrays;
 
 // DP
 
-/**
- * @see <a href="https://leetcode.com/articles/partition-to-k-equal-sum-subsets/">Leetcode</a>
- */
+/** @see <a href="https://leetcode.com/articles/partition-to-k-equal-sum-subsets/">Leetcode</a> */
 public class Leetcode698PartitiontoKEqualSumSubsets2 {
   static boolean recursion(int placing, int leftSum, boolean[] isValid, int[] nums, int ave) {
+    if (placing == ((1 << nums.length) - 1)) return true;
+
     for (int i = 0; i < nums.length; i++) {
       if ((((1 << i) | placing) != placing) && nums[i] <= ((leftSum - 1) % ave + 1)) {
         // System.out.println(String.format("try %6s", Integer.toBinaryString(placing | (1 << i))));
         if (recursion(placing | (1 << i), leftSum - nums[i], isValid, nums, ave)) {
           // System.out.println(String.format("works %6s", Integer.toBinaryString(placing | (1 << i))));
-          isValid[placing] = true;
-          break;
+          return true;
+          // isValid[placing] = true;
+          //  break;
         }
         // else
         //   System.out.println(String.format("not works %6s", Integer.toBinaryString(placing | (1 << i))));
       }
     }
-
     // if (isValid[placing] == true)
     //  System.out.println(String.format("valid order %6s", Integer.toBinaryString(placing)));
-    return isValid[placing];
+    return false; //isValid[placing];
   }
 
   public static boolean canPartitionKSubsets(int[] nums, int k) {
@@ -49,6 +49,7 @@ public class Leetcode698PartitiontoKEqualSumSubsets2 {
 
     boolean[] isValid = new boolean[1 << nums.length];
     isValid[(1 << nums.length) - 1] = true;
+    // to see if the valid placing will via this placling : (1 << nums.length) - 1
     //System.out.println(String.format("default %6s is true", Integer.toBinaryString((1 << nums.length) - 1)));
     return recursion(0, sum, isValid, nums, sum / k);
   }
