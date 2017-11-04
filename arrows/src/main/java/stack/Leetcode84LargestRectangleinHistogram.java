@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Stack;
 
 /**
- * <a href="http://www.informatik.uni-ulm.de/acm/Locals/2003/html/judge.html"></a>
+ * <a href="http://www.informatik.uni-ulm.de/acm/Locals/2003/html/judge.html"> Problem H: Largest Rectangle in a Histogram </a>
  */
 public class Leetcode84LargestRectangleinHistogram {
 
@@ -28,6 +28,7 @@ public class Leetcode84LargestRectangleinHistogram {
      * @param heightOfBarAt
      * @return
      */
+    // O(N)
     static int largestRectangleArea2(int[] heightOfBarAt) {
         Stack<Integer> ascendingBarsIndex = new Stack<>();
         int max_area = 0;
@@ -49,31 +50,13 @@ public class Leetcode84LargestRectangleinHistogram {
     /**
      * -----------------------------------------legend---------------------------------------------------
      * <pre>
-     * Stack is used to calculate the width used to calculate area.
-     * It saves index of bar, and only those bars whose height <= next bar.
+     * Stack saves index of bar, and only those bars whose height <= next bar.
      * so it is in ascending order, from bottom to top.
-     * so before pushing in the next bar if the index at top of stack is greater than than the next bar
+     * so before pushing in the next bar if the index at top of stack is greater than the next bar
      * need pop and calculate the area and update the max area of rectangle.
      *
-     * the index in stack is not always successive.
-     * if it is not successive. the empty parts between 2 bar in stack are those
-     * whose height are greater than the right side bar. they has been pop out of stack in the processing of
-     * pushing in the right side bar.
-     *
-     * in the process of popping stack for pushing in next bar,
-     * before moving in next bar if there are empty between the top index and the index of next bar.
-     * the empty part are those bar whose height is greater than the current top bar, as stack is in ascending order,
-     * and the next bar.
-     *
-     * when calculate the are of rectangle with the bar at top index as height,
-     * the width will be (   empty bars on the left side of bar at topIndex
-     *                       + bar of topIndex
-     *                       + empty bars on the left side of bar at topIndex
-     *                    )
-     *
-     * if the next bar which will be pushed has the same height with the top one in stack. push it in
-     *
-     * empty stack means the height of the bar at pre index is 0
+     * if the next bar which will be pushed has the same height with the top one in stack.
+     * Skip it to improve performance
      */
     static int largestRectangleArea(int[] heightOfBarAt) {
 
@@ -111,7 +94,7 @@ public class Leetcode84LargestRectangleinHistogram {
      * 给一个数组,代表一组人的身高。然后输出一个数组,表示在当前人之后的所有
      * 比他高的人里,离他最近的人的身高。
      * 比如输入是[3, 6, 7,   2, 3]
-     * 输出就是 [6, 7, null, 3, null]。
+     * 输出就是  [6, 7, null, 3, null]。
      * <a href="http://www.geeksforgeeks.org/find-next-smaller-next-greater-array/"> next greater and smaller</a>
      * O(n)
      */
