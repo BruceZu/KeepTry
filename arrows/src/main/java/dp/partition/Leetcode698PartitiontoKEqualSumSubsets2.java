@@ -13,11 +13,11 @@
 // limitations under the License.
 //
 
-package numberPartitioning;
+package dp.partition;
 
 import java.util.Arrays;
 
-// DP
+// DP: Intuition version
 
 /** @see <a href="https://leetcode.com/articles/partition-to-k-equal-sum-subsets/">Leetcode</a> */
 public class Leetcode698PartitiontoKEqualSumSubsets2 {
@@ -52,52 +52,5 @@ public class Leetcode698PartitiontoKEqualSumSubsets2 {
     // to see if the valid placing will via this placling : (1 << nums.length) - 1
     //System.out.println(String.format("default %6s is true", Integer.toBinaryString((1 << nums.length) - 1)));
     return recursion(0, sum, isValid, nums, sum / k);
-  }
-
-  //---------------------------------------------------
-  public static void main(String[] args) {
-
-    int[] nums = new int[] {1, 2, 3, 4, 5, 6};
-    int k = 3;
-    System.out.println(" -- okay -- ");
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums = new int[] {4, 2, 2, 3, 6, 6, 1};
-    k = 4;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums = new int[] {2, 1, 2, 2, 1, 1};
-    k = 3;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums = new int[] {2, 2, 2, 2, 2, 2};
-    k = 3;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums = new int[] {3, 1, 1, 2, 1, 1};
-    k = 3;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums = new int[] {2, 2, 2, 1, 1, 1};
-    k = 3;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-
-    System.out.println(" -- false -- ");
-    nums = new int[] {3, 1, 1, 2, 1, 1};
-    k = 7;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums = new int[] {3, 1, 1, 2, 1, 1};
-    k = 0;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums = null;
-    k = 2;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums = new int[] {3, 1, 1, 2, 1, 1};
-    k = 2;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
-    nums =
-        new int[] {
-          5, 5, 5, 5, 5,
-          5, 5, 5, 5, 5,
-          5, 5, 5, 5, 5,
-          5
-        };
-    k = 5;
-    System.out.println(canPartitionKSubsets(nums, k) == true ? "Can  " : "No ");
   }
 }
