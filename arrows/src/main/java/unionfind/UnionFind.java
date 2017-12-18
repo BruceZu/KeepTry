@@ -20,7 +20,7 @@ package unionfind;
  *     scenario: disjoint sets. e.g. islands, groups of machines
  *     data structure:
  *                int[] or HashMap to keep:
- *                       1 mapping relation: index is node id/tag -> value is nextNodeIdOf node's id/tag it is pointing to.
+ *                       1 mapping relation: index is node id/tag -> value is next node's id/tag it is pointing to.
  *                       2 all nodes' id/tag: 0 ~ array length -1
  *     operations:
  *            search: root(int nodeId)
@@ -43,7 +43,7 @@ public class UnionFind {
 
     // Assume all nodes have been tagged with digits,
     // So: ids are distinguish, 0 ~ n-1,
-    private final int[] nextNodeIdOf;
+    private final int[] next;// next node id of
 
     // Tag nodes with digits,
     public UnionFind(String[] nodes) {
@@ -52,19 +52,19 @@ public class UnionFind {
         // so the root/end is itself. Each node represents a islands/groups of machines
         //
         // if the root points to any other node in its islands/groups of machines.
-        // it will be a graph like a black hole shape. It has only one circle, as for any node there is
+        // It has only one circle, as for any node there is
         // only one 'come out' edge.
-        nextNodeIdOf = new int[100];
+        next = new int[100];
         for (int i = 0; i < 100; i++) {
-            nextNodeIdOf[i] = i;
+            next[i] = i;
         }
     }
 
     // Pass Compress: in each search, break up 1/2 path.
     public int rootOf(int nodeId) {
-        while (nodeId != nextNodeIdOf[nodeId]) {
-            nextNodeIdOf[nodeId] = nextNodeIdOf[nextNodeIdOf[nodeId]];
-            nodeId = nextNodeIdOf[nodeId];
+        while (nodeId != next[nodeId]) {
+            next[nodeId] = next[next[nodeId]];
+            nodeId = next[nodeId];
         }
         return nodeId;
     }
@@ -73,7 +73,7 @@ public class UnionFind {
         int roota = rootOf(ida);
         int rootb = rootOf(idb);
         if (roota != rootb) {
-            nextNodeIdOf[roota] = rootb;
+            next[roota] = rootb;
         }
     }
 }
