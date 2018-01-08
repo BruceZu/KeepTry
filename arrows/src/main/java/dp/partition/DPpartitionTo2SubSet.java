@@ -58,7 +58,7 @@ import java.util.Arrays;
 public class DPpartitionTo2SubSet {
   // runtime complexity: O(nS)
   public static boolean can(int[] nums) {
-    // corner case check
+    //Todo: corner case check
 
     boolean[] T = new boolean[10240]; // possible to get subset with sum of x
     int sum = Arrays.stream(nums).sum();
