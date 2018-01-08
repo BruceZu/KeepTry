@@ -15,6 +15,8 @@
 
 package dp.partition;
 
+import java.util.Arrays;
+
 public class ChangeMoneyLimitedCopys_kSubset {
   // subset is k, sum is m
   /**
@@ -22,8 +24,8 @@ public class ChangeMoneyLimitedCopys_kSubset {
    * are interested in the product, and our coins are prime numbers. Then this algorithm is somewhat
    * similar to the sieve of Erastosthenes.
    *
-   * Other times, we might want to find a subset of a
-   * particular size k, whose sum is m. In this case, we might want to make the table
-   * two­dimensional, k­by­n, and use each row to generate the next one.
+   * <p>Other times, we might want to find a subset of a particular size k, whose sum is m. In this
+   * case, we might want to make the table two­dimensional, k­by­n, and use each row to generate the
+   * next one.
    */
 }

@@ -34,7 +34,7 @@ public class ChangeMoneyRealLife {
   // concern: for sum 's', there are more than one subsets.
   // these subsets are not same as from the combination view
   public static Set<Map<Integer, Integer>> smallestChangesLimited(int[] coins, int[] copys, int S) {
-    //todo: corner case check
+    //Todo: corner case check
     boolean[] T = new boolean[S + 1];
     T[0] = true;
     Set<Map<Integer, Integer>>[] r = new HashSet[S + 1];
