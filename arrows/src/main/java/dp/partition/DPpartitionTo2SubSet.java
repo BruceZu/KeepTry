@@ -59,23 +59,22 @@ public class DPpartitionTo2SubSet {
   // runtime complexity: O(nS)
   public static boolean can(int[] nums) {
     //Todo: corner case check
-
-    boolean[] T = new boolean[10240]; // possible to get subset with sum of x
     int sum = Arrays.stream(nums).sum();
     if (sum % 2 != 0) return false;
-    // initialize the table T[0] = true;
-    T[0] = true; // possible to get subset with sum of 0
+    sum /= 2;
+    boolean[] T = new boolean[sum + 1];
+    T[0] = true;
 
     for (int i : nums)
       for (int j = sum - i; j >= 0; j--) {
-        if (T[j]) {
-          T[j + i] = true;
-        }
+        if (T[j]) T[j + i] = true;
       }
-    return T[sum / 2];
+    return T[sum];
   }
 
   public static void main(String[] args) {
     System.out.println(can(new int[] {4, 6, 1}));
+    System.out.println(can(new int[] {5, 3, 2, 4}));
+    System.out.println(can(new int[] {7, 1}));
   }
 }
