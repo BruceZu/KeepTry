@@ -49,11 +49,10 @@ public class DPpartitionTo2SubSet2 {
    */
   public static boolean can_Improved(int[] nums) {
     // Todo corner case checking
-    boolean[] T = new boolean[10240];
     Arrays.sort(nums); // O(nlogn)
     int sum = Arrays.stream(nums).sum();
     if (sum % 2 != 0) return false;
-    // initialize the table T[0] = true;
+    boolean[] T = new boolean[sum / 2 + 1];
     T[0] = true;
 
     int r = 0; //rightest Index where T[r] is true
