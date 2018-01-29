@@ -20,48 +20,49 @@ import java.util.TreeSet;
 /**
  * <pre>
  * <a href="https://leetcode.com/problems/max-sum-of-sub-matrix-no-larger-than-k/?tab=Description">LeetCode</a>
- * @see java.util.TreeMap#getCeilingEntry()
+ * @see java.util.TreeMap#getCeilingEntry(Object)
+ * runtime complexity:
  */
 public class Leetcode363MaxSumofRectangleNoLargerThanK {
-    static public int maxSumSubmatrix(int[][] matrix, int k) {
-        if (matrix.length == 0) return 0;
-        int rows = matrix.length, cols = matrix[0].length;
-        int lessThanOrEqualToK = Integer.MIN_VALUE;
+  public static int maxSumSubmatrix(int[][] matrix, int k) {
+    if (matrix.length == 0) return 0;
+    int rows = matrix.length, cols = matrix[0].length;
+    int lessThanOrEqualToK = Integer.MIN_VALUE;
 
-        for (int colFrom = 0; colFrom < cols; colFrom++) {
-            int[] rowAddeds = new int[rows];
-            for (int colTo = colFrom; colTo < cols; colTo++) {
-                for (int row = 0; row < rows; row++) {
-                    rowAddeds[row] += matrix[row][colTo];
-                }
-
-                TreeSet<Integer> treeSet_presums = new TreeSet();
-                treeSet_presums.add(0); // (i, j] when the o row is of the result rectangle
-                int cumulativeSum = 0;
-
-                for (int rowAdded : rowAddeds) {
-                    cumulativeSum += rowAdded;
-                    Integer ceiling = treeSet_presums.ceiling(cumulativeSum - k); // O(logN) ?
-                    if (ceiling != null) {
-                        lessThanOrEqualToK = Math.max(lessThanOrEqualToK, cumulativeSum - ceiling);
-                        if (lessThanOrEqualToK == k) return k;// peformance
-
-                    }
-                    treeSet_presums.add(cumulativeSum);
-                }
-            }
+    for (int colFrom = 0; colFrom < cols; colFrom++) {
+      int[] rowLevelSums = new int[rows];
+      for (int colTo = colFrom; colTo < cols; colTo++) {
+        for (int row = 0; row < rows; row++) {
+          rowLevelSums[row] += matrix[row][colTo]; // calculate at the row direction
         }
-        return lessThanOrEqualToK;
-    }
+        TreeSet<Integer> SumOfRectsFromTop = new TreeSet();
+        SumOfRectsFromTop.add(0); // (i, j] when the o row is of the result rectangle
+        int cumulativeSum = 0;
 
-    public static void main(String[] args) {
-        maxSumSubmatrix(new int[][]{{0, 1}, {-2, 3}}, 2);
-        maxSumSubmatrix(new int[][]{{1, 0, 1}, {0, -2, 3}}, 2);
-        //I find the 'The rectangle inside the matrix must have an area > 0.'  does exist in test case.
-        // e.g.
-        maxSumSubmatrix(new int[][]{{1, 0}}, 1);
-        maxSumSubmatrix(new int[][]{{1}}, 1);
-        maxSumSubmatrix(new int[][]{{1, 2, 1, 3}, {0, 3, 0, 2}}, 10);
+        for (int rls : rowLevelSums) {
+          cumulativeSum += rls; // calculate at the column direction
+          Integer ceiling = SumOfRectsFromTop.ceiling(cumulativeSum - k); // O(logN) ?
+          if (ceiling != null) {
+            lessThanOrEqualToK = Math.max(lessThanOrEqualToK, cumulativeSum - ceiling);
+            if (lessThanOrEqualToK == k) {
+              return k; // peformance
+            }
+          }
+          SumOfRectsFromTop.add(cumulativeSum);
+        }
+      }
     }
+    return lessThanOrEqualToK;
+  }
+
+  public static void main(String[] args) {
+    maxSumSubmatrix(new int[][] {{0, 1}, {-2, 3}}, 2);
+    maxSumSubmatrix(new int[][] {{1, 0, 1}, {0, -2, 3}}, 2);
+    maxSumSubmatrix(new int[][] {{1, 1, 1}, {1, -2, 3}, {1, 9, 1}}, 7);
+    //I find the 'The rectangle inside the matrix must have an area > 0.'  does exist in test case.
+    // e.g.
+    maxSumSubmatrix(new int[][] {{1, 0}}, 1);
+    maxSumSubmatrix(new int[][] {{1}}, 1);
+    maxSumSubmatrix(new int[][] {{1, 2, 1, 3}, {0, 3, 0, 2}}, 10);
+  }
 }
-
