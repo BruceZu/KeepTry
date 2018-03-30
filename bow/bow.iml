@@ -35,24 +35,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../buck-out/gen/lib/guice/guice_library#class-abi/guice_library-abi.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../buck-out/gen/lib/jetty/server#class-abi/server-abi.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="junit-junit-4.12" level="project" />
     <orderEntry type="library" name="hamcrest-core-abi" level="project" />
     <orderEntry type="library" name="sshd-sshd-core-1.0.0" level="project" />
@@ -66,5 +48,8 @@
     <orderEntry type="library" name="JavaMail-API-compat-mail-1.4.7" level="project" />
     <orderEntry type="library" name="JavaMail-API-jar-mailapi-1.4.3" level="project" />
     <orderEntry type="library" name="javax-JavaMail-API-jar-javax.mail-api-1.6.0" level="project" />
+    <orderEntry type="library" name="server-abi" level="project" />
+    <orderEntry type="library" name="guice-assistedinject-abi" level="project" />
+    <orderEntry type="library" name="aopalliance-abi" level="project" />
   </component>
 </module>
