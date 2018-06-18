@@ -21,42 +21,45 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
+
 @RunWith(Parameterized.class)
 public class TestKMP {
-    @Parameterized.Parameters(name = "")
-    public static Iterable<Object[]> data() {
+  @Parameterized.Parameters(name = "")
+  public static Iterable<Object[]> data() {
 
-        return Arrays.asList(new Object[][]{
-                {"ABCABD", "CA", 2},
-                {"ABAABAAC", "CA", -1},
-                {"ABAABAAC", "ABAAC", 3},
-                {"ABYABYABYABZ", "ABYABYABZ", 3},
-                {"AAAAB", "AAAB", 1},
-                {"AAAAB", "", 0},
-                {"", "", 0},
-                {"", "AA", -1},
-                {"ABC ABCDAB ABCDABCDABDE", "ABCDABD", 15},
-                {"CGTGCCTACTTACTTACTTACTTACGCGAA", "CTTACTTAC", 8},
-                {"BBBBBBBBBB", "ABBBB", -1},
-                {"ABABDABACDABABCABAB", "ABABCABAB", 10},
-                {"dddddddddd", "ddddds", -1}
+    return Arrays.asList(
+        new Object[][] {
+          {"ABCABD", "CA", 2},
+          {"ABAABAAC", "CA", -1},
+          {"ABAABAAC", "ABAAC", 3},
+          {"ABYABYABYABZ", "ABYABYABZ", 3},
+          {"AAAAB", "AAAB", 1},
+          {"AAAAB", "", 0},
+          {"", "", 0},
+          {"", "AA", -1},
+          {null, "CA", -1},
+          {"", null, -1},
+          {"ABC ABCDAB ABCDABCDABDE", "ABCDABD", 15},
+          {"CGTGCCTACTTACTTACTTACTTACGCGAA", "CTTACTTAC", 8},
+          {"BBBBBBBBBB", "ABBBB", -1},
+          {"ABABDABACDABABCABAB", "ABABCABAB", 10},
+          {"dddddddddd", "ddddds", -1}
         });
-    }
+  }
 
-    private String txt;
-    private String str;
-    private int expected;
+  private String txt;
+  private String str;
+  private int expected;
 
-    public TestKMP(Object text, Object str, Object expected) {
-        this.txt = (String) text;
-        this.str = (String) str;
-        this.expected = (Integer) expected;
-    }
+  public TestKMP(Object text, Object str, Object expected) {
+    this.txt = (String) text;
+    this.str = (String) str;
+    this.expected = (Integer) expected;
+  }
 
-    @Test(timeout = 100L, expected = Test.None.class)
-    public void testKMP() {
-        Assert.assertEquals(expected, KMP.KMP(txt, str));
-        Assert.assertEquals(expected, KMP.legend_KMP(txt, str));
-        Assert.assertEquals(expected, KMP.forceWay(txt, str));
-    }
+  @Test(timeout = 100L, expected = Test.None.class)
+  public void testKMP() {
+    Assert.assertEquals(expected, KMP.KMP(txt, str));
+    Assert.assertEquals(expected, KMP.forceWay(txt, str));
+  }
 }
