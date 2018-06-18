@@ -26,17 +26,39 @@ import java.util.Arrays;
  *
  *  1 BIT array 每个数存的是什么.
  *     binary tree array[0]从来不用。 或者说BIT array 的index 值是 1 based的
- *     其他数存的是原来数组的一个range sum：
- *     如binary tree array[12]
+ *     其他数存的是原来数组的 一个后者一段数的 sum, production  or ...
+ *     一段：from array[?]~array[ith].
+ *     take sum as example:
+ *
+ *     如BST[12]
  *                12 = 0b1100
- *                最后一个bit‘1’对应的十进制数是 2 =   x & (-x)
- *                从原数组中数出2个数： 从第12个数既array【11】开始，含，向左数2个，求和存入 binary tree array[12]
- *                 x - ( x & (-x))
+ *
+ *                最后一个bit‘1’对应的十进制数是 4 =   x & (-x)
+ *
+ *                从原数组中数出4个数： 从第12个数既array【11】开始，含，向左数4个，求sum存入 BST[12]
+ *                BST[12]=array【11】+array【10】+array【9】+array【8】
+ *                        第１２　　　　　第１１　　　第１０　　　第９　
+ *
+ *     ａｒｒａｙ前１２个数的sum怎么通过ＢＳＴＨ获得？
+ *     分区间对应到ＢＳＴ
+ *     区间分法也是ＢＳＴ　存法：
+ *     12 = 0b 1100＝0b 1000 + 0b 0100
+ *                    8个　　　　４个
+ *
+ *                  　４个　＝　　　　x & (-x)　saved in BST[0b 1100]
+ *                 　 8个  ＝　x - ( x & (-x))saved in BST[0b 1000]
+ *     calculate indexes of BST
+ *       12 = 0b 1100,             ＢＳＴ[0b 1100] => ４个　
+ *       x - ( x & (-x)) = 0b 1000 ＢＳＴ[0b 1000 ]=> 8个　
+ *       y= x - ( x & (-x))
+ *       y - ( y & (-y)) = 0 stop
+ *       ａｒｒａｙ前１２个数的sum　＝　ＢＳＴ[0b 1100]  + ＢＳＴ[0b 1000 ]
+ *       = ＢＳＴ[12]  + ＢＳＴ[8]
  *
  *  2  原数组从第一个数开始到index i的数的和，用 binary tree array 怎么算？ 算法复杂度是多少
  *     如求 原数组index 0 到 index 12 这13个数的和
  *     分析13： 0b1101
- *      13 个数= 0b1000 个数     +     0b0100  个数   +     0b0001   个数
+ *      13 个数 0b1101 = 0b1000 个数     +     0b0100  个数   +     0b0001   个数
  *      他们已经存储在对应的BIT array 中的index为
  *              0b1000                0b1100              0b1101
  *
@@ -46,82 +68,83 @@ import java.util.Arrays;
  *     <img src="../../../resources/BIT_sum13.png" height="400" width="600">
  *     <img src="../../../resources/BIT_sum7.png" height="400" width="600">
  *
- * 3   原数组index 为12 发生变化，add（）对 binary tree array的影响：
+ * 3   array[12] 发生变化，add（）对 BST的影响：
  *    可用add（） build binary tree array
  *
  *   <img src="../../../resources/BIT_add.png" height="400" width="600">
  *
  *       binary tree array 中 index 13 自己需要更新
- *       后续需要更新的index是：
- *       分析13： 0b1101
- *       下一个是 0b1110
- *       下一个是0b10000
+ *       后续需要更新的index是谁：
+ *       分析13：     0b    1101
+ *       下一个是14   0b    1110
+ *       下一个是16   0b   10000
+ *       下一个是32   0b  100000
+ *       下一个是64   0b 1000000
  *       直到出界为止
  *       算法复杂度 是 O(1ogn)
- *       x + ( x & (-x))
+ *       x is current index;每次算下一个要更新的index: x + ( x & (-x))
  *
  *  Notes:
  *     BIT array 长度是原数组的length + 1
  *     基本BIT array 可以求原数组任意区间的sum sum(i, j】 = sum(j) - sum(i)
  *     还可用于求 product, xor。 but not for min/max (using segment tree)
  */
-
 public class BinaryIndexedTree {
-    private final int[] bitree;
+  private final int[] bitree;
 
-    BinaryIndexedTree(int[] flat) {
-        bitree = new int[flat.length + 1];
-        for (int i_0_based = 0; i_0_based < flat.length; i_0_based++) {
-            add(i_0_based + 1, flat[i_0_based]);
-        }
+  BinaryIndexedTree(int[] flat) {
+    bitree = new int[flat.length + 1];
+    for (int i_0_based = 0; i_0_based < flat.length; i_0_based++) {
+      add(i_0_based + 1, flat[i_0_based]);
     }
+  }
 
-    public void add(int i_1_based, int delta) {
-        while (i_1_based < bitree.length) {
-            bitree[i_1_based] += delta;
-            i_1_based += i_1_based & -i_1_based;
-        }
+  public void add(int i_1_based, int delta) {
+    while (i_1_based < bitree.length) {
+      bitree[i_1_based] += delta;
+      i_1_based += i_1_based & -i_1_based;
     }
+  }
 
-    public int sum(int i_0_based) {
-        int sum = 0;
-        // Note
-        int i_1_based = i_0_based + 1;
-        while (i_1_based > 0) {
-            sum += bitree[i_1_based];
-            i_1_based -= i_1_based & -i_1_based;
-        }
-        return sum;
+  public int sum(int i_0_based) {
+    int sum = 0;
+    // Note
+    int i_1_based = i_0_based + 1;
+    while (i_1_based > 0) {
+      sum += bitree[i_1_based];
+      i_1_based -= i_1_based & -i_1_based;
     }
+    return sum;
+  }
 
-    // [i,j]
-    public int sum(int i_0_based, int j_0_based) {
-        return sum(j_0_based) - sum(i_0_based - 1);
-    }
+  // [i,j]
+  public int sum(int i_0_based, int j_0_based) {
+    return sum(j_0_based) - sum(i_0_based - 1);
+  }
 
-    /*------------------------common founctions ----------------*/
-    @Override
-    public String toString() {
-        return Arrays.toString(bitree);
-    }
+  /*------------------------common founctions ----------------*/
+  @Override
+  public String toString() {
+    return Arrays.toString(bitree);
+  }
 
-    public static void main(String[] args) {
-        //                     0  1  2  3  4  5  6  7  8  9
-        int[] test = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        BinaryIndexedTree bit = new BinaryIndexedTree(test);
-        System.out.println(bit.toString());
-        System.out.println(bit.sum(0));
-        System.out.println(bit.sum(1));
-        System.out.println(bit.sum(2));
-        System.out.println(bit.sum(3));
-        System.out.println(bit.sum(4));
-        System.out.println(bit.sum(5));
-        System.out.println(bit.sum(6));
-        System.out.println(bit.sum(7));
-        System.out.println(bit.sum(8));
-        System.out.println(bit.sum(9));
-        System.out.println("----");
-        System.out.println(bit.sum(0, 2));
-        System.out.println(bit.sum(4, 5));
-    }
+  public static void main(String[] args) {
+    //                     0  1  2  3  4  5  6  7  8  9
+    int[] test = new int[] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    BinaryIndexedTree bit = new BinaryIndexedTree(test);
+    System.out.println(bit.toString());
+    System.out.println(bit.sum(0));
+    System.out.println(bit.sum(1));
+    System.out.println(bit.sum(2));
+    System.out.println(bit.sum(3));
+    System.out.println(bit.sum(4));
+    System.out.println(bit.sum(5));
+    System.out.println(bit.sum(6));
+    System.out.println(bit.sum(7));
+    System.out.println(bit.sum(8));
+    System.out.println(bit.sum(9));
+    System.out.println("----");
+    System.out.println(bit.sum(0, 2));
+    System.out.println(bit.sum(4, 5));
+  }
 }
