@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="guice-assistedinject-abi">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/guice-assistedinject#abi/guice-assistedinject-abi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/guice-assistedinject#class-abi/guice-assistedinject-abi.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
