@@ -78,7 +78,7 @@ public class KMP {
     }
     return T;
   }
-  
+
   // get the index of str where find the first match of give str string.
   // O(n+m), where n is the length of s, m is the length of w
   static int KMP(String s, String w) {
@@ -94,21 +94,19 @@ public class KMP {
     int T[] = getPartialMatchTable(w);
     int si = 0;
     int wi = 0;
-    while (true) { // when si is s.length; firstly check wi, then check si.
-      if (wi == w.length()) {
-        return si - w.length();
-      }
-      if (si == s.length()) {
-        return -1;
-      }
+    while (si < s.length()) { // when si is s.length; firstly check wi, then check si.
       if (w.charAt(wi) == s.charAt(si)) {
         si++;
         wi++;
+        if (wi == w.length()) {
+          return si - w.length();
+        }
       } else {
         if (wi == 0) si++;
         else wi = T[wi - 1]; // fantastic
       }
     }
+    return -1;
   }
 
   /**
