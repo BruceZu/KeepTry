@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 @RunWith(Parameterized.class)
 public class TestKMP {
-  @Parameterized.Parameters(name = "")
+  @Parameterized.Parameters(name = "{index} {0} {1} {2}")
   public static Iterable<Object[]> data() {
 
     return Arrays.asList(
