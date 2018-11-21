@@ -46,39 +46,78 @@ public class KMP {
    *
    *
    * meaning of value of w[i] is:
-   * for the array:start with index 0 and end up with current index of i (including),
+   * for the array:start with index 0 and end up with current index of i-1 (including),
    * the length of
    * - the longest prefix starting from the w[0], used by w
-   * - at the same time it is should also be the longest suffix end up with w[i] (including). used by s.
+   * - at the same time it is should also be the longest suffix end up with w[i-1] (including). used by s.
    * - it is also the new wi, fantastic.
    * Use of "Partial match" table:
-   * get the value of "Partial match" table of pattern 'w' at index of 'wi-1':
-   * T[wi-1]; wi>=1.
+   * get the value of "Partial match" table of pattern 'w' at index of 'wi':
+   *
    * when the w[0] is not match. move w right side 1 index;（ｉt is si++;）
    * This is special case. precess it before using PMT
    */
-  static int[] getPartialMatchTable(String w) {
-    char[] chars = w.toCharArray();
-    int[] T = new int[chars.length];
+  static int[] newIndexToTry2(String word) {
+    // get Partial Match Table
+    if (word == null || word.isEmpty()) return null;
+    char[] w = word.toCharArray();
+    int[] I = new int[w.length];
+    // length of longest proper prefix and subfix;
+    // also is the next index of w to try when current char comparing failed between S and W.
 
-    T[0] = 0;
-    for (int i = 1; i < chars.length; i++) {
-      int v = T[i - 1]; // is the length of .. and also is the index of w
+    I[0] = -1;
+    if (w.length == 1) return I;
+
+    I[1] = 0;
+    for (int i = 2; i < w.length; i++) {
+      int l = I[i - 1]; // is the length of .. and also is the index of w
+      char currentChar = w[i - 1];
       while (true) {
-        if (chars[i] == chars[v]) {
-          T[i] = v + 1; // is length of ...
+        if (currentChar == w[l]) {
+          I[i] = l + 1; // is length of .... need not checking the longer ones.
           break;
         }
-        if (v == 0) { // reach the index 0
-          T[i] = 0;
+        if (l == 0) {
+          // 0 length of longest proper prefix and subfix,
+          // means now compare directly with w[0] to see if it is possible to get
+          // 1 or 0 length of longest proper prefix and subfix.
+          I[i] = 0;
           break;
         }
-        v = T[v - 1]; // v>=1, continue loop;  v is index .
+        l = I[l]; // v>=1, continue loop;  v is index .
       }
+    }
+    return I;
+  }
+
+  // O(m) m is the length of word
+  static int[] newIndexToTry(String word) {
+    if (word == null || word.isEmpty()) return null;
+    char[] w = word.toCharArray();
+    int[] T = new int[w.length];
+
+    T[0] = -1;
+    if (w.length == 1) return T;
+
+    int wi = 0; // index of char in W
+    int i = 1; // index in T[]
+
+    while (i < w.length) {
+      if (w[i] == w[wi]) {
+        T[i] = T[wi]; // performance feature
+      } else {
+        T[i] = wi;
+        // calculate for next i
+        wi = T[wi]; // performance improve;
+        while (wi >= 0 && w[i] != w[wi]) {
+          wi = T[wi];
+        }
+      }
+      i++;
+      wi++;
     }
     return T;
   }
-
   // get the index of str where find the first match of give str string.
   // O(n+m), where n is the length of s, m is the length of w
   static int KMP(String s, String w) {
@@ -91,24 +130,33 @@ public class KMP {
     }
     if (s.isEmpty()) return -1;
 
-    int T[] = getPartialMatchTable(w);
+    int NI[] = newIndexToTry(w);
     int si = 0;
     int wi = 0;
     while (si < s.length()) { // when si is s.length; firstly check wi, then check si.
       if (w.charAt(wi) == s.charAt(si)) {
+        // wi and si go ahead 1 step.
         si++;
         wi++;
         if (wi == w.length()) {
           return si - w.length();
         }
       } else {
-        if (wi == 0) si++;
-        else wi = T[wi - 1]; // fantastic
+        if (NI[wi] == -1) si++; //  wi is still, which is 0 now, si go ahead 1 step
+        else wi = NI[wi]; // fantastic. si is still, wi is backtracking try, at most wi steps
       }
     }
     return -1;
   }
 
+  public static void main(String[] args) {
+    System.out.println(KMP.KMP("ABCABD", "CA"));
+    System.out.println(KMP.KMP("ABAABAAC", "CA"));
+
+    System.out.println(Arrays.toString(KMP.newIndexToTry("ABCDABD")));
+    System.out.println(Arrays.toString(KMP.newIndexToTry("ABACABABC")));
+    System.out.println(Arrays.toString(KMP.newIndexToTry("PARTICIPATE IN PARACHUTE")));
+  }
   /**
    * <pre>
    * haystack = "hello world"
