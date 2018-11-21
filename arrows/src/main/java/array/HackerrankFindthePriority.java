@@ -56,108 +56,112 @@ import java.util.Scanner;
  * @see <a href="https://www.hackerrank.com/contests/citrix-code-master/challenges/find-the-priority/submissions/code/6978702">hacker rank</a>
  */
 public class HackerrankFindthePriority {
-    static class TestCaseCategory implements Comparable {
-        String category;
-        int[] SIValue;
-        int numberOfCategory;
+  public static void main(String[] args) {
+    Scanner s = new Scanner(System.in);
+    List<TestCaseCategory> max = null;
+    int r = 0;
 
-        // Descending order
-        public int compareTo(Object oth) {
-            TestCaseCategory o = (TestCaseCategory) oth;
-            if (this.numberOfCategory > o.numberOfCategory) {
-                return -1;
-            } else if (this.numberOfCategory < o.numberOfCategory) {
-                return 1;
-            } else {
-                for (int i = 0; i < numberOfCategory; i++) {
-                    if (this.SIValue[i] > o.SIValue[i]) {
-                        return -1;
-                    } else if (this.SIValue[i] < o.SIValue[i]) {
-                        return 1;
-                    }
-                }
-                return 0;
-            }
+    int nums = s.nextInt();
+    s.nextLine();
+    for (int i = 1; i <= nums; i++) {
+      if (max == null) {
+        max = TestCaseCategory.parseToSortedCategorysInDescendingOrder(s.nextLine());
+        r = i;
+      } else {
+        List<TestCaseCategory> newMax =
+            TestCaseCategory.maxUnstable(
+                max, TestCaseCategory.parseToSortedCategorysInDescendingOrder(s.nextLine()));
+        if (newMax != max) {
+          max = newMax;
+          r = i;
         }
+      }
+    }
+    System.out.println(r);
+  }
 
-        public TestCaseCategory(String category, int SI) {
-            this.category = category;
-            this.SIValue = new int[4];
-            SIValue[0] = SI;
-            numberOfCategory = 1;
-        }
+  static class TestCaseCategory implements Comparable {
+    String category;
+    int[] SIValue;
+    int numberOfCategory;
 
-        // Severity Index (SI)
-        public TestCaseCategory addSIInDescendingOrder(int si) {
-            if (si <= this.SIValue[numberOfCategory - 1]) {
-                this.SIValue[numberOfCategory++] = si;
-                return this;
-            }
-            int insertTo = -1;
-            for (int i = 0; i < numberOfCategory; i++) {
-                if (si > this.SIValue[i]) {
-                    insertTo = i;
-                    break;
-                }
-            }
-            for (int i = numberOfCategory; i > insertTo; i--) {
-                this.SIValue[i] = this.SIValue[i - 1];
-            }
-            this.SIValue[insertTo] = si;
-            numberOfCategory++;
-            return this;
-        }
-
-        public static List<TestCaseCategory> parseToSortedCategorysInDescendingOrder(String str) {
-            Map<String, TestCaseCategory> featureTestCases = new HashMap();
-            String[] sic = str.split(" ");
-            for (String curSIC : sic) {
-                int SI = curSIC.charAt(0);
-                String category = "" + curSIC.charAt(1);
-                TestCaseCategory tmp = featureTestCases.get(category);
-                featureTestCases.put(category, tmp == null ? new TestCaseCategory(category, SI) : tmp.addSIInDescendingOrder(SI));
-            }
-            List<TestCaseCategory> r = new ArrayList<>(featureTestCases.values());
-            Collections.sort(r);
-            return r;
-        }
-
-
-        public static List<TestCaseCategory> maxUnstable(List<TestCaseCategory> a, List<TestCaseCategory> b) {
-            Iterator<TestCaseCategory> ai = a.iterator();
-            Iterator<TestCaseCategory> bi = b.iterator();
-            while (ai.hasNext()) {
-                TestCaseCategory ac = ai.next();
-                TestCaseCategory bc = bi.next();
-                if (ac.compareTo(bc) < 0) {
-                    return a;
-                } else if (ac.compareTo(bc) > 0) {
-                    return b;
-                }
-            }
-            return a; // same
-        }
+    public TestCaseCategory(String category, int SI) {
+      this.category = category;
+      this.SIValue = new int[4];
+      SIValue[0] = SI;
+      numberOfCategory = 1;
     }
 
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
-        List<TestCaseCategory> max = null;
-        int r = 0;
-
-        int nums = s.nextInt();
-        s.nextLine();
-        for (int i = 1; i <= nums; i++) {
-            if (max == null) {
-                max = TestCaseCategory.parseToSortedCategorysInDescendingOrder(s.nextLine());
-                r = i;
-            } else {
-                List<TestCaseCategory> newMax = TestCaseCategory.maxUnstable(max, TestCaseCategory.parseToSortedCategorysInDescendingOrder(s.nextLine()));
-                if (newMax != max) {
-                    max = newMax;
-                    r = i;
-                }
-            }
-        }
-        System.out.println(r);
+    public static List<TestCaseCategory> parseToSortedCategorysInDescendingOrder(String str) {
+      Map<String, TestCaseCategory> featureTestCases = new HashMap();
+      String[] sic = str.split(" ");
+      for (String curSIC : sic) {
+        int SI = curSIC.charAt(0);
+        String category = "" + curSIC.charAt(1);
+        TestCaseCategory tmp = featureTestCases.get(category);
+        featureTestCases.put(
+            category,
+            tmp == null ? new TestCaseCategory(category, SI) : tmp.addSIInDescendingOrder(SI));
+      }
+      List<TestCaseCategory> r = new ArrayList<>(featureTestCases.values());
+      Collections.sort(r);
+      return r;
     }
+
+    public static List<TestCaseCategory> maxUnstable(
+        List<TestCaseCategory> a, List<TestCaseCategory> b) {
+      Iterator<TestCaseCategory> ai = a.iterator();
+      Iterator<TestCaseCategory> bi = b.iterator();
+      while (ai.hasNext()) {
+        TestCaseCategory ac = ai.next();
+        TestCaseCategory bc = bi.next();
+        if (ac.compareTo(bc) < 0) {
+          return a;
+        } else if (ac.compareTo(bc) > 0) {
+          return b;
+        }
+      }
+      return a; // same
+    }
+
+    // Descending order
+    public int compareTo(Object oth) {
+      TestCaseCategory o = (TestCaseCategory) oth;
+      if (this.numberOfCategory > o.numberOfCategory) {
+        return -1;
+      } else if (this.numberOfCategory < o.numberOfCategory) {
+        return 1;
+      } else {
+        for (int i = 0; i < numberOfCategory; i++) {
+          if (this.SIValue[i] > o.SIValue[i]) {
+            return -1;
+          } else if (this.SIValue[i] < o.SIValue[i]) {
+            return 1;
+          }
+        }
+        return 0;
+      }
+    }
+
+    // Severity Index (SI)
+    public TestCaseCategory addSIInDescendingOrder(int si) {
+      if (si <= this.SIValue[numberOfCategory - 1]) {
+        this.SIValue[numberOfCategory++] = si;
+        return this;
+      }
+      int insertTo = -1;
+      for (int i = 0; i < numberOfCategory; i++) {
+        if (si > this.SIValue[i]) {
+          insertTo = i;
+          break;
+        }
+      }
+      for (int i = numberOfCategory; i > insertTo; i--) {
+        this.SIValue[i] = this.SIValue[i - 1];
+      }
+      this.SIValue[insertTo] = si;
+      numberOfCategory++;
+      return this;
+    }
+  }
 }

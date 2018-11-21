@@ -55,50 +55,48 @@ import java.util.Set;
  *      returns false
  */
 public class IdenticalStrings {
-    // As need a read only set, replace 'new HashSet<>(Arrays.asList(sets[i]))' with this method
-    // to improve a bit performance .
-    private static Set toSet(String[] arr) {
-        Set<String> r = new HashSet<>(arr.length);
-        for (String s : arr) {
-            r.add(s);
-        }
-        return r;
+  // As need a read only set, replace 'new HashSet<>(Arrays.asList(sets[i]))' with this method
+  // to improve a bit performance .
+  private static Set toSet(String[] arr) {
+    Set<String> r = new HashSet<>(arr.length);
+    for (String s : arr) {
+      r.add(s);
     }
+    return r;
+  }
 
-    /**
-     * <pre>
-     * Convert the first element, a String array, to a set. If there is a set represented by any other element
-     * that is not same as the one converted by the first one, then all elements are not identical.
-     *
-     * Note: Element of the input array maybe null.
-     *       This method is not thread-safe.
-     *
-     * @return true if the sets represented by arrays, elements of the input array,
-     *         are all equivalent, else false.
-     *
-     *         Note: If the input array is null or the size of the input array is less than 2,
-     *              this method will return true.
-     */
-    public static boolean allStringSetsIdentical(String[][] arrays) {
-        if (null == arrays || arrays.length <= 1) {
-            return true;
-        }
-        if (null == arrays[0]) {
-            for (int i = 1; i < arrays.length; i++) {
-                if (null != arrays[i]) {
-                    return false;
-                }
-            }
-            return true;
-
-        }
-        Set<String> set = toSet(arrays[0]);
-        for (int i = 1; i < arrays.length; i++) {
-            if (null == arrays[i]
-                    || !set.equals(toSet(arrays[i]))) {
-                return false;
-            }
-        }
-        return true;
+  /**
+   * <pre>
+   * Convert the first element, a String array, to a set. If there is a set represented by any other element
+   * that is not same as the one converted by the first one, then all elements are not identical.
+   *
+   * Note: Element of the input array maybe null.
+   *       This method is not thread-safe.
+   *
+   * @return true if the sets represented by arrays, elements of the input array,
+   *         are all equivalent, else false.
+   *
+   *         Note: If the input array is null or the size of the input array is less than 2,
+   *              this method will return true.
+   */
+  public static boolean allStringSetsIdentical(String[][] arrays) {
+    if (null == arrays || arrays.length <= 1) {
+      return true;
     }
+    if (null == arrays[0]) {
+      for (int i = 1; i < arrays.length; i++) {
+        if (null != arrays[i]) {
+          return false;
+        }
+      }
+      return true;
+    }
+    Set<String> set = toSet(arrays[0]);
+    for (int i = 1; i < arrays.length; i++) {
+      if (null == arrays[i] || !set.equals(toSet(arrays[i]))) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

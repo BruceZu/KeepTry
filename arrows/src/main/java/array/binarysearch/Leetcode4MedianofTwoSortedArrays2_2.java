@@ -36,39 +36,39 @@ package array.binarysearch;
  *                         | B[i-1]  B[i]
  */
 public class Leetcode4MedianofTwoSortedArrays2_2 {
-    public static  double findMedianSortedArrays(int[] A, int[] B) {
-        int Ki = (A.length + B.length) / 2;
-        int Ai = 0, Bi = Ki;
-        int aFrom = Math.max(-1, Ki - B.length), aTo = Math.min(Ki, A.length);
+  public static double findMedianSortedArrays(int[] A, int[] B) {
+    int Ki = (A.length + B.length) / 2;
+    int Ai = 0, Bi = Ki;
+    int aFrom = Math.max(-1, Ki - B.length), aTo = Math.min(Ki, A.length);
 
-        while (true) {
-            Ai = (aTo + aFrom) / 2;
-            Bi = Ki - Ai;
+    while (true) {
+      Ai = (aTo + aFrom) / 2;
+      Bi = Ki - Ai;
 
-            if (v(B, Bi - 1) <= v(A, Ai)) {
-                if (v(A, Ai - 1) <= v(B, Bi)) {
-                    break;
-                } else {
-                    aTo = Ai - 1;
-                }
-            } else {
-                aFrom = Ai + 1;
-            }
+      if (v(B, Bi - 1) <= v(A, Ai)) {
+        if (v(A, Ai - 1) <= v(B, Bi)) {
+          break;
+        } else {
+          aTo = Ai - 1;
         }
-
-        if ((A.length + B.length & 1) == 1) {
-            return Math.min(v(A, Ai), v(B, Bi));
-        }
-        return (double) (Math.min(v(A, Ai), v(B, Bi)) + Math.max(v(A, Ai - 1), v(B, Bi - 1))) / 2;
+      } else {
+        aFrom = Ai + 1;
+      }
     }
 
-    private static  int v(int[] nums, int i) {
-        if (i <= -1) {
-            return Integer.MIN_VALUE;
-        }
-        if (i >= nums.length) {
-            return Integer.MAX_VALUE;
-        }
-        return nums[i];
+    if ((A.length + B.length & 1) == 1) {
+      return Math.min(v(A, Ai), v(B, Bi));
     }
+    return (double) (Math.min(v(A, Ai), v(B, Bi)) + Math.max(v(A, Ai - 1), v(B, Bi - 1))) / 2;
+  }
+
+  private static int v(int[] nums, int i) {
+    if (i <= -1) {
+      return Integer.MIN_VALUE;
+    }
+    if (i >= nums.length) {
+      return Integer.MAX_VALUE;
+    }
+    return nums[i];
+  }
 }

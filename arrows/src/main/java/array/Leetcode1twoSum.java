@@ -59,34 +59,34 @@ package array;
  *   @see <a href="https://discuss.leetcode.com/topic/50160/does-anybody-know-the-fastest-java-solution-2ms/6">discuss </a>
  */
 public class Leetcode1twoSum {
-    // runtime O(N), space depends on value of min, max and target
-    // wrong solutions
-    public static int[] twoSum(int[] nums, int target) {
-        int max = nums[0], min = nums[0];
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] > max) {
-                max = nums[i];
-            }
-            if (nums[i] < min) {
-                min = nums[i];
-            }
-        }
-
-        int mi = Math.min(min, target - max);
-        int ma = Math.max(max, target - min);
-
-        Integer[] map = new Integer[ma - mi + 1];
-        target = target - mi;
-        for (int i = 0; i < nums.length; i++) {
-            int key = target - nums[i];
-            if (map[key] != null) {
-                // assume that each input would have <strong>exactly one</strong>solution.
-                // assume the array is not sorted
-                return new int[]{map[key], i};
-            } else {
-                map[nums[i] - mi] = i;
-            }
-        }
-        return new int[]{-1, -1}; // -1 as not found, for test
+  // runtime O(N), space depends on value of min, max and target
+  // wrong solutions
+  public static int[] twoSum(int[] nums, int target) {
+    int max = nums[0], min = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+      if (nums[i] > max) {
+        max = nums[i];
+      }
+      if (nums[i] < min) {
+        min = nums[i];
+      }
     }
+
+    int mi = Math.min(min, target - max);
+    int ma = Math.max(max, target - min);
+
+    Integer[] map = new Integer[ma - mi + 1];
+    target = target - mi;
+    for (int i = 0; i < nums.length; i++) {
+      int key = target - nums[i];
+      if (map[key] != null) {
+        // assume that each input would have <strong>exactly one</strong>solution.
+        // assume the array is not sorted
+        return new int[] {map[key], i};
+      } else {
+        map[nums[i] - mi] = i;
+      }
+    }
+    return new int[] {-1, -1}; // -1 as not found, for test
+  }
 }

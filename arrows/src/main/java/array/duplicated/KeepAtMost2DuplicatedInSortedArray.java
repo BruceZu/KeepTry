@@ -25,36 +25,36 @@ package array.duplicated;
  */
 public class KeepAtMost2DuplicatedInSortedArray {
 
-    public static int AtMost2DuplicatedOf(int[] sorted) {
-        int size = 1;
-        boolean noKept = true;
-        for (int i = 1; i < sorted.length; i++) {
-            int v = sorted[i];
-            boolean same = (v ^ sorted[i - 1]) == 0;
-            if (same && noKept) {
-                sorted[size++] = v;
-                noKept = false;
-                continue;
-            }
-            if (!same) {
-                sorted[size++] = v;
-                noKept = true;
-            }
-        }
-        return size;
+  public static int AtMost2DuplicatedOf(int[] sorted) {
+    int size = 1;
+    boolean noKept = true;
+    for (int i = 1; i < sorted.length; i++) {
+      int v = sorted[i];
+      boolean same = (v ^ sorted[i - 1]) == 0;
+      if (same && noKept) {
+        sorted[size++] = v;
+        noKept = false;
+        continue;
+      }
+      if (!same) {
+        sorted[size++] = v;
+        noKept = true;
+      }
     }
+    return size;
+  }
 
-    //  This algorithm not apply to getting the result array.
-    public static int LengthOfAtMost2DuplicatedOf(int[] sorted) {
-        int size = 1;
-        for (int i = 1; i < sorted.length; i++) {
-            int v = sorted[i];
-            boolean same = (v ^ sorted[i - 1]) == 0;
-            if (!same || same && i > 1 && (v ^ sorted[i - 2]) != 0) {
-                size++;
-                continue;
-            }
-        }
-        return size;
+  //  This algorithm not apply to getting the result array.
+  public static int LengthOfAtMost2DuplicatedOf(int[] sorted) {
+    int size = 1;
+    for (int i = 1; i < sorted.length; i++) {
+      int v = sorted[i];
+      boolean same = (v ^ sorted[i - 1]) == 0;
+      if (!same || same && i > 1 && (v ^ sorted[i - 2]) != 0) {
+        size++;
+        continue;
+      }
     }
+    return size;
+  }
 }

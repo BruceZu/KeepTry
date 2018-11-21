@@ -15,8 +15,6 @@
 
 package array;
 
-import java.util.Arrays;
-
 /**
  * 243. Shortest Word Distance
  * Esay
@@ -42,46 +40,47 @@ import java.util.Arrays;
  *   elements maybe duplicated. ["a","a","b","b"], "a","b"
  */
 public class Leetcode243ShortestWordDistance {
-    // O(N)
-    public int shortestDistance1(String[] words, String A, String B) {
-        int latestIndexOfA = -1, latestIndexOfB = -1; // data structure
-        int result = Integer.MAX_VALUE;
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].equals(A)) {
-                latestIndexOfA = i;
-            } else if (words[i].equals(B)) {
-                latestIndexOfB = i;
-            } else {
-                continue;
-            }
-
-            if (latestIndexOfA != -1 && latestIndexOfB != -1) {
-                int curDistance = Math.abs(latestIndexOfA - latestIndexOfB);
-                result = result < curDistance ? result : curDistance;
-            }
+  /**
+   * start from each word1, to find word2 in both forward and backward direction, use min to record
+   * the answer.
+   */
+  public static int shortestDistance(String[] words, String A, String B) {
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].equals(A)) {
+        int jumps = 1;
+        while (true) {
+          int lIndexOfB = i - jumps, rIndexOfB = i + jumps;
+          if (lIndexOfB >= 0 && words[lIndexOfB].equals(B)
+              || rIndexOfB < words.length && words[rIndexOfB].equals(B)) {
+            result = result < jumps ? result : jumps;
+            break;
+          }
+          jumps++;
         }
-        return result;
+      }
     }
+    return result;
+  }
 
-    /**
-     * start from each word1, to find word2 in both forward and backward direction,
-     * use min to record the answer.
-     */
-    public static int shortestDistance(String[] words, String A, String B) {
-        int result = Integer.MAX_VALUE;
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].equals(A)) {
-                int jumps = 1;
-                while (true) {
-                    int lIndexOfB = i - jumps, rIndexOfB = i + jumps;
-                    if (lIndexOfB >= 0 && words[lIndexOfB].equals(B) || rIndexOfB < words.length && words[rIndexOfB].equals(B)) {
-                        result = result < jumps ? result : jumps;
-                        break;
-                    }
-                    jumps++;
-                }
-            }
-        }
-        return result;
+  // O(N)
+  public int shortestDistance1(String[] words, String A, String B) {
+    int latestIndexOfA = -1, latestIndexOfB = -1; // data structure
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].equals(A)) {
+        latestIndexOfA = i;
+      } else if (words[i].equals(B)) {
+        latestIndexOfB = i;
+      } else {
+        continue;
+      }
+
+      if (latestIndexOfA != -1 && latestIndexOfB != -1) {
+        int curDistance = Math.abs(latestIndexOfA - latestIndexOfB);
+        result = result < curDistance ? result : curDistance;
+      }
     }
+    return result;
+  }
 }

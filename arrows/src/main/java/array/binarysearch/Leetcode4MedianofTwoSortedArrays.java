@@ -144,116 +144,113 @@ package array.binarysearch;
  * <a href="https://leetcode.com/discuss/15790/share-my-o-log-min-m-n-solution-with-explanation"> Idea 2 </a>
  */
 public class Leetcode4MedianofTwoSortedArrays {
-    private static int[] s, l;
+  private static int[] s, l;
 
-    private static double resultWhen2ElementInShorter(int is, int ssize,
-                                                      int il, int lsize, int lmIndex, boolean lIsOdd) {
-        if (!lIsOdd) {
-            int lrmIndex = il + lsize / 2;
-            // A
-            if (l[lmIndex] <= s[is] && s[is + 1] <= l[lrmIndex]) {
-                return (s[is] + s[is + 1]) * 0.5;
-            }
-            // B
-            if (lsize == 2 && s[is] <= l[il] && l[il + 1] <= s[is + 1]) {
-                return (l[il] + l[lrmIndex]) * 0.5;
-            }
-        }
-        // Other cases
-        if (s[is] < l[lmIndex]) {
-            return cutHalfToNewPair(is + 1, ssize - 1, il, lsize - 1);
-        }
-        return cutHalfToNewPair(is, ssize - 1, il + 1, lsize - 1);
+  private static double resultWhen2ElementInShorter(
+      int is, int ssize, int il, int lsize, int lmIndex, boolean lIsOdd) {
+    if (!lIsOdd) {
+      int lrmIndex = il + lsize / 2;
+      // A
+      if (l[lmIndex] <= s[is] && s[is + 1] <= l[lrmIndex]) {
+        return (s[is] + s[is + 1]) * 0.5;
+      }
+      // B
+      if (lsize == 2 && s[is] <= l[il] && l[il + 1] <= s[is + 1]) {
+        return (l[il] + l[lrmIndex]) * 0.5;
+      }
+    }
+    // Other cases
+    if (s[is] < l[lmIndex]) {
+      return cutHalfToNewPair(is + 1, ssize - 1, il, lsize - 1);
+    }
+    return cutHalfToNewPair(is, ssize - 1, il + 1, lsize - 1);
+  }
+
+  // @param lmIndex index of long array median, or left median
+  private static double resultWhenOneElementInShorter(
+      int is, int il, int lsize, int lmIndex, boolean lIsOdd) {
+    int v = s[is];
+    int m = l[lmIndex];
+    if (lsize == 1) {
+      return (v + m) * 0.5; //double
+    }
+    int next = l[lmIndex + 1];
+    if (lIsOdd) {
+      int pre = l[lmIndex - 1];
+      if (pre <= v && v <= next) {
+        return (v + m) * 0.5; //double
+      }
+      if (v > next) {
+        return (m + next) * 0.5;
+      }
+      return (pre + m) * 0.5;
+    }
+    // even
+    if (m <= v && v <= next) {
+      return v;
+    }
+    if (next < v) {
+      return next;
+    }
+    return m;
+  }
+
+  /**
+   * @param is start index of array s
+   * @param il start index of array l
+   */
+  private static double cutHalfToNewPair(int is, int ssize, int il, int lsize) {
+    if (ssize > lsize) {
+      int[] t = s;
+      s = l;
+      l = t;
+      return cutHalfToNewPair(il, lsize, is, ssize);
+    }
+    // input check.
+    if (ssize == 0) {
+      int lmIndex = (lsize + 1) / 2 - 1;
+      if ((lsize & 1) == 1) {
+        return l[lmIndex];
+      }
+      return (l[lmIndex] + l[lmIndex + 1]) * 0.5;
+    }
+    // stop check
+    boolean lIsOdd = (lsize & 1) == 1;
+    int lmIndex = il + (lsize + 1) / 2 - 1;
+    if (ssize == 1) {
+      return resultWhenOneElementInShorter(is, il, lsize, lmIndex, lIsOdd);
+    }
+    if (ssize == 2) {
+      return resultWhen2ElementInShorter(is, ssize, il, lsize, lmIndex, lIsOdd);
     }
 
-    // @param lmIndex index of long array median, or left median
-    private static double resultWhenOneElementInShorter(int is, int il, int lsize, int lmIndex, boolean lIsOdd) {
-        int v = s[is];
-        int m = l[lmIndex];
-        if (lsize == 1) {
-            return (v + m) * 0.5; //double
-        }
-        int next = l[lmIndex + 1];
-        if (lIsOdd) {
-            int pre = l[lmIndex - 1];
-            if (pre <= v && v <= next) {
-                return (v + m) * 0.5; //double
-            }
-            if (v > next) {
-                return (m + next) * 0.5;
-            }
-            return (pre + m) * 0.5;
-        }
-        // even
-        if (m <= v && v <= next) {
-            return v;
-        }
-        if (next < v) {
-            return next;
-        }
-        return m;
+    // binary search, divide and conquer
+    boolean sIsOdd = (ssize & 1) == 1;
+    int cutNum = (ssize + 1) / 2 - 1;
+    int smIndex = is + cutNum;
+    if (s[smIndex] == l[lmIndex]) {
+      if (!sIsOdd && !lIsOdd) {
+        return 0.5
+            * (s[smIndex] + (s[smIndex + 1] < l[lmIndex + 1] ? s[smIndex + 1] : l[lmIndex + 1]));
+      }
+      return s[smIndex];
     }
 
-    /**
-     * @param is start index of array s
-     * @param il start index of array l
-     */
-    private static double cutHalfToNewPair(int is, int ssize,
-                                           int il, int lsize) {
-        if (ssize > lsize) {
-            int[] t = s;
-            s = l;
-            l = t;
-            return cutHalfToNewPair(il, lsize, is, ssize);
-        }
-        // input check.
-        if (ssize == 0) {
-            int lmIndex = (lsize + 1) / 2 - 1;
-            if ((lsize & 1) == 1) {
-                return l[lmIndex];
-            }
-            return (l[lmIndex] + l[lmIndex + 1]) * 0.5;
-        }
-        // stop check
-        boolean lIsOdd = (lsize & 1) == 1;
-        int lmIndex = il + (lsize + 1) / 2 - 1;
-        if (ssize == 1) {
-            return resultWhenOneElementInShorter(is,
-                    il, lsize, lmIndex, lIsOdd);
-        }
-        if (ssize == 2) {
-            return resultWhen2ElementInShorter(is, ssize,
-                    il, lsize, lmIndex, lIsOdd);
-        }
-
-        // binary search, divide and conquer
-        boolean sIsOdd = (ssize & 1) == 1;
-        int cutNum = (ssize + 1) / 2 - 1;
-        int smIndex = is + cutNum;
-        if (s[smIndex] == l[lmIndex]) {
-            if (!sIsOdd && !lIsOdd) {
-                return 0.5 * (s[smIndex] + (s[smIndex + 1] < l[lmIndex + 1]
-                        ? s[smIndex + 1]
-                        : l[lmIndex + 1]));
-            }
-            return s[smIndex];
-        }
-
-        ssize = ssize - cutNum;
-        lsize = lsize - cutNum;
-        if (s[smIndex] < l[lmIndex]) {
-            is = is + cutNum;
-        } else {
-            il = il + cutNum;
-        }
-        return cutHalfToNewPair(is, ssize, il, lsize);
+    ssize = ssize - cutNum;
+    lsize = lsize - cutNum;
+    if (s[smIndex] < l[lmIndex]) {
+      is = is + cutNum;
+    } else {
+      il = il + cutNum;
     }
+    return cutHalfToNewPair(is, ssize, il, lsize);
+  }
 
-    public static double findMedianSortedArrays(int[] a, int[] b) {
-        s = a;
-        l = b;
-        assert (s != null);
-        assert (l != null);
-        return cutHalfToNewPair(0, s.length, 0, l.length);
-    }
+  public static double findMedianSortedArrays(int[] a, int[] b) {
+    s = a;
+    l = b;
+    assert (s != null);
+    assert (l != null);
+    return cutHalfToNewPair(0, s.length, 0, l.length);
+  }
 }

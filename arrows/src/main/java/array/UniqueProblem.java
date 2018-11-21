@@ -18,39 +18,39 @@ package array;
 import java.util.Arrays;
 
 public class UniqueProblem {
-    // element uniqueness problem
-    // O(N^2) running time
-    private static boolean my_isUnique(int[] a, int checked, int from) {
-        if (a[checked] == a[from]) {
-            return false;
-        }
-        if (from - 1 != checked) {
-            return my_isUnique(a, checked, from - 1);
-        }
-        if (checked + 1 <= a.length - 2) {
-            return my_isUnique(a, checked + 1, a.length - 1);
-        }
-        return true;
+  // element uniqueness problem
+  // O(N^2) running time
+  private static boolean my_isUnique(int[] a, int checked, int from) {
+    if (a[checked] == a[from]) {
+      return false;
     }
+    if (from - 1 != checked) {
+      return my_isUnique(a, checked, from - 1);
+    }
+    if (checked + 1 <= a.length - 2) {
+      return my_isUnique(a, checked + 1, a.length - 1);
+    }
+    return true;
+  }
 
-    public static boolean isUnique(int[] a) {
-        if (a.length == 1) {
-            return true;
-        }
-        return my_isUnique(a, 0, a.length - 1);
+  public static boolean isUnique(int[] a) {
+    if (a.length == 1) {
+      return true;
     }
+    return my_isUnique(a, 0, a.length - 1);
+  }
 
-    // element uniqueness problem
-    // O(NlogN) running time
-    public static boolean isUnique2(int[] data) {
-        int n = data.length;
-        int[] clone = Arrays.copyOf(data, n);
-        Arrays.sort(clone);
-        for (int j = 0; j < n - 1; j++) {
-            if (clone[j] == clone[j + 1]) {
-                return false;
-            }
-        }
-        return true;
+  // element uniqueness problem
+  // O(NlogN) running time
+  public static boolean isUnique2(int[] data) {
+    int n = data.length;
+    int[] clone = Arrays.copyOf(data, n);
+    Arrays.sort(clone);
+    for (int j = 0; j < n - 1; j++) {
+      if (clone[j] == clone[j + 1]) {
+        return false;
+      }
     }
+    return true;
+  }
 }

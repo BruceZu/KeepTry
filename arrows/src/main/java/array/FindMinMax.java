@@ -19,51 +19,45 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * C442
- * finding both the minimumand maximum of n numbers
- * using fewer than 3n/2 comparisons
- */
+/** C442 finding both the minimumand maximum of n numbers using fewer than 3n/2 comparisons */
 public class FindMinMax {
-    public static int[] findMinimumAndMaximumOf(int[] numbers) {
-        assert numbers.length >= 2;
-        List<Integer> bigList = new ArrayList<>(numbers.length / 2);
-        List<Integer> smallerList = new ArrayList<>(numbers.length / 2);
-        int i = 1;
-        for (; i < numbers.length; i = i + 2) {
-            if (numbers[i] > numbers[i - 1]) {
-                bigList.add(numbers[i]);
-                smallerList.add(numbers[i - 1]);
-            } else {
-                bigList.add(numbers[i - 1]);
-                smallerList.add(numbers[i]);
-            }
-        }
-        if ((numbers.length & 1) == 1) {
-            if (numbers[numbers.length - 1] > numbers[numbers.length - 2]) {
-                bigList.add(numbers[numbers.length - 1]);
-            } else {
-                smallerList.add(numbers[numbers.length - 1]);
-            }
-        }
-        Iterator<Integer> iBig = bigList.iterator();
-        int biggest = iBig.next();
-        while (iBig.hasNext()) {
-            int current = iBig.next();
-            if (current > biggest) {
-                biggest = current;
-            }
-        }
-        Iterator<Integer> iSmall = smallerList.iterator();
-        int smallest = iSmall.next();
-        while (iSmall.hasNext()) {
-            int current = iSmall.next();
-            if (current < smallest) {
-                smallest = current;
-            }
-        }
-        return new int[]{biggest, smallest};
+  public static int[] findMinimumAndMaximumOf(int[] numbers) {
+    assert numbers.length >= 2;
+    List<Integer> bigList = new ArrayList<>(numbers.length / 2);
+    List<Integer> smallerList = new ArrayList<>(numbers.length / 2);
+    int i = 1;
+    for (; i < numbers.length; i = i + 2) {
+      if (numbers[i] > numbers[i - 1]) {
+        bigList.add(numbers[i]);
+        smallerList.add(numbers[i - 1]);
+      } else {
+        bigList.add(numbers[i - 1]);
+        smallerList.add(numbers[i]);
+      }
     }
+    if ((numbers.length & 1) == 1) {
+      if (numbers[numbers.length - 1] > numbers[numbers.length - 2]) {
+        bigList.add(numbers[numbers.length - 1]);
+      } else {
+        smallerList.add(numbers[numbers.length - 1]);
+      }
+    }
+    Iterator<Integer> iBig = bigList.iterator();
+    int biggest = iBig.next();
+    while (iBig.hasNext()) {
+      int current = iBig.next();
+      if (current > biggest) {
+        biggest = current;
+      }
+    }
+    Iterator<Integer> iSmall = smallerList.iterator();
+    int smallest = iSmall.next();
+    while (iSmall.hasNext()) {
+      int current = iSmall.next();
+      if (current < smallest) {
+        smallest = current;
+      }
+    }
+    return new int[] {biggest, smallest};
+  }
 }
-
-

@@ -13,24 +13,24 @@
 // limitations under the License.
 //
 
-package array;/*
-Given a collection of integers that might contain duplicates, nums, return all possible subsets.
+package array; /*
+               Given a collection of integers that might contain duplicates, nums, return all possible subsets.
 
-Note:
-Elements in a subset must be in non-descending order.
-The solution set must not contain duplicate subsets.
-For example,
-If nums = [1,2,2], a solution is:
+               Note:
+               Elements in a subset must be in non-descending order.
+               The solution set must not contain duplicate subsets.
+               For example,
+               If nums = [1,2,2], a solution is:
 
-[
-  [2],
-  [1],
-  [1,2,2],
-  [2,2],
-  [1,2],
-  []
-]
- */
+               [
+                 [2],
+                 [1],
+                 [1,2,2],
+                 [2,2],
+                 [1,2],
+                 []
+               ]
+                */
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,30 +38,30 @@ import java.util.List;
 
 public class Leetcode90SubsetsII {
 
-    // O(?)
-    static public List<List<Integer>> subsetsWithDup(int[] nums) {
-        Arrays.sort(nums);
-        List<List<Integer>> results = new ArrayList<>();
+  // O(?)
+  public static List<List<Integer>> subsetsWithDup(int[] nums) {
+    Arrays.sort(nums);
+    List<List<Integer>> results = new ArrayList<>();
 
-        int size = 0; // size prior to adding
-        results.add(new ArrayList<>()); // empty
+    int size = 0; // size prior to adding
+    results.add(new ArrayList<>()); // empty
 
-        for (int i = 0; i < nums.length; i++) {
-            int curToAdd = nums[i];
-            int from = i > 0 && curToAdd != nums[i - 1] ? 0 : size;
+    for (int i = 0; i < nums.length; i++) {
+      int curToAdd = nums[i];
+      int from = i > 0 && curToAdd != nums[i - 1] ? 0 : size;
 
-            size = results.size();
-            for (; from < size; from++) {
-                List<Integer> list = new ArrayList(results.get(from));
-                list.add(nums[i]);
-                results.add(list);
-            }
-        }
-
-        return results;
+      size = results.size();
+      for (; from < size; from++) {
+        List<Integer> list = new ArrayList(results.get(from));
+        list.add(nums[i]);
+        results.add(list);
+      }
     }
 
-    public static void main(String[] args) {
-        subsetsWithDup(new int[]{1, 2, 2});
-    }
+    return results;
+  }
+
+  public static void main(String[] args) {
+    subsetsWithDup(new int[] {1, 2, 2});
+  }
 }

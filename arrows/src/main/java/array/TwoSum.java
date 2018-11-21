@@ -18,41 +18,41 @@ package array;
 import java.util.Arrays;
 
 /**
- * C522 Suppose you are given an array, A, containing n distinct integers that are listed
- * in increasing order. Given a number k, describe a recursive algorithm to find two
- * integers in A that sum to k, if such a pair exists. What is the running time of your
- * algorithm?
+ * C522 Suppose you are given an array, A, containing n distinct integers that are listed in
+ * increasing order. Given a number k, describe a recursive algorithm to find two integers in A that
+ * sum to k, if such a pair exists. What is the running time of your algorithm?
  */
 public class TwoSum {
-    private static boolean find(int[] nums, long k, int[] array) {
-        // walk from both sides towards center.
-        // index[0] keep left side index, index[1] keep right side index,
-        // runtime O(N)
-        int l = array[0];
-        int r = array[1];
-        if (l == r) {
-            array[0] = -1;
-            array[1] = -1;
-            return false;
-        }
-        if (nums[l] + nums[r] == k) {
-            array[0]++;
-            array[1]++;
-            return true;
-        }
-        if (nums[l] + nums[r] < k) {
-            array[0]++;
-        } else {
-            array[1]--;
-        }
-        return find(nums, k, array);
+  private static boolean find(int[] nums, long k, int[] array) {
+    // walk from both sides towards center.
+    // index[0] keep left side index, index[1] keep right side index,
+    // runtime O(N)
+    int l = array[0];
+    int r = array[1];
+    if (l == r) {
+      array[0] = -1;
+      array[1] = -1;
+      return false;
     }
+    if (nums[l] + nums[r] == k) {
+      array[0]++;
+      array[1]++;
+      return true;
+    }
+    if (nums[l] + nums[r] < k) {
+      array[0]++;
+    } else {
+      array[1]--;
+    }
+    return find(nums, k, array);
+  }
 
-    public static boolean twoSum(final int[] nums, int target) {
-        Arrays.sort(nums); //if the nums is not sorted, then sorted it firstly, thus the running time will be O(NlogN)
-        int[] ids = new int[2];
-        ids[0] = 0;
-        ids[1] = nums.length - 1;
-        return find(nums, target, ids);
-    }
+  public static boolean twoSum(final int[] nums, int target) {
+    Arrays.sort(
+        nums); //if the nums is not sorted, then sorted it firstly, thus the running time will be O(NlogN)
+    int[] ids = new int[2];
+    ids[0] = 0;
+    ids[1] = nums.length - 1;
+    return find(nums, target, ids);
+  }
 }

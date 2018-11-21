@@ -16,31 +16,30 @@
 package array;
 
 public class Sum {
-    // Linear Recursion
-    // Running time is O(n)
-    public static int my_linearSum(int[] data, int n) {
-        if (n == data.length) {
-            n = n - 1;
-        }
-        if (n == 0) {
-            return data[0];
-        }
-        return data[n] + my_linearSum(data, n - 1);
+  // Linear Recursion
+  // Running time is O(n)
+  public static int my_linearSum(int[] data, int n) {
+    if (n == data.length) {
+      n = n - 1;
+    }
+    if (n == 0) {
+      return data[0];
+    }
+    return data[n] + my_linearSum(data, n - 1);
+  }
+
+  // Binary recursion case:
+  // O(logn) amount of additional space,
+  // Running time is still O(n)
+  public static int my_binarySum(int[] data, int startIndex, int endIndex) {
+    if (startIndex + 1 == endIndex) {
+      return data[startIndex] + data[endIndex];
+    }
+    if (startIndex == endIndex) {
+      return data[startIndex];
     }
 
-    // Binary recursion case:
-    // O(logn) amount of additional space,
-    // Running time is still O(n)
-    public static int my_binarySum(int[] data, int startIndex, int endIndex) {
-        if (startIndex + 1 == endIndex) {
-            return data[startIndex] + data[endIndex];
-        }
-        if (startIndex == endIndex) {
-            return data[startIndex];
-        }
-
-        int mid = (startIndex + endIndex) / 2;
-        return my_binarySum(data, startIndex, mid)
-                + my_binarySum(data, mid + 1, endIndex);
-    }
+    int mid = (startIndex + endIndex) / 2;
+    return my_binarySum(data, startIndex, mid) + my_binarySum(data, mid + 1, endIndex);
+  }
 }

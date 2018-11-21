@@ -24,40 +24,40 @@ package array;
  * First 4 sequential digits are: 7 3 1 6
  * Second 4 sequential digits are: 3 1 6 7
  */
-
 public class FourDigitsWithBiggestProduct {
-    /**
-     * @param input
-     * @param l     left index included
-     * @param r     right index included
-     * @return product
-     */
-    private static short calculate(char[] input, int l, int r) {
-        short p = 1;
-        for (int i = l; i <= r; i++) {
-            //p *= Integer.valueOf("" + input[i]); // Note: use the value of char variable input[i], not itself related int value.
-            p *= input[i] - '0'; // '0' int value is 48
-        }
-
-        return p;
+  /**
+   * @param input
+   * @param l left index included
+   * @param r right index included
+   * @return product
+   */
+  private static short calculate(char[] input, int l, int r) {
+    short p = 1;
+    for (int i = l; i <= r; i++) {
+      //p *= Integer.valueOf("" + input[i]); // Note: use the value of char variable input[i], not itself related int value.
+      p *= input[i] - '0'; // '0' int value is 48
     }
 
-    /**
-     * @param testStr
-     * @return The first digit index and product.
-     */
-    public static int[] find(String testStr) {
-        char[] input = testStr.toCharArray();
+    return p;
+  }
 
-        short max = Short.MIN_VALUE; // Note: 1> use short is enough;  Note: 2> use MIN_VALUE.  do not use 0.
-        int indexFrom = 0;
-        for (int i = 0; i <= input.length - 4; i++) {
-            short p = calculate(input, i, i + 3);
-            if (max < p) {
-                max = p;
-                indexFrom = i;
-            }
-        }
-        return new int[]{indexFrom, max};
+  /**
+   * @param testStr
+   * @return The first digit index and product.
+   */
+  public static int[] find(String testStr) {
+    char[] input = testStr.toCharArray();
+
+    short max =
+        Short.MIN_VALUE; // Note: 1> use short is enough;  Note: 2> use MIN_VALUE.  do not use 0.
+    int indexFrom = 0;
+    for (int i = 0; i <= input.length - 4; i++) {
+      short p = calculate(input, i, i + 3);
+      if (max < p) {
+        max = p;
+        indexFrom = i;
+      }
     }
+    return new int[] {indexFrom, max};
+  }
 }

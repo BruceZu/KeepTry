@@ -45,46 +45,45 @@ import java.util.HashMap;
  * Hide Similar Problems: (E) Merge Two Sorted Lists (E) Shortest Word Distance (M) Shortest Word Distance III
  */
 public class Leetcode244ShortestWordDistanceII {
-    // Your WordDistance object will be instantiated and called as such:
-    // WordDistance wordDistance = new WordDistance(words);
-    // wordDistance.shortest("word1", "word2");
-    // wordDistance.shortest("anotherWord1", "anotherWord2");
-    class WordDistance {
+  // Your WordDistance object will be instantiated and called as such:
+  // WordDistance wordDistance = new WordDistance(words);
+  // wordDistance.shortest("word1", "word2");
+  // wordDistance.shortest("anotherWord1", "anotherWord2");
+  class WordDistance {
 
-        private HashMap<String, ArrayList<Integer>> indexexOf;
+    private HashMap<String, ArrayList<Integer>> indexexOf;
 
-        // unique words  -> locations
-        public WordDistance(String[] words) {
-            indexexOf = new HashMap<>();
-            for (int i = 0; i < words.length; i++) {
-                if (!indexexOf.containsKey(words[i])) {
-                    ArrayList<Integer> indexes = new ArrayList<>();
-                    indexes.add(i);
-                    indexexOf.put(words[i], indexes);
-                } else
-                    indexexOf.get(words[i]).add(i);
-            }
-        }
-
-        public int shortest(String word1, String word2) {
-            ArrayList<Integer> sortedIndexesA = indexexOf.get(word1);
-            ArrayList<Integer> sortedIndexesB = indexexOf.get(word2);
-
-            int shortest = Integer.MAX_VALUE;
-            int iiA = 0, iiB = 0;
-            while (iiA < sortedIndexesA.size() && iiB < sortedIndexesB.size()) {
-                if (shortest == 1) return shortest;
-                int indexA = sortedIndexesA.get(iiA);
-                int indexB = sortedIndexesB.get(iiB);
-                if (indexA < indexB) {
-                    shortest = indexB - indexA < shortest ? indexB - indexA : shortest;
-                    ++iiA;
-                } else { // > or ==
-                    shortest = indexA - indexB < shortest ? indexA - indexB : shortest;
-                    ++iiB;
-                }
-            }
-            return shortest;
-        }
+    // unique words  -> locations
+    public WordDistance(String[] words) {
+      indexexOf = new HashMap<>();
+      for (int i = 0; i < words.length; i++) {
+        if (!indexexOf.containsKey(words[i])) {
+          ArrayList<Integer> indexes = new ArrayList<>();
+          indexes.add(i);
+          indexexOf.put(words[i], indexes);
+        } else indexexOf.get(words[i]).add(i);
+      }
     }
+
+    public int shortest(String word1, String word2) {
+      ArrayList<Integer> sortedIndexesA = indexexOf.get(word1);
+      ArrayList<Integer> sortedIndexesB = indexexOf.get(word2);
+
+      int shortest = Integer.MAX_VALUE;
+      int iiA = 0, iiB = 0;
+      while (iiA < sortedIndexesA.size() && iiB < sortedIndexesB.size()) {
+        if (shortest == 1) return shortest;
+        int indexA = sortedIndexesA.get(iiA);
+        int indexB = sortedIndexesB.get(iiB);
+        if (indexA < indexB) {
+          shortest = indexB - indexA < shortest ? indexB - indexA : shortest;
+          ++iiA;
+        } else { // > or ==
+          shortest = indexA - indexB < shortest ? indexA - indexB : shortest;
+          ++iiB;
+        }
+      }
+      return shortest;
+    }
+  }
 }

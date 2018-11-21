@@ -20,35 +20,32 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @see <a  href="https://leetcode.com/problems/contains-duplicate-ii/">leetcode</a>
- */
+/** @see <a href="https://leetcode.com/problems/contains-duplicate-ii/">leetcode</a> */
 public class Leetcode219ContainsDuplicateII {
-    // 11ms
-    public boolean containsNearbyDuplicate2(int[] nums, int k) {
-        Map<Integer, Integer> map = new HashMap();
-        for (int i = 0; i < nums.length; i++) {
-            Integer indices = map.get(nums[i]);
-            if (indices != null && i - indices <= k) {
-                return true;
-            }
-            map.put(nums[i], i);
-
-        }
-        return false;
+  // 11ms
+  public boolean containsNearbyDuplicate2(int[] nums, int k) {
+    Map<Integer, Integer> map = new HashMap();
+    for (int i = 0; i < nums.length; i++) {
+      Integer indices = map.get(nums[i]);
+      if (indices != null && i - indices <= k) {
+        return true;
+      }
+      map.put(nums[i], i);
     }
+    return false;
+  }
 
-    // 9ms
-    public boolean containsNearbyDuplicate(int[] nums, int k) {
-        Set<Integer> kes = new HashSet<Integer>();
-        for (int i = 0; i < nums.length; i++) {
-            if (i > k) {
-                kes.remove(nums[i - k - 1]);
-            }
-            if (!kes.add(nums[i])) {
-                return true;
-            }
-        }
-        return false;
+  // 9ms
+  public boolean containsNearbyDuplicate(int[] nums, int k) {
+    Set<Integer> kes = new HashSet<Integer>();
+    for (int i = 0; i < nums.length; i++) {
+      if (i > k) {
+        kes.remove(nums[i - k - 1]);
+      }
+      if (!kes.add(nums[i])) {
+        return true;
+      }
     }
+    return false;
+  }
 }

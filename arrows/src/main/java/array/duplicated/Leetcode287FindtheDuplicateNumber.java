@@ -49,15 +49,15 @@ package array.duplicated;
  *  @see <a href="https://leetcode.com/problems/find-the-duplicate-number/" > leetcoce</a>
  */
 public class Leetcode287FindtheDuplicateNumber {
-    public int findDuplicate(int[] nums) {
-        int[] times = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            int v = nums[i];
-            if (times[v] != 0) {
-                return v;
-            }
-            times[v]++;
-        }
-        return -1;
+  public int findDuplicate(int[] nums) {
+    int[] times = new int[nums.length];
+    for (int i = 0; i < nums.length; i++) {
+      int v = nums[i];
+      if (times[v] != 0) {
+        return v;
+      }
+      times[v]++;
     }
+    return -1;
+  }
 }

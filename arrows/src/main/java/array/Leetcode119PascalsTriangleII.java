@@ -28,57 +28,56 @@ import java.util.Map;
  */
 public class Leetcode119PascalsTriangleII {
 
-    private static Map<Integer, List<Integer>> cache = new HashMap();
+  private static Map<Integer, List<Integer>> cache = new HashMap();
 
-    static {
-        cache.put(0, Arrays.asList(1));
-        cache.put(1, Arrays.asList(1, 1));
+  static {
+    cache.put(0, Arrays.asList(1));
+    cache.put(1, Arrays.asList(1, 1));
+  }
+
+  public static List<Integer> getRow2(int rowIndex) {
+    List r = cache.get(rowIndex);
+    if (r != null) {
+      return r;
+    }
+    List<Integer> pre = getRow2(rowIndex - 1);
+
+    Integer[] cur = new Integer[rowIndex + 1];
+    cur[0] = 1;
+    cur[1] = rowIndex;
+
+    for (int i = 2; i <= rowIndex / 2; i++) {
+      cur[i] = pre.get(i) + pre.get(i - 1);
+    }
+    for (int i = rowIndex; i >= 0; i--) {
+      if (cur[i] != null) {
+        break;
+      }
+      cur[i] = cur[rowIndex - i];
+    }
+    cache.put(rowIndex, Arrays.asList(cur));
+    return cache.get(rowIndex);
+  }
+
+  // Could you optimize your algorithm to use only O(k) extra space?
+  public static List<Integer> getRow(int rowIndex) {
+    if (rowIndex == 0) {
+      return Arrays.asList(1);
+    }
+    if (rowIndex == 1) {
+      return Arrays.asList(1, 1);
     }
 
-    public static List<Integer> getRow2(int rowIndex) {
-        List r = cache.get(rowIndex);
-        if (r != null) {
-            return r;
-        }
-        List<Integer> pre = getRow2(rowIndex - 1);
-
-        Integer[] cur = new Integer[rowIndex + 1];
-        cur[0] = 1;
-        cur[1] = rowIndex;
-
-
-        for (int i = 2; i <= rowIndex / 2; i++) {
-            cur[i] = pre.get(i) + pre.get(i - 1);
-        }
-        for (int i = rowIndex; i >= 0; i--) {
-            if (cur[i] != null) {
-                break;
-            }
-            cur[i] = cur[rowIndex - i];
-        }
-        cache.put(rowIndex, Arrays.asList(cur));
-        return cache.get(rowIndex);
+    Integer[] arr = new Integer[rowIndex + 1];
+    arr[0] = 1;
+    int size = 1;
+    while (size != arr.length) {
+      arr[size] = 1;
+      for (int i = size - 1; i > 0; i--) {
+        arr[i] = arr[i] + arr[i - 1];
+      }
+      size++;
     }
-
-    // Could you optimize your algorithm to use only O(k) extra space?
-    public static List<Integer> getRow(int rowIndex) {
-        if (rowIndex == 0) {
-            return Arrays.asList(1);
-        }
-        if (rowIndex == 1) {
-            return Arrays.asList(1, 1);
-        }
-
-        Integer[] arr = new Integer[rowIndex + 1];
-        arr[0] = 1;
-        int size = 1;
-        while (size != arr.length) {
-            arr[size] = 1;
-            for (int i = size - 1; i > 0; i--) {
-                arr[i] = arr[i] + arr[i - 1];
-            }
-            size++;
-        }
-        return Arrays.asList(arr);
-    }
+    return Arrays.asList(arr);
+  }
 }
