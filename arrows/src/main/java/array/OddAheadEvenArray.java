@@ -23,55 +23,54 @@ package array;
 // What is the running time of your algorithm on an array of n values?)
 
 public class OddAheadEvenArray {
-    // recursive method, running time O(N)
-    private static void rearranges(int[] array, int indexEven, int currentIndex) {
-        if (currentIndex == array.length) {
-            return;
-        }
-
-        int who = array[currentIndex] & 1;
-        if (who == 0 && indexEven == -1) {
-            indexEven = currentIndex;
-        }
-        if (who == 1 && indexEven != -1) {
-            // swap
-            array[indexEven] ^= array[currentIndex];
-            array[currentIndex] ^= array[indexEven];
-            array[indexEven] ^= array[currentIndex];
-            indexEven++; //
-        }
-
-        rearranges(array, indexEven, currentIndex + 1);
+  // recursive method, running time O(N)
+  private static void rearranges(int[] array, int indexEven, int currentIndex) {
+    if (currentIndex == array.length) {
+      return;
     }
 
-
-    public static void rearranges(int[] array) {
-        rearranges(array, -1, 0);
+    int who = array[currentIndex] & 1;
+    if (who == 0 && indexEven == -1) {
+      indexEven = currentIndex;
+    }
+    if (who == 1 && indexEven != -1) {
+      // swap
+      array[indexEven] ^= array[currentIndex];
+      array[currentIndex] ^= array[indexEven];
+      array[indexEven] ^= array[currentIndex];
+      indexEven++; //
     }
 
-    // no recursion implementation, running time O(N)
-    public static void rearranges2(int[] array) {
-        int indexEven = -1;
-        for (int i = 0; i < array.length; i++) {
-            int check = (array[i] & 1);
-            //    even
-            //odd even
-            if (check == 0 && indexEven == -1) {
-                indexEven = i;
-                continue;
-            }
-            // even odd
-            if (check == 1 && indexEven != -1) {
-                // swap
-                array[indexEven] ^= array[i];
-                array[i] ^= array[indexEven];
-                array[indexEven] ^= array[i];
+    rearranges(array, indexEven, currentIndex + 1);
+  }
 
-                indexEven++; //
-            }
-            // even even
-            // odd  odd
-            //      odd
-        }
+  public static void rearranges(int[] array) {
+    rearranges(array, -1, 0);
+  }
+
+  // no recursion implementation, running time O(N)
+  public static void rearranges2(int[] array) {
+    int indexEven = -1;
+    for (int i = 0; i < array.length; i++) {
+      int check = (array[i] & 1);
+      //    even
+      //odd even
+      if (check == 0 && indexEven == -1) {
+        indexEven = i;
+        continue;
+      }
+      // even odd
+      if (check == 1 && indexEven != -1) {
+        // swap
+        array[indexEven] ^= array[i];
+        array[i] ^= array[indexEven];
+        array[indexEven] ^= array[i];
+
+        indexEven++; //
+      }
+      // even even
+      // odd  odd
+      //      odd
     }
+  }
 }

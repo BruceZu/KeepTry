@@ -81,34 +81,34 @@ package array.binarysearch;
  */
 public class Leetcode4MedianofTwoSortedArrays3 {
 
-    private static int[] A, B;
+  private static int[] A, B;
 
-    public static double findMedianSortedArrays(int[] a, int[] b) {
-        A = a;
-        B = b;
-        double l = getkth(0, 0, (A.length + B.length + 1) / 2);
-        if ((A.length + B.length & 1) == 0) {
-            return 0.5 * (l + getkth(0, 0, (A.length + B.length + 2) / 2));
-        }
-        return l;
+  public static double findMedianSortedArrays(int[] a, int[] b) {
+    A = a;
+    B = b;
+    double l = getkth(0, 0, (A.length + B.length + 1) / 2);
+    if ((A.length + B.length & 1) == 0) {
+      return 0.5 * (l + getkth(0, 0, (A.length + B.length + 2) / 2));
     }
+    return l;
+  }
 
-    public static double getkth(int aStart, int bStart, int left) {
-        if (aStart == A.length) {
-            return B[bStart + left - 1];
-        }
-        if (bStart == B.length) {
-            return A[aStart + left - 1];
-        }
-        if (left == 1) {
-            return A[aStart] < B[bStart] ? A[aStart] : B[bStart];
-        }
-        int compareA = left / 2 > (A.length - aStart) ? Integer.MAX_VALUE : A[aStart + left / 2 - 1];
-        int compareB = left / 2 > (B.length - bStart) ? Integer.MAX_VALUE : B[bStart + left / 2 - 1];
-
-        if (compareA < compareB) {
-            return getkth(aStart + left / 2, bStart, left - left / 2);
-        }
-        return getkth(aStart, bStart + left / 2, left - left / 2);
+  public static double getkth(int aStart, int bStart, int left) {
+    if (aStart == A.length) {
+      return B[bStart + left - 1];
     }
+    if (bStart == B.length) {
+      return A[aStart + left - 1];
+    }
+    if (left == 1) {
+      return A[aStart] < B[bStart] ? A[aStart] : B[bStart];
+    }
+    int compareA = left / 2 > (A.length - aStart) ? Integer.MAX_VALUE : A[aStart + left / 2 - 1];
+    int compareB = left / 2 > (B.length - bStart) ? Integer.MAX_VALUE : B[bStart + left / 2 - 1];
+
+    if (compareA < compareB) {
+      return getkth(aStart + left / 2, bStart, left - left / 2);
+    }
+    return getkth(aStart, bStart + left / 2, left - left / 2);
+  }
 }

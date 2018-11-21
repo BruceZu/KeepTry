@@ -16,27 +16,27 @@
 package array;
 
 public class Leetcode20ValidParentheses2 {
-    // using a array to act as a stack;
-    public boolean isValid1(String str) {
-        char[] arr = str.toCharArray();
-        char[] st = new char[arr.length];
-        int size = 0;
-        for (int i = 0; i < arr.length; i++) {
-            char c = arr[i];
-            if (c == '(' || c == '{' || c == '[') {
-                st[size++] = c;
-                continue;
-            }
-            if (size == 0) { // note
-                return false;
-            }
-            size--;
-            char poped = st[size];
-            if (poped == '(' && c == ')' || poped == '{' && c == '}' || poped == '[' && c == ']') {
-                continue;
-            }
-            return false;
-        }
-        return size == 0;
+  // using a array to act as a stack;
+  public boolean isValid1(String str) {
+    char[] arr = str.toCharArray();
+    char[] st = new char[arr.length];
+    int size = 0;
+    for (int i = 0; i < arr.length; i++) {
+      char c = arr[i];
+      if (c == '(' || c == '{' || c == '[') {
+        st[size++] = c;
+        continue;
+      }
+      if (size == 0) { // note
+        return false;
+      }
+      size--;
+      char poped = st[size];
+      if (poped == '(' && c == ')' || poped == '{' && c == '}' || poped == '[' && c == ']') {
+        continue;
+      }
+      return false;
     }
+    return size == 0;
+  }
 }

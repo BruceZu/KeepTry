@@ -27,56 +27,55 @@ the java.util.Random class, which returns a random number between 0 and n−1
 inclusive.
  */
 public class Shuffle {
-    /**
-     *
-     * @param a array
-     * @return  shuffled array.  the input array is kept no touch
-     */
-    static int[] shuffle(int[] a) {
-        Random r = new Random();
-        LinkedHashSet oldIndexesOrder = new LinkedHashSet(a.length);
+  /**
+   * @param a array
+   * @return shuffled array. the input array is kept no touch
+   */
+  static int[] shuffle(int[] a) {
+    Random r = new Random();
+    LinkedHashSet oldIndexesOrder = new LinkedHashSet(a.length);
 
-        while (oldIndexesOrder.size() < a.length) {
-            oldIndexesOrder.add(r.nextInt(a.length));
-        }
-
-        int[] re = new int[a.length];
-        int index = 0;
-
-        Iterator e = oldIndexesOrder.iterator();
-        while (e.hasNext()) {
-            re[index++] = a[(int) e.next()];
-        }
-        return re;
+    while (oldIndexesOrder.size() < a.length) {
+      oldIndexesOrder.add(r.nextInt(a.length));
     }
 
-    static private void swap(int[] arr, int i, int j) {
-        arr[i] ^= arr[j];
-        arr[j] ^= arr[i];
-        arr[i] ^= arr[j];
-    }
+    int[] re = new int[a.length];
+    int index = 0;
 
-    /**
-     * In iteration i, get a pseudorandom, uniformly distributed int value between 0 (inclusive)
-     * and i (exclusive). Swap a[i] and a[r].
-     *
-     * @param a array.
-     * @return updated array
-     */
-    static int[] shuffle2(int[] a) {
-        Random r = new Random();
-        for (int i = 1; i < a.length; i++) {
-            int index = r.nextInt(i);
-            if (index != i) {
-                swap(a, index, i);
-            }
-        }
-        return a;
+    Iterator e = oldIndexesOrder.iterator();
+    while (e.hasNext()) {
+      re[index++] = a[(int) e.next()];
     }
+    return re;
+  }
 
-    public static void main(String[] args) {
-        int[] a = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        System.out.println(Arrays.toString(shuffle(a)));
-        System.out.println(Arrays.toString(shuffle2(a)));
+  private static void swap(int[] arr, int i, int j) {
+    arr[i] ^= arr[j];
+    arr[j] ^= arr[i];
+    arr[i] ^= arr[j];
+  }
+
+  /**
+   * In iteration i, get a pseudorandom, uniformly distributed int value between 0 (inclusive) and i
+   * (exclusive). Swap a[i] and a[r].
+   *
+   * @param a array.
+   * @return updated array
+   */
+  static int[] shuffle2(int[] a) {
+    Random r = new Random();
+    for (int i = 1; i < a.length; i++) {
+      int index = r.nextInt(i);
+      if (index != i) {
+        swap(a, index, i);
+      }
     }
+    return a;
+  }
+
+  public static void main(String[] args) {
+    int[] a = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    System.out.println(Arrays.toString(shuffle(a)));
+    System.out.println(Arrays.toString(shuffle2(a)));
+  }
 }

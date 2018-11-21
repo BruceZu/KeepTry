@@ -19,38 +19,36 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-/**
- * @see <a href="https://www.hackerrank.com/challenges/find-digits">hacker rank</a>
- */
+/** @see <a href="https://www.hackerrank.com/challenges/find-digits">hacker rank</a> */
 public class HackerrankFindDigits {
 
-    private static void calculate(Scanner s) {
-        Integer t = s.nextInt(); // here
+  private static void calculate(Scanner s) {
+    Integer t = s.nextInt(); // here
 
-        char[] digits = String.valueOf(t).toCharArray();
-        int r = 0;
-        Set<Character> divisibleCharSet = new HashSet();
+    char[] digits = String.valueOf(t).toCharArray();
+    int r = 0;
+    Set<Character> divisibleCharSet = new HashSet();
 
-        for (int i = 0; i < digits.length; i++) {
-            char curDigitChar = digits[i];
-            if (curDigitChar == '0') { // here
-                continue;
-            }
-            if (divisibleCharSet.contains(curDigitChar)) { // care need (int)
-                r++;
-            } else if (t % (curDigitChar - '0') == 0) { // here
-                divisibleCharSet.add(curDigitChar); // here can just save (int) digits[i]
-                r++;
-            }
-        }
-        System.out.println(r);
+    for (int i = 0; i < digits.length; i++) {
+      char curDigitChar = digits[i];
+      if (curDigitChar == '0') { // here
+        continue;
+      }
+      if (divisibleCharSet.contains(curDigitChar)) { // care need (int)
+        r++;
+      } else if (t % (curDigitChar - '0') == 0) { // here
+        divisibleCharSet.add(curDigitChar); // here can just save (int) digits[i]
+        r++;
+      }
     }
+    System.out.println(r);
+  }
 
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
-        int tests = s.nextInt();
-        for (int i = 0; i < tests; i++) {
-            calculate(s);
-        }
+  public static void main(String[] args) {
+    Scanner s = new Scanner(System.in);
+    int tests = s.nextInt();
+    for (int i = 0; i < tests; i++) {
+      calculate(s);
     }
+  }
 }

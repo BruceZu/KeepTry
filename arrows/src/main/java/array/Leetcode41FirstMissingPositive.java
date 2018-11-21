@@ -16,6 +16,8 @@
 package array;
 
 /**
+ *
+ *
  * <pre>
  * Difficulty: Hard
  * Given an unsorted integer array, find the first missing positive integer.
@@ -57,133 +59,131 @@ package array;
  * </pre>
  */
 public class Leetcode41FirstMissingPositive {
-    public int firstMissingPositive2(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 1;
-        }
+  /**
+   * <pre>
+   *
+   *  Idea:
+   *       1 filter
+   *          as find the positive number, the positive number starts from 1, 2 ,3 ,....
+   *          So firstly from the array filter out negative, 0 , bigger that n by replacing them with n+1, or
+   *          other number out of 1 ~ n.
+   *
+   *       2 mark.
+   *          now the room of array maybe just
+   *          index 0, 1, 2, ... n-1
+   *             {1, 2, 3,  ... n}, then the answer is n+1
+   *          else mapping the left number to index of number -1 by marking the sign of num[number -1] as negative.
+   *          Note:
+   *               maybe the current number is already be marked as negative. so need check its abs value.
+   *               maybe the num[abs(number)-1] is already be marked as negative. so need check it to avoid repeat marking
+   *          after marking the sign. also reach a aim of sorting them in order.
+   *
+   *       3 check
+   *           So now check from left to right to find the first positive
+   *
+   *
+   *  index:     0,  1  ... ,  n-2,   n-1   |  length = n
+   *
+   *           { 1,  2, ... ,   n-1 ,   n  }
+   *
+   *  1 filter those elements out of the room:
+   *       1   e <=0
+   *       2   e > nums.length
+   *  2 mark
+   *     index:     0   1,  2...  n-2,  n-1    n
+   *                   /   /     /     /     /
+   *               { 1,  2, ... ,   n-1 ,   n  }
+   *
+   *  3 check.
+   *   Note:
+   *      1 Also care those repeated e;
+   *      2 when nums is null or empty
+   *   Test case:
+   *   {1, 9, 11, 12}
+   *   {2, 1}
+   *   {2, 2}
+   *   null
+   *   {}
+   *   {1}
+   *   {-8}
+   *   {9}
+   *   e.g.
+   *    index  0   1  2  3  4  5   6 7
+   *         {-2 , 0, 1, 7, 6, 12}
+   *
+   *    index 0    1  2  3  4   5   6 7
+   *   ->    {7,   7, 1, 7, 6,  7}
+   *
+   *    index  0   1  2  3   4   5   6 7
+   *   ->    {-7,  7, 1, 7,  7, -7}
+   *   ->          2
+   *
+   * e.g.
+   *    index 0 1 2
+   *         {1}
+   *
+   *    index 0 1 2
+   *         {1}
+   *
+   *    index  0 1 2
+   *         {-1}
+   *     ->2
+   */
+  public static int firstMissingPositive(int[] nums) {
+    if (nums == null) {
+      return 1;
+    }
+    int n = nums.length;
+    int MARK = n + 1; // n+1 maybe bigger that Integer.MAX_VALUE
 
-        int max = nums[0];
-        for (int i = 0; i < nums.length; i++) {
-            int v = nums[i];
-            if (max < v) {
-                max = v;
-            }
-        }
-
-        int[] cpn = new int[max + 1 + 1]; //continue Positive number from 1 to max.
-        for (int i = 0; i < nums.length; i++) {
-            int v = nums[i];
-            if (v > 0) {
-                cpn[v] = 1;
-            }
-        }
-        for (int i = 1; i < cpn.length; i++) {
-            if (cpn[i] == 0) {
-                return i;
-            }
-        }
-        return -1;
+    for (int i = 0; i < n; i++) {
+      int v = nums[i];
+      if (v <= 0 || v > n) {
+        nums[i] = MARK;
+      }
     }
 
-
-    /**
-     * <pre>
-     *
-     *  Idea:
-     *       1 filter
-     *          as find the positive number, the positive number starts from 1, 2 ,3 ,....
-     *          So firstly from the array filter out negative, 0 , bigger that n by replacing them with n+1, or
-     *          other number out of 1 ~ n.
-     *
-     *       2 mark.
-     *          now the room of array maybe just
-     *          index 0, 1, 2, ... n-1
-     *             {1, 2, 3,  ... n}, then the answer is n+1
-     *          else mapping the left number to index of number -1 by marking the sign of num[number -1] as negative.
-     *          Note:
-     *               maybe the current number is already be marked as negative. so need check its abs value.
-     *               maybe the num[abs(number)-1] is already be marked as negative. so need check it to avoid repeat marking
-     *          after marking the sign. also reach a aim of sorting them in order.
-     *
-     *       3 check
-     *           So now check from left to right to find the first positive
-     *
-     *
-     *  index:     0,  1  ... ,  n-2,   n-1   |  length = n
-     *
-     *           { 1,  2, ... ,   n-1 ,   n  }
-     *
-     *  1 filter those elements out of the room:
-     *       1   e <=0
-     *       2   e > nums.length
-     *  2 mark
-     *     index:     0   1,  2...  n-2,  n-1    n
-     *                   /   /     /     /     /
-     *               { 1,  2, ... ,   n-1 ,   n  }
-     *
-     *  3 check.
-     *   Note:
-     *      1 Also care those repeated e;
-     *      2 when nums is null or empty
-     *   Test case:
-     *   {1, 9, 11, 12}
-     *   {2, 1}
-     *   {2, 2}
-     *   null
-     *   {}
-     *   {1}
-     *   {-8}
-     *   {9}
-     *   e.g.
-     *    index  0   1  2  3  4  5   6 7
-     *         {-2 , 0, 1, 7, 6, 12}
-     *
-     *    index 0    1  2  3  4   5   6 7
-     *   ->    {7,   7, 1, 7, 6,  7}
-     *
-     *    index  0   1  2  3   4   5   6 7
-     *   ->    {-7,  7, 1, 7,  7, -7}
-     *   ->          2
-     *
-     * e.g.
-     *    index 0 1 2
-     *         {1}
-     *
-     *    index 0 1 2
-     *         {1}
-     *
-     *    index  0 1 2
-     *         {-1}
-     *     ->2
-     */
-    public static int firstMissingPositive(int[] nums) {
-        if (nums == null) {
-            return 1;
-        }
-        int n = nums.length;
-        int MARK = n + 1; // n+1 maybe bigger that Integer.MAX_VALUE
-
-        for (int i = 0; i < n; i++) {
-            int v = nums[i];
-            if (v <= 0 || v > n) {
-                nums[i] = MARK;
-            }
-        }
-
-        for (int i = 0; i < n; i++) {
-            int absv = Math.abs(nums[i]);
-            if (absv != MARK  /* can */
-                    && nums[absv - 1] > 0 /* no repeat update sign */) {
-                nums[absv - 1] = -1 * nums[absv - 1];
-            }
-        }
-
-        for (int i = 0; i < n; i++) {
-            int v = nums[i];
-            if (v > 0) {
-                return i + 1;
-            }
-        }
-        return n + 1;
+    for (int i = 0; i < n; i++) {
+      int absv = Math.abs(nums[i]);
+      if (absv != MARK /* can */ && nums[absv - 1] > 0 /* no repeat update sign */) {
+        nums[absv - 1] = -1 * nums[absv - 1];
+      }
     }
+
+    for (int i = 0; i < n; i++) {
+      int v = nums[i];
+      if (v > 0) {
+        return i + 1;
+      }
+    }
+    return n + 1;
+  }
+
+  public int firstMissingPositive2(int[] nums) {
+    if (nums == null || nums.length == 0) {
+      return 1;
+    }
+
+    int max = nums[0];
+    for (int i = 0; i < nums.length; i++) {
+      int v = nums[i];
+      if (max < v) {
+        max = v;
+      }
+    }
+
+    int[] cpn = new int[max + 1 + 1]; //continue Positive number from 1 to max.
+    for (int i = 0; i < nums.length; i++) {
+      int v = nums[i];
+      if (v > 0) {
+        cpn[v] = 1;
+      }
+    }
+    for (int i = 1; i < cpn.length; i++) {
+      if (cpn[i] == 0) {
+        return i;
+      }
+    }
+    return -1;
+  }
 }

@@ -20,35 +20,35 @@ import java.util.Arrays;
 
 public class Leetcode219ContainsDuplicateII3 {
 
-    // 2 ms , the fast one, depends on the leetcode test data.
-    // find out all duplicated elements then check each one;
-    public static boolean containsNearbyDuplicate(int[] nums, int k) {
-        int[] sorted = nums.clone();
-        Arrays.sort(sorted);
-        ArrayList<Integer> dups = new ArrayList<>();
-        for (int s = 0; s < sorted.length - 1; s++) {
-            if (sorted[s] == sorted[s + 1] && !dups.contains(sorted[s])) {
-                dups.add(sorted[s]);
-            }
-        }
-
-        for (int v : dups) {
-            int pre = -1;
-            for (int i = 0; i < nums.length; i++) { // find the fist one of current duplicated elements
-                if (nums[i] == v) {
-                    pre = i;
-                    break;
-                }
-            }
-            for (int i = pre + 1; i < nums.length; i++) {
-                if (nums[i] == v) {
-                    if (i - pre <= k) {
-                        return true;
-                    }
-                    pre = i;
-                }
-            }
-        }
-        return false;
+  // 2 ms , the fast one, depends on the leetcode test data.
+  // find out all duplicated elements then check each one;
+  public static boolean containsNearbyDuplicate(int[] nums, int k) {
+    int[] sorted = nums.clone();
+    Arrays.sort(sorted);
+    ArrayList<Integer> dups = new ArrayList<>();
+    for (int s = 0; s < sorted.length - 1; s++) {
+      if (sorted[s] == sorted[s + 1] && !dups.contains(sorted[s])) {
+        dups.add(sorted[s]);
+      }
     }
+
+    for (int v : dups) {
+      int pre = -1;
+      for (int i = 0; i < nums.length; i++) { // find the fist one of current duplicated elements
+        if (nums[i] == v) {
+          pre = i;
+          break;
+        }
+      }
+      for (int i = pre + 1; i < nums.length; i++) {
+        if (nums[i] == v) {
+          if (i - pre <= k) {
+            return true;
+          }
+          pre = i;
+        }
+      }
+    }
+    return false;
+  }
 }

@@ -19,7 +19,7 @@ package array.binarysearch;
  * <pre>
  * Idea: see the link, two arrays A and B. n = A.length+B.length
  *      check whether an element A[i] is the kth =(n+1)/2
-
+ *
  *     How to select a member from A to check?
  *     Firstly assume the kth is in A array.
  *     select median from valid index scope: [aFrom, aTo]
@@ -99,57 +99,55 @@ package array.binarysearch;
  * > link </a>
  */
 public class Leetcode4MedianofTwoSortedArrays2 {
-    public static double kthValue(int aFrom, int aTo) {
-        // stop
-        if (aFrom > aTo) {
-            int[] t = A;
-            A = B;
-            B = t;
-            aFrom = Math.max(k - B.length, 1) - 1;
-            aTo = Math.min(A.length, k) - 1;
-        }
-        if (A.length == 0) {
-            return B[k - 1];
-        }
+  private static int[] A, B;
+  private static int k; // kth
 
-        //start
-        int i = (aFrom + aTo) / 2;
-        int n = i + 1;
-        int j = k - n - 1;
-        int j1 = j + 1;
-        boolean jValid = 0 <= j && j < B.length;
-        boolean j1Valid = 0 <= j1 && j1 < B.length;
-        int v = A[i];
-        if (j1Valid && j == -1 && v <= B[j1]
-                || j1Valid && jValid && B[j] <= v && v <= B[j1]
-                || jValid && B[j] <= v && j1 == B.length) {
-            return v;
-        }
-        if (jValid && v < B[j]) {
-            return kthValue(i + 1, aTo);
-        }
-        return kthValue(aFrom, i - 1);
-
+  public static double kthValue(int aFrom, int aTo) {
+    // stop
+    if (aFrom > aTo) {
+      int[] t = A;
+      A = B;
+      B = t;
+      aFrom = Math.max(k - B.length, 1) - 1;
+      aTo = Math.min(A.length, k) - 1;
     }
-    private static int[] A, B;
-    private static int k; // kth
-
-    public static double findMedianSortedArrays(int[] a, int[] b) {
-        A = a;
-        B = b;
-        k = (A.length + B.length + 1) / 2;
-
-        int aFrom = Math.max(k - B.length, 1) - 1;
-        int aTo = Math.min(A.length, k) - 1;
-        double l = kthValue(aFrom, aTo);
-        if ((A.length + B.length & 1) == 0) {
-            k = k + 1;
-            aFrom = Math.max(k - B.length, 1) - 1;
-            aTo = Math.min(A.length, k) - 1;
-            return 0.5 * (l +
-                    kthValue(aFrom, aTo)
-            );
-        }
-        return l;
+    if (A.length == 0) {
+      return B[k - 1];
     }
+
+    //start
+    int i = (aFrom + aTo) / 2;
+    int n = i + 1;
+    int j = k - n - 1;
+    int j1 = j + 1;
+    boolean jValid = 0 <= j && j < B.length;
+    boolean j1Valid = 0 <= j1 && j1 < B.length;
+    int v = A[i];
+    if (j1Valid && j == -1 && v <= B[j1]
+        || j1Valid && jValid && B[j] <= v && v <= B[j1]
+        || jValid && B[j] <= v && j1 == B.length) {
+      return v;
+    }
+    if (jValid && v < B[j]) {
+      return kthValue(i + 1, aTo);
+    }
+    return kthValue(aFrom, i - 1);
+  }
+
+  public static double findMedianSortedArrays(int[] a, int[] b) {
+    A = a;
+    B = b;
+    k = (A.length + B.length + 1) / 2;
+
+    int aFrom = Math.max(k - B.length, 1) - 1;
+    int aTo = Math.min(A.length, k) - 1;
+    double l = kthValue(aFrom, aTo);
+    if ((A.length + B.length & 1) == 0) {
+      k = k + 1;
+      aFrom = Math.max(k - B.length, 1) - 1;
+      aTo = Math.min(A.length, k) - 1;
+      return 0.5 * (l + kthValue(aFrom, aTo));
+    }
+    return l;
+  }
 }

@@ -15,26 +15,23 @@
 
 package array;
 
-/**
- * other ideas:
- * {@link  bitmanipulation.Leetcode169MajorityElement#majorityElement(int[])}
- */
+/** other ideas: {@link bitmanipulation.Leetcode169MajorityElement#majorityElement(int[])} */
 public class Leetcode169MajorityElement2 {
-    public int majorityElement(int[] nums) {
-        int vote = 1;
-        int candidator = nums[0];
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] == candidator) {
-                vote++;
-                continue;
-            }
-            if (vote > 0) {
-                vote--;
-                continue;
-            }
-            vote = 1;
-            candidator = nums[i];
-        }
-        return candidator;
+  public int majorityElement(int[] nums) {
+    int vote = 1;
+    int candidator = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+      if (nums[i] == candidator) {
+        vote++;
+        continue;
+      }
+      if (vote > 0) {
+        vote--;
+        continue;
+      }
+      vote = 1;
+      candidator = nums[i];
     }
+    return candidator;
+  }
 }

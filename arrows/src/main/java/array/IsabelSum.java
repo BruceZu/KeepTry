@@ -23,22 +23,22 @@ import static java.lang.Math.log;
 // outputs B[0]. Otherwise, she replaces A with B, and repeats the process. What is
 // the running time of her algorithm?
 public class IsabelSum {
-    // O(N-1)
-    private static long sum(long[] data, long[] by) {
-        for (int i = 0; i < by.length; i++) {
-            by[i] = data[2 * i] + data[2 * i + 1];
-        }
-        if (by.length == 1) {
-            return by[0];
-        }
-        return sum(by, new long[by.length >> 1]);
+  // O(N-1)
+  private static long sum(long[] data, long[] by) {
+    for (int i = 0; i < by.length; i++) {
+      by[i] = data[2 * i] + data[2 * i + 1];
     }
+    if (by.length == 1) {
+      return by[0];
+    }
+    return sum(by, new long[by.length >> 1]);
+  }
 
-    public static long isabelSum(long[] data) throws UnsupportedOperationException {
-        double log = log(data.length) / log(2);
-        if (log != (long) log) {
-            throw new UnsupportedOperationException();
-        }
-        return sum(data, new long[data.length >> 1]);
+  public static long isabelSum(long[] data) throws UnsupportedOperationException {
+    double log = log(data.length) / log(2);
+    if (log != (long) log) {
+      throw new UnsupportedOperationException();
     }
+    return sum(data, new long[data.length >> 1]);
+  }
 }

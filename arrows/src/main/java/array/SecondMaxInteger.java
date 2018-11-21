@@ -17,26 +17,26 @@ package array;
 
 public class SecondMaxInteger {
 
-    /**
-     * Running timeO(N)
-     * <p>
-     * Return -1 if the second max does not exists.
-     */
-    public static int secondMax(int[] nums) {
-        if (nums == null || nums.length <= 1) {
-            return -1;
-        }
-        int max = nums[0] < nums[1] ? nums[1] : nums[0];
-        int second = max == nums[0] ? nums[1] : nums[0];
-        for (int i = 2; i < nums.length; i++) {
-            int v = nums[i];
-            if (v > max) {
-                second = max;
-                max = v;
-            } else if (v > second) { // note else if, not if only
-                second = v;
-            }
-        }
-        return second;
+  /**
+   * Running timeO(N)
+   *
+   * <p>Return -1 if the second max does not exists.
+   */
+  public static int secondMax(int[] nums) {
+    if (nums == null || nums.length <= 1) {
+      return -1;
     }
+    int max = nums[0] < nums[1] ? nums[1] : nums[0];
+    int second = max == nums[0] ? nums[1] : nums[0];
+    for (int i = 2; i < nums.length; i++) {
+      int v = nums[i];
+      if (v > max) {
+        second = max;
+        max = v;
+      } else if (v > second) { // note else if, not if only
+        second = v;
+      }
+    }
+    return second;
+  }
 }

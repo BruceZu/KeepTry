@@ -35,24 +35,24 @@ package array;
  *   [array]
  */
 public class FindPivotalNumber {
-    public static int pivotalOf(int[] arr) {
-        int maxByfar = arr[0];
-        boolean stillValid = true;
-        int candidate = arr[0];
-        for (int i = 1; i < arr.length; i++) {
-            int cur = arr[i];
-            if (cur > maxByfar) {
-                maxByfar = cur;
-                if (!stillValid) {
-                    candidate = maxByfar;
-                    stillValid = true;
-                }
-            }
-            if (cur < candidate) {
-                stillValid = false;
-            }
+  public static int pivotalOf(int[] arr) {
+    int maxByfar = arr[0];
+    boolean stillValid = true;
+    int candidate = arr[0];
+    for (int i = 1; i < arr.length; i++) {
+      int cur = arr[i];
+      if (cur > maxByfar) {
+        maxByfar = cur;
+        if (!stillValid) {
+          candidate = maxByfar;
+          stillValid = true;
         }
-        // TODO: 8/6/16
-        return 0;
+      }
+      if (cur < candidate) {
+        stillValid = false;
+      }
     }
+    // TODO: 8/6/16
+    return 0;
+  }
 }

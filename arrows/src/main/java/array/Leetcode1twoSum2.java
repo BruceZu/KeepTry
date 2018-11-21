@@ -21,49 +21,49 @@ import java.util.List;
 import java.util.Map;
 
 public class Leetcode1twoSum2 {
-    /**
-     * <pre>
-     * HashMap runtime is O(N), space:
-     *  cons: slow,
-     *  pros: can find all pair if using Map<Integer, List<Integer>> map
-     */
-    public static int[] twoSum2(final int[] nums, int target) {
-        Map<Integer, List<Integer>> map = new HashMap<>(nums.length);
-        for (int i = 0; i < nums.length; i++) {
-            int v = nums[i];
-            if (map.containsKey(target - v)) {
-                return new int[]{map.get(target - v).get(0), i};
-            }
-            List indexes = map.get(v);
-            if (indexes == null) {
-                indexes = new ArrayList();
-                indexes.add(i); // keep all indexes
-                map.put(v, indexes);
+  /**
+   * <pre>
+   * HashMap runtime is O(N), space:
+   *  cons: slow,
+   *  pros: can find all pair if using Map<Integer, List<Integer>> map
+   */
+  public static int[] twoSum2(final int[] nums, int target) {
+    Map<Integer, List<Integer>> map = new HashMap<>(nums.length);
+    for (int i = 0; i < nums.length; i++) {
+      int v = nums[i];
+      if (map.containsKey(target - v)) {
+        return new int[] {map.get(target - v).get(0), i};
+      }
+      List indexes = map.get(v);
+      if (indexes == null) {
+        indexes = new ArrayList();
+        indexes.add(i); // keep all indexes
+        map.put(v, indexes);
 
-            } else {
-                indexes.add(i);
-            }
-        }
-        return new int[]{-1, -1};
+      } else {
+        indexes.add(i);
+      }
     }
+    return new int[] {-1, -1};
+  }
 
-    /**
-     * <pre>
-     * simple version as only need return one pair
-     * Note
-     *             if (map.containsKey(v)) {
-     *                  continue; // wrong, e.g. test case: [0,4,3,0], 0
-     *             }
-     */
-    public static int[] twoSum(final int[] nums, int target) {
-        Map<Integer, Integer> map = new HashMap<>(nums.length);
-        for (int i = 0; i < nums.length; i++) {
-            int v = nums[i];
-            if (map.containsKey(target - v)) {
-                return new int[]{map.get(target - v), i};
-            }
-            map.put(v, i);
-        }
-        return new int[]{-1, -1};
+  /**
+   * <pre>
+   * simple version as only need return one pair
+   * Note
+   *             if (map.containsKey(v)) {
+   *                  continue; // wrong, e.g. test case: [0,4,3,0], 0
+   *             }
+   */
+  public static int[] twoSum(final int[] nums, int target) {
+    Map<Integer, Integer> map = new HashMap<>(nums.length);
+    for (int i = 0; i < nums.length; i++) {
+      int v = nums[i];
+      if (map.containsKey(target - v)) {
+        return new int[] {map.get(target - v), i};
+      }
+      map.put(v, i);
     }
+    return new int[] {-1, -1};
+  }
 }

@@ -16,8 +16,8 @@
 package array;
 
 /**
- * 245. Shortest Word Distance III
- * https://leetcode.com/problems/shortest-word-distance-iii/
+ * 245. Shortest Word Distance III https://leetcode.com/problems/shortest-word-distance-iii/
+ *
  * <pre>
  *     Difficulty: Medium
  * This is a follow up of Shortest Word Distance. The only difference is now word1 could be the same as word2.
@@ -42,58 +42,57 @@ package array;
  * </pre>
  */
 public class Leecode245ShortestWordDistanceIII {
-    //
-    public int shortestWordDistance(String[] words, String word1, String word2) {
-        int result = Integer.MAX_VALUE, indexW1 = -1, indexW2 = -1;
+  //
+  public int shortestWordDistance(String[] words, String word1, String word2) {
+    int result = Integer.MAX_VALUE, indexW1 = -1, indexW2 = -1;
 
-        if (word1.equals(word2)) {
-            for (int i = 0; i < words.length; i++) {
-                if (words[i].equals(word1)) {
-                    if (indexW1 != -1) {
-                        result = Math.min(result, i - indexW1);
-                    }
-                    indexW1 = i;
-                }
-            }
-        } else {
-            for (int i = 0; i < words.length; i++) {
-                if (words[i].equals(word1)) {
-                    indexW1 = i;
-                } else if (words[i].equals(word2)) {
-                    indexW2 = i;
-                }
-
-                if (indexW1 != -1 && indexW2 != -1) {
-                    result = Math.min(result, Math.abs(indexW1 - indexW2));
-                }
-            }
+    if (word1.equals(word2)) {
+      for (int i = 0; i < words.length; i++) {
+        if (words[i].equals(word1)) {
+          if (indexW1 != -1) {
+            result = Math.min(result, i - indexW1);
+          }
+          indexW1 = i;
         }
-        return result;
-    }
-
-
-    // same idea. just save a parameter
-    public int shortestWordDistance2(String[] words, String word1, String word2) {
-        int min = Integer.MAX_VALUE;
-        int indexW1or2 = -1;
-        if (word1.equals(word2)) {//if work for shortest word distance, only using the code of if clause
-            for (int i = 0; i < words.length; i++) {
-                if (words[i].equals(word1)) {
-                    if (indexW1or2 != -1)
-                        min = Math.min(min, i - indexW1or2);
-                    indexW1or2 = i;
-                }
-            }
-        } else {//deal with the cases that are the same parameters
-            for (int i = 0; i < words.length; i++) {
-                String curW = words[i];
-                if (curW.equals(word1) || curW.equals(word2)) {
-                    if (indexW1or2 != -1 && !curW.equals(words[indexW1or2]))
-                        min = Math.min(min, i - indexW1or2);
-                    indexW1or2 = i;
-                }
-            }
+      }
+    } else {
+      for (int i = 0; i < words.length; i++) {
+        if (words[i].equals(word1)) {
+          indexW1 = i;
+        } else if (words[i].equals(word2)) {
+          indexW2 = i;
         }
-        return min;
+
+        if (indexW1 != -1 && indexW2 != -1) {
+          result = Math.min(result, Math.abs(indexW1 - indexW2));
+        }
+      }
     }
+    return result;
+  }
+
+  // same idea. just save a parameter
+  public int shortestWordDistance2(String[] words, String word1, String word2) {
+    int min = Integer.MAX_VALUE;
+    int indexW1or2 = -1;
+    if (word1.equals(
+        word2)) { //if work for shortest word distance, only using the code of if clause
+      for (int i = 0; i < words.length; i++) {
+        if (words[i].equals(word1)) {
+          if (indexW1or2 != -1) min = Math.min(min, i - indexW1or2);
+          indexW1or2 = i;
+        }
+      }
+    } else { //deal with the cases that are the same parameters
+      for (int i = 0; i < words.length; i++) {
+        String curW = words[i];
+        if (curW.equals(word1) || curW.equals(word2)) {
+          if (indexW1or2 != -1 && !curW.equals(words[indexW1or2]))
+            min = Math.min(min, i - indexW1or2);
+          indexW1or2 = i;
+        }
+      }
+    }
+    return min;
+  }
 }

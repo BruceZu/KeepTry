@@ -15,43 +15,41 @@
 
 package array;
 
-/**
- * @ <a href="https://leetcode.com/problems/plus-one/">leetcode</a>
- */
+/** @ <a href="https://leetcode.com/problems/plus-one/">leetcode</a> */
 public class Leetcode66PlusOne {
-    public int[] plusOne(int[] digits) {
-        int carry = 1;
-        for (int i = digits.length - 1; i >= 0; i--) {
-            int sum = carry + digits[i];
-            if (sum > 9) {
-                digits[i] = sum - 10;
-                carry = 1;
-            } else {
-                digits[i] = sum;
-                carry = 0;
-            }
-        }
-        if (carry != 0) {
-            int[] r = new int[digits.length + 1];
-            r[0] = carry;
-            System.arraycopy(digits, 0, r, 1, digits.length);
-            return r;
-        }
+  public int[] plusOne(int[] digits) {
+    int carry = 1;
+    for (int i = digits.length - 1; i >= 0; i--) {
+      int sum = carry + digits[i];
+      if (sum > 9) {
+        digits[i] = sum - 10;
+        carry = 1;
+      } else {
+        digits[i] = sum;
+        carry = 0;
+      }
+    }
+    if (carry != 0) {
+      int[] r = new int[digits.length + 1];
+      r[0] = carry;
+      System.arraycopy(digits, 0, r, 1, digits.length);
+      return r;
+    }
+    return digits;
+  }
+
+  // improved version, same speed
+  public int[] plusOne2(int[] digits) {
+    for (int i = digits.length - 1; i >= 0; i--) {
+      if (digits[i] < 9) {
+        digits[i]++;
         return digits;
+      }
+      digits[i] = 0;
     }
 
-    // improved version, same speed
-    public int[] plusOne2(int[] digits) {
-        for (int i = digits.length - 1; i >= 0; i--) {
-            if (digits[i] < 9) {
-                digits[i]++;
-                return digits;
-            }
-            digits[i] = 0;
-        }
-
-        int[] r = new int[digits.length + 1];
-        r[0] = 1;
-        return r;
-    }
+    int[] r = new int[digits.length + 1];
+    r[0] = 1;
+    return r;
+  }
 }

@@ -18,19 +18,17 @@ package array;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @see <a href="https://leetcode.com/problems/contains-duplicate/">leetcode</a>
- */
+/** @see <a href="https://leetcode.com/problems/contains-duplicate/">leetcode</a> */
 public class Leetcode217ContainsDuplicate {
-    // it can be negative number
-    public boolean containsDuplicate1(int[] nums) {
-        Map<Integer, Integer> times = new HashMap();
-        for (int i = 0; i < nums.length; i++) {
-            if (times.get(nums[i]) != null) {
-                return true;
-            }
-            times.put(nums[i], 1);
-        }
-        return false;
+  // it can be negative number
+  public boolean containsDuplicate1(int[] nums) {
+    Map<Integer, Integer> times = new HashMap();
+    for (int i = 0; i < nums.length; i++) {
+      if (times.get(nums[i]) != null) {
+        return true;
+      }
+      times.put(nums[i], 1);
     }
+    return false;
+  }
 }
