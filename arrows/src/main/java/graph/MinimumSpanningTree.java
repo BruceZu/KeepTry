@@ -55,7 +55,7 @@ import org.jetbrains.annotations.NotNull;
  *   - 2 Using adjacent nodes structure to represent graph.
  *
  *   Todo: improve to O(M+NlogN) using Fibonacci heap and adjacent nodes
- *
+ *   Todo: for Fibonacci heap the deCrease(key) need firstly find the target's key.
  *
  * B> Todo: improve to O(M), if the graph is dense (i.e. m/n ≥ log log log n)  with no isolated vertices
  *
