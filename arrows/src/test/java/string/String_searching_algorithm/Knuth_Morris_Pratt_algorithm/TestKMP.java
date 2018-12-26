@@ -59,7 +59,7 @@ public class TestKMP {
 
   @Test(timeout = 100L, expected = Test.None.class)
   public void testKMP() {
-    Assert.assertEquals(expected, KMP.KMP(txt, str));
+    Assert.assertEquals(expected, KMP.firstMatchPosition(txt, str));
     Assert.assertEquals(expected, KMP.forceWay(txt, str));
   }
 }
