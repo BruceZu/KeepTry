@@ -20,186 +20,156 @@ import java.util.Arrays;
 /**
  * <a href ="https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm">wiki</a>
  * <pre>
- *   worst-case performance is O(k⋅n)
- *   s[] length is n
- *   W[] length is k
- *   e.g.    s[] =  AAAAAA
- *           W[] =  AAB
+ *   O(m+n)  s[] length is n, W[] length is m
  */
 public class KMP {
-  /**
-   * <pre>
-   * get Partial Match Table of pattern w
-   * assume str length is at least 1.
-   * assume str does not contain supplementary character
-   * <img src="../../../../resources/KMP_partial_T.png" height="450" width="500">
-   * O(m), where k is the length of pattern w
-   *
-   *
-   * "Partial match" table (also known as "failure function")
-   * when mismatch happen between s[si] and w[wi].
-   * need move w right side some distance. and then compare updated si and wi or only wi
-   * and continue compare s[si] and w[wi].
-   *
-   * The PMT determines the distance and how to decide the wi and si.
-   * The goal of the table is: not to let any character of S match successfully more than once .
-   *
-   *
-   * meaning of value of w[i] is:
-   * for the array:start with index 0 and end up with current index of i-1 (including),
-   * the length of
-   * - the longest prefix starting from the w[0], used by w
-   * - at the same time it is should also be the longest suffix end up with w[i-1] (including). used by s.
-   * - it is also the new wi, fantastic.
-   * Use of "Partial match" table:
-   * get the value of "Partial match" table of pattern 'w' at index of 'wi':
-   *
-   * when the w[0] is not match. move w right side 1 index;（ｉt is si++;）
-   * This is special case. precess it before using PMT
-   */
-  static int[] newIndexToTry2(String word) {
-    // get Partial Match Table
-    if (word == null || word.isEmpty()) return null;
-    char[] w = word.toCharArray();
-    int[] I = new int[w.length];
-    // length of longest proper prefix and subfix;
-    // also is the next index of w to try when current char comparing failed between S and W.
+    /**
+     * <pre>
+     * Partial Match Table("failure function") of W
+     * - Assume W length is at least 1.
+     * - Assume W does not contain supplementary character
+     * <img src="../../../../resources/KMP_partial_T.png" height="450" width="500">
+     * O(m), where m is the length of W
+     *
+     * The PMT determines the distance and how to decide the wi and si.
+     * The goal of the table is: not to let any character of S match successfully more than once .
+     *
+     * Meaning of value of T[i] is:
+     * - The length of LP/S of substring with index [0, i-1]
+     * - The index of W to which try to compare the current S[si] if current W[i] is ame same as S[si].
+     *
+     * When index is 0 and 1 there is no proper suffix and prefix of the given substring.
+     * when the W[0] is not match. move W 1 index it is same as si++.
+     * This is the meaning of -1 of T[0]; This is special case handled before using PMT.
+     *
+     * When the W[1] is not match the only choice is move one step to try to compare W[0] with current S[si]
+     * This is the meaning of 0 of T[0].
+     * The performance improvement here is if W[0] is equal to w[1], means
+     * W[0] is also not same as current S[si], so T[1]=T[0]=-1.
+     * In every calculating step this performance improvement is applied.
+     */
+    static int[] newIndexToTry(String word) {
+        if (word == null || word.isEmpty()) return null;
+        char[] W = word.toCharArray();
+        int[] T = new int[W.length];
 
-    I[0] = -1;
-    if (w.length == 1) return I;
+        int i = 0; // index in T[]
+        int l = -1; // length of the LP/S of string end up at W[i-1].
+        T[i] = l;
+        // T[0]=-1; if S[si] is not same as W[0], S[si] need align with -1 of W to let
+        // S[si+1] compare W[0]
 
-    I[1] = 0;
-    for (int i = 2; i < w.length; i++) {
-      int l = I[i - 1]; // is the length of .. and also is the index of w
-      char currentChar = w[i - 1];
-      while (true) {
-        if (currentChar == w[l]) {
-          I[i] = l + 1; // is length of .... need not checking the longer ones.
-          break;
-        }
-        if (l == 0) {
-          // 0 length of longest proper prefix and subfix,
-          // means now compare directly with w[0] to see if it is possible to get
-          // 1 or 0 length of longest proper prefix and subfix.
-          I[i] = 0;
-          break;
-        }
-        l = I[l]; // v>=1, continue loop;  v is index .
-      }
-    }
-    return I;
-  }
+        l++;
+        i++;
+        while (i < W.length) {
+            T[i] = l;
+            char c = W[i];
+            if (W[l] == c) { // So w[l] is also not same as current s[si].
+                T[i] = T[l]; // * Performance feature. T[i] can use the value of T[l]. Not affect l
+            }
+            // W[i] != W[l]. W[l] has the possibility it is same with s[si]. Need try.
+            // Done
+            // Prepare LP/S of substr [0~i] for calculating T[i+1] via
+            // looking for the index of the end char of LP of LP/S of string [0~i], W[index] == c
+            while (l >= 0 && W[l] != c) l = T[l];
+            // 1> W[l] == c, need not fall back to look for index matching W[index]==c.
+            // 2> Found. At least at index=0. in this case if S[si] is not same as W[i+1]. S[si]
+            // will compare with W[1] later.
+            // 3> Not found the index where W[index]==c. Now l is -1. For substring [0~i] the
+            // length of LP/S is 0. If S[si] is not same as W[i+1]. S[si] will compare with W[0]
+            // later.
 
-  // O(m) m is the length of word
-  static int[] newIndexToTry(String word) {
-    if (word == null || word.isEmpty()) return null;
-    char[] w = word.toCharArray();
-    int[] T = new int[w.length];
-
-    T[0] = -1;
-    if (w.length == 1) return T;
-
-    int wi = 0; // index of char in W
-    int i = 1; // index in T[]
-
-    while (i < w.length) {
-      if (w[i] == w[wi]) {
-        T[i] = T[wi]; // performance feature
-      } else {
-        T[i] = wi;
-        // calculate for next i
-        wi = T[wi]; // performance improve;
-        while (wi >= 0 && w[i] != w[wi]) {
-          wi = T[wi];
-        }
-      }
-      i++;
-      wi++;
-    }
-    return T;
-  }
-  // get the index of str where find the first match of give str string.
-  // O(n+m), where n is the length of s, m is the length of w
-  static int KMP(String s, String w) {
-    if (w == null || s == null || w.length() > s.length()) {
-      return -1;
-    }
-
-    if (w.isEmpty()) {
-      return 0;
-    }
-    if (s.isEmpty()) return -1;
-
-    int NI[] = newIndexToTry(w);
-    int si = 0;
-    int wi = 0;
-    while (si < s.length()) { // when si is s.length; firstly check wi, then check si.
-      if (w.charAt(wi) == s.charAt(si)) {
-        // wi and si go ahead 1 step.
-        si++;
-        wi++;
-        if (wi == w.length()) {
-          return si - w.length();
-        }
-      } else {
-        if (NI[wi] == -1) si++; //  wi is still, which is 0 now, si go ahead 1 step
-        else wi = NI[wi]; // fantastic. si is still, wi is backtracking try, at most wi steps
-      }
-    }
-    return -1;
-  }
-
-  public static void main(String[] args) {
-    System.out.println(KMP.KMP("ABCABD", "CA"));
-    System.out.println(KMP.KMP("ABAABAAC", "CA"));
-
-    System.out.println(Arrays.toString(KMP.newIndexToTry("ABCDABD")));
-    System.out.println(Arrays.toString(KMP.newIndexToTry("ABACABABC")));
-    System.out.println(Arrays.toString(KMP.newIndexToTry("PARTICIPATE IN PARACHUTE")));
-  }
-  /**
-   * <pre>
-   * haystack = "hello world"
-   * needle = "world"
-   * return 6
-   *
-   * haystack length is m
-   * needle length is n
-   * O(n*(m-n))
-   *
-   * Give a worse case
-   *
-   * @param haystack
-   * @param needle
-   * @return index of the char from where the needle appears for the fist time.
-   */
-  public static int forceWay(String haystack, String needle) {
-    // check corner cases
-    if (haystack == null || needle == null) {
-      return -1;
-    }
-    if (needle.isEmpty()) {
-      return 0;
-    }
-    //
-    int max = haystack.length() - needle.length();
-    for (int i = 0; i <= max; i++) { // care it is <= not <
-      char curC = haystack.charAt(i);
-      if (curC == needle.charAt(0)) {
-
-        boolean found = true;
-        for (int j = 1; j < needle.length(); j++) {
-          if (needle.charAt(j) != haystack.charAt(i + j)) {
-            found = false;
-            break;
-          }
+            i++;
+            l++; // The index of last char of LP, c, becomes the length of LP now.
         }
 
-        if (found) {
-          return i;
-        }
-      }
+        return T;
     }
-    return -1;
-  }
+    // Get the index in S of the first match of give W string.
+    // O(n+m), n is the length of S, m is the length of W
+    static int firstMatchPosition(String S, String W) {
+        if (W == null || S == null || W.length() > S.length()) {
+            return -1;
+        }
+
+        if (W.isEmpty()) {
+            return 0;
+        }
+        if (S.isEmpty()) return -1;
+
+        int NI[] = newIndexToTry(W);
+        int si = 0;
+        int wi = 0;
+        while (si < S.length()) { // when si is S.length; firstly check wi, then check si.
+            if (W.charAt(wi) == S.charAt(si)) {
+                // both wi and si go ahead 1 step.
+                si++;
+                wi++;
+                if (wi == W.length()) {
+                    return si - W.length();
+                }
+            } else {
+                if (NI[wi] == -1) si++; //  wi is 0 now, si go ahead 1 step
+                else
+                    wi = NI[wi]; // fantastic. si is still, wi is backtracking try, at most wi steps
+            }
+        }
+        return -1;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public static void main(String[] args) {
+        System.out.println(KMP.firstMatchPosition("ABCABD", "CA"));
+        System.out.println(KMP.firstMatchPosition("ABAABAAC", "CA"));
+
+        System.out.println(Arrays.toString(KMP.newIndexToTry("ABCDABD")));
+        System.out.println(Arrays.toString(KMP.newIndexToTry("ABACABABC")));
+        System.out.println(Arrays.toString(KMP.newIndexToTry("PARTICIPATE IN PARACHUTE")));
+    }
+    /**
+     * <pre>
+     * haystack = "hello world"
+     * needle = "world"
+     * return 6
+     *
+     * haystack length is m
+     * needle length is n
+     * O(n*(m-n))
+     *
+     * Give a worse case
+     *
+     * @param haystack
+     * @param needle
+     * @return index of the char from where the needle appears for the fist time.
+     */
+    public static int forceWay /*used for test*/(String haystack, String needle) {
+        // check corner cases
+        if (haystack == null || needle == null) {
+            return -1;
+        }
+        if (needle.isEmpty()) {
+            return 0;
+        }
+        //
+        int max = haystack.length() - needle.length();
+        for (int i = 0; i <= max; i++) { // care it is <= not <
+            char curC = haystack.charAt(i);
+            if (curC == needle.charAt(0)) {
+
+                boolean found = true;
+                for (int j = 1; j < needle.length(); j++) {
+                    if (needle.charAt(j) != haystack.charAt(i + j)) {
+                        found = false;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 }
