@@ -37,58 +37,47 @@ package dp;
  *    Idea:
  *      same like Kadane Algorithm
  *
- *               1   2    -1       3      -2       -1
- *   maxbyfar    1   2/2  -2/-1   -3/3    -6/12   -12 /6
- *   minbyfar    1   2/2  -2/-2   -6/-6   12/-6     6 /-12
- *
- *   max         1   2    2       3       12      12
- *
- *   ??
- *       how to analyze this kind question in DP thought?
- *
  *   @see <a href="https://leetcode.com/problems/maximum-product-subarray/">leetcode</a>
  */
 public class Leetcode152MaximumProductSubarray {
+    // O(N)
     public static int maxProduct(int[] A) {
         if (A.length == 0) {
             return 0;
         }
 
-        int maxEndsHere = A[0];
-        int minEndsHere = A[0];
-        int max = A[0];
+        int max = A[0]; // in set of possible solutions ending at index i
+        int min = A[0];
+        // in set of possible solutions ending at index i. product of 2 negative numbers is positive
+        // that is why need a min here.
+        int r = A[0];
 
         int newMax, newMin;
         for (int i = 1; i < A.length; i++) {
-            newMax = Math.max(Math.max(maxEndsHere * A[i], minEndsHere * A[i]), A[i]); // 2
-            newMin = Math.min(Math.min(maxEndsHere * A[i], minEndsHere * A[i]), A[i]); // 3
-            max = Math.max(newMax, max); // 1
+            newMax = Math.max(Math.max(max * A[i], min * A[i]), A[i]);
+            newMin = Math.min(Math.min(max * A[i], min * A[i]), A[i]);
+            r = Math.max(newMax, r);
 
-            maxEndsHere = newMax;
-            minEndsHere = newMin;
+            max = newMax;
+            min = newMin;
         }
-        return max;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(
-                maxProduct(new int[]{1, 2, -1, 3, -2, -1}));
+        return r;
     }
 
     /**
-     * Not DP Idea:
-     * observations: negative numbers is even of odd.
-     * if it's odd, either the left end one or the right end one should be counted,
-     * scanning from left and from right to see.
-     * 0 is a kind of delimiter, product accumulation will be reset to 1
+     * Not DP Idea: observations: negative numbers is even or odd. odd: either the left end one or
+     * the right end one should be counted,
+     *
+     * <p>scanning from left and from right to see. 0 is delimiter, product accumulation will be
+     * reset to 1 O(N)
      */
-    public int maxProduct2(int[] nums) {
-        int max = Integer.MIN_VALUE;
-        int product = 1;
+    public static int maxProduct2(int[] nums) {
+        int r = Integer.MIN_VALUE;
         int len = nums.length;
 
+        int product = 1;
         for (int i = 0; i < len; i++) {
-            max = Math.max(product *= nums[i], max);
+            r = Math.max(product *= nums[i], r);
             if (nums[i] == 0) {
                 product = 1;
             }
@@ -96,11 +85,30 @@ public class Leetcode152MaximumProductSubarray {
 
         product = 1;
         for (int i = len - 1; i >= 0; i--) {
-            max = Math.max(product *= nums[i], max);
+            r = Math.max(product *= nums[i], r);
             if (nums[i] == 0) {
                 product = 1;
             }
         }
-        return max;
+        return r;
+    }
+
+    //-----------------------------------------------
+
+    // TODO float?
+    public static void main(String[] args) {
+        System.out.println(maxProduct(new int[] {-2, 0, -1}));
+        System.out.println(maxProduct(new int[] {0, 0, 0}));
+        System.out.println(maxProduct(new int[] {0, 0, -2, 0}));
+        System.out.println(maxProduct(new int[] {0, 0, 3, 0}));
+        System.out.println(maxProduct(new int[] {1, 2, -1, 3, -2, -1}));
+        System.out.println(maxProduct(new int[] {1, 2, 3, 2, -1, 2, 4, 5, 7 - 1, 1, 2}));
+
+        System.out.println(maxProduct2(new int[] {-2, 0, -1}));
+        System.out.println(maxProduct2(new int[] {0, 0, 0}));
+        System.out.println(maxProduct2(new int[] {0, 0, -2, 0}));
+        System.out.println(maxProduct2(new int[] {0, 0, 3, 0}));
+        System.out.println(maxProduct2(new int[] {1, 2, -1, 3, -2, -1}));
+        System.out.println(maxProduct2(new int[] {1, 2, 3, 2, -1, 2, 4, 5, 7 - 1, 1, 2}));
     }
 }

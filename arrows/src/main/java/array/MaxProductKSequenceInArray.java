@@ -30,7 +30,7 @@ import java.util.Map;
  *    bottom up approach is not easy as top-down+cache. because for each (i,k)
  *    need prepare  f() and fmin() for the next step.
  */
-public class MaxProduct {
+public class MaxProductKSequenceInArray {
     private float[] A;
     private boolean verbose;
     private Map<String, Double> cache;
@@ -39,7 +39,7 @@ public class MaxProduct {
         return cache;
     }
 
-    public MaxProduct(float[] array, boolean v) {
+    public MaxProductKSequenceInArray(float[] array, boolean v) {
         A = array;
         verbose = v;
         cache = new HashMap<>();
@@ -162,7 +162,7 @@ public class MaxProduct {
     }
 
     public static void verify(float[] A, int k, Double expected, boolean verbose) {
-        MaxProduct mp = new MaxProduct(A, verbose);
+        MaxProductKSequenceInArray mp = new MaxProductKSequenceInArray(A, verbose);
         Double r = mp.f(0, k);
         if (!r.equals(expected)) {
             System.out.println(r);
