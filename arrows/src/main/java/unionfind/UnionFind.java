@@ -20,30 +20,26 @@ package unionfind;
  *     scenario: disjoint sets. e.g. islands, groups of machines
  *     data structure:
  *                int[] or HashMap to keep:
- *                       1 mapping relation: index is node id/tag -> value is next node's id/tag it is pointing to.
- *                       2 all nodes' id/tag: 0 ~ array length -1
- *     operations:
- *            search: root(int nodeId)
- *                    root node id represents the id of its set / island/ group of machine
- *                    this method is used to check if 2 given nodes are in the same set/island/group of machine.
- *            update: union(int nodeAid, int nodeBid)
- *                    if 2 given nodes are not in the same set/island/group of machine.
- *                    link together their sets/islands/groups of machine
- *                    for performance concern, link the one with lower tree height to the other.
- *                    but if the root() implements Pass Compress, just link any one to the other,
- *                    and need not to maintain the tree height.
+ *                all nodes' id/tag: 0 ~ array length -1
  *
  * with Pass Compress the tree will be updated eventually to be end up with tree height of 1.
  *        n1
  *      / |  \
  *  n2 n3 .... n7 n8
- *
+ *  <a href="https://en.wikipedia.org/wiki/Disjoint-set_data_structure">wiki<a/>
+ *  "Using both path compression, splitting, or halving and union by rank or size ensures
+ *  that the amortized time per operation is only alpha (n)
+ *  which is optimal, where  alpha (n) is the inverse Ackermann function.
+ *  This function has a value  alpha (n)<5
+ *  for any value of n that can be written in this physical universe,
+ *  so the disjoint-set operations take place in essentially constant time."
  */
 public class UnionFind {
 
     // Assume all nodes have been tagged with digits,
     // So: ids are distinguish, 0 ~ n-1,
-    private final int[] next;// next node id of
+    private final int[] parent; // next node id of
+    private final int[] rank;
 
     // Tag nodes with digits,
     public UnionFind(String[] nodes) {
@@ -54,26 +50,48 @@ public class UnionFind {
         // if the root points to any other node in its islands/groups of machines.
         // It has only one circle, as for any node there is
         // only one 'come out' edge.
-        next = new int[100];
+        parent = new int[100];
+        rank = new int[100];
         for (int i = 0; i < 100; i++) {
-            next[i] = i;
+            parent[i] = i;
         }
     }
 
-    // Pass Compress: in each search, break up 1/2 path.
-    public int rootOf(int nodeId) {
-        while (nodeId != next[nodeId]) {
-            next[nodeId] = next[next[nodeId]];
-            nodeId = next[nodeId];
+    /**
+     * Path splitting makes every node on the path point to its grandparent. O(alpha (n))
+     *
+     * @see graph.MinimumSpanningTree#root(int[], int)
+     */
+    public int root(int i) {
+        while (parent[i] != i) {
+            int p = parent[i];
+            parent[i] = parent[p];
+            i = p;
         }
-        return nodeId;
+        return i;
     }
 
+    /**
+     * O(alpha (n))
+     *
+     * @see graph.MinimumSpanningTree#merge(int[], int[], int, int)
+     */
     public void union(int ida, int idb) {
-        int roota = rootOf(ida);
-        int rootb = rootOf(idb);
-        if (roota != rootb) {
-            next[roota] = rootb;
+        int r1 = root(ida);
+        int r2 = root(idb);
+
+        int el /* equal or less than*/, o /* other*/;
+        if (rank[r1] <= rank[r2]) {
+            el = r1;
+            o = r2;
+        } else {
+            el = r2;
+            o = r1;
+        }
+
+        parent[el] = o;
+        if (rank[el] == rank[o]) {
+            rank[o]++;
         }
     }
 }

@@ -26,17 +26,17 @@ public class UnionFindTest {
         UnionFind uf = new UnionFind(new String[]{""});
         Random r = new Random();
         int id = r.nextInt(100);
-        Assert.assertTrue(id == uf.rootOf(id));
+        Assert.assertTrue(id == uf.root(id));
 
         uf.union(1, 2);
-        Assert.assertTrue(uf.rootOf(2) == uf.rootOf(1));
+        Assert.assertTrue(uf.root(2) == uf.root(1));
 
         uf.union(4, 5);
-        Assert.assertTrue(uf.rootOf(4) == uf.rootOf(5));
+        Assert.assertTrue(uf.root(4) == uf.root(5));
 
-        Assert.assertTrue(uf.rootOf(4) != uf.rootOf(1));
+        Assert.assertTrue(uf.root(4) != uf.root(1));
         uf.union(1, 5);
-        Assert.assertTrue(uf.rootOf(4) == uf.rootOf(1));
+        Assert.assertTrue(uf.root(4) == uf.root(1));
 
         uf.union(7, 8);
         uf.union(1, 8);
@@ -63,23 +63,23 @@ public class UnionFindTest {
 
         uf.union(23, 43);// height of 4
 
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(11));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(12));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(13));
+        Assert.assertTrue(uf.root(10) == uf.root(11));
+        Assert.assertTrue(uf.root(10) == uf.root(12));
+        Assert.assertTrue(uf.root(10) == uf.root(13));
 
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(20));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(21));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(22));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(23));
+        Assert.assertTrue(uf.root(10) == uf.root(20));
+        Assert.assertTrue(uf.root(10) == uf.root(21));
+        Assert.assertTrue(uf.root(10) == uf.root(22));
+        Assert.assertTrue(uf.root(10) == uf.root(23));
 
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(30));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(31));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(32));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(33));
+        Assert.assertTrue(uf.root(10) == uf.root(30));
+        Assert.assertTrue(uf.root(10) == uf.root(31));
+        Assert.assertTrue(uf.root(10) == uf.root(32));
+        Assert.assertTrue(uf.root(10) == uf.root(33));
 
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(40));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(41));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(42));
-        Assert.assertTrue(uf.rootOf(10) == uf.rootOf(43));
+        Assert.assertTrue(uf.root(10) == uf.root(40));
+        Assert.assertTrue(uf.root(10) == uf.root(41));
+        Assert.assertTrue(uf.root(10) == uf.root(42));
+        Assert.assertTrue(uf.root(10) == uf.root(43));
     }
 }
