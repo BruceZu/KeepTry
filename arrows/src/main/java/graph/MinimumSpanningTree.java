@@ -89,7 +89,7 @@ public class MinimumSpanningTree {
      */
     // O(alpha (n))
     // prefer path compression to path halving or path splitting
-    private static int root(int[] next, int v) {
+    public static int root(int[] next, int v) {
         if (next[v] != v) {
             next[v] = root(next, next[v]);
         }
@@ -97,8 +97,8 @@ public class MinimumSpanningTree {
     }
     // O(alpha (n))
     // union by rank
-    private static void merge(int next[], int rank[], int r1, int r2) {
-        int el, o;
+    public static void merge(int next[], int rank[], int r1 /*root of one*/, int r2) {
+        int el /* equal or less than*/, o /* other*/;
         if (rank[r1] <= rank[r2]) {
             el = r1;
             o = r2;
@@ -126,7 +126,8 @@ public class MinimumSpanningTree {
         // data structure 2: union-find checks circle
         int[] next = new int[N];
         int[] rank = new int[N];
-        // the rank is not depth or height because path compression will change the tree's heights over time
+        // the rank is not depth or height because path compression will change the tree's heights
+        // over time
 
         for (int v = 0; v < N; ++v) {
             next[v] = v; // index is vertex ID from 0 to N-1.
@@ -177,7 +178,7 @@ public class MinimumSpanningTree {
             int v = cutMinimumEdgeOuterV(weight, notInMstNow);
             notInMstNow[v] = false;
 
-            //Update status of weight[vi] and therV[vi]
+            // Update status of weight[vi] and therV[vi]
             for (int vi = 0; vi < N; vi++) {
                 if (notInMstNow[vi] /* is in cut set */
                         && graph[v][vi] != 0 /* there is edge */
