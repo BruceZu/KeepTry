@@ -18,7 +18,7 @@ Buck
 
 ```
 $ buck --version
-buck version d16adb2b57199b1d139eb817c44a2e248c4cda50
+buck version bf16295cfcbb55592fa90a474b89beb2997c3aa2
 ```
 
 Node.js
@@ -37,7 +37,7 @@ Python 2.7.11
 Get all required Java libs and run all Junit tests
 
 ```
-$ buck targets | xargs buck build && buck test --all
+$ {buck targets //bow/...; buck targets //arrows/...;} | xargs buck build && buck test --all
 ```
 Import it by Intellij IDEA 2016.3 and start enjoy coding
 
