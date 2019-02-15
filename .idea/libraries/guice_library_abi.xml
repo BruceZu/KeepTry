@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="guice_library-abi">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/guice_library#class-abi/guice_library-abi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
