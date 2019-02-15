@@ -15,41 +15,38 @@
 
 package generics;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 public class Generics {
-  public static void main(String[] args) {
-    // 1
-    Class a = new ArrayList<Integer>().getClass();
-    Class b = new ArrayList<String>().getClass();
-    System.out.println(a == b); // true
+    public static void main(String[] args) {
+        // 1
+        Class a = new ArrayList<Integer>().getClass();
+        Class b = new ArrayList<String>().getClass();
+        System.out.println(a == b); // true
 
-    // 2
-    //    Collections
-    //    public static <T> void copy(List<? super T> dest, List<? extends T> src) {
+        // 2
+        //    Collections
+        //    public static <T> void copy(List<? super T> dest, List<? extends T> src) {
 
-    // 3
-    List<Integer>[] listArray = new ArrayList[1];
-    ArrayList<Integer> list = new ArrayList();
-    list.add(1);
-    list.add(2);
+        // 3
+        List<Integer>[] listArray = new ArrayList[1];
+        ArrayList<Integer> list = new ArrayList();
+        list.add(1);
+        list.add(2);
 
-    listArray[0] = list;
-    for (List<Integer> e : listArray) {
-      for (Integer i : e) {
-        System.out.println(i);
-      }
+        listArray[0] = list;
+        for (List<Integer> e : listArray) {
+            for (Integer i : e) {
+                System.out.println(i);
+            }
+        }
+
+        // 4
+        //  if(listArray instanceof   ArrayList<Integer>[] ){ //
+        if (listArray instanceof ArrayList[]) {}
+        if (listArray instanceof ArrayList<?>[]) {}
     }
-
-    // 4
-    //  if(listArray instanceof   ArrayList<Integer>[] ){ //
-    if (listArray instanceof ArrayList[]) {}
-    if (listArray instanceof ArrayList<?>[]) {}
-  }
-  // 5  https://blog.jooq.org/2013/06/28/the-dangers-of-correlating-subtype-polymorphism-with-generic-polymorphism/
+    // 5
+    // https://blog.jooq.org/2013/06/28/the-dangers-of-correlating-subtype-polymorphism-with-generic-polymorphism/
 }
-
