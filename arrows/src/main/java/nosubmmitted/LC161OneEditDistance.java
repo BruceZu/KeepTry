@@ -35,31 +35,31 @@ public class LC161OneEditDistance {
      * the fast one currently
      * beat 93.69%
      */
-    public boolean isOneEditDistance(String s, String t) {
+    public boolean isOneEditDistance(String S, String T) {
 
-        int s1 = -1, s2 = s.length(), t1 = -1, t2 = t.length();
-        char[] sArr = s.toCharArray(), tArr = t.toCharArray();
+        int si = -1, sl = S.length(), ti = -1, tl = T.length();
+        char[] sArr = S.toCharArray(), tArr = T.toCharArray();
 
-        if (Math.abs(s2 - t2) > 1) {
+        if (Math.abs(sl - tl) > 1) {
             return false;
         }
 
-        while (s1 < s2 - 1 && t1 < t2 - 1 && sArr[s1 + 1] == tArr[t1 + 1]) {
-            s1++;
-            t1++;
+        while (si < sl - 1 && ti < tl - 1 && sArr[si + 1] == tArr[ti + 1]) {
+            si++;
+            ti++;
         }
 
         // equals
-        if (s2 == t2 && s1 == s2 - 1) {
+        if (sl == tl && si == sl - 1) {
             return false;
         }
 
-        while (s2 > 0 && t2 > 0 && sArr[s2 - 1] == tArr[t2 - 1]) {
-            s2--;
-            t2--;
+        while (sl > 0 && tl > 0 && sArr[sl - 1] == tArr[tl - 1]) {
+            sl--;
+            tl--;
         }
 
-        return Math.max(s2 - s1, t2 - t1) < 3;
+        return Math.max(sl - si, tl - ti) < 3;
     }
 
     /**
