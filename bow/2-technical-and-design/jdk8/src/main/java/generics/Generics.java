@@ -19,17 +19,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Generics {
+
+    private static <E> void privateHelper(List<E> list /*Got int the fly*/, int i, int j) {
+        list.set(i, list.set(j, list.get(i)));
+    }
+
+    public static void swap(List<?> list, int i, int j) {
+        privateHelper(list, i, j);
+        System.out.println(list.toString());
+    }
+
+    public static <T> void copy(List<? super T> dest, List<? extends T> src) {}
+
+    public static <T> List<? super T> copy(List<? extends T> src) {
+        List<? super T> dest = new ArrayList<>();
+        for (T t : src) {
+            dest.add(t);
+        }
+        return dest;
+    }
+
     public static void main(String[] args) {
-        // 1
         Class a = new ArrayList<Integer>().getClass();
         Class b = new ArrayList<String>().getClass();
         System.out.println(a == b); // true
 
-        // 2
-        //    Collections
-        //    public static <T> void copy(List<? super T> dest, List<? extends T> src) {
-
-        // 3
         List<Integer>[] listArray = new ArrayList[1];
         ArrayList<Integer> list = new ArrayList();
         list.add(1);
@@ -42,10 +56,19 @@ public class Generics {
             }
         }
 
-        // 4
-        //  if(listArray instanceof   ArrayList<Integer>[] ){ //
-        if (listArray instanceof ArrayList[]) {}
-        if (listArray instanceof ArrayList<?>[]) {}
+        // 4 runtime will erase the generic type
+        // illegal
+        //        if (listArray instanceof ArrayList<Integer>[]) {
+        //            System.out.println("true");
+        //        }
+        if (listArray instanceof ArrayList[]) {
+            System.out.println("true");
+        }
+        if (listArray instanceof ArrayList<?>[]) {
+            System.out.println("true");
+        }
+
+        swap(list, 0, 1);
     }
     // 5
     // https://blog.jooq.org/2013/06/28/the-dangers-of-correlating-subtype-polymorphism-with-generic-polymorphism/
