@@ -43,8 +43,8 @@ import org.jetbrains.annotations.NotNull;
  *
  *  2> Prim's Spanning Tree Algorithm.
  *   TODO improvement to O(MlogN), O((M+N)logN), O(MlogN + logN!)
- *   - 1 customize a priority queue with a binary heap and an inner array mapping the index(vertex Id)
- *   to its index in binary heap. O(1).
+ *   - 1 customize a priority queue (with a binary heap and an inner array mapping the index(vertex Id)
+ *   to its index in binary heap. O(1)).
  *   implements only
  *    - decreaseAt(int index)
  *    - pop()
@@ -163,50 +163,49 @@ public class MinimumSpanningTree {
     public static int[] mstPrim(int graph[][]) {
         int N = graph.length;
 
-        int otherV[] = new int[N];
-        Arrays.fill(otherV, -1);
+        int resultOtherV[] = new int[N];
+        Arrays.fill(resultOtherV, -1);
 
-        int weight[] = new int[N];
-        Arrays.fill(weight, Integer.MAX_VALUE);
+        int minWei[] = new int[N];
+        Arrays.fill(minWei, Integer.MAX_VALUE);
 
-        boolean notInMstNow[] = new boolean[N];
-        Arrays.fill(notInMstNow, true);
-        java.util.PriorityQueue q = new java.util.PriorityQueue();
+        boolean noSeleted[] = new boolean[N];
+        Arrays.fill(noSeleted, true);
 
-        weight[0] = 0;
+        minWei[0] = 0;
         for (int n = 0; n < N; n++) {
-            int v = cutMinimumEdgeOuterV(weight, notInMstNow);
-            notInMstNow[v] = false;
+            int v = cutMinimumEdgeOuterV(minWei, noSeleted);
+            noSeleted[v] = false;
 
             // Update status of weight[vi] and therV[vi]
             for (int vi = 0; vi < N; vi++) {
-                if (notInMstNow[vi] /* is in cut set */
+                if (noSeleted[vi] /* is in cut set */
                         && graph[v][vi] != 0 /* there is edge */
-                        && graph[v][vi] < weight[vi] /* now the v contributes
+                        && graph[v][vi] < minWei[vi] /* now the v contributes
                         the shortest one of edges from MST's vertexes to the given vi which is not in MST */) {
-                    weight[vi] = graph[v][vi];
-                    otherV[vi] = v;
+                    minWei[vi] = graph[v][vi];
+                    resultOtherV[vi] = v;
                 }
             }
         }
-        return otherV;
+        return resultOtherV;
     }
 
     /**
      * O(N). calculate the shortest edge of current `cut circle` it is the smallest one of weight[].
      *
-     * @param weight for vertax vi the weight[vi] means the shortest one among all edges from each
-     *     vertex of MST to the vi
-     * @param notInMst
+     * @param minWeigh for vertax vi the minWeigh[vi] means the shortest one among all edges from
+     *     each vertex of MST to the vi
+     * @param notInMST
      * @return the shortest edge's vertex that is not in MST
      */
-    private static int cutMinimumEdgeOuterV(int weight[], boolean notInMst[]) {
-        int currentMinEdgeCost = Integer.MAX_VALUE;
+    private static int cutMinimumEdgeOuterV(int minWeigh[], boolean notInMST[]) {
+        int curMinMinWei = Integer.MAX_VALUE;
         int otherSide = -1;
 
-        for (int vi = 0; vi < weight.length; vi++) {
-            if (notInMst[vi] && weight[vi] < currentMinEdgeCost) {
-                currentMinEdgeCost = weight[vi];
+        for (int vi = 0; vi < minWeigh.length; vi++) {
+            if (notInMST[vi] && minWeigh[vi] < curMinMinWei) {
+                curMinMinWei = minWeigh[vi];
                 otherSide = vi;
             }
         }
