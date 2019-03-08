@@ -17,21 +17,22 @@ package java_util_concurrent;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
-
+import java.util.concurrent.atomic.AtomicLong;
 
 public class VolatileTest {
-    //volatile only guarantee the visibility, and kind of ordering, but not sure the atomic.
+    // volatile only guarantee the visibility, and kind of ordering, but not sure the atomic.
 
     private static volatile int v = 0;
     private static volatile long vl = 0;
-    private static int a = 0;
+    private static int synced = 0;
+    private static AtomicLong atomicLong = new AtomicLong(0);
 
     public static synchronized void syncincrease() {
-        a++; // with 'syncronized' to make sure atomic operation
+        synced++; // with 'syncronized' to make sure atomic operation
     }
 
     public static synchronized int readSynced() {
-        return a; // read is also need synchronized
+        return synced; // read is also need synchronized
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -41,10 +42,11 @@ public class VolatileTest {
                 new CyclicBarrier(
                         testNumber,
                         () -> {
-                            System.out.println("All are done");
+                            System.out.println(String.format("%d operation are done", testNumber));
                             System.out.println("v: " + v);
                             System.out.println("vl: " + vl);
-                            System.out.println("a: " + readSynced());
+                            System.out.println("synced: " + readSynced());
+                            System.out.println("atomicLong: " + atomicLong.get());
                         });
 
         for (int i = 0; i < testNumber; i++) {
@@ -64,8 +66,10 @@ public class VolatileTest {
                                     try {
                                         c.await();
                                         Thread.currentThread().sleep(100l);
-                                        v++;vl++;
+                                        v++;
+                                        vl++;
                                         syncincrease();
+                                        atomicLong.getAndIncrement();
                                         barrier.await();
                                     } catch (Exception e) {
                                         e.printStackTrace();
