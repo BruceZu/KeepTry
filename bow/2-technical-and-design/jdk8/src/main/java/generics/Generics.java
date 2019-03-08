@@ -31,6 +31,16 @@ public class Generics {
 
     public static <T> void copy(List<? super T> dest, List<? extends T> src) {}
 
+    public static <T extends Comparable<? super T>> T max(List<? extends T> list) {
+        T temp = list.get(0);
+        for (T cur : list) {
+            if (cur.compareTo(cur) > 0) {
+                temp = cur;
+            }
+        }
+        return temp;
+    }
+
     public static <T> List<? super T> copy(List<? extends T> src) {
         List<? super T> dest = new ArrayList<>();
         for (T t : src) {
