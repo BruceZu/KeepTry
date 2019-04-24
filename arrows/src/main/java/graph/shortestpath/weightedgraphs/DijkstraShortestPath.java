@@ -15,10 +15,15 @@
 
 package graph.shortestpath.weightedgraphs;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <pre>
+ * when the weight of edge is negtive number. Dijkstra algorithm does not work.
+ *
  * Scenario:
  * provide: start node and end node;
  *          It maybe a directed graph or undirected graph.
@@ -31,22 +36,24 @@ import java.util.*;
  *
  * Data structure
  * Node:
- *    map: immediate neighbors and the edge length/distance.
- *    int and node: keep tentative shortest path' distance from start node to this node
- *                  and the related predecessor node on the shortest path.
+ *    map: neighbor:distance.
+ *    int: current shortest path distance from start node
+ *    node: predecessor node on the current shortest path.
  *
  *    Initial:
- *     -- map: If a given node has not path to his neighbor node, set the distance to be infinity: Integer.MAX_VALUE;
+ *     -- map: If node has not path to his neighbor node, set the distance:  Integer.MAX_VALUE;
  *     -- int and node:
- *         for start node: 'td', 'tentative shortest distance', is 0;
- *                         'predecessor node' is null.
- *         for other node: 'td', 'tentative shortest distance', is Integer.MAX_VALUE;
- *                         'predecessor node' is null.
+ *         for start node:  shortest distance  is 0;
+ *                          predecessor node  is null.
+ *         for other node:  shortest distance is Integer.MAX_VALUE;
+ *                          predecessor node is null.
  *
- * Set<Node>:  settled nodes, have found the shortest paths from start node to these nodes .
- * Heap<Node>: sortedBorder, keep nodes under evaluating. a border between settled node and left nodes.
- * // Set<Node> borders is for performance concern.
- * Stack<Node> or StringBuilder:  used to calculate the shortest path.
+ * Set<Node>:  evaluated nodes, have found the shortest paths from start node .
+ * Heap<Node>: under evaluating. a border between settled node and left nodes.
+ *
+ * use a binary heap which keep the node position in the binary heap array to get O(logV)
+ * for decrease operation
+ * Stack<Node> or StringBuilder: used to calculate the shortest path.
  *
  * Algorithm:
  *
@@ -61,63 +68,68 @@ import java.util.*;
  *      else continue loop
  *
  * @see <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Algorithm"> wiki</a>
+ *
+ * adjacency lists and binary heap. it is necessary to use an auxiliary
+ * data structure that maps each vertex to its position in the heap, and to keep this structure up
+ * to date as the priority queue Q changes. With a self-balancing binary search tree or binary heap,
+ * the algorithm requires.
+ *
+ * Theta  ((|E|+|V|)log|V|)
+ * time in the worst case for connected graphs this time bound
+ * can be simplified to  Theta (|E|log|V|) "
+ *
  */
-// O(N)
 public class DijkstraShortestPath {
+
     private static boolean hasShortestPath(Node start, Node end) {
-        Queue<Node> borderHeap = new PriorityQueue(); // top is with shortest distance from start
-        Set<Node> doneSet = new HashSet(); // avoid undirect graph's repeat; avoid directed graph's circle
+        IBinaryHeap evaluating = new IBinaryHeap(2); // top is with shortest distance from start
+        Set<Node> evaluated =
+                new HashSet(); // avoid undirect graph's repeat; avoid directed graph's circle
 
-        borderHeap.offer(start);
+        evaluating.offer(start);
         while (true) {
-            if (borderHeap.isEmpty()) {
-                return false;
+            if (evaluating.isEmpty()) {
+                return false; // no way
             }
-            Node toBeSettled = borderHeap.poll();
+            Node cur = evaluating.poll();
+            evaluated.add(cur);
 
-            // uniform-cost search
-            if (toBeSettled.tentativeShortestDistanceFromStart == Integer.MAX_VALUE) {
-                return false;   // check this before the following check
+            if (cur.shortDisFromStart == Integer.MAX_VALUE) {
+                return false; // no way
             }
 
-            if (toBeSettled == end) {
+            if (cur == end) {
                 return true;
             }
-            // update neighbors tentative shortest distance from start
-            for (Node neighbor : toBeSettled.distanceToAdjacentNode.keySet()) {
-                if (!doneSet.contains(neighbor)) {
-                    int viaCur =
-                            toBeSettled.tentativeShortestDistanceFromStart
-                                    + toBeSettled.distanceToAdjacentNode.get(neighbor);
+            // continue evaluating
+            for (Node neighbor : cur.neighborDistance.keySet()) {
+                if (!evaluated.contains(neighbor)) {
+                    int viaCur = cur.shortDisFromStart + cur.neighborDistance.get(neighbor);
                     if (viaCur < 0) { // distance may be MAX_VALUE
                         viaCur = Integer.MAX_VALUE;
                     }
-                    if (viaCur < neighbor.tentativeShortestDistanceFromStart) {
-                        neighbor.tentativeShortestDistanceFromStart = viaCur;
-                        neighbor.predecessorNode = toBeSettled;
+                    if (viaCur < neighbor.shortDisFromStart) {
+                        neighbor.shortDisFromStart = viaCur;
+                        neighbor.pre = cur;
+                        if (evaluating.index(neighbor) == null) {
+                            evaluating.offer(neighbor); // O(logN)
+                        } else {
+                            evaluating.shiftUp(neighbor, evaluating.index(neighbor)); // O(logN)
+                        }
                     }
-                    // if it is already in the border
-                    //     if it is updated:  remove and offer again
-                    //     else:  need not touch it
-                    // else: offer 
-                    borderHeap.remove(neighbor); // O(N)
-                    borderHeap.offer(neighbor);
                 }
-
             }
-            // settled
-            doneSet.add(toBeSettled);
         }
     }
 
-     static String getShortestPath(Node end) {
+    static String getShortestPath(Node end) {
         // trace back to start node along the shortest path from end
         StringBuilder r = new StringBuilder();
         r.append(end.name);
         Node n = end;
-        while (n.predecessorNode != null) {
-            r.append(n.predecessorNode.name);
-            n = n.predecessorNode;
+        while (n.pre != null) {
+            r.append(n.pre.name);
+            n = n.pre;
         }
         return r.reverse().toString();
     }
@@ -174,7 +186,8 @@ public class DijkstraShortestPath {
         bNodeDistanceTo.put(c, 10);
         // bNodeDistanceTo.put(c, Integer.MAX_VALUE); TEST 1
         bNodeDistanceTo.put(end, 15);
-        // bNodeDistanceTo.put(end, Integer.MAX_VALUE); // TEST 2   this not path between start a and end d
+        // bNodeDistanceTo.put(end, Integer.MAX_VALUE); // TEST 2   this not path between start a
+        // and end d
 
         cNodeDistanceTo.put(start, 9);
         cNodeDistanceTo.put(b, 10);
