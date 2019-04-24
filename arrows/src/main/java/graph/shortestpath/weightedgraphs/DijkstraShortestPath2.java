@@ -15,58 +15,57 @@
 
 package graph.shortestpath.weightedgraphs;
 
-import java.util.*;
-
 import static graph.shortestpath.weightedgraphs.DijkstraShortestPath.getShortestPath;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <pre>
- * Difference with DijkstraShortestPath is the parameter of methods
- * provided the Set<Node>graph.
+ * Difference with DijkstraShortestPath
+ *
+ * put all nodes in heap in advance
  *
  * pros:
- * with it the code becomes concise with one Heap is enough
- * Set<Node> settled is saved too
+ *
+ * -- no 'Set<Node> evaluated'
+ * -- need not know which is the start node
  *
  * cons:
- * 1 initially all nodes are entered into the priority queue. This is, however, not necessary
- * see DijkstraShortestPath, especially when memory is not enough.
- * 2 resort each loop. Heap (Priority can not resort automatically when some element changed value)
- *
- * O(|E|+|V|log|V|) for connected graphsin the worst case;.
- * the number of edges, denoted  |E|,
- * and the number of vertices, denoted |V|
- * When using binary heaps, the average case time complexity is lower than the worst-case.
+ * -- initially all nodes are entered into the priority queue. This is, however, not necessary
+ *    especially when memory is not enough.
  */
 public class DijkstraShortestPath2 {
 
     public static boolean hashShortestPath(Set<Node> graph, Node end) {
-        Queue<Node> unSettled = new PriorityQueue();
+        IBinaryHeap evaluating = new IBinaryHeap(32);
 
         for (Node n : graph) {
-            unSettled.offer(n);
+            evaluating.offer(n);
         }
-        while (!unSettled.isEmpty()) {
-            Node toBeSttled = unSettled.poll();
-            if (toBeSttled.tentativeShortestDistanceFromStart == Integer.MAX_VALUE) {
+        while (!evaluating.isEmpty()) {
+            Node toBeSttled = evaluating.poll();
+            if (toBeSttled.shortDisFromStart == Integer.MAX_VALUE) {
                 return false;
             }
             if (toBeSttled == end) {
                 return true;
             }
-            for (Node neighbor : toBeSttled.distanceToAdjacentNode.keySet()) {
-                if (unSettled.contains(neighbor)) {
-                    int alt = toBeSttled.tentativeShortestDistanceFromStart
-                            + toBeSttled.distanceToAdjacentNode.get(neighbor);
-                    if (alt < 0) {
-                        alt = Integer.MAX_VALUE;
-                    }
-                    if (alt < neighbor.tentativeShortestDistanceFromStart) {
-                        neighbor.tentativeShortestDistanceFromStart = alt;
-                        neighbor.predecessorNode = toBeSttled;
-
-                        unSettled.remove(neighbor);
-                        unSettled.offer(neighbor);
+            for (Node neighbor : toBeSttled.neighborDistance.keySet()) {
+                int alt = toBeSttled.shortDisFromStart + toBeSttled.neighborDistance.get(neighbor);
+                if (alt < 0) {
+                    alt = Integer.MAX_VALUE;
+                }
+                if (alt < neighbor.shortDisFromStart) {
+                    neighbor.shortDisFromStart = alt;
+                    neighbor.pre = toBeSttled;
+                    if (evaluating.index(neighbor) == null) {
+                        evaluating.offer(neighbor); // O(logN)
+                    } else {
+                        evaluating.shiftUp(neighbor, evaluating.index(neighbor)); // O(logN)
                     }
                 }
             }
@@ -127,7 +126,8 @@ public class DijkstraShortestPath2 {
         // bNodeDistanceTo.put(c, 10);
         bNodeDistanceTo.put(c, Integer.MAX_VALUE); // TEST 1
         bNodeDistanceTo.put(end, 15);
-        // bNodeDistanceTo.put(end, Integer.MAX_VALUE); // TEST 2   this not path between start a and end d
+        // bNodeDistanceTo.put(end, Integer.MAX_VALUE); // TEST 2   this not path between start a
+        // and end d
 
         cNodeDistanceTo.put(start, 9);
         cNodeDistanceTo.put(b, 10);
@@ -150,9 +150,7 @@ public class DijkstraShortestPath2 {
         dNodeDistanceTo.put(b, 15);
         // dNodeDistanceTo.put(b, Integer.MAX_VALUE); // TEST 2
 
-        System.out.println(shortestPath(
-                new HashSet<>(Arrays.asList(start, e, end, b, c, f)),
-                start,
-                end));
+        System.out.println(
+                shortestPath(new HashSet<>(Arrays.asList(start, e, end, b, c, f)), start, end));
     }
 }
