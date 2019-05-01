@@ -61,12 +61,13 @@ import org.jetbrains.annotations.NotNull;
  *
  */
 public class MinimumSpanningTree {
+
     private static class Edge implements Comparable<Edge> {
-        int v1, v2, w;
+        int from, to, w;
 
         public Edge(int vertex1Id, int vertex2Id, int weight) {
-            this.v1 = vertex1Id;
-            this.v2 = vertex2Id;
+            this.from = vertex1Id;
+            this.to = vertex2Id;
             this.w = weight;
         }
 
@@ -77,7 +78,7 @@ public class MinimumSpanningTree {
 
         @Override
         public String toString() {
-            return v1 + "-" + v2 + ", weight: " + w;
+            return from + "-" + to + ", weight: " + w;
         }
     }
 
@@ -114,7 +115,7 @@ public class MinimumSpanningTree {
     }
 
     /**
-     * @param N number Of Vertex
+     * @param N = |V|, M = |E|
      * @param edges graph represented by edges array
      */
     public static Collection<Edge> mstKruskal(int N, Edge[] edges) {
@@ -127,7 +128,7 @@ public class MinimumSpanningTree {
         int[] next = new int[N];
         int[] rank = new int[N];
         // the rank is not depth or height because path compression will change the tree's heights
-        // over time
+        // over time. it is the history max depth or height.
 
         for (int v = 0; v < N; ++v) {
             next[v] = v; // index is vertex ID from 0 to N-1.
@@ -138,7 +139,7 @@ public class MinimumSpanningTree {
         Edge e; // current edge
         do { //  O(M)
             e = edges[ei];
-            int v1Root = root(next, e.v1), v2Root = root(next, e.v2);
+            int v1Root = root(next, e.from), v2Root = root(next, e.to);
             if (v1Root != v2Root) {
                 // skip when v1Root == v2Root, else it will create circle
                 r.add(e);
@@ -152,65 +153,49 @@ public class MinimumSpanningTree {
     /**
      * <pre>
      *  O(N^2)
-     *  data structure:
-     * - index is vertex Id.
-     * - current vertex vi and otherV[vi] are of a edge whose wight is weight[vi].
-     *   This edge is the shortest one of the edges between the vi and all other vertexes
-     *   in the current MST.
-     * @param graph represented by adjacency matrix.
      * @return
      */
     public static int[] mstPrim(int graph[][]) {
-        int N = graph.length;
+        int V = graph.length;
 
-        int resultOtherV[] = new int[N];
-        Arrays.fill(resultOtherV, -1);
+        int vTo[] = new int[V]; // the vertex in MST from where the shortest edge exits
+        Arrays.fill(vTo, -1);
 
-        int minWei[] = new int[N];
-        Arrays.fill(minWei, Integer.MAX_VALUE);
+        int distTo[] = new int[V]; // the shortest edge length from MST
+        Arrays.fill(distTo, Integer.MAX_VALUE);
 
-        boolean noSeleted[] = new boolean[N];
-        Arrays.fill(noSeleted, true);
+        boolean relax[] = new boolean[V];
+        Arrays.fill(relax, false);
 
-        minWei[0] = 0;
-        for (int n = 0; n < N; n++) {
-            int v = cutMinimumEdgeOuterV(minWei, noSeleted);
-            noSeleted[v] = false;
+        distTo[0] = 0;
+        for (int i = 0; i < V; i++) {
+            int min = Integer.MAX_VALUE;
+            int v = -1;
 
-            // Update status of weight[vi] and therV[vi]
-            for (int vi = 0; vi < N; vi++) {
-                if (noSeleted[vi] /* is in cut set */
+            // select out the shortest edge in the cut, relax a vertex.
+            for (int vi = 0; vi < V; vi++) {
+                if (!relax[vi] && distTo[vi] < min) {
+                    min = distTo[vi];
+                    v = vi;
+                }
+            }
+
+            relax[v] = true;
+
+            // Update cut with the relax vertex.
+            for (int vi = 0; vi < V; vi++) {
+                if (!relax[vi] /* is in cut set */
                         && graph[v][vi] != 0 /* there is edge */
-                        && graph[v][vi] < minWei[vi] /* now the v contributes
-                        the shortest one of edges from MST's vertexes to the given vi which is not in MST */) {
-                    minWei[vi] = graph[v][vi];
-                    resultOtherV[vi] = v;
+                        && graph[v][vi] < distTo[vi] /* now the v contributes
+                        the shortest edge from MST to the vi which is not in MST */) {
+                    distTo[vi] = graph[v][vi];
+                    vTo[vi] = v;
                 }
             }
         }
-        return resultOtherV;
+        return vTo;
     }
 
-    /**
-     * O(N). calculate the shortest edge of current `cut circle` it is the smallest one of weight[].
-     *
-     * @param minWeigh for vertax vi the minWeigh[vi] means the shortest one among all edges from
-     *     each vertex of MST to the vi
-     * @param notInMST
-     * @return the shortest edge's vertex that is not in MST
-     */
-    private static int cutMinimumEdgeOuterV(int minWeigh[], boolean notInMST[]) {
-        int curMinMinWei = Integer.MAX_VALUE;
-        int otherSide = -1;
-
-        for (int vi = 0; vi < minWeigh.length; vi++) {
-            if (notInMST[vi] && minWeigh[vi] < curMinMinWei) {
-                curMinMinWei = minWeigh[vi];
-                otherSide = vi;
-            }
-        }
-        return otherSide;
-    }
     // ------------------------------------------------------------------------------------------
     public static void main(String[] args) {
 
