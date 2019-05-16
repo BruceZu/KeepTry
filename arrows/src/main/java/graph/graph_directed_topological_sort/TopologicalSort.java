@@ -15,13 +15,17 @@
 
 package graph.graph_directed_topological_sort;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
 /**
  * <pre>
+ *   why we need it? e.g. for build system
  * Condition:
  *          DAG：Directed Acyclic Graph
  * Aim:     a linear ordering of vertexes such that for every directed edge uv, vertex u comes before v in the ordering.
@@ -76,8 +80,8 @@ import java.util.Stack;
  *    cons:  need check circle firstly
  *    pros:  from any node to start
  *
- *  todo The topological ordering can also be used to quickly compute shortest paths through
- *  a weighted directed acyclic graph.
+ *  todo The topological order can also be used to quickly compute shortest paths through
+ *  a weighted directed(negative wight is allowed) acyclic graph.
  *
  *   <a href="https://en.wikipedia.org/wiki/Topological_sorting"> wiki </a>
  *   <a href="https://www.youtube.com/watch?v=ddTC4Zovtbc"> DFS from youtube </a>
@@ -104,7 +108,80 @@ import java.util.Stack;
  *     o
  */
 public class TopologicalSort {
-    //as do not care edge weight, make the data structure simple.
+
+    static class G {
+        // make it simple, assume all Vertex is marked with ID from 0 to V-1.
+        // thus it is possible use array, else have to use Map and Node.
+        private List<Integer>[] vToAdjest;
+        private int[] inDegree;
+        private int V;
+
+        public G(int /* number of Vertex */ V) {
+            this.V = V;
+            vToAdjest = new List[V];
+            for (int i = 0; i < V; i++) {
+                vToAdjest[i] = new ArrayList();
+            }
+            inDegree = new int[V];
+        }
+
+        public G edge(int from, int to) {
+            vToAdjest[from].add(to);
+            inDegree[to]++;
+            return this;
+        }
+
+        public List topologicalOrder() {
+            Queue<Integer> relax = new LinkedList();
+
+            for (int i = 0; i < V; i++) {
+                if (inDegree[i] == 0) {
+                    relax.add(i);
+                }
+            }
+            List<Integer> r = new ArrayList<>(V);
+            Integer cur;
+            while ((cur = relax.poll()) != null) {
+                r.add(cur);
+                for (int ad : vToAdjest[cur]) {
+                    if (--inDegree[ad] == 0) {
+                        relax.add(ad);
+                    }
+                }
+            }
+
+            if (r.size() != V) {
+                System.out.println("There is circle. no topologicall sort order");
+                return null;
+            }
+            return r;
+        }
+    }
+
+    public static void main(String[] args) {
+        // graph is a case in algs4.cs.princeton.edu
+        G g = new G(8);
+        g.edge(0, 1)
+                .edge(0, 7)
+                .edge(0, 4)
+                .edge(1, 3)
+                .edge(1, 2)
+                .edge(1, 7)
+                .edge(4, 5)
+                .edge(4, 6)
+                .edge(4, 7)
+                .edge(7, 2)
+                .edge(7, 5)
+                .edge(5, 2)
+                .edge(5, 6)
+                .edge(2, 3)
+                .edge(2, 6)
+                .edge(3, 6);
+        System.out.println(g.topologicalOrder());
+    }
+
+    // ----------------------------------------------------------
+    // as do not care edge weight, make the data structure simple.
     class V {
         Set<V> outgoings; // neighbors
     }
@@ -120,13 +197,13 @@ public class TopologicalSort {
         return r;
     }
 
-    private static void dfsPosterOrder(V vertex, Stack<V> r, Set<V> black) {
-        if (!black.contains(vertex)) {
-            black.add(vertex);
-            for (V out : vertex.outgoings) {
-                dfsPosterOrder(out, r, black);
+    private static void dfsPosterOrder(V v, Stack<V> r, Set<V> visited) {
+        if (!visited.contains(v)) {
+            visited.add(v);
+            for (V out : v.outgoings) {
+                dfsPosterOrder(out, r, visited);
             }
-            r.push(vertex); // post order
+            r.push(v); // post order
         }
     }
 }
