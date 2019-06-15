@@ -98,10 +98,9 @@ public class Leetcode1080InsufficientNodesinRoottoLeafPaths {
         if (root.right != null) {
             root.right = sufficientSubset(root.right, limit - root.val);
         }
-        return root.left == root.right && root.left == null ? null : root;
+        return root.left == null && root.right == null ? null : root;
     }
 
-    // failed to pass the last 4 test cases in leetcode
     public static TreeNode sufficientSubset(TreeNode root, int limit) {
         if (root == null) return null;
 
@@ -109,7 +108,20 @@ public class Leetcode1080InsufficientNodesinRoottoLeafPaths {
     }
 
     private static long maxPathSum(TreeNode node, long sum, int limit) {
-        if (node == null) return sum;
+        if (node.left == null && node.right == null) {
+            // leaf
+            return sum + node.val;
+        }
+        if (node.left == null && node.right != null) {
+            long rSum = maxPathSum(node.right, sum + node.val, limit);
+            if (rSum < limit) node.right = null;
+            return rSum;
+        }
+        if (node.left != null && node.right == null) {
+            long lSum = maxPathSum(node.left, sum + node.val, limit);
+            if (lSum < limit) node.left = null;
+            return lSum;
+        }
 
         long lSum = maxPathSum(node.left, sum + node.val, limit);
         long rSum = maxPathSum(node.right, sum + node.val, limit);
@@ -127,13 +139,12 @@ public class Leetcode1080InsufficientNodesinRoottoLeafPaths {
     public static void main(String[] args) {
         // [0, null, -1, null, null];
         // limit = 0;
-        // expected return is [0]
+        // expected return is null
 
         TreeNode root = new TreeNode(0);
         root.right = new TreeNode(-1);
         root = sufficientSubset(root, 0);
-
-        System.out.println(root.right == null);
+        System.out.println(root == null);
 
         // [1, null, 10, -100, -100, null, null, null, null];
         // limit = 10;
@@ -147,10 +158,27 @@ public class Leetcode1080InsufficientNodesinRoottoLeafPaths {
 
         // [2, -3];
         // limit = 1;
-        // expected return is [2];
+        // expected return is null;
         root = new TreeNode(2);
         root.left = new TreeNode(-3);
         root = sufficientSubset(root, 1);
-        System.out.println(root.left == null && root.val == 2);
+        System.out.println(root == null);
+
+        // [1,2,-3,-5,null,4,null]
+        // limit = -1
+        // expected return  [1,null,-3,4]
+
+        root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(-5);
+        root.right = new TreeNode(-3);
+        root.right.left = new TreeNode(4);
+        root = sufficientSubset(root, -1);
+        System.out.println(
+                root.val == 1
+                        && root.left == null
+                        && root.right.val == -3
+                        && root.right.left.val == 4
+                        && root.right.right == null);
     }
 }
