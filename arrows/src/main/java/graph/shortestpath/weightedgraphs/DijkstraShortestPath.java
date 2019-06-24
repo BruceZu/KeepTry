@@ -74,15 +74,19 @@ import java.util.Set;
  * to date as the priority queue Q changes. With a self-balancing binary search tree or binary heap,
  * the algorithm requires.
  *
- * Theta  ((|E|+|V|)log|V|)
+ * `ø((|E|+|V|)log|V|)`
+ *
  * time in the worst case for connected graphs this time bound
- * can be simplified to  Theta (|E|log|V|) "
+ * can be simplified to
+ *
+ * `ø(|E|log|V|)` "
  *
  */
 public class DijkstraShortestPath {
 
     private static boolean hasShortestPath(Node start, Node end) {
-        IBinaryHeap evaluating = new IBinaryHeap(2); // top is with shortest distance from start
+        IBinaryHeap<Node> evaluating =
+                new IBinaryHeap<>(2); // top element is with shortest distance from start
         Set<Node> evaluated =
                 new HashSet(); // avoid undirect graph's repeat; avoid directed graph's circle
 
@@ -111,10 +115,10 @@ public class DijkstraShortestPath {
                     if (viaCur < neighbor.shortDisFromStart) {
                         neighbor.shortDisFromStart = viaCur;
                         neighbor.pre = cur;
-                        if (evaluating.index(neighbor) == null) {
-                            evaluating.offer(neighbor); // O(logN)
+                        if (evaluating.contains(neighbor)) {
+                            evaluating.shiftUp(neighbor); // O(logN)
                         } else {
-                            evaluating.shiftUp(neighbor, evaluating.index(neighbor)); // O(logN)
+                            evaluating.offer(neighbor); // O(logN)
                         }
                     }
                 }
@@ -142,7 +146,7 @@ public class DijkstraShortestPath {
         if (hasPath) {
             return getShortestPath(end);
         } else {
-            return "this not path betwen start " + start.name + " and end " + end.name;
+            return "there is not path betwen start " + start.name + " and end " + end.name;
         }
     }
 
@@ -210,6 +214,6 @@ public class DijkstraShortestPath {
         dNodeDistanceTo.put(b, 15);
         // dNodeDistanceTo.put(b, Integer.MAX_VALUE); // TEST 2
 
-        System.out.println(DijkstraShortestPath.shortestPath(start, end));
+        System.out.println(DijkstraShortestPath.shortestPath(start, end).equals("acd"));
     }
 }

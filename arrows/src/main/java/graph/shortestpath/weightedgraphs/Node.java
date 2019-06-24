@@ -15,13 +15,10 @@
 
 package graph.shortestpath.weightedgraphs;
 
-import java.util.AbstractQueue;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
     // assume this is id and be distinguish
     // when label it as digit from 0 to n-1, the Node can be
     // translated to 3 array
@@ -49,7 +46,7 @@ public class Node implements Comparable {
     }
 
     @Override
-    public int compareTo(@NotNull Object o) {
+    public int compareTo(@NotNull Node o) {
         Node with = (Node) o;
         return this.equals(with) ? 0 : this.shortDisFromStart.compareTo(with.shortDisFromStart);
     }
@@ -63,107 +60,5 @@ public class Node implements Comparable {
     public boolean equals(Object obj) {
         Node with = (Node) obj;
         return this.name.equals(with.name);
-    }
-}
-
-class IBinaryHeap extends AbstractQueue<Node> implements java.io.Serializable {
-
-    int size;
-    Node[] heap;
-    private Map<Node, Integer>
-            indexes; // position in binary heap, null means it is not is binary heap
-
-    private void doubleSize() {
-        Node[] old = heap;
-        heap = new Node[heap.length * 2];
-
-        System.arraycopy(old, 1, heap, 1, size);
-    }
-
-    private void percolatingDown(Node n, int pos) {
-        int child;
-        for (; 2 * pos <= size; pos = child) {
-            child = 2 * pos;
-            Node c = heap[child];
-            if (child + 1 <= size && c.compareTo(heap[child + 1]) > 0) {
-                c = heap[child = child + 1];
-            }
-
-            if (n.compareTo(c) < 0) {
-                break;
-            }
-            heap[pos] = c;
-            indexes.put(c, pos);
-        }
-        heap[pos] = n;
-        indexes.put(n, pos);
-    }
-
-    public IBinaryHeap(int capacity) {
-        // keep data from index 1: calculate parent with index/2. child: 2＊k, 2＊k+1
-        // (keep data from index 0: calculate parent with (index-1)/2.child: 2＊k+1,2＊k+2)
-        size = 0; // current size of nodes
-        heap = new Node[capacity];
-        indexes = new HashMap();
-    }
-
-    public Integer index(Node n) {
-        return indexes.get(n);
-    }
-
-    public void shiftUp(Node n, int pos) {
-        for (; pos > 1 && n.compareTo(heap[pos / 2]) < 0; pos = pos / 2) {
-            heap[pos] = heap[pos / 2];
-            indexes.put(heap[pos], pos);
-        }
-        heap[pos] = n;
-        indexes.put(n, pos);
-    }
-
-    public boolean offer(Node n) {
-        if (n == null) throw new NullPointerException();
-        if (size == heap.length - 1) {
-            doubleSize();
-        }
-        int pos = ++size;
-        if (pos == 1) {
-            heap[pos] = n;
-            indexes.put(n, pos);
-
-        } else {
-            shiftUp(n, pos);
-        }
-        return true;
-    }
-
-    public Node poll() {
-        if (size == 0) {
-            throw null;
-        }
-        Node min = heap[1];
-        int s = size--;
-
-        Node n = heap[s];
-        heap[s] = null;
-
-        if (s != 1) {
-            percolatingDown(n, 1);
-        }
-        return min;
-    }
-
-    @Override
-    public Iterator<Node> iterator() {
-        throw new UnsupportedOperationException("iterator");
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public Node peek() {
-        return (size == 0) ? null : heap[1];
     }
 }
