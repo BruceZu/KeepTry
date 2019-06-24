@@ -41,7 +41,7 @@ import java.util.Set;
 public class DijkstraShortestPath2 {
 
     public static boolean hashShortestPath(Set<Node> graph, Node end) {
-        IBinaryHeap evaluating = new IBinaryHeap(32);
+        IBinaryHeap<Node> evaluating = new IBinaryHeap(32);
 
         for (Node n : graph) {
             evaluating.offer(n);
@@ -62,10 +62,10 @@ public class DijkstraShortestPath2 {
                 if (alt < neighbor.shortDisFromStart) {
                     neighbor.shortDisFromStart = alt;
                     neighbor.pre = toBeSttled;
-                    if (evaluating.index(neighbor) == null) {
-                        evaluating.offer(neighbor); // O(logN)
+                    if (evaluating.contains(neighbor)) {
+                        evaluating.shiftUp(neighbor); // O(logN)
                     } else {
-                        evaluating.shiftUp(neighbor, evaluating.index(neighbor)); // O(logN)
+                        evaluating.offer(neighbor); // O(logN)
                     }
                 }
             }
@@ -151,6 +151,6 @@ public class DijkstraShortestPath2 {
         // dNodeDistanceTo.put(b, Integer.MAX_VALUE); // TEST 2
 
         System.out.println(
-                shortestPath(new HashSet<>(Arrays.asList(start, e, end, b, c, f)), start, end));
+                shortestPath(new HashSet<>(Arrays.asList(start, e, end, b, c, f)), start, end).equals("abd"));
     }
 }
