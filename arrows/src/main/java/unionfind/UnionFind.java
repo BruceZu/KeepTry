@@ -34,64 +34,20 @@ package unionfind;
  *  for any value of n that can be written in this physical universe,
  *  so the disjoint-set operations take place in essentially constant time."
  */
-public class UnionFind {
+interface Relation<E> {
+    E next(E e);
 
-    // Assume all nodes have been tagged with digits,
-    // So: ids are distinguish, 0 ~ n-1,
-    private final int[] parent; // next node id of
-    private final int[] rank;
+    void setNext(E key, E value);
+}
 
-    // Tag nodes with digits,
-    public UnionFind(String[] nodes) {
-        // Just make a easy cases, only 100 nodes.
-        // Initially let each node point to itself, circle, to form a tree
-        // so the root/end is itself. Each node represents a islands/groups of machines
-        //
-        // if the root points to any other node in its islands/groups of machines.
-        // It has only one circle, as for any node there is
-        // only one 'come out' edge.
-        parent = new int[100];
-        rank = new int[100];
-        for (int i = 0; i < 100; i++) {
-            parent[i] = i;
-        }
-    }
+interface Rank<E, Integer> {
+    Integer rank(E e);
 
-    /**
-     * Path splitting makes every node on the path point to its grandparent. O(alpha (n))
-     *
-     * @see graph.MinimumSpanningTree#root(int[], int)
-     */
-    public int root(int i) {
-        while (parent[i] != i) {
-            int p = parent[i];
-            parent[i] = parent[p];
-            i = p;
-        }
-        return i;
-    }
+    void increase(E key);
+}
 
-    /**
-     * O(alpha (n))
-     *
-     * @see graph.MinimumSpanningTree#merge(int[], int[], int, int)
-     */
-    public void union(int ida, int idb) {
-        int r1 = root(ida);
-        int r2 = root(idb);
+public interface UnionFind<E> {
+    E find(E e);
 
-        int el /* equal or less than*/, o /* other*/;
-        if (rank[r1] <= rank[r2]) {
-            el = r1;
-            o = r2;
-        } else {
-            el = r2;
-            o = r1;
-        }
-
-        parent[el] = o;
-        if (rank[el] == rank[o]) {
-            rank[o]++;
-        }
-    }
+    void union(E e1, E e2);
 }
