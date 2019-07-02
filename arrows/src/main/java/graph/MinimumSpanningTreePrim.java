@@ -15,7 +15,7 @@
 
 package graph;
 
-import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * <pre>
@@ -37,49 +37,13 @@ import java.util.Arrays;
  */
 public class MinimumSpanningTreePrim {
 
-    /**
-     * <pre>
-     *  O(N^2)
-     * @return
-     */
-    public static int[] mstPrim(int graph[][]) {
-        int V = graph.length;
-
-        int vTo[] = new int[V]; // the vertex in MST from where the shortest edge exits
-        Arrays.fill(vTo, -1);
-
-        int distTo[] = new int[V]; // the shortest edge length from MST
-        Arrays.fill(distTo, Integer.MAX_VALUE);
-
-        boolean relax[] = new boolean[V];
-        Arrays.fill(relax, false);
-
-        distTo[0] = 0;
-        for (int i = 0; i < V; i++) {
-            int min = Integer.MAX_VALUE;
-            int v = -1;
-
-            // select out the shortest edge in the cut, relax a vertex.
-            for (int vi = 0; vi < V; vi++) {
-                if (!relax[vi] && distTo[vi] < min) {
-                    min = distTo[vi];
-                    v = vi;
-                }
-            }
-
-            relax[v] = true;
-
+    public static Collection<Edge> mstPrim(IGraph<IVertex, Edge> g) {
+        g.initVertexDistanceStatus();
+        while (g.left()) {
+            IVertex v = g.selectVertex();
             // Update cut with the relax vertex.
-            for (int vi = 0; vi < V; vi++) {
-                if (!relax[vi] /* is in cut set */
-                        && graph[v][vi] != 0 /* there is edge */
-                        && graph[v][vi] < distTo[vi] /* now the v contributes
-                      the shortest edge from MST to the vi which is not in MST */) {
-                    distTo[vi] = graph[v][vi];
-                    vTo[vi] = v;
-                }
-            }
+            g.updateCutWith(v, g.getDistCalculator());
         }
-        return vTo;
+        return g.getMst();
     }
 }
