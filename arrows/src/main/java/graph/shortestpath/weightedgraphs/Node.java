@@ -1,4 +1,4 @@
-//  Copyright 2017 The keepTry Open Source Project
+//  Copyright 2019 The KeepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,40 +15,42 @@
 
 package graph.shortestpath.weightedgraphs;
 
+import graph.IVertex;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class Node implements Comparable<Node> {
+public class Node implements Comparable<Node>, IVertex {
     // assume this is id and be distinguish
     // when label it as digit from 0 to n-1, the Node can be
     // translated to 3 array
-    String name;
-    Map<Node, Integer> neighborDistance; // immediate neighbors
+    private String name;
+    private Map<Node, Integer> neighDistMap; // immediate neighbors
 
-    Integer shortDisFromStart;
-    Node pre; // predecessor Node
+    private Integer shortestDisToI;
+    private IVertex vertexToI; // predecessor Node
 
-    public Node(String name, Map<Node, Integer> distanceToAdjacentNode) {
+    public Node(String name, Map<Node, Integer> map) {
         this.name = name;
-        this.neighborDistance = distanceToAdjacentNode;
-        this.shortDisFromStart = Integer.MAX_VALUE;
-        this.pre = null;
+        this.neighDistMap = map;
+        this.shortestDisToI = Integer.MAX_VALUE;
+        this.vertexToI = null;
     }
 
     public Node(
             String name,
-            Map<Node, Integer> distanceToAdjacentNode,
-            int startNodeTentativeShortestDistanceFromStart) {
+            Map<Node, Integer> map,
+            int shortestDisToStartNode) {
         this.name = name;
-        this.neighborDistance = distanceToAdjacentNode;
-        this.shortDisFromStart = startNodeTentativeShortestDistanceFromStart;
-        this.pre = null;
+        this.neighDistMap = map;
+        this.shortestDisToI = shortestDisToStartNode;
+        this.vertexToI = null;
     }
 
     @Override
     public int compareTo(@NotNull Node o) {
-        Node with = (Node) o;
-        return this.equals(with) ? 0 : this.shortDisFromStart.compareTo(with.shortDisFromStart);
+        Node with = o;
+        return this.equals(with) ? 0 : this.shortestDisToI.compareTo(with.shortestDisToI);
     }
 
     @Override
@@ -59,6 +61,41 @@ public class Node implements Comparable<Node> {
     @Override
     public boolean equals(Object obj) {
         Node with = (Node) obj;
-        return this.name.equals(with.name);
+        return this.name.equals(with.getName());
+    }
+
+    @Override
+    public Map<Node, Integer> getNeighborWeighMap() {
+        return neighDistMap;
+    }
+
+    @Override
+    public int getShortestDistanceToI() {
+        return this.shortestDisToI;
+    }
+
+    @Override
+    public void setShortestDistanceWith(int v) {
+        this.shortestDisToI = v;
+    }
+
+    @Override
+    public IVertex getVertexToI() {
+        return this.vertexToI;
+    }
+
+    @Override
+    public void setVertexToI(IVertex v) {
+        this.vertexToI = v;
+    }
+
+    @Override
+    public int getId() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 }

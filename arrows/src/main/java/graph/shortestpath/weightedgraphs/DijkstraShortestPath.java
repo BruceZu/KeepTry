@@ -15,6 +15,7 @@
 
 package graph.shortestpath.weightedgraphs;
 
+import graph.IVertex;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -98,7 +99,7 @@ public class DijkstraShortestPath {
             Node cur = evaluating.poll();
             evaluated.add(cur);
 
-            if (cur.shortDisFromStart == Integer.MAX_VALUE) {
+            if (cur.getShortestDistanceToI() == Integer.MAX_VALUE) {
                 return false; // no way
             }
 
@@ -106,15 +107,16 @@ public class DijkstraShortestPath {
                 return true;
             }
             // continue evaluating
-            for (Node neighbor : cur.neighborDistance.keySet()) {
+            for (Node neighbor : cur.getNeighborWeighMap().keySet()) {
                 if (!evaluated.contains(neighbor)) {
-                    int viaCur = cur.shortDisFromStart + cur.neighborDistance.get(neighbor);
+                    int viaCur =
+                            cur.getShortestDistanceToI() + cur.getNeighborWeighMap().get(neighbor);
                     if (viaCur < 0) { // distance may be MAX_VALUE
                         viaCur = Integer.MAX_VALUE;
                     }
-                    if (viaCur < neighbor.shortDisFromStart) {
-                        neighbor.shortDisFromStart = viaCur;
-                        neighbor.pre = cur;
+                    if (viaCur < neighbor.getShortestDistanceToI()) {
+                        neighbor.setShortestDistanceWith(viaCur);
+                        neighbor.setVertexToI(cur);
                         if (evaluating.contains(neighbor)) {
                             evaluating.shiftUp(neighbor); // O(logN)
                         } else {
@@ -129,11 +131,11 @@ public class DijkstraShortestPath {
     static String getShortestPath(Node end) {
         // trace back to start node along the shortest path from end
         StringBuilder r = new StringBuilder();
-        r.append(end.name);
-        Node n = end;
-        while (n.pre != null) {
-            r.append(n.pre.name);
-            n = n.pre;
+        r.append(end.getName());
+        IVertex n = end;
+        while (n.getVertexToI() != null) {
+            r.append(n.getVertexToI().getName());
+            n = n.getVertexToI();
         }
         return r.reverse().toString();
     }
@@ -146,7 +148,10 @@ public class DijkstraShortestPath {
         if (hasPath) {
             return getShortestPath(end);
         } else {
-            return "there is not path betwen start " + start.name + " and end " + end.name;
+            return "there is not path betwen start "
+                    + start.getName()
+                    + " and end "
+                    + end.getName();
         }
     }
 
