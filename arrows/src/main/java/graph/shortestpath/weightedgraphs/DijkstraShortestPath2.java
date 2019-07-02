@@ -48,20 +48,22 @@ public class DijkstraShortestPath2 {
         }
         while (!evaluating.isEmpty()) {
             Node toBeSttled = evaluating.poll();
-            if (toBeSttled.shortDisFromStart == Integer.MAX_VALUE) {
+            if (toBeSttled.getShortestDistanceToI() == Integer.MAX_VALUE) {
                 return false;
             }
             if (toBeSttled == end) {
                 return true;
             }
-            for (Node neighbor : toBeSttled.neighborDistance.keySet()) {
-                int alt = toBeSttled.shortDisFromStart + toBeSttled.neighborDistance.get(neighbor);
+            for (Node neighbor : toBeSttled.getNeighborWeighMap().keySet()) {
+                int alt =
+                        toBeSttled.getShortestDistanceToI()
+                                + toBeSttled.getNeighborWeighMap().get(neighbor);
                 if (alt < 0) {
                     alt = Integer.MAX_VALUE;
                 }
-                if (alt < neighbor.shortDisFromStart) {
-                    neighbor.shortDisFromStart = alt;
-                    neighbor.pre = toBeSttled;
+                if (alt < neighbor.getShortestDistanceToI()) {
+                    neighbor.setShortestDistanceWith(alt);
+                    neighbor.setVertexToI(toBeSttled);
                     if (evaluating.contains(neighbor)) {
                         evaluating.shiftUp(neighbor); // O(logN)
                     } else {
@@ -81,7 +83,7 @@ public class DijkstraShortestPath2 {
         if (hasPath) {
             return getShortestPath(end);
         } else {
-            return "this not path betwen start " + start.name + " and end " + end.name;
+            return "this not path betwen start " + start.getName() + " and end " + end.getName();
         }
     }
 
@@ -151,6 +153,7 @@ public class DijkstraShortestPath2 {
         // dNodeDistanceTo.put(b, Integer.MAX_VALUE); // TEST 2
 
         System.out.println(
-                shortestPath(new HashSet<>(Arrays.asList(start, e, end, b, c, f)), start, end).equals("abd"));
+                shortestPath(new HashSet<>(Arrays.asList(start, e, end, b, c, f)), start, end)
+                        .equals("abd"));
     }
 }
