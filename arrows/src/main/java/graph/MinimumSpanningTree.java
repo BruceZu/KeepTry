@@ -18,8 +18,8 @@ package graph;
 import static graph.MinimumSpanningTreeKruskal.kruskal;
 import static graph.MinimumSpanningTreePrim.mstPrim;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * <pre>
@@ -37,7 +37,7 @@ import java.util.Iterator;
  *  1> Kruskal's Spanning Tree Algorithm. O(|E|log|V|).
  *      {@link MinimumSpanningTreeKruskal#kruskal(int, Edge[])}
  *  2> Prim's Minimum Spanning Tree Algorithm.
- *      {@link MinimumSpanningTreePrim#mstPrim(int[][])}
+ *      {@link MinimumSpanningTreePrim#mstPrim(IGraph)}
  *
  * B> Todo: improve to O(|E|), if the graph is dense (i.e. m/n ≥ log log log n)  with no isolated vertices
  *
@@ -63,12 +63,12 @@ public class MinimumSpanningTree {
         edges[2] = new Edge(0, 3, 5);
         edges[3] = new Edge(1, 3, 15);
         edges[4] = new Edge(2, 3, 4);
-        printResult(kruskal(4, edges));
+        printResult(kruskal(4, edges), "Kruskal");
         int[][] graph =
                 new int[][] {
                     {0, 10, 6, 5}, {10, 0, 0, 15}, {6, 0, 0, 4}, {5, 15, 4, 0},
                 };
-        printResult(mstPrim(graph), graph);
+        printResult(mstPrim(new IGraphImpWithMatrix(graph)), "Prim");
 
         /* <B> use matrix to represent graph
             2    3
@@ -89,7 +89,7 @@ public class MinimumSpanningTree {
         edges[5] = new Edge(2, 4, 7);
         edges[6] = new Edge(3, 4, 9);
 
-        printResult(kruskal(5, edges));
+        printResult(kruskal(5, edges), "Kruskal");
         graph =
                 new int[][] {
                     {0, 2, 0, 6, 0},
@@ -98,7 +98,7 @@ public class MinimumSpanningTree {
                     {6, 8, 0, 0, 9},
                     {0, 5, 7, 9, 0},
                 };
-        printResult(mstPrim(graph), graph);
+        printResult(mstPrim(new IGraphImpWithMatrix(graph)), "Prim");
 
         /*
            _____________
@@ -118,7 +118,7 @@ public class MinimumSpanningTree {
         edges[4] = new Edge(3, 4, 6);
         edges[5] = new Edge(4, 5, 8);
         edges[6] = new Edge(3, 5, 10);
-        printResult(kruskal(6, edges));
+        printResult(kruskal(6, edges), "Kruskal");
         graph =
                 new int[][] {
                     {0, 3, 5, 50, 0, 0},
@@ -129,21 +129,13 @@ public class MinimumSpanningTree {
                     {0, 0, 0, 10, 8, 0},
                 };
 
-        printResult(mstPrim(graph), graph);
+        printResult(mstPrim(new IGraphImpWithMatrix(graph)), "Prim");
     }
 
-    private static void printResult(int[] otherV, int[][] graph) {
-        System.out.println("One MST, Prim's algorithm");
-        for (int vi = 1; vi < otherV.length; vi++)
-            System.out.println(vi + "-" + otherV[vi] + ", weight:" + graph[vi][otherV[vi]]);
-    }
-
-    private static void printResult(Collection<Edge> MST) {
-
-        System.out.println("One MST with Kruskal's algorithm, using union find checking circle: ");
-        Iterator<Edge> it = MST.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-        }
+    private static void printResult(Collection<Edge> mst, String algorithmName) {
+        System.out.println(algorithmName);
+        Object[] r = mst.toArray();
+        Arrays.sort(r);
+        Arrays.stream(r).forEach(i -> System.out.println(i.toString()));
     }
 }
