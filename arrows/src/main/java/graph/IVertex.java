@@ -20,9 +20,9 @@ import java.util.Map;
 public interface IVertex<N extends IVertex> {
     Map<N, Integer> getNeighborWeighMap();
 
-    int getShortestDistanceToI(); // from MST or from start point for calculating SP
+    int getShortestDistanceToI(); // from MST or from cur point for calculating SP
 
-    void setShortestDistanceWith(int v);
+    void setShortestDistanceToI(int v);
 
     N getVertexToI();
 

@@ -17,12 +17,21 @@ package graph;
 
 import org.jetbrains.annotations.NotNull;
 
-class Edge implements Comparable<Edge> {
-    int from, to, w;
+public class Edge implements Comparable<Edge> {
+    Integer from, to, w;
+    String fromN, toN;
 
     public Edge(int vertex1Id, int vertex2Id, int weight) {
+        this.fromN = vertex1Id + "";
+        this.toN = vertex2Id + "";
         this.from = vertex1Id;
         this.to = vertex2Id;
+        this.w = weight;
+    }
+
+    public Edge(String vertex1Id, String vertex2Id, int weight) {
+        this.fromN = vertex1Id + "";
+        this.toN = vertex2Id + "";
         this.w = weight;
     }
 
@@ -32,7 +41,21 @@ class Edge implements Comparable<Edge> {
     }
 
     @Override
+    public int hashCode() {
+        return this.fromN.hashCode() + this.toN.hashCode() + this.w * 31;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof Edge)) return false;
+        Edge other = (Edge) o;
+        if (this.w != other.w) return false;
+        return this.fromN.equals(other.fromN) && this.toN.equals(other.toN)
+                || this.fromN.equals(other.toN) && this.toN.equals(other.fromN);
+    }
+
+    @Override
     public String toString() {
-        return from + "-" + to + ", weight: " + w;
+        return fromN + "-" + toN + ", weight: " + w;
     }
 }

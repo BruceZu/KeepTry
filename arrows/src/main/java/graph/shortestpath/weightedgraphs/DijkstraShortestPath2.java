@@ -15,8 +15,7 @@
 
 package graph.shortestpath.weightedgraphs;
 
-import static graph.shortestpath.weightedgraphs.DijkstraShortestPath.getShortestPath;
-
+import graph.IVertex;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +31,6 @@ import java.util.Set;
  * pros:
  *
  * -- no 'Set<Node> evaluated'
- * -- need not know which is the start node
  *
  * cons:
  * -- initially all nodes are entered into the priority queue. This is, however, not necessary
@@ -40,46 +38,54 @@ import java.util.Set;
  */
 public class DijkstraShortestPath2 {
 
-    public static boolean hashShortestPath(Set<Node> graph, Node end) {
+    public static boolean hashShortestPath(Set<Node> graph, Node end, Node start) {
         IBinaryHeap<Node> evaluating = new IBinaryHeap(32);
+        graph.stream().forEach(n -> n.setShortestDistanceToI(Integer.MAX_VALUE));
+        start.setShortestDistanceToI(0);
 
         for (Node n : graph) {
             evaluating.offer(n);
         }
         while (!evaluating.isEmpty()) {
-            Node toBeSttled = evaluating.poll();
-            if (toBeSttled.getShortestDistanceToI() == Integer.MAX_VALUE) {
+            Node cur = evaluating.poll();
+            if (cur.getShortestDistanceToI() == Integer.MAX_VALUE) {
                 return false;
             }
-            if (toBeSttled == end) {
+            if (cur == end) {
                 return true;
             }
-            for (Node neighbor : toBeSttled.getNeighborWeighMap().keySet()) {
-                int alt =
-                        toBeSttled.getShortestDistanceToI()
-                                + toBeSttled.getNeighborWeighMap().get(neighbor);
+            for (Node neighbor : cur.getNeighborWeighMap().keySet()) {
+                int alt = cur.getShortestDistanceToI() + cur.getNeighborWeighMap().get(neighbor);
                 if (alt < 0) {
                     alt = Integer.MAX_VALUE;
                 }
                 if (alt < neighbor.getShortestDistanceToI()) {
-                    neighbor.setShortestDistanceWith(alt);
-                    neighbor.setVertexToI(toBeSttled);
-                    if (evaluating.contains(neighbor)) {
-                        evaluating.shiftUp(neighbor); // O(logN)
-                    } else {
-                        evaluating.offer(neighbor); // O(logN)
-                    }
+                    neighbor.setShortestDistanceToI(alt);
+                    neighbor.setVertexToI(cur);
+                    evaluating.shiftUp(neighbor); // O(logN)
                 }
             }
         }
         return false;
     }
 
+    static String getShortestPath(Node end) {
+        // trace back to start node along the shortest path from end
+        StringBuilder r = new StringBuilder();
+        r.append(end.getName());
+        IVertex n = end;
+        while (n.getVertexToI() != null) {
+            r.append(n.getVertexToI().getName());
+            n = n.getVertexToI();
+        }
+        return r.reverse().toString();
+    }
+
     // Assume all nodes has been initialed
     // calculate shortest path from start node to end node
     // if there is not path between them, return false.
     public static String shortestPath(Set<Node> graph, Node start, Node end) {
-        boolean hasPath = hashShortestPath(graph, end);
+        boolean hasPath = hashShortestPath(graph, end, start);
         if (hasPath) {
             return getShortestPath(end);
         } else {
@@ -113,7 +119,8 @@ public class DijkstraShortestPath2 {
         Map<Node, Integer> eNodeDistanceTo = new HashMap();
         Map<Node, Integer> fNodeDistanceTo = new HashMap();
 
-        Node start = new Node("a", startNodeDistanceTo, 0);
+        Node start = new Node("a", startNodeDistanceTo);
+
         Node b = new Node("b", cNodeDistanceTo);
         Node e = new Node("e", eNodeDistanceTo);
         Node c = new Node("c", bNodeDistanceTo);

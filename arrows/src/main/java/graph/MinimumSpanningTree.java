@@ -16,7 +16,7 @@
 package graph;
 
 import static graph.MinimumSpanningTreeKruskal.kruskal;
-import static graph.MinimumSpanningTreePrim.mstPrim;
+import static graph.MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,7 +37,7 @@ import java.util.Collection;
  *  1> Kruskal's Spanning Tree Algorithm. O(|E|log|V|).
  *      {@link MinimumSpanningTreeKruskal#kruskal(int, Edge[])}
  *  2> Prim's Minimum Spanning Tree Algorithm.
- *      {@link MinimumSpanningTreePrim#mstPrim(IGraph)}
+ *      {@link MinimumSpanningTreePrimShortestPathDijkstra#mstOrSp(IGraph)}
  *
  * B> Todo: improve to O(|E|), if the graph is dense (i.e. m/n ≥ log log log n)  with no isolated vertices
  *
@@ -68,7 +68,7 @@ public class MinimumSpanningTree {
                 new int[][] {
                     {0, 10, 6, 5}, {10, 0, 0, 15}, {6, 0, 0, 4}, {5, 15, 4, 0},
                 };
-        printResult(mstPrim(new IGraphImpWithMatrix(graph)), "Prim");
+        printResult(mstOrSp(new IGraphWithMatrixImp(graph)), "Prim");
 
         /* <B> use matrix to represent graph
             2    3
@@ -98,7 +98,7 @@ public class MinimumSpanningTree {
                     {6, 8, 0, 0, 9},
                     {0, 5, 7, 9, 0},
                 };
-        printResult(mstPrim(new IGraphImpWithMatrix(graph)), "Prim");
+        printResult(mstOrSp(new IGraphWithMatrixImp(graph)), "Prim");
 
         /*
            _____________
@@ -129,7 +129,7 @@ public class MinimumSpanningTree {
                     {0, 0, 0, 10, 8, 0},
                 };
 
-        printResult(mstPrim(new IGraphImpWithMatrix(graph)), "Prim");
+        printResult(mstOrSp(new IGraphWithMatrixImp(graph)), "Prim");
     }
 
     private static void printResult(Collection<Edge> mst, String algorithmName) {
