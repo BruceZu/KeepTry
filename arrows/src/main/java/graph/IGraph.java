@@ -25,16 +25,21 @@ import java.util.function.BiFunction;
  * @param <E>
  */
 interface IGraph<V extends IVertex, E extends Edge> {
+    enum Status {
+        SP_NO_RESULT, // only for shortest path.
+        ING,
+        DONE
+    }
 
     void initVertexDistanceStatus();
 
-    boolean left();
+    Status currentStatus();
 
-    V selectVertex();
+    void selectCurrentVertex();
 
-    void updateCutWith(V v, BiFunction<V, V, ?> distCalculator);
+    void updateCutWithCurrentVertex(BiFunction<V, V, Integer> distCalculator);
 
-    Set<E> getMst();
+    Set<E> getMstOrSp();
 
-    BiFunction<V, V, ?> getDistCalculator();
+    BiFunction<V, V, Integer> getDistCalculator();
 }

@@ -15,6 +15,7 @@
 
 package graph;
 
+import graph.IGraph.Status;
 import java.util.Collection;
 
 /**
@@ -35,15 +36,23 @@ import java.util.Collection;
  *   Todo: improve to O(|E|+|V|log|V|) using Fibonacci heap and adjacent nodes
  *   Todo: for Fibonacci heap the deCrease(key) need firstly find the target's key.
  */
-public class MinimumSpanningTreePrim {
+public class MinimumSpanningTreePrimShortestPathDijkstra {
 
-    public static Collection<Edge> mstPrim(IGraph<IVertex, Edge> g) {
+    public static Collection<Edge> mstOrSp(IGraph<IVertex, Edge> g) {
+        // SP: need to know the cur Node and Fnd Node
+        // MST: need to know the cur Node.
+
         g.initVertexDistanceStatus();
-        while (g.left()) {
-            IVertex v = g.selectVertex();
+        while (g.currentStatus().equals(Status.ING)) {
+            g.selectCurrentVertex();
             // Update cut with the relax vertex.
-            g.updateCutWith(v, g.getDistCalculator());
+            g.updateCutWithCurrentVertex(g.getDistCalculator());
         }
-        return g.getMst();
+        if (g.currentStatus().equals(Status.DONE)) {
+            // for sp, now the end is still at the top of the evaluating heap.
+            // and will not assign to cur.
+            return g.getMstOrSp();
+        }
+        return null;
     }
 }

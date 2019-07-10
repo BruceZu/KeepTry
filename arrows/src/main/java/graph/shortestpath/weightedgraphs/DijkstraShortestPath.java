@@ -15,20 +15,22 @@
 
 package graph.shortestpath.weightedgraphs;
 
-import graph.IVertex;
+import graph.Edge;
+import graph.IGraphWithAdjacentNodesSpImp;
+import graph.MinimumSpanningTreePrimShortestPathDijkstra;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * <pre>
- * when the weight of edge is negtive number. Dijkstra algorithm does not work.
+ * when the weight of edge is negative number. Dijkstra algorithm does not work.
  *
  * Scenario:
  * provide: start node and end node;
  *          It maybe a directed graph or undirected graph.
- * confirm if it is not a spanning tree: it there is circle or the end node is a single vertex
+ * confirm if it is not a spanning tree: if there is circle or the end node is a single vertex
  *          (A spanning tree is a subset of Graph G, which has all the vertices covered with
  *          minimum possible number of edges.
  *          Hence, a spanning tree does not have cycles and it cannot be disconnected.)
@@ -43,7 +45,7 @@ import java.util.Set;
  *
  *    Initial:
  *     -- map: If node has not path to his neighbor node, set the distance:  Integer.MAX_VALUE;
- *     -- int and node:
+ *     -- shortest distance and predecessor node:
  *         for start node:  shortest distance  is 0;
  *                          predecessor node  is null.
  *         for other node:  shortest distance is Integer.MAX_VALUE;
@@ -84,78 +86,6 @@ import java.util.Set;
  *
  */
 public class DijkstraShortestPath {
-
-    private static boolean hasShortestPath(Node start, Node end) {
-        IBinaryHeap<Node> evaluating =
-                new IBinaryHeap<>(2); // top element is with shortest distance from start
-        Set<Node> evaluated =
-                new HashSet(); // avoid undirect graph's repeat; avoid directed graph's circle
-
-        evaluating.offer(start);
-        while (true) {
-            if (evaluating.isEmpty()) {
-                return false; // no way
-            }
-            Node cur = evaluating.poll();
-            evaluated.add(cur);
-
-            if (cur.getShortestDistanceToI() == Integer.MAX_VALUE) {
-                return false; // no way
-            }
-
-            if (cur == end) {
-                return true;
-            }
-            // continue evaluating
-            for (Node neighbor : cur.getNeighborWeighMap().keySet()) {
-                if (!evaluated.contains(neighbor)) {
-                    int viaCur =
-                            cur.getShortestDistanceToI() + cur.getNeighborWeighMap().get(neighbor);
-                    if (viaCur < 0) { // distance may be MAX_VALUE
-                        viaCur = Integer.MAX_VALUE;
-                    }
-                    if (viaCur < neighbor.getShortestDistanceToI()) {
-                        neighbor.setShortestDistanceWith(viaCur);
-                        neighbor.setVertexToI(cur);
-                        if (evaluating.contains(neighbor)) {
-                            evaluating.shiftUp(neighbor); // O(logN)
-                        } else {
-                            evaluating.offer(neighbor); // O(logN)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    static String getShortestPath(Node end) {
-        // trace back to start node along the shortest path from end
-        StringBuilder r = new StringBuilder();
-        r.append(end.getName());
-        IVertex n = end;
-        while (n.getVertexToI() != null) {
-            r.append(n.getVertexToI().getName());
-            n = n.getVertexToI();
-        }
-        return r.reverse().toString();
-    }
-
-    // Assume all nodes has been initialed
-    // calculate shortest path from start node to end node
-    // if there is not path between them, return false.
-    public static String shortestPath(Node start, Node end) {
-        boolean hasPath = hasShortestPath(start, end);
-        if (hasPath) {
-            return getShortestPath(end);
-        } else {
-            return "there is not path betwen start "
-                    + start.getName()
-                    + " and end "
-                    + end.getName();
-        }
-    }
-
-    // -------------------------------------------------------------
     public static void main(String[] args) {
         // todo test dircted graph;
 
@@ -180,7 +110,8 @@ public class DijkstraShortestPath {
         Map<Node, Integer> eNodeDistanceTo = new HashMap();
         Map<Node, Integer> fNodeDistanceTo = new HashMap();
 
-        Node start = new Node("a", startNodeDistanceTo, 0);
+        Node start = new Node("a", startNodeDistanceTo);
+
         Node b = new Node("b", bNodeDistanceTo);
         Node c = new Node("c", cNodeDistanceTo);
         Node e = new Node("e", eNodeDistanceTo);
@@ -219,6 +150,26 @@ public class DijkstraShortestPath {
         dNodeDistanceTo.put(b, 15);
         // dNodeDistanceTo.put(b, Integer.MAX_VALUE); // TEST 2
 
-        System.out.println(DijkstraShortestPath.shortestPath(start, end).equals("acd"));
+        Collection<Edge> sp =
+                MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
+                        new IGraphWithAdjacentNodesSpImp(
+                                new ArrayList<Node>() {
+                                    {
+                                        add(start);
+                                        add(b);
+                                        add(c);
+                                        add(e);
+                                        add(f);
+                                        add(end);
+                                    }
+                                },
+                                start,
+                                end));
+        sp.stream()
+                .forEach(
+                        edge -> {
+                            System.out.println(edge.toString());
+                        });
+        // a-c-d
     }
 }

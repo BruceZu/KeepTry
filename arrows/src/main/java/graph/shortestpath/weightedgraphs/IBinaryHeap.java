@@ -40,7 +40,7 @@ import java.util.Map;
  *      -- use 1 based index in 'heap' array.
  *
  */
-class IBinaryHeap<T extends Comparable<T>> extends AbstractQueue<T> {
+public class IBinaryHeap<T extends Comparable<T>> extends AbstractQueue<T> {
 
     private int size;
     private Object[] heap;

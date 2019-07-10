@@ -33,18 +33,6 @@ public class Node implements Comparable<Node>, IVertex {
     public Node(String name, Map<Node, Integer> map) {
         this.name = name;
         this.neighDistMap = map;
-        this.shortestDisToI = Integer.MAX_VALUE;
-        this.vertexToI = null;
-    }
-
-    public Node(
-            String name,
-            Map<Node, Integer> map,
-            int shortestDisToStartNode) {
-        this.name = name;
-        this.neighDistMap = map;
-        this.shortestDisToI = shortestDisToStartNode;
-        this.vertexToI = null;
     }
 
     @Override
@@ -75,7 +63,7 @@ public class Node implements Comparable<Node>, IVertex {
     }
 
     @Override
-    public void setShortestDistanceWith(int v) {
+    public void setShortestDistanceToI(int v) {
         this.shortestDisToI = v;
     }
 

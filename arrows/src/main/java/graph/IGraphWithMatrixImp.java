@@ -17,13 +17,11 @@ package graph;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /** O(|V|^2) */
-class IGraphImpWithMatrix implements IGraph {
+class IGraphWithMatrixImp implements IGraph {
 
     int[][] g;
     // the vertex in MST vertexTo where the
@@ -33,8 +31,9 @@ class IGraphImpWithMatrix implements IGraph {
     int shortestEdgeTo[];
     boolean inMST[];
     int mstVerTexCount = 0;
+    int currentVertexId = -1;
 
-    public IGraphImpWithMatrix(int[][] g) {
+    public IGraphWithMatrixImp(int[][] g) {
         this.g = g;
         vertexTo = new int[g.length];
         Arrays.fill(vertexTo, -1);
@@ -48,15 +47,16 @@ class IGraphImpWithMatrix implements IGraph {
     public void initVertexDistanceStatus() {
         Arrays.fill(shortestEdgeTo, Integer.MAX_VALUE);
         shortestEdgeTo[0] = 0;
+        currentVertexId = 0;
     }
 
     @Override
-    public boolean left() {
-        return mstVerTexCount < g.length;
+    public Status currentStatus() {
+        return mstVerTexCount < g.length ? Status.ING : Status.DONE;
     }
 
     @Override
-    public IVertex selectVertex() {
+    public void selectCurrentVertex() {
         mstVerTexCount++;
         int min = Integer.MAX_VALUE;
         int nextV = -1;
@@ -70,44 +70,7 @@ class IGraphImpWithMatrix implements IGraph {
         }
 
         inMST[nextV] = true;
-        final int selectedVetextId = nextV;
-
-        return new IVertex() {
-            @Override
-            public Map<IVertex, Integer> getNeighborWeighMap() {
-                throw new NotImplementedException();
-            }
-
-            @Override
-            public int getShortestDistanceToI() {
-                throw new NotImplementedException();
-            }
-
-            @Override
-            public void setShortestDistanceWith(int v) {
-                throw new NotImplementedException();
-            }
-
-            @Override
-            public IVertex getVertexToI() {
-                throw new NotImplementedException();
-            }
-
-            @Override
-            public void setVertexToI(IVertex v) {
-                throw new NotImplementedException();
-            }
-
-            @Override
-            public int getId() {
-                return selectedVetextId;
-            }
-
-            @Override
-            public String getName() {
-                throw new NotImplementedException();
-            }
-        };
+        currentVertexId = nextV;
     }
 
     @Override
@@ -116,8 +79,8 @@ class IGraphImpWithMatrix implements IGraph {
     }
 
     @Override
-    public void updateCutWith(IVertex v, BiFunction distCalculator) {
-        int i = v.getId();
+    public void updateCutWithCurrentVertex(BiFunction distCalculator) {
+        int i = currentVertexId;
         for (int j = 0; j < g.length; j++) {
             if (!inMST[j]
                     && g[i][j] != 0 /* there is edge */
@@ -130,10 +93,10 @@ class IGraphImpWithMatrix implements IGraph {
     }
 
     @Override
-    public Set<Edge> getMst() {
+    public Set<Edge> getMstOrSp() {
         Set<Edge> r = new HashSet<>(g.length);
         // Note it is from 1 not 0
-        // because the vertex with index 0 is the start vertex
+        // because the vertex with index 0 is the cur vertex
         // and no vertex as its 'in'
 
         for (int i = 1; i < g.length; i++) {
