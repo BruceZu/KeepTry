@@ -16,8 +16,8 @@
 package graph.shortestpath.weightedgraphs;
 
 import graph.Edge;
-import graph.IGraphWithAdjacentNodesSpImp;
 import graph.MinimumSpanningTreePrimShortestPathDijkstra;
+import graph.Node;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -152,7 +152,7 @@ public class DijkstraShortestPath {
 
         Collection<Edge> sp =
                 MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
-                        new IGraphWithAdjacentNodesSpImp(
+                        new IGraphWithAdjacentNodesDijkstraImp(
                                 new ArrayList<Node>() {
                                     {
                                         add(start);

@@ -13,15 +13,18 @@
 // limitations under the License.
 //
 
-package graph;
+package graph.minimum_spanning_tree;
 
+import graph.Edge;
+import graph.IGraph;
+import graph.IVertex;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 
 /** O(|V|^2) */
-class IGraphWithMatrixImp implements IGraph {
+public class IGraphWithMatrixPrimImp implements IGraph {
 
     int[][] g;
     // the vertex in MST vertexTo where the
@@ -33,7 +36,7 @@ class IGraphWithMatrixImp implements IGraph {
     int mstVerTexCount = 0;
     int currentVertexId = -1;
 
-    public IGraphWithMatrixImp(int[][] g) {
+    public IGraphWithMatrixPrimImp(int[][] g) {
         this.g = g;
         vertexTo = new int[g.length];
         Arrays.fill(vertexTo, -1);

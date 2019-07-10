@@ -13,8 +13,9 @@
 // limitations under the License.
 //
 
-package graph;
+package graph.minimum_spanning_tree;
 
+import graph.Edge;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

@@ -13,9 +13,8 @@
 // limitations under the License.
 //
 
-package graph.shortestpath.weightedgraphs;
+package graph;
 
-import graph.IVertex;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;

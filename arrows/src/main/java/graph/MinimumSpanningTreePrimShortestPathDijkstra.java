@@ -15,7 +15,10 @@
 
 package graph;
 
+import graph.Edge;
+import graph.IGraph;
 import graph.IGraph.Status;
+import graph.IVertex;
 import java.util.Collection;
 
 /**

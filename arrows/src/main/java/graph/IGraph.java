@@ -24,7 +24,7 @@ import java.util.function.BiFunction;
  * @param <V>
  * @param <E>
  */
-interface IGraph<V extends IVertex, E extends Edge> {
+public interface IGraph<V extends IVertex, E extends Edge> {
     enum Status {
         SP_NO_RESULT, // only for shortest path.
         ING,
