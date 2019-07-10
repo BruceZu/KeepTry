@@ -18,8 +18,13 @@ package graph.minimum_spanning_tree;
 import graph.Edge;
 import graph.IGraph;
 import graph.MinimumSpanningTreePrimShortestPathDijkstra;
+import graph.Node;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <pre>
@@ -64,6 +69,7 @@ public class MinimumSpanningTree {
         edges[3] = new Edge(1, 3, 15);
         edges[4] = new Edge(2, 3, 4);
         printResult(MinimumSpanningTreeKruskal.kruskal(4, edges), "Kruskal");
+        //
         int[][] graph =
                 new int[][] {
                     {0, 10, 6, 5}, {10, 0, 0, 15}, {6, 0, 0, 4}, {5, 15, 4, 0},
@@ -72,6 +78,41 @@ public class MinimumSpanningTree {
                 MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
                         new IGraphWithMatrixPrimImp(graph)),
                 "Prim");
+        //
+        Map<Node, Integer> NodeDistanceTo0 = new HashMap();
+        Map<Node, Integer> NodeDistanceTo1 = new HashMap();
+        Map<Node, Integer> NodeDistanceTo2 = new HashMap();
+        Map<Node, Integer> NodeDistanceTo3 = new HashMap();
+
+        Node a0 = new Node("0", NodeDistanceTo0);
+        Node b1 = new Node("1", NodeDistanceTo1);
+        Node c2 = new Node("2", NodeDistanceTo2);
+        Node d3 = new Node("3", NodeDistanceTo3);
+
+        NodeDistanceTo0.put(b1, 10);
+        NodeDistanceTo0.put(c2, 6);
+        NodeDistanceTo0.put(d3, 5);
+
+        NodeDistanceTo1.put(a0, 10);
+        NodeDistanceTo1.put(d3, 15);
+
+        NodeDistanceTo2.put(a0, 6);
+        NodeDistanceTo2.put(d3, 4);
+
+        NodeDistanceTo3.put(a0, 5);
+        NodeDistanceTo3.put(b1, 15);
+        NodeDistanceTo3.put(c2, 4);
+
+        List<Node> nodes = new ArrayList<>();
+        nodes.add(a0);
+        nodes.add(b1);
+        nodes.add(c2);
+        nodes.add(d3);
+
+        printResult(
+                MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
+                        new IGraphWithAdjacentNodesPrimImp(nodes, a0)),
+                "AdjacentNodesPrimImp");
 
         /* <B> use matrix to represent graph
             2    3
@@ -91,8 +132,8 @@ public class MinimumSpanningTree {
         edges[4] = new Edge(1, 2, 3);
         edges[5] = new Edge(2, 4, 7);
         edges[6] = new Edge(3, 4, 9);
-
         printResult(MinimumSpanningTreeKruskal.kruskal(5, edges), "Kruskal");
+        //
         graph =
                 new int[][] {
                     {0, 2, 0, 6, 0},
@@ -105,6 +146,49 @@ public class MinimumSpanningTree {
                 MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
                         new IGraphWithMatrixPrimImp(graph)),
                 "Prim");
+        //
+        NodeDistanceTo0 = new HashMap();
+        NodeDistanceTo1 = new HashMap();
+        NodeDistanceTo2 = new HashMap();
+        NodeDistanceTo3 = new HashMap();
+        Map<Node, Integer> NodeDistanceTo4 = new HashMap();
+
+        a0 = new Node("0", NodeDistanceTo0);
+        b1 = new Node("1", NodeDistanceTo1);
+        c2 = new Node("2", NodeDistanceTo2);
+        d3 = new Node("3", NodeDistanceTo3);
+        Node e4 = new Node("4", NodeDistanceTo4);
+
+        NodeDistanceTo0.put(b1, 2);
+        NodeDistanceTo0.put(d3, 6);
+
+        NodeDistanceTo1.put(a0, 2);
+        NodeDistanceTo1.put(c2, 3);
+        NodeDistanceTo1.put(d3, 8);
+        NodeDistanceTo1.put(e4, 5);
+
+        NodeDistanceTo2.put(b1, 3);
+        NodeDistanceTo2.put(e4, 7);
+
+        NodeDistanceTo3.put(a0, 6);
+        NodeDistanceTo3.put(b1, 8);
+        NodeDistanceTo3.put(e4, 9);
+
+        NodeDistanceTo4.put(b1, 5);
+        NodeDistanceTo4.put(c2, 7);
+        NodeDistanceTo4.put(d3, 9);
+
+        nodes = new ArrayList<>();
+        nodes.add(a0);
+        nodes.add(b1);
+        nodes.add(c2);
+        nodes.add(d3);
+        nodes.add(e4);
+
+        printResult(
+                MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
+                        new IGraphWithAdjacentNodesPrimImp(nodes, a0)),
+                "AdjacentNodesPrimImp");
 
         /*
            _____________
@@ -139,6 +223,53 @@ public class MinimumSpanningTree {
                 MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
                         new IGraphWithMatrixPrimImp(graph)),
                 "Prim");
+        //
+        NodeDistanceTo0 = new HashMap();
+        NodeDistanceTo1 = new HashMap();
+        NodeDistanceTo2 = new HashMap();
+        NodeDistanceTo3 = new HashMap();
+        NodeDistanceTo4 = new HashMap();
+        Map<Node, Integer> NodeDistanceTo5 = new HashMap();
+
+        a0 = new Node("0", NodeDistanceTo0);
+        b1 = new Node("1", NodeDistanceTo1);
+        c2 = new Node("2", NodeDistanceTo2);
+        d3 = new Node("3", NodeDistanceTo3);
+        e4 = new Node("4", NodeDistanceTo4);
+        Node f5 = new Node("5", NodeDistanceTo5);
+
+        NodeDistanceTo0.put(b1, 3);
+        NodeDistanceTo0.put(c2, 5);
+        NodeDistanceTo0.put(d3, 50);
+
+        NodeDistanceTo1.put(a0, 3);
+        NodeDistanceTo1.put(c2, 4);
+
+        NodeDistanceTo2.put(b1, 4);
+        NodeDistanceTo2.put(a0, 5);
+
+        NodeDistanceTo3.put(a0, 50);
+        NodeDistanceTo3.put(e4, 6);
+        NodeDistanceTo3.put(f5, 10);
+
+        NodeDistanceTo4.put(d3, 6);
+        NodeDistanceTo4.put(f5, 8);
+
+        NodeDistanceTo5.put(d3, 10);
+        NodeDistanceTo5.put(e4, 8);
+
+        nodes = new ArrayList<>();
+        nodes.add(a0);
+        nodes.add(b1);
+        nodes.add(c2);
+        nodes.add(d3);
+        nodes.add(e4);
+        nodes.add(f5);
+
+        printResult(
+                MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
+                        new IGraphWithAdjacentNodesPrimImp(nodes, a0)),
+                "AdjacentNodesPrimImp");
     }
 
     private static void printResult(Collection<Edge> mst, String algorithmName) {
