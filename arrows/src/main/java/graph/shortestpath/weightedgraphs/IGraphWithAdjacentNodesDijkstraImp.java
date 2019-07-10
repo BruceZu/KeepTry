@@ -13,18 +13,21 @@
 // limitations under the License.
 //
 
-package graph;
+package graph.shortestpath.weightedgraphs;
 
-import graph.shortestpath.weightedgraphs.IBinaryHeap;
-import graph.shortestpath.weightedgraphs.Node;
+import graph.Edge;
+import graph.IBinaryHeap;
+import graph.IGraphWithAdjacentNodesAbstractImp;
+import graph.IVertex;
+import graph.Node;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class IGraphWithAdjacentNodesSpImp extends IGraphWithAdjacentNodesAbstractImp {
+public class IGraphWithAdjacentNodesDijkstraImp extends IGraphWithAdjacentNodesAbstractImp {
     Node end;
 
-    public IGraphWithAdjacentNodesSpImp(List<Node> nodes, Node start, Node end) {
+    public IGraphWithAdjacentNodesDijkstraImp(List<Node> nodes, Node start, Node end) {
         this.cur = start;
         this.end = end;
         this.nodes = nodes;

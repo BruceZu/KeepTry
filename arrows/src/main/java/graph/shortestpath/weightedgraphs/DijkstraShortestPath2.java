@@ -15,7 +15,9 @@
 
 package graph.shortestpath.weightedgraphs;
 
+import graph.IBinaryHeap;
 import graph.IVertex;
+import graph.Node;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;

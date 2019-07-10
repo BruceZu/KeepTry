@@ -15,17 +15,15 @@
 
 package graph;
 
-import graph.shortestpath.weightedgraphs.IBinaryHeap;
-import graph.shortestpath.weightedgraphs.Node;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
 public abstract class IGraphWithAdjacentNodesAbstractImp implements IGraph {
-    List<Node> nodes;
-    IBinaryHeap<Node> evaluating;
-    Node cur;
-    Set<Node> evaluated;
+    protected List<Node> nodes;
+    protected IBinaryHeap<Node> evaluating;
+    protected Node cur;
+    protected Set<Node> evaluated;
 
     @Override
     public void initVertexDistanceStatus() {

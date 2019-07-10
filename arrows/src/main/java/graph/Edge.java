@@ -18,8 +18,8 @@ package graph;
 import org.jetbrains.annotations.NotNull;
 
 public class Edge implements Comparable<Edge> {
-    Integer from, to, w;
-    String fromN, toN;
+    public Integer from, to, w;
+    public String fromN, toN;
 
     public Edge(int vertex1Id, int vertex2Id, int weight) {
         this.fromN = vertex1Id + "";

@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package graph.shortestpath.weightedgraphs;
+package graph;
 
 import java.util.AbstractQueue;
 import java.util.Arrays;

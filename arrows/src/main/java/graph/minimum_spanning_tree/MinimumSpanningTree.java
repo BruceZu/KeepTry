@@ -1,4 +1,4 @@
-//  Copyright 2017 The keepTry Open Source Project
+//  Copyright 2019 The KeepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
 // limitations under the License.
 //
 
-package graph;
+package graph.minimum_spanning_tree;
 
-import static graph.MinimumSpanningTreeKruskal.kruskal;
-import static graph.MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp;
-
+import graph.Edge;
+import graph.IGraph;
+import graph.MinimumSpanningTreePrimShortestPathDijkstra;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -63,12 +63,15 @@ public class MinimumSpanningTree {
         edges[2] = new Edge(0, 3, 5);
         edges[3] = new Edge(1, 3, 15);
         edges[4] = new Edge(2, 3, 4);
-        printResult(kruskal(4, edges), "Kruskal");
+        printResult(MinimumSpanningTreeKruskal.kruskal(4, edges), "Kruskal");
         int[][] graph =
                 new int[][] {
                     {0, 10, 6, 5}, {10, 0, 0, 15}, {6, 0, 0, 4}, {5, 15, 4, 0},
                 };
-        printResult(mstOrSp(new IGraphWithMatrixImp(graph)), "Prim");
+        printResult(
+                MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
+                        new IGraphWithMatrixPrimImp(graph)),
+                "Prim");
 
         /* <B> use matrix to represent graph
             2    3
@@ -89,7 +92,7 @@ public class MinimumSpanningTree {
         edges[5] = new Edge(2, 4, 7);
         edges[6] = new Edge(3, 4, 9);
 
-        printResult(kruskal(5, edges), "Kruskal");
+        printResult(MinimumSpanningTreeKruskal.kruskal(5, edges), "Kruskal");
         graph =
                 new int[][] {
                     {0, 2, 0, 6, 0},
@@ -98,7 +101,10 @@ public class MinimumSpanningTree {
                     {6, 8, 0, 0, 9},
                     {0, 5, 7, 9, 0},
                 };
-        printResult(mstOrSp(new IGraphWithMatrixImp(graph)), "Prim");
+        printResult(
+                MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
+                        new IGraphWithMatrixPrimImp(graph)),
+                "Prim");
 
         /*
            _____________
@@ -118,7 +124,7 @@ public class MinimumSpanningTree {
         edges[4] = new Edge(3, 4, 6);
         edges[5] = new Edge(4, 5, 8);
         edges[6] = new Edge(3, 5, 10);
-        printResult(kruskal(6, edges), "Kruskal");
+        printResult(MinimumSpanningTreeKruskal.kruskal(6, edges), "Kruskal");
         graph =
                 new int[][] {
                     {0, 3, 5, 50, 0, 0},
@@ -129,7 +135,10 @@ public class MinimumSpanningTree {
                     {0, 0, 0, 10, 8, 0},
                 };
 
-        printResult(mstOrSp(new IGraphWithMatrixImp(graph)), "Prim");
+        printResult(
+                MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
+                        new IGraphWithMatrixPrimImp(graph)),
+                "Prim");
     }
 
     private static void printResult(Collection<Edge> mst, String algorithmName) {
