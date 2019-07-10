@@ -16,23 +16,20 @@
 package graph.shortestpath.weightedgraphs;
 
 import graph.Edge;
-import graph.IBinaryHeap;
 import graph.IGraphWithAdjacentNodesAbstractImp;
 import graph.IVertex;
 import graph.Node;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 public class IGraphWithAdjacentNodesDijkstraImp extends IGraphWithAdjacentNodesAbstractImp {
     Node end;
 
     public IGraphWithAdjacentNodesDijkstraImp(List<Node> nodes, Node start, Node end) {
-        this.cur = start;
+        super(nodes, start);
         this.end = end;
-        this.nodes = nodes;
-        evaluating = new IBinaryHeap<>(nodes.size());
-        evaluated = new HashSet<>(nodes.size());
     }
 
     @Override
@@ -62,5 +59,10 @@ public class IGraphWithAdjacentNodesDijkstraImp extends IGraphWithAdjacentNodesA
         }
 
         return r;
+    }
+
+    @Override
+    public BiFunction<IVertex<Node>, IVertex<Node>, Integer> getDistCalculator() {
+        return (i, neighbor) -> i.getShortestDistanceToI() + i.getNeighborWeighMap().get(neighbor);
     }
 }

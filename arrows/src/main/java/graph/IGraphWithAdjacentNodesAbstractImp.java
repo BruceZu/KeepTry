@@ -15,6 +15,7 @@
 
 package graph;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -24,6 +25,13 @@ public abstract class IGraphWithAdjacentNodesAbstractImp implements IGraph {
     protected IBinaryHeap<Node> evaluating;
     protected Node cur;
     protected Set<Node> evaluated;
+
+    public IGraphWithAdjacentNodesAbstractImp(List<Node> nodes, Node start) {
+        this.cur = start;
+        this.nodes = nodes;
+        evaluating = new IBinaryHeap<>(nodes.size());
+        evaluated = new HashSet<>(nodes.size());
+    }
 
     @Override
     public void initVertexDistanceStatus() {
@@ -59,10 +67,5 @@ public abstract class IGraphWithAdjacentNodesAbstractImp implements IGraph {
                 }
             }
         }
-    }
-
-    @Override
-    public BiFunction<IVertex<Node>, IVertex<Node>, Integer> getDistCalculator() {
-        return (i, neighbor) -> i.getShortestDistanceToI() + i.getNeighborWeighMap().get(neighbor);
     }
 }
