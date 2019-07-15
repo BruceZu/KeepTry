@@ -18,6 +18,7 @@ package array_two_pointer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * <pre>
@@ -45,9 +46,9 @@ import java.util.Map;
  */
 public class Leetcode1124LongestWellPerformingInterval {
 
-    public int longestWPI2(int[] hours) {
+    public static int longestWPI2(int[] hours) {
         for (int i = 0; i < hours.length; i++) {
-            hours[i] = hours[i] > 8 ? 1 : -1;
+            // hours[i] = hours[i] > 8 ? 1 : -1;
         }
         int maxl = 0;
         // O(N^2)
@@ -64,7 +65,7 @@ public class Leetcode1124LongestWellPerformingInterval {
     }
 
     // O(N)
-    public static int longestWPI(int[] h) {
+    public static int longestWPI3(int[] h) {
         System.out.println(Arrays.toString(h));
         for (int i = 0; i < h.length; i++) {
             //  h[i] = h[i] > 8 ? 1 : -1;
@@ -93,6 +94,43 @@ public class Leetcode1124LongestWellPerformingInterval {
         return r;
     }
 
+    /**
+     * <pre>
+     * O(N)
+     * index i < j, (i, j) is a valid pair if prefixSum[j] - prefixSum[i] >= K
+     *
+     * goal is to get max j-i
+     *
+     * - fix j and minimize i. Consider any i1 < i2 < j and prefixSum[i1] <= prefixSum[i2].
+     *   if (i1, j) is valid  it is longer than (i2, j).
+     *  = > candidates can form a strictly monotone decreasing stack.
+     *
+     * - fix i and maximize j. Consider any i < j1 < j2 and prefixSum[j2] - prefix[i] >= K.
+     * (i, j2) is better.
+     *  => iterate j from end to begin and once find a valid (i, j) need to keep i in smdStack any longer.
+     */
+    public static int longestWPI(int[] h) {
+        int[] s = new int[h.length + 1]; // prefixSum
+        for (int i = 1; i <= h.length; ++i) {
+            s[i] = s[i - 1] + (h[i - 1] /* > 8 ? 1 : -1*/);
+        }
+        // strictly monotone decreasing index stack
+        Stack<Integer> ciStack = new Stack();
+        for (int i = 0; i <= h.length; ++i) {
+            if (ciStack.empty() || s[i] < s[ciStack.peek()]) ciStack.push(i);
+        }
+
+        int r = 0, k = 1;
+        for (int j = h.length; j >= 0; --j) {
+            //  stack skill: check empty to avoid exception
+            while (!ciStack.empty() && s[j] - s[ciStack.peek()] >= k) {
+                r = Math.max(r, j - ciStack.peek());
+                ciStack.pop();
+            }
+        }
+        return r;
+    }
+    // -----------------------------------
     public static void main(String[] args) {
         System.out.println(longestWPI(new int[] {1, -1, -1, -1, -1, -1, -1, 1, -1, 1, -1}) == 3);
         System.out.println(longestWPI(new int[] {-1, 1, -1}) == 1);
@@ -104,5 +142,27 @@ public class Leetcode1124LongestWellPerformingInterval {
         System.out.println(longestWPI(new int[] {-1, -1, -1, -1, -1, 1, 1}) == 3);
         System.out.println(
                 longestWPI(new int[] {1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1, -1}) == 7);
+
+        System.out.println(longestWPI2(new int[] {1, -1, -1, -1, -1, -1, -1, 1, -1, 1, -1}) == 3);
+        System.out.println(longestWPI2(new int[] {-1, 1, -1}) == 1);
+        System.out.println(longestWPI2(new int[] {-1, -1, 1}) == 1);
+        System.out.println(longestWPI2(new int[] {1, 1, -1, -1, -1, -1, -1, 1}) == 3);
+        System.out.println(longestWPI2(new int[] {-1, 1, -1, -1, 1, 1, 1, 1, 1, -1}) == 10);
+        System.out.println(longestWPI2(new int[] {1, 1, -1, -1, -1, -1, 1}) == 3);
+        System.out.println(longestWPI2(new int[] {1, -1, -1, 1, -1, -1, -1, 1, 1, 1, 1}) == 11);
+        System.out.println(longestWPI2(new int[] {-1, -1, -1, -1, -1, 1, 1}) == 3);
+        System.out.println(
+                longestWPI2(new int[] {1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1, -1}) == 7);
+
+        System.out.println(longestWPI3(new int[] {1, -1, -1, -1, -1, -1, -1, 1, -1, 1, -1}) == 3);
+        System.out.println(longestWPI3(new int[] {-1, 1, -1}) == 1);
+        System.out.println(longestWPI3(new int[] {-1, -1, 1}) == 1);
+        System.out.println(longestWPI3(new int[] {1, 1, -1, -1, -1, -1, -1, 1}) == 3);
+        System.out.println(longestWPI3(new int[] {-1, 1, -1, -1, 1, 1, 1, 1, 1, -1}) == 10);
+        System.out.println(longestWPI3(new int[] {1, 1, -1, -1, -1, -1, 1}) == 3);
+        System.out.println(longestWPI3(new int[] {1, -1, -1, 1, -1, -1, -1, 1, 1, 1, 1}) == 11);
+        System.out.println(longestWPI3(new int[] {-1, -1, -1, -1, -1, 1, 1}) == 3);
+        System.out.println(
+                longestWPI3(new int[] {1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1, -1}) == 7);
     }
 }
