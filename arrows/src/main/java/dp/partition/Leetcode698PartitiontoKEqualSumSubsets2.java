@@ -17,40 +17,52 @@ package dp.partition;
 
 import java.util.Arrays;
 
-// DP: Intuition version
-
-/** @see <a href="https://leetcode.com/articles/partition-to-k-equal-sum-subsets/">Leetcode</a> */
+/**
+ * <pre>
+ * @see <a href="https://leetcode.com/articles/partition-to-k-equal-sum-subsets/">Leetcode</a>
+ *
+ * DP:  Intuition version
+ *
+ * Topdown.
+ *
+ * no validate[] to mark.
+ *
+ */
 public class Leetcode698PartitiontoKEqualSumSubsets2 {
-  static boolean recursion(int placing, int leftSum, boolean[] isValid, int[] nums, int ave) {
-    if (placing == ((1 << nums.length) - 1)) return true;
+    static boolean recursion(int r, int leftSum, int[] nums, int ave) {
+        if (r == ((1 << nums.length) - 1)) return true;
+        for (int i = 0; i < nums.length; i++) {
+            int newr = (1 << i) | r;
+            int remainder = (leftSum - 1) % ave + 1;
+            if ((newr != r) && nums[i] <= remainder) {
+                if (recursion(newr, leftSum - nums[i], nums, ave)) {
+                    //                    System.out.println(
+                    //                            String.format(
+                    //                                    "r：%7s, sum:%3s, + nums[%s:%7s]:%s (remain
+                    // %s)=> newr: %7s,leftsum:%3s",
+                    //                                    Integer.toBinaryString(r),
+                    //                                    leftSum,
+                    //                                    i,
+                    //                                    Integer.toBinaryString(1 << i),
+                    //                                    nums[i],
+                    //                                    remainder,
+                    //                                    Integer.toBinaryString(newr),
+                    //                                    leftSum - nums[i]));
 
-    for (int i = 0; i < nums.length; i++) {
-      if ((((1 << i) | placing) != placing) && nums[i] <= ((leftSum - 1) % ave + 1)) {
-        // System.out.println(String.format("try %6s", Integer.toBinaryString(placing | (1 << i))));
-        if (recursion(placing | (1 << i), leftSum - nums[i], isValid, nums, ave)) {
-          // System.out.println(String.format("works %6s", Integer.toBinaryString(placing | (1 << i))));
-          return true;
-          // isValid[placing] = true;
-          //  break;
+                    return true;
+                }
+            }
         }
-        // else
-        //   System.out.println(String.format("not works %6s", Integer.toBinaryString(placing | (1 << i))));
-      }
+        return false;
     }
-    // if (isValid[placing] == true)
-    //  System.out.println(String.format("valid order %6s", Integer.toBinaryString(placing)));
-    return false; //isValid[placing];
-  }
 
-  public static boolean canPartitionKSubsets(int[] nums, int k) {
-    if (nums == null || nums.length == 0 || k < 1 || k > nums.length) return false;
-    int sum = Arrays.stream(nums).sum();
-    if (sum % k > 0) return false;
-
-    boolean[] isValid = new boolean[1 << nums.length];
-    isValid[(1 << nums.length) - 1] = true;
-    // to see if the valid placing will via this placling : (1 << nums.length) - 1
-    //System.out.println(String.format("default %6s is true", Integer.toBinaryString((1 << nums.length) - 1)));
-    return recursion(0, sum, isValid, nums, sum / k);
-  }
+    public static boolean canPartitionKSubsets(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k < 1 || k > nums.length) return false;
+        Arrays.sort(nums);
+        int sum = Arrays.stream(nums).sum();
+        int ave = sum / k;
+        if (sum % k > 0 || nums[nums.length - 1] > ave) return false;
+        // System.out.println("array: " + Arrays.toString(nums) + ", k=" + k + ", ave=" + ave);
+        return recursion(0, sum, nums, sum / k);
+    }
 }

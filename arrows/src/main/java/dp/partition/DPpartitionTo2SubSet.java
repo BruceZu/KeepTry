@@ -54,27 +54,36 @@ import java.util.Arrays;
  *  1     1   *     *
  *  1     1   1  *  1  *  *     *
  *  1  *  1   1  1  1  1  1  *  1  *
+ *
+ *  update:
+ *  It becomes leetcode416
+ *  Given a non-empty array containing only positive integers,
+ *  find if the array can be partitioned into two subsets
+ *  such that the sum of elements in both subsets is equal.
+ *  Note:
+ *   Each of the array element will not exceed 100.
+ *   The array size will not exceed 200.
  */
 public class DPpartitionTo2SubSet {
-  // runtime complexity: O(nS)
-  public static boolean can(int[] nums) {
-    //Todo: corner case check
-    int sum = Arrays.stream(nums).sum();
-    if (sum % 2 != 0) return false;
-    sum /= 2;
-    boolean[] T = new boolean[sum + 1];
-    T[0] = true;
+    // runtime complexity: O(nS)
+    public static boolean can(int[] nums) {
+        // Todo: corner case check
+        int sum = Arrays.stream(nums).sum();
+        if (sum % 2 != 0) return false;
+        sum /= 2;
+        boolean[] T = new boolean[sum + 1];
+        T[0] = true;
 
-    for (int i : nums)
-      for (int j = sum - i; j >= 0; j--) {
-        if (T[j]) T[j + i] = true;
-      }
-    return T[sum];
-  }
+        for (int i : nums)
+            for (int j = sum - i; j >= 0; j--) {
+                if (T[j]) T[j + i] = true;
+            }
+        return T[sum];
+    }
 
-  public static void main(String[] args) {
-    System.out.println(can(new int[] {4, 6, 1}));
-    System.out.println(can(new int[] {5, 3, 2, 4}));
-    System.out.println(can(new int[] {7, 1}));
-  }
+    public static void main(String[] args) {
+        System.out.println(can(new int[] {4, 6, 1}));
+        System.out.println(can(new int[] {5, 3, 2, 4}));
+        System.out.println(can(new int[] {7, 1}));
+    }
 }
