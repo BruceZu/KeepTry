@@ -63,24 +63,20 @@ public class KMP {
         i++;
         while (i < W.length) {
             T[i] = l;
+            // for next
             char c = W[i];
             if (W[l] == c) { // So w[l] is also not same as current s[si].
                 T[i] = T[l]; // * Performance feature. T[i] can use the value of T[l]. Not affect l
             }
-            // W[i] != W[l]. W[l] has the possibility it is same with s[si]. Need try.
+            // W[l] != c. W[l] has the possibility it is same with s[si]. Need try.
             // Done
             // Prepare LP/S of substr [0~i] for calculating T[i+1] via
             // looking for the index of the end char of LP of LP/S of string [0~i], W[index] == c
             while (l >= 0 && W[l] != c) l = T[l];
-            // 1> W[l] == c, need not fall back to look for index matching W[index]==c.
-            // 2> Found. At least at index=0. in this case if S[si] is not same as W[i+1]. S[si]
-            // will compare with W[1] later.
-            // 3> Not found the index where W[index]==c. Now l is -1. For substring [0~i] the
-            // length of LP/S is 0. If S[si] is not same as W[i+1]. S[si] will compare with W[0]
-            // later.
+            // l is index here, need l>=0,if not found, now l is -1.
 
             i++;
-            l++; // The index of last char of LP, c, becomes the length of LP now.
+            l++; // becomes the length
         }
 
         return T;
