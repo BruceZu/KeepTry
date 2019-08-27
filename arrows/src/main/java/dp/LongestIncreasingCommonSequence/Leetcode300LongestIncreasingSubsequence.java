@@ -16,7 +16,6 @@
 package dp.LongestIncreasingCommonSequence;
 
 import java.util.Arrays;
-import org.junit.Assert;
 
 /**
  * <a href="https://leetcode.com/problems/longest-increasing-subsequence/description/">leetcode</a>
@@ -109,7 +108,7 @@ public class Leetcode300LongestIncreasingSubsequence {
      */
     public static int ceilIndexJ(int[] A, int[] M, int t, int l, int r) {
         if (M == null || M.length == 0 || l < 0 || r > M.length - 1) {
-            Assert.fail("invalid Array or index bound");
+           throw new RuntimeException("invalid Array or index bound");
         }
         // now the Array may have 1,2,3 or more elements
         if (t <= A[M[l]]) {
@@ -156,7 +155,7 @@ public class Leetcode300LongestIncreasingSubsequence {
      */
     public static int ceilIndex(int[] A, int t, int l, int r) {
         if (A == null || A.length == 0 || l < 0 || r > A.length - 1) {
-            Assert.fail("invalid Array or index bound");
+            throw new RuntimeException("invalid Array or index bound");
         }
         // now the A may have 1,2,3 or more elements
         if (t <= A[l]) {

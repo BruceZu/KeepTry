@@ -81,7 +81,7 @@ public class DeckOfPokerCardsTest {
         Assert.assertTrue(Arrays.equals(cards, shuffledCards));
     }
 
-    @Test(timeout = 10l, expected = Test.None.class)
+    @Test(timeout = 50l, expected = Test.None.class)
     public void testSUITName() {
         DeckOfPokerCards deck = new DeckOfPokerCards();
 
