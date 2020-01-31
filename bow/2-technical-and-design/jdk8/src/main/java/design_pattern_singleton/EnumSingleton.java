@@ -26,6 +26,8 @@ import java.io.Serializable;
  * anymore.
  */
 public enum EnumSingleton implements Serializable {
+    // enum values are static fields which hold instances of that enum type,
+    // and initialization order of static fields depends on their position.
     INSTANCE;
     private Logger log = LoggerFactory.getLogger(EnumSingleton.class);
 
