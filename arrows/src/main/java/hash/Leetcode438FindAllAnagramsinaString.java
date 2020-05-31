@@ -28,87 +28,92 @@ import java.util.List;
  * <a href="https://leetcode.com/problems/find-all-anagrams-in-a-string/#/description">Leetcode</a>
  */
 public class Leetcode438FindAllAnagramsinaString {
-    // O(N)
-    static public List<Integer> findAnagrams2(String s, String p) {
-        List<Integer> list = new ArrayList<>();
-        if (s == null || s.length() == 0 || p == null || p.length() == 0 || p.length() > s.length()) return list;
-
-        int[] map = new int[128]; //lowercase English letters only
-        char[] chars = p.toCharArray();
-        for (char c : chars) {
-            map[c]++;
-        }
-
-        int l = 0, r = 0, len = p.length();
-
-        while (r < s.length()) {
-            if (map[s.charAt(r)] >= 1) {
-                len--;
-            }
-            map[s.charAt(r)]--; // according to map
-
-
-            if (len == 0) {
-                list.add(l);
-            }
-
-            if (r - l == p.length() - 1) {
-                if (map[s.charAt(l)] >= 0) {
-                    len++;
-                }
-                map[s.charAt(l)]++; // according to  map[s.charAt(r)]--;
-                l++;
-            }
-
-            r++;
-        }
-        return list;
+  // O(N) use array as map, 128 length.
+  public static List<Integer> findAnagrams2(String s, String p) {
+    List<Integer> list = new ArrayList<>();
+    if (s == null || s.length() == 0 || p == null || p.length() == 0 || p.length() > s.length()) {
+      return list;
+    }
+    // at least there is one element; let r start from index of 0
+    int[] map = new int[123]; // lowercase English letters only. a is 97, z is 122;A is 65, Z is 90
+    char[] chars = p.toCharArray();
+    for (char c : chars) {
+      map[c]++;
     }
 
-    public static void main(String[] args) {
-        findAnagrams("cbaebabacd", "abc");
+    int l = 0, r = 0, len = p.length();
+    while (r < s.length()) {
+      if (map[s.charAt(r)] >= 1) {
+        len--;
+      }
+      map[s.charAt(r)]--; // always ++
+
+      if (r - l == p.length()) {
+        if (map[s.charAt(l)] >= 0) {
+          len++;
+        }
+        map[s.charAt(l)]++; // always --;
+        l++;
+      }
+
+      if (len == 0) {
+        list.add(l);
+      }
+
+      // for next loop
+      r++;
+    }
+    return list;
+  }
+
+  public static void main(String[] args) {
+    System.out.println(findAnagrams3("cbaebabacd", "abc"));
+  }
+
+  // O(N) use array as map, length 26
+  public static List<Integer> findAnagrams(String s, String p) {
+    List<Integer> result = new ArrayList<>();
+    if (s == null || s.length() == 0 || p == null || p.length() == 0 || p.length() > s.length()) {
+      return result;
     }
 
-    // O(N)
-    static public List<Integer> findAnagrams(String s, String p) {
-        List<Integer> result = new ArrayList<>();
-        if (s == null || s.length() == 0 || p == null || p.length() == 0 || p.length() > s.length()) {
-            return result;
-        }
+    int[] map = new int[26]; // lowercase English letters only
+    char[] chars = p.toCharArray();
+    for (char c : chars) map[c - 'a']++;
 
-        int[] map = new int[26]; //lowercase English letters only
-        char[] chars = p.toCharArray();
-        for (char c : chars) map[c - 'a']++;
-
-        int l = 0, r = 0, len = p.length();
-        while (r < s.length()) {
-            // if current char's account >=0, 'plus it' will affect len.
-            if (r - l == p.length()
-                    && map[s.charAt(l++) - 'a']++ >= 0) len++;
-
-            // if current char's account >=1, 'minus it' will affect len.
-            if (map[s.charAt(r++) - 'a']-- >= 1) len--;
-
-            if (len == 0) result.add(l);
-
-        }
-        return result;
+    int l = 0, r = 0, len = p.length();
+    while (r < s.length()) {
+      if (map[s.charAt(r) - 'a']-- >= 1) len--;
+      if (r - l == p.length() && map[s.charAt(l++) - 'a']++ >= 0) len++;
+      if (len == 0) result.add(l);
+      r++;
     }
+    return result;
+  }
 
-    public List<Integer> findAnagrams3(String s, String p) {
-        List<Integer> result = new ArrayList();
-        int[] map = new int[128];
-        for (char c : p.toCharArray()) map[c]++;
+  // O(N)
+  public static List<Integer> findAnagrams3(String o, String t) {
+    List<Integer> re = new ArrayList();
+    if (o == null || t == null || o.length() == 0 || t.length() == 0) return re;
+    // at least one char length
 
-        int l = 0, r = 0, len = p.length();
+    char[] temp = t.toCharArray();
+    int[] m = new int[123]; // 'z' is 122
+    for (char c : temp) m[c]++;
 
-        while (r < s.length()) {
-            if (map[s.charAt(r++)]-- >= 1) len--;
-            while (len == 0) { // ?
-                if (r - l == p.length()) result.add(l);
-                if (map[s.charAt(l++)]++ >= 0) len++;
-            }
-        }
-        return result;
+    int l = 0, r = 0, size = t.length();
+    char[] s = o.toCharArray();
+    while (r < s.length) {
+      if (m[s[r]] >= 1) size--;
+      m[s[r]]--;
+      r++;
+      // above 3 step can be wrote into one line
+      while (size == 0) { // not match this condition then save all operations in it
+        // now the l maybe is 0;
+        if (r - l == t.length()) re.add(l);
+        if (m[s[l++]]++ >= 0) size++; // merge 3 steps into one
+      }
     }
+    return re;
+  }
 }
