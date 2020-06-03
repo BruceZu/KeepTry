@@ -15,8 +15,7 @@
 
 package array_two_pointer;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <pre>
@@ -25,199 +24,311 @@ import java.util.Map;
  * algorithm: 2 pointers
  */
 public class Leetcode76MinimumWindowSubstring {
+  public static String minWindow(String s, String t) {
+    if (s == null || t == null || s.length() == 0 || s.length() < t.length()) return "";
 
-    // using array as mapping, assume only ASCII letter
-    static public String minWindow(String str, String t) {
-        char[] s = str.toCharArray();
-        char[] target = t.toCharArray();
-        int AllTCharCounts = target.length;
-        int[] sizeOfTChar = new int[128];
-        for (char c : target) {
-            sizeOfTChar[c]++;
-        }
-
-        int l = 0, start = 0, end = Integer.MAX_VALUE;
-        for (int r = 0; r < s.length; r++) {
-            char charAtR = s[r];
-            if (sizeOfTChar[charAtR] > 0) {
-                AllTCharCounts--;
-            }
-            sizeOfTChar[charAtR]--;
-
-            if (AllTCharCounts == 0) { // check update: covered Target
-                while (AllTCharCounts == 0) {
-                    if (sizeOfTChar[s[l]]++ == 0) { // restore what r done to find the minimum one end with r
-                        AllTCharCounts++; // invalid and end the loop
-                        if (r - l < end - start) {
-                            start = l;
-                            end = r;
-                        }
-                    }
-                    l++;
-                }
-            }
-        }
-        return end == Integer.MAX_VALUE ? "" : str.substring(start, end + 1);
+    Map<Character, Integer> m = new HashMap();
+    for (char c : t.toCharArray()) {
+      m.put(c, m.getOrDefault(c, 0) + 1);
     }
 
-    // ------------------------------using Map--------------------------------------------------------
-    static public String minWindow2(String s, String t) {
-        int start = 0, end = Integer.MAX_VALUE;
-        Map<Character, Integer> charToCount = new HashMap();
-        int allCount = t.length();
+    int l = 0, r = 0, counter = t.length();
 
-        for (int i = 0; i < t.length(); i++) {
-            Integer counts = charToCount.get(t.charAt(i));
-            charToCount.put(t.charAt(i), counts == null ? 1 : counts + 1);
+    char[] o = s.toCharArray();
+
+    // keep the candidate or result
+    int len = Integer.MAX_VALUE;
+    int start = -1;
+    while (r < o.length) {
+      char cr = o[r];
+      if (m.containsKey(cr)) {
+        if (m.get(cr) >= 1) counter--;
+        m.put(cr, m.get(cr) - 1);
+      }
+      r++;
+
+      while (counter == 0) {
+        if (r - l < len) {
+          len = r - l;
+          start = l;
         }
-
-        int l = 0;
-        for (int r = 0; r < s.length(); r++) {
-            Character rChar = s.charAt(r);
-            if (charToCount.containsKey(rChar)) {
-                Integer rCharCount = charToCount.get(rChar);
-                if (rCharCount > 0) {
-                    allCount--;
-                }
-                charToCount.put(rChar, rCharCount - 1);
-
-                if (allCount == 0) {// check update
-                    while (allCount == 0) {
-                        Character lChar = s.charAt(l);
-                        if (charToCount.containsKey(lChar)) {
-                            Integer lCharCount = charToCount.get(lChar);
-                            if (lCharCount == 0) {
-                                allCount++;
-                                if (r - l < end - start) {
-                                    start = l;
-                                    end = r;
-                                }
-                            }
-                            charToCount.put(lChar, lCharCount + 1);
-                        }
-                        l++;
-                    }
-                }
-            }
+        char lc = o[l];
+        if (m.containsKey(lc)) {
+          if (m.get(lc) >= 0) counter++;
+          m.put(lc, m.get(lc) + 1);
         }
-        return end == Integer.MAX_VALUE ? "" : s.substring(start, end + 1);
+        l++;
+      }
+    }
+    return len == Integer.MAX_VALUE ? "" : s.substring(start, start + len);
+  }
+
+  // leetcode 3. Longest Substring Without Repeating Characters
+  public static int lengthOfLongestSubstring(String s) {
+    if (s == null || s.length() == 0) return 0;
+    // at least length is 1
+    Map<Character, Integer> map = new HashMap();
+
+    int l = 0, r = 0;
+    char[] o = s.toCharArray();
+
+    int ll = Integer.MIN_VALUE;
+    while (r < s.length()) {
+      char rc = o[r];
+      map.put(rc, map.getOrDefault(rc, 0) + 1);
+      r++;
+
+      while (map.get(rc) == 2) {
+        // move left
+        char lc = o[l];
+        map.put(lc, map.get(lc) - 1);
+        l++;
+      }
+      // current l may be at the repeated char
+      ll = Math.max(r - l, ll);
+    }
+    return ll;
+  }
+
+  // Leetcode 30. Substring with Concatenation of All Words  <3>
+  // O(W.S). W: word length, S: source string length
+  public List<Integer> findSubstring3(String S, String[] L) {
+    List<Integer> res = new ArrayList();
+    if (S == null || L == null || S.length() == 0 || L.length == 0) {
+      return res;
+    }
+    // at least S have one char
+    int wl = L[0].length();
+
+    for (int start = 0; start < wl; start++) {
+      Map<String, Integer> m = new HashMap();
+      for (String w : L) {
+        m.put(w, m.getOrDefault(w, 0) + 1);
+      }
+      int counter = L.length;
+      int l = start, r = start;
+      while (r <= S.length() - wl) {
+        // r in window
+        String ru = S.substring(r, r + wl);
+        if (m.containsKey(ru)) {
+          if (m.get(ru) >= 1) counter--;
+          m.put(ru, m.get(ru) - 1);
+        }
+        r = r + wl;
+
+        if (r - l == wl * L.length) {
+          // maybe it is firstly reach a window length
+          if (counter == 0) res.add(l);
+
+          // l out of window
+          String lu = S.substring(l, l + wl);
+          if (m.containsKey(lu)) {
+            if (m.get(lu) >= 0) counter++;
+            m.put(lu, m.get(lu) + 1);
+          }
+          l = l + wl;
+        }
+      } // end while. at this time the model and counter is dirty, nee reset.
+    }
+    return res;
+  }
+  // Leetcode 30. Substring with Concatenation of All Words  <2>
+  // O(S). S: source string length.
+  //   use a mirror model and counter 2 to
+  //   save the reset work of create model and counter.
+  public List<Integer> findSubstring2(String S, String[] L) {
+    List<Integer> res = new ArrayList();
+    if (S == null || L == null || S.length() == 0 || L.length == 0) {
+      return res;
+    }
+    // at least S have one char
+    Map<String, Integer> m = new HashMap();
+    for (String w : L) {
+      m.put(w, m.getOrDefault(w, 0) + 1);
+    }
+    int counter = L.length;
+    int wl = L[0].length();
+
+    for (int start = 0; start < wl; start++) {
+      int l = start, r = start;
+      Map<String, Integer> m2 = new HashMap();
+      int counter2 = 0;
+
+      while (r <= S.length() - wl) {
+        // r in window
+        String ru = S.substring(r, r + wl);
+        if (m.containsKey(ru)) {
+          m2.put(ru, m2.getOrDefault(ru, 0) + 1);
+          if (m2.get(ru) >= 1 && m2.get(ru) <= m.get(ru)) counter2++; // [1, x]
+        }
+        r = r + wl;
+        if (r - l == wl * L.length) {
+          // maybe it is firstly reach a window length
+          if (counter == counter2) res.add(l); // not compare with 0
+
+          // l out of window
+          String lu = S.substring(l, l + wl);
+          if (m.containsKey(lu)) {
+            m2.put(lu, m2.getOrDefault(lu, 0) - 1);
+            if (m2.get(lu) >= 0 && m2.get(lu) < m.get(lu)) counter2--; // [0, x)
+          }
+          l = l + wl;
+        }
+      }
+    }
+    return res;
+  }
+  // Leetcode 30. Substring with Concatenation of All Words  <1> best
+  // only change ** 2 lines ** compared with the above one:
+  public List<Integer> findSubstring(String S, String[] L) {
+    List<Integer> res = new ArrayList();
+    if (S == null || L == null || S.length() == 0 || L.length == 0) {
+      return res;
+    }
+    // at least S have one char
+    Map<String, Integer> m = new HashMap();
+    for (String w : L) {
+      m.put(w, m.getOrDefault(w, 0) + 1);
+    }
+    int counter = L.length;
+    int wl = L[0].length();
+
+    for (int start = 0; start < wl; start++) {
+      int l = start, r = start;
+      Map<String, Integer> m2 = new HashMap();
+      int counter2 = 0;
+
+      while (r <= S.length() - wl) {
+        // r in window
+        String ru = S.substring(r, r + wl);
+        if (m.containsKey(ru)) {
+          m2.put(ru, m2.getOrDefault(ru, 0) + 1);
+          if (m2.get(ru) >= 1 && m2.get(ru) <= m.get(ru)) counter2++; // [1, x]
+        }
+        r = r + wl;
+        while (counter == counter2) { // not compare with 0 . ** 2 lines start **
+          // maybe it is firstly reach a window length
+          if (r - l == wl * L.length) res.add(l); //          ** 2 lines end **
+
+          // l out of window
+          String lu = S.substring(l, l + wl);
+          if (m.containsKey(lu)) {
+            m2.put(lu, m2.getOrDefault(lu, 0) - 1);
+            if (m2.get(lu) >= 0 && m2.get(lu) < m.get(lu)) counter2--; // [0, x)
+          }
+          l = l + wl;
+        }
+      }
+    }
+    return res;
+  }
+
+  // Leetcode 159 Longest Substring with At Most Two Distinct Characters
+
+  /**
+   * Given a string s , find the length of the longest substring t that contains at most 2 distinct
+   * characters.
+   *
+   * <p>Example 1: Input: "eceba" Output: 3 Explanation: tis "ece" which its length is 3.
+   *
+   * <p>Example 2: Input: "ccaabbb" Output: 5 Explanation: tis "aabbb" which its length is 5.
+   */
+  // runtime O(N), space O(1)
+  // use Map.size() to maintain the kinds of char.
+  static int lengthOfLongestSubstringTwoDistinct(String str) {
+    if (str == null || str.length() <= 2) return 0;
+    // at lest there are 3 chars
+    Map<Character, Integer> map = new HashMap<>();
+    int l = 0, r = 0, res = Integer.MIN_VALUE;
+    char[] s = str.toCharArray();
+    while (r < s.length) {
+      // r in window
+      char rc = s[r];
+      map.put(rc, map.getOrDefault(rc, 0) + 1);
+      r++;
+
+      while (map.size() == 3) {
+        // l out of window
+        char lc = s[l];
+        map.put(lc, map.get(lc) - 1);
+        if (map.get(lc) == 0) map.remove(lc); // maintain the counter. HashMap remove() is O(1)
+        l++;
+      }
+      // counter is <=2
+      res = Math.max(res, r - l);
     }
 
-    // ------------ Longest Substring with At Most Two Distinct Characters -------------------
-    static int lengthOfLongestSubstringTwoDistinct(char[] s) {
-        int[] map = new int[128];
-        int charCount = 0, l = 0, r = 0, LengestSubstrLength = 0;
-        while (r < s.length) {
-            if (map[s[r]] == 0) {
-                charCount++;
-            }
+    return res;
+  }
 
-            map[s[r]]++;
-            r++;
-            while (charCount > 2) {
-                if (map[s[l++]]-- == 1) {
-                    charCount--;
-                }
-            }
-            LengestSubstrLength = Math.max(LengestSubstrLength, r - l);
-        }
-        return LengestSubstrLength;
+  // not use Map.size(), instead use a counter to maintain the kinds of char.
+  public static int lengthOfLongestSubstringTwoDistinct2(String s) {
+    Map<Character, Integer> map = new HashMap<>();
+    int l = 0, r = 0, res = 0, counter = 0;
+
+    while (r < s.length()) {
+      char c = s.charAt(r);
+      map.put(c, map.getOrDefault(c, 0) + 1);
+      if (map.get(c) == 1) counter++;
+      r++;
+
+      while (counter == 3) {
+        char lc = s.charAt(l);
+        map.put(lc, map.get(lc) - 1);
+        if (map.get(lc) == 0) counter--;
+        l++;
+      }
+      res = Math.max(res, r - l);
     }
+    return res;
+  }
 
-    // ----------- Longest Substring Without Repeating Characters --------------------------
-    static int lengthOfLongestSubstringWithoutRepeating(char[] s) {
-        int[] map = new int[128];
-        int countOfMoreThanOne = 0, l = 0, r = 0, lengthOfLongestSubstr = 0;
-        while (r < s.length) {
-            if (map[s[r++]]++ > 0) {
-                countOfMoreThanOne++;
-            }
-            while (countOfMoreThanOne > 0) {
-                if (map[s[l++]]-- > 1) {
-                    countOfMoreThanOne--;
-                }
-            }
-            lengthOfLongestSubstr = Math.max(lengthOfLongestSubstr, r - l); //while valid, update d
-        }
-        return lengthOfLongestSubstr;
+  // Leetcode 904. Fruit Into Baskets
+  // 2 pointer
+  public int totalFruit2(int[] tree) {
+    if (tree == null || tree.length == 0) return 0;
+    // at least there is one element
+
+    int l = 0, r = 0;
+    int res = 0;
+    Map<Integer, Integer> m = new HashMap();
+    // model of target. Use map.size() keep the counter of distinct type
+
+    while (r < tree.length) {
+      // r in window
+      int rt = tree[r]; // r pointer 's fruit type
+      m.put(rt, m.getOrDefault(rt, 0) + 1);
+      r++;
+
+      while (m.size() == 3) {
+        // l in window
+        int lt = tree[l]; // r pointer 's fruit type
+        m.put(lt, m.get(lt) - 1);
+        if (m.get(lt) == 0) m.remove(lt); // update the map size
+        l++;
+      }
+      // calculate the length/number of fruits with type x<=2
+      res = Math.max(res, r - l);
     }
+    return res;
+  }
 
-    // -----------------------------------------------------------------------------------------------
-    public static void main(String[] args) {
-        System.out.println(minWindow("aaaaaaaaaaaabbbbbcdd", "abcdd")); // "abbbbbcdd"
-        System.out.println(minWindow("a", "aa")); // ""
-        System.out.println(minWindow("bdab", "ab")); //"ab"
-        System.out.println(minWindow("ab", "b")); // b
-        System.out.println(minWindow("bba", "ab")); // ba
-        System.out.println(minWindow("abc", "ac")); // abc
-        System.out.println(minWindow("a", "ab")); // ""
-        System.out.println(minWindow("a", "a")); // a
-
-        System.out.println(lengthOfLongestSubstringTwoDistinct("aabc".toCharArray()));
-        System.out.println(lengthOfLongestSubstringWithoutRepeating("abcb123".toCharArray()));
+  public int totalFruit(int[] tree) {
+    if (tree == null || tree.length == 0) return 0;
+    // at least there is one element
+    // a b c is the tree type
+    // q  is the fruit number of the last second and last one type
+    // qb is the fruit number of the last one type
+    int res = 0, q = 0, qb = 0, a = 0, b = 0;
+    for (int c : tree) {
+      q = c == a || c == b ? q + 1 : qb + 1;
+      res = Math.max(res, q);
+      qb = c == b ? qb + 1 : 1;
+      if (c != b) {
+        a = b;
+        b = c;
+      }
     }
-
-    // ---------------------------- Permutation. window equal with target exactly on char and number of char -------------------------------------------------------------------
-    static public String minWindow_withExactlyNumberOfCharacter(String s, String t) {
-        int[] startEnd = new int[2];
-        startEnd[0] = 0;
-        startEnd[1] = Integer.MAX_VALUE;
-        Map<Character, Integer> target = new HashMap();
-        int i = 0;
-        while (i < t.length()) {
-            Integer counts = target.get(t.charAt(i));
-            target.put(t.charAt(i), counts == null ? 1 : counts + 1);
-            i++;
-        }
-        Map<Character, Integer> status = new HashMap();
-        int sub = -1;
-        for (int add = 0; add < s.length(); add++) {
-            Character toAddC = s.charAt(add);
-            if (target.containsKey(toAddC)) {
-                Integer counts = status.get(toAddC);
-                if (counts == target.get(toAddC)) {
-                    while (true) {
-                        Character toSubC = s.charAt(sub);
-                        if (!target.containsKey(toSubC)) {
-                            sub++;
-                            continue;
-                        }
-                        status.put(toSubC, status.get(toSubC) - 1);
-                        sub++;
-                        if (toSubC == toAddC) {
-                            break;
-                        }
-                    }
-                    while (!target.containsKey(s.charAt(sub))) {
-                        sub++;
-                    }
-                    status.put(toAddC, counts);
-                } else if (counts == null) {
-
-                    if (sub == -1) {
-                        sub = add;
-                    }
-                    status.put(toAddC, 1);
-                } else { // counts < target.get(toAddC)
-                    status.put(toAddC, counts + 1);
-                }
-                checkUpdate(target, status, toAddC, add, sub, startEnd);
-            }
-        }
-        return startEnd[1] == Integer.MAX_VALUE ? "" : s.substring(startEnd[0], startEnd[1] + 1);
-    }
-
-    static private void checkUpdate(Map<Character, Integer> target,
-                                    Map<Character, Integer> status,
-                                    Character toAddC,
-                                    int add,
-                                    int sub,
-                                    int[] startEnd) {
-        if (target.get(toAddC) == status.get(toAddC) && target.equals(status)) {
-            if (add - sub < startEnd[1] - startEnd[0]) {
-                startEnd[0] = sub;
-                startEnd[1] = add;
-            }
-        }
-    }
+    return res;
+  }
 }
