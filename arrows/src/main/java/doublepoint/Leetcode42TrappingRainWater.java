@@ -54,64 +54,47 @@ import java.util.Stack;
  *            always make sure the next and pre is valid
  */
 public class Leetcode42TrappingRainWater {
+  public int trap(int[] height) {
+    if (height == null || height.length <= 2) return 0;
+    // at least we have 3 elements
+    int l = 1, r = height.length - 2;
+    int lh = height[0], rh = height[height.length - 1];
+    int result = 0;
+    while (l <= r) { // '==' also need need calculate
+      if (lh <= rh) { // calculate from l side
+        int lv = height[l];
+        if (lh > lv) result += lh - lv; // there is water
+        else lh = lv; // no water
+        l++; // next on in loop
+      } else { // calculate from r side
+        int rv = height[r];
+        if (rh > rv) result += rh - rv; // there is water
+        else rh = rv; // no water
+        r--; // next on in loop
+      }
+    }
+    return result;
+  }
 
-    public static int trap(int[] arr) {
-        if (arr == null || arr.length <= 2) {
-            return 0;
+  // using stack
+  public static int trap2(int[] height) {
+    if (height == null || height.length <= 2) return 0;
+
+    int result = 0;
+    Stack<Integer> s = new Stack(); // Height Index, descending from bottom Up,
+    for (int i = 0; i < height.length; i++) {
+      int iv = height[i];
+      while (!s.isEmpty() && iv > height[s.peek()]) {
+        int top = s.pop();
+        if (!s.isEmpty()) { // 三缺一不存水.
+          int width = i - s.peek() - 1;
+          int wh = Math.min(iv, height[s.peek()]) - height[top];
+          result += width * wh;
         }
-        int l = 0;
-        int r = arr.length - 1;
-        int result = 0;
-
-        while (l < r) {
-            if (arr[l] <= arr[r]) {
-                int next = l + 1;
-                while (next < r && arr[next] <= arr[l]) {
-                    result += arr[l] - arr[next];
-                    next++;
-
-                }
-                l = next;
-            } else {
-                int pre = r - 1;
-                while (l < pre && arr[pre] <= arr[r]) {
-                    result += arr[r] - arr[pre];
-                    pre--;
-
-                }
-                r = pre;
-            }
-        }
-        return result;
+      }
+      s.push(i);
     }
 
-    /**
-     * using stack
-     *
-     * @param height
-     * @return
-     */
-    static public int trap2(int[] height) {
-        if (height == null || height.length == 0) {
-            return 0;
-        }
-
-        int result = 0;
-        Stack<Integer> descendingBottomUpHeightIndex = new Stack();
-        for (int i = 0; i < height.length; i++) {
-            while (!descendingBottomUpHeightIndex.isEmpty()
-                    && height[i] > height[descendingBottomUpHeightIndex.peek()]) {
-                int topLowestIndex = descendingBottomUpHeightIndex.pop();
-                if (!descendingBottomUpHeightIndex.isEmpty()) { // 三缺一不存水.
-                    int curTopLowestIndex = descendingBottomUpHeightIndex.peek();
-                    int width = i - curTopLowestIndex - 1;
-                    int waterHeigh = Math.min(height[i], height[curTopLowestIndex]) - height[topLowestIndex];
-                    result += width * waterHeigh;
-                }
-            }
-            descendingBottomUpHeightIndex.push(i);
-        }
-
-        return result;
-    }
+    return result;
+  }
 }

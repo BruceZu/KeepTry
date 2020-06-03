@@ -16,33 +16,27 @@
 package array_two_pointer;
 
 public class Leetcode11ContainerWithMostWater {
-    public static int maxArea(int[] height) {
-        int l = 0, r = height.length - 1;
-        int result = 0;
 
-        while (l < r) {
-            if (height[l] <= height[r]) {
-                result = Math.max(result, (r - l) * height[l]);
+  public static int maxArea(int[] height) {
+    // the question say there is at least 2 elements
+    int l = 0, r = height.length - 1;
+    int res = 0;
+    while (l < r) { // when l==r, no container and need not calculate
+      // calculate current container water.
+      int lv = height[l], rv = height[r];
+      res = Math.max(res, (r - l) * Math.min(lv, rv));
+      // For next loop to find a higher one from the lower side as reducing the width of container.
+      if (lv <= rv) {
+        int cur = l;
+        while (cur < r && height[cur] <= lv) cur++;
+        l = cur;
 
-                int next = l + 1;
-                while (next < r && height[next] <= height[l]) {
-                    next++;
-                }
-                l = next;
-
-            } else {
-                result = Math.max(result, (r - l) * height[r]);
-                int next = r - 1;
-                while (next > l && height[next] <= height[r]) {
-                    next--;
-                }
-                r = next;
-            }
-        }
-        return result;
+      } else {
+        int cur = r;
+        while (cur > l && height[cur] <= rv) cur--;
+        r = cur;
+      }
     }
-
-    public static void main(String[] args) {
-        System.out.println(maxArea(new int[]{1, 1}));
-    }
+    return res;
+  }
 }
