@@ -67,232 +67,130 @@ package dp;
  *
  */
 public class Leetcode741CherryPickup {
-
     // bottom up runtime O(N^3), space O(N^2)
-    public static int cherryPickup2(int[][] g) {
-        if (g == null) return 0;
-        for (int[] r : g) {
-            if (r == null || r.length == 0) return 0;
-        }
+  public static int cherryPickup(int[][] g) {
+    if (g == null || g[0] == null || g[0].length == 0) return 0;
+    int N = g.length;
 
-        int N = g.length;
-        int dp[][] = new int[N][N];
-        dp[0][0] = g[0][0];
-        for (int t = 1; t <= 2 * N - 2; t++) {
-            for (int r = Math.min(t, N - 1); 0 <= r; r--) {
-                for (int rr = Math.min(t, N - 1); 0 <= rr; rr--) {
-                    int j = t - r, jj = t - rr;
-                    if (0 <= j && j <= Math.min(t, N - 1) && 0 <= jj && jj <= Math.min(t, N - 1)) {
+    // dp[Xr][Yr]: max number of cherry got by start concurrently along 2 paths from start cell,
+    // after s steps , reached 2
+    // location (Xr, s-Xr) and (Yr, s-Yr) on the diagonal line.
+    int[][] dp = new int[N][N];
+    // Note: initial value
+    dp[0][0] = g[0][0];
 
-                        if (g[r][j] == -1 || g[rr][jj] == -1) {
-                            dp[r][rr] = -1;
-                            continue;
-                        }
-
-                        int ll = (r == t || rr == t) ? -1 : dp[r][rr];
-                        int lu = (r == t || rr - 1 < 0) ? -1 : dp[r][rr - 1];
-                        int ul = (r - 1 < 0 || rr == t) ? -1 : dp[r - 1][rr];
-                        int uu = (r - 1 < 0 || rr - 1 < 0) ? -1 : dp[r - 1][rr - 1];
-
-                        int pre = -1;
-                        if (ll != -1) pre = Math.max(pre, ll);
-                        if (lu != -1) pre = Math.max(pre, lu);
-                        if (ul != -1) pre = Math.max(pre, ul);
-                        if (uu != -1) pre = Math.max(pre, uu);
-                        dp[r][rr] = pre;
-
-                        if (dp[r][rr] == -1) {
-                            continue;
-                        }
-
-                        // Note: use () here
-                        dp[r][rr] += g[r][j] + (r == rr ? 0 : g[rr][jj]);
-                    }
-                }
+    // Note: start from 1, else result always is -1
+    for (int s = 1; s <= 2 * N - 2; s++) {
+      // bottom up, step by step. or diagonal line by diagonal line
+      // ascending order to save space complicity.
+      for (int Xr = Math.min(s, N - 1); Xr >= 0; Xr--) {
+        for (int Yr = Math.min(s, N - 1); Yr >= 0; Yr--) {
+          int Xc = s - Xr, Yc = s - Yr;
+          if (0 <= Xc && Xc <= N - 1 && 0 <= Yc && Yc <= N - 1) {
+            // no way in these 2 location
+            if (g[Xr][Xc] == -1 || g[Yr][Yc] == -1) {
+              dp[Xr][Yr] = -1;
+              continue;
             }
-        }
-        int r = dp[N - 1][N - 1];
-        return r == -1 ? 0 : r;
-    }
 
-    // bottom up runtime O(N^3), space O(N^3)
-    public static int cherryPickup3(int[][] g) {
-        if (g == null) return 0;
-        for (int[] r : g) {
-            if (r == null || r.length == 0) return 0;
-        }
+            // to see if these 2 locations reachable from start
+            int ll = (Xr == s || Yr == s) ? -1 : dp[Xr][Yr];
+            int lt = (Xr == s || Yr - 1 < 0) ? -1 : dp[Xr][Yr - 1];
+            int tl = (Xr - 1 < 0 || Yr == s) ? -1 : dp[Xr - 1][Yr];
+            int tt = (Xr - 1 < 0 || Yr - 1 < 0) ? -1 : dp[Xr - 1][Yr - 1];
 
-        // dp[r][rr]: max cherries got by walking simultaneously from (0,0) via 2 paths to (r,t-r)
-        // and (rr,t-rr)
-        // When r = N-1, rr = N-1, t = 2*N -2. Got the answer.
-        int N = g.length;
-        int dp[][][] = new int[2 * N - 1][N][N];
-        dp[0][0][0] = g[0][0];
-        for (int t = 1; t <= 2 * N - 2; t++) {
-            for (int r = 0; r <= Math.min(t, N - 1); r++) {
-                for (int rr = 0; rr <= Math.min(t, N - 1); rr++) {
-                    int j = t - r, jj = t - rr;
-                    if (0 <= j && j <= Math.min(t, N - 1) && 0 <= jj && jj <= Math.min(t, N - 1)) {
-                        if (g[r][j] == -1 || g[rr][jj] == -1) {
-                            dp[t][r][rr] = Integer.MIN_VALUE;
-                            continue;
-                        }
+            int maxPre = Math.max(ll, lt);
+            maxPre = Math.max(maxPre, tl);
+            maxPre = Math.max(maxPre, tt);
 
-                        // max cherries got from left A B paths:
-                        int pre = Integer.MIN_VALUE;
-                        if (r <= t - 1 && rr <= t - 1) { // or use getPre2()
-                            pre = Math.max(pre, dp[t - 1][r][rr]);
-                        }
-                        if (r <= t - 1 && 0 <= rr - 1) {
-                            pre = Math.max(pre, dp[t - 1][r][rr - 1]);
-                        }
-                        if (0 <= r - 1 && rr <= t - 1) {
-                            pre = Math.max(pre, dp[t - 1][r - 1][rr]);
-                        }
-                        if (0 <= r - 1 && 0 <= rr - 1)
-                            pre = Math.max(pre, dp[t - 1][r - 1][rr - 1]);
-
-                        if (pre == Integer.MIN_VALUE) {
-                            dp[t][r][rr] = Integer.MIN_VALUE;
-                            continue;
-                        }
-
-                        // Note: use () here
-                        int curAB = g[r][j] + (r == rr ? 0 : g[rr][jj]);
-                        dp[t][r][rr] = pre + curAB;
-                    }
-                }
+            if (maxPre == -1) {
+              dp[Xr][Yr] = -1;
+              continue;
             }
+            // reachable.
+            dp[Xr][Yr] = maxPre + (Xr == Yr ? g[Xr][Xc] : g[Xr][Xc] + g[Yr][Yc]);
+          }
         }
-        // Note: when resule is -1, for user it should be 0;
-        int r = dp[2 * N - 2][N - 1][N - 1];
-        return r == Integer.MIN_VALUE ? 0 : r;
+      }
     }
+    return dp[N - 1][N - 1] == -1 ? 0 : dp[N - 1][N - 1];
+  }
 
-    private static int getPre2(int[][][] dp, int t, int r, int rr) {
-        if (r < 0 || rr < 0 || t < r || t < rr) return -1;
-        return dp[t][r][rr];
-    }
-
-    private static int r(int[][] g, int r, int rr, int t, int[][][] cache) {
-        // Note: border
-        if (r == 0 && rr == 0 && t == 0) {
-            cache[0][0][0] = g[0][0];
-            return cache[0][0][0];
-        }
-
-        // calculate
-        int N = g.length;
-        int j = t - r, jj = t - rr;
-        if (0 <= r && r <= Math.min(N - 1, t) &&
-            0 <= rr && rr <= Math.min(N - 1, t) &&
-            0 <= j  && j <= Math.min(N - 1, t) &&
-            0 <= jj && jj <= Math.min(N - 1, t) &&
-            g[r][j] != -1  && g[rr][jj] != -1) {
-            if (cache[t][r][rr] != 0) return cache[t][r][rr];
-
-            int maxPre2 = -1;
-            maxPre2 = Math.max(maxPre2, r(g, r, rr, t - 1, cache));
-            maxPre2 = Math.max(maxPre2, r(g, r, rr - 1, t - 1, cache));
-            maxPre2 = Math.max(maxPre2, r(g, r - 1, rr, t - 1, cache));
-            maxPre2 = Math.max(maxPre2, r(g, r - 1, rr - 1, t - 1, cache));
-
-            // Note:
-            if (maxPre2 != -1) {
-                cache[t][r][rr] = maxPre2 + g[r][j] + (r == rr ? 0 : g[rr][jj]);
-            } else cache[t][r][rr] = -1;
-            return cache[t][r][rr];
-        }
-        return -1;
-    }
-
-    // top down runtime O(?), space O(N^3)
-    public static int cherryPickup(int[][] g) {
-        if (g == null) return 0;
-        for (int[] r : g) {
-            if (r == null || r.length == 0) return 0;
-        }
-        //
-        int N = g.length;
-        int[][][] cache = new int[2 * N - 1][N][N];
-        int r = r(g, N - 1, N - 1, 2 * N - 2, cache);
-        return r == -1 ? 0 : r;
-    }
-    // ---------------------------------------------------------------------------------------
-    public static void main(String[] args) {
-        System.out.println(
-                5
-                        == cherryPickup(
-                                new int[][] {
-                                    {0, 1, 0},
-                                    {0, 1, 1},
-                                    {1, 1, 0}
-                                }));
-        System.out.println(
-                5
-                        == cherryPickup(
-                                new int[][] {
-                                    {0, 1, -1},
-                                    {1, 1, 1},
-                                    {-1, 1, 0}
-                                }));
-        System.out.println(
-                2
-                        == cherryPickup(
-                                new int[][] {
-                                    {0, 0, 1},
-                                    {0, 1, 0},
-                                    {1, 0, 0}
-                                }));
-        System.out.println(
-                4
-                        == cherryPickup(
-                                new int[][] {
-                                    {1, 1},
-                                    {1, 1},
-                                }));
-        System.out.println(
-                8
-                        == cherryPickup(
-                                new int[][] {
-                                    {1, 1, 1},
-                                    {1, 1, 1},
-                                    {1, 1, 1}
-                                }));
-        System.out.println(
-                0
-                        == cherryPickup(
-                                new int[][] {
-                                    {1, 1, -1},
-                                    {1, -1, 1},
-                                    {-1, 1, 1}
-                                }));
-        System.out.println(
-                0
-                        == cherryPickup(
-                                new int[][] {
-                                    {1, -1, 1, -1, 1, 1, 1, 1, 1, -1},
-                                    {-1, 1, 1, -1, -1, 1, 1, 1, 1, 1},
-                                    {1, 1, 1, -1, 1, 1, 1, 1, 1, 1},
-                                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                                    {-1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                                    {1, -1, 1, 1, 1, 1, -1, 1, 1, 1},
-                                    {1, 1, 1, -1, 1, 1, -1, 1, 1, 1},
-                                    {1, -1, 1, -1, -1, 1, 1, 1, 1, 1},
-                                    {1, 1, -1, -1, 1, 1, 1, -1, 1, -1},
-                                    {1, 1, -1, 1, 1, 1, 1, 1, 1, 1}
-                                }));
-        System.out.println(
-                15
-                        == cherryPickup(
-                                new int[][] {
-                                    {1, 1, 1, 1, 0, 0, 0},
-                                    {0, 0, 0, 1, 0, 0, 0},
-                                    {0, 0, 0, 1, 0, 0, 1},
-                                    {1, 0, 0, 1, 0, 0, 0},
-                                    {0, 0, 0, 1, 0, 0, 0},
-                                    {0, 0, 0, 1, 0, 0, 0},
-                                    {0, 0, 0, 1, 1, 1, 1}
-                                }));
-    }
+  // ---------------------------------------------------------------------------------------
+  public static void main(String[] args) {
+    System.out.println(
+        5
+            == cherryPickup(
+                new int[][] {
+                  {0, 1, 0},
+                  {0, 1, 1},
+                  {1, 1, 0}
+                }));
+    System.out.println(
+        5
+            == cherryPickup(
+                new int[][] {
+                  {0, 1, -1},
+                  {1, 1, 1},
+                  {-1, 1, 0}
+                }));
+    System.out.println(
+        2
+            == cherryPickup(
+                new int[][] {
+                  {0, 0, 1},
+                  {0, 1, 0},
+                  {1, 0, 0}
+                }));
+    System.out.println(
+        4
+            == cherryPickup(
+                new int[][] {
+                  {1, 1},
+                  {1, 1},
+                }));
+    System.out.println(
+        8
+            == cherryPickup(
+                new int[][] {
+                  {1, 1, 1},
+                  {1, 1, 1},
+                  {1, 1, 1}
+                }));
+    System.out.println(
+        0
+            == cherryPickup(
+                new int[][] {
+                  {1, 1, -1},
+                  {1, -1, 1},
+                  {-1, 1, 1}
+                }));
+    System.out.println(
+        0
+            == cherryPickup(
+                new int[][] {
+                  {1, -1, 1, -1, 1, 1, 1, 1, 1, -1},
+                  {-1, 1, 1, -1, -1, 1, 1, 1, 1, 1},
+                  {1, 1, 1, -1, 1, 1, 1, 1, 1, 1},
+                  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                  {-1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                  {1, -1, 1, 1, 1, 1, -1, 1, 1, 1},
+                  {1, 1, 1, -1, 1, 1, -1, 1, 1, 1},
+                  {1, -1, 1, -1, -1, 1, 1, 1, 1, 1},
+                  {1, 1, -1, -1, 1, 1, 1, -1, 1, -1},
+                  {1, 1, -1, 1, 1, 1, 1, 1, 1, 1}
+                }));
+    System.out.println(
+        15
+            == cherryPickup(
+                new int[][] {
+                  {1, 1, 1, 1, 0, 0, 0},
+                  {0, 0, 0, 1, 0, 0, 0},
+                  {0, 0, 0, 1, 0, 0, 1},
+                  {1, 0, 0, 1, 0, 0, 0},
+                  {0, 0, 0, 1, 0, 0, 0},
+                  {0, 0, 0, 1, 0, 0, 0},
+                  {0, 0, 0, 1, 1, 1, 1}
+                }));
+  }
 }
