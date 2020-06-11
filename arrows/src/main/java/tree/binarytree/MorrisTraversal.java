@@ -17,6 +17,7 @@ package tree.binarytree;
 
 /**
  * <pre>
+ * Morris Traversal
  *
  * Require space complexity is O(1).
  * - No use stack and recursion.
@@ -37,9 +38,11 @@ public class MorrisTraversal {
 
   /**
    * <pre>
-   *   true: created thread
-   *   false: deleted thread
+   *  let n's left sub tree's right most child pointer (that would otherwise be null)
+   *  point to the in-order successor of the node (if it exists), it is n.
    *
+   *   true: created thread.
+   *   false: deleted thread, or not applicable when n there is no left sub tree.
    */
   private static boolean thread(Node n) {
     if (n.l != null) {
@@ -62,89 +65,109 @@ public class MorrisTraversal {
   public static String inOrder(Node root) {
     StringBuilder r = new StringBuilder();
     Node n = root;
-    while (n != null) {
-      if (n.l != null && thread(n)) {
-        n = n.l;
-        continue;
-      }
-      r.append(n.name);
-      n = n.r;
-    }
-    return r.toString();
-  }
-
-  public static String inOrder2(Node root) {
-    StringBuilder r = new StringBuilder();
-    Node n = root;
-    while (n != null) { // root | right most node.
-      // create / delete thread before handler left subtree
+    start: // start handle current tree
+    while (true) {
+      if (n == null) return r.toString();
       if (n.l != null) {
-        boolean isCreaded = thread(n);
-        if (isCreaded) {
-          n = n.l;
-          continue;
+        if (thread(n)) {
+          n = n.l; // continue left subtree from start:
+        } else {
+          // left subtree is done.
+          r.append(n.name);
+          n = n.r; // continue right subtree from start:
         }
+      } else { // reached left most node. now the inorder: null, n, n.r
+        r.append(n.name);
+        n = n.r; // continue right subtree || threaded parent from start:
       }
-      // left most end | left sub stree has been processed
-      r.append(n.name); // in order
-      n = n.r; // right sub tree ( maybe threaded root)
     }
-    return r.toString();
   }
 
   public static String preOrder(Node root) {
     StringBuilder r = new StringBuilder();
     Node n = root;
-    while (n != null) {
+    start: // start handle current tree
+    while (true) {
+      if (n == null) return r.toString();
+      // pre order: n, n.l, n.r
+      // r.append(n.name); is wrong here. you maybe is on the back way from left sub tree.
+      // So put off handling after checking n.l existence, even put off it after checking thread.
       if (n.l != null) {
-        boolean isCreated = thread(n);
-        if (isCreated) {
-          r.append(n.name); // pre order
-          n = n.l;
-        } else {
-          n = n.r;
+        if (thread(n)) {
+          r.append(n.name);
+          n = n.l; // continue left subtree from start:
+        } else { // left subtree is done for pre-order: n, n.l, n.r. next is handle n.r
+          n = n.r; // continue right subtree from start:
         }
       } else {
-        r.append(n.name); // pre order
-        n = n.r;
+        // n, n.l==null, n.r
+        r.append(n.name);
+        n = n.r; // continue right subtree || threaded parent from start:
       }
     }
-    return r.toString();
   }
 
   public static String postOrder(Node root) {
     StringBuilder r = new StringBuilder();
     Node n = root;
+    start: // handle current tree
+    while (true) {
+      if (n == null) break; // do not return directly. Root's right line is left if root is not null
+
+      // post-order: n.l, n.r, n; check left subtree firstly
+      if (n.l != null) {
+        if (thread(n)) {
+          n = n.l; // continue left subtree from start:
+        } else {
+          // is left subtree n.l done for post-order: n.l, n.r, n ? No.
+          printRightLineBottomUpOf(n.l, r); // now left subtree is done.
+          n = n.r; // continue right subtree from start
+          // not way to handle n, pending
+        }
+      } else { // n.l==null, n.r, n
+        n = n.r; // continue right subtree || threaded parent from start
+        // no way to handle n, pending
+      }
+    }
+    if (root != null) printRightLineBottomUpOf(root, r);
+    return r.toString();
+  }
+
+  /** without comments version */
+  public static String postOrder2(Node root) {
+    StringBuilder r = new StringBuilder();
+    Node n = root;
+
     while (n != null) {
       if (n.l != null) {
-        boolean isCreated = thread(n);
-        if (isCreated) {
+        if (thread(n)) {
           n = n.l;
         } else {
-          printRihtLineBottomUp(n.l, r);
+          printRightLineBottomUpOf(n.l, r);
           n = n.r;
         }
       } else {
         n = n.r;
       }
     }
-    printRihtLineBottomUp(root, r);
+    printRightLineBottomUpOf(root, r);
     return r.toString();
   }
 
-  private static void printRihtLineBottomUp(Node top, StringBuilder result) {
-    Node end = null; // right most end
-    while (top != end) {
-      Node from = top;
-      while (from.r != end) {
-        from = from.r;
-      }
-      result.append(from.name);
-      end = from;
+  /** The algorithm guarantee the space complexity O(1), without using stack */
+  private static void printRightLineBottomUpOf(Node top, StringBuilder result) {
+    if (top == null) return;
+
+    Node r = null; // initial value
+    Node n;
+    while ((n = top) != r) {
+      while (n.r != r) n = n.r;
+      result.append(n.name);
+      r = n; // r is picked
     }
   }
 
-  // --------------------------------------------------------
+  // --------------------------------------------------------------------------//
   public static void main(String[] args) {
 
     // null
