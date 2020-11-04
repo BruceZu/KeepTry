@@ -18,7 +18,7 @@ Buck
 
 ```
 $ buck --version
-buck version 12963f12a2fa764f24c9c3a7413b0f9c4bdb2b05
+buck version ae2347e05da6f0ef9e0ec21497a654757aca7ad5
 
 ```
 

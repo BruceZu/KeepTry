@@ -31,7 +31,7 @@ import util
 
 NPMJS = 'https://registry.npmjs.org/'
 
-MAVEN = 'http://repo1.maven.org/maven2/'
+MAVEN = 'https://repo1.maven.org/maven2/'
 MINOR_HOME = os.path.expanduser('~/.minorminor')
 CACHED_PATH = os.path.join(MINOR_HOME, 'buck-cache', 'download-artifacts-jar')
 CACHED_NPMJS_PATH = os.path.join(MINOR_HOME, 'buck-cache', 'download-artifacts-npmjs')
