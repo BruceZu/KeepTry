@@ -4,7 +4,11 @@ Algorithms + Data Structures.  DIY.
 Environment:
 
 Ubuntu 32 bit 16.04.1 LTS (Xenial Xerus)
-git version 2.7.4
+
+Need install curl
+
+Git version 2.7.4
+
 Java
 
 ```
@@ -18,7 +22,7 @@ Buck
 
 ```
 $ buck --version
-buck version ae2347e05da6f0ef9e0ec21497a654757aca7ad5
+buck version 12963f12a2fa764f24c9c3a7413b0f9c4bdb2b05
 
 ```
 
@@ -38,7 +42,7 @@ Python 2.7.11
 Get all required Java libs and run all Junit tests
 
 ```
-$ { buck targets //bow/...; buck targets //arrows/...; } | xargs buck build && buck test --all
+$ alias python=/usr/bin/python2.7; { buck targets //bow/...; buck targets //arrows/...; } | xargs buck build && buck test --all
 ```
 Import it by Intellij IDEA 2016.3 and start enjoy coding
 

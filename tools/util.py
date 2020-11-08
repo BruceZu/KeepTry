@@ -21,6 +21,7 @@ import urllib
 import contextlib
 import subprocess
 import __builtin__
+from distutils.spawn import find_executable
 
 
 def make_sure_dir(d):
@@ -51,7 +52,8 @@ def sha1_of(file):
 def is_integrated(file, sha1):
     h = sha1_of(file)
     if sha1 != h:
-        print('\n received SHA-1: %s \n expected SHA-1: %s' % (h, sha1), file=sys.stderr)
+        print('\n received SHA-1: %s \n expected SHA-1: %s' %
+              (h, sha1), file=sys.stderr)
         return False
     return True
 
@@ -68,7 +70,7 @@ def sha1_of_file(filepath):
         while True:
             buf = f.read(65536)
             if not buf:
-                break;
+                break
             h.update(buf)
     return h.hexdigest()
 
@@ -88,15 +90,19 @@ def download(url, to, verbose):
     try:
         if verbose:
             print("\ndownload %s\n to %s\n" % (url, to), file=sys.stderr)
-        subprocess.check_output(['curl',
-                                 '--proxy-anyauth',
-                                 '--create-dirs',
-                                 '-f',
-                                 '--silent',
-                                 '--insecure',
-                                 '-o', to,
-                                 '--url', url
-                                 ])
-    except  subprocess.CalledProcessError as e:
-        print('\ncurl is failed to download %s :\n%s,\n%s' % (url, e.cmd, e.output), file=sys.stderr)
+        if find_executable('curl') is not None:
+            subprocess.check_output(['curl',
+                                     '--proxy-anyauth',
+                                     '--create-dirs',
+                                     '-f',
+                                     '--silent',
+                                     '--insecure',
+                                     '-o', to,
+                                     '--url', url
+                                     ])
+        else:
+            print("need install curl", file=sys.stderr)
+    except subprocess.CalledProcessError as e:
+        print('\ncurl is failed to download %s :\n%s,\n%s' %
+              (url, e.cmd, e.output), file=sys.stderr)
         sys.exit(e.returncode)
