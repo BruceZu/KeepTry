@@ -17,6 +17,8 @@ package string;
 
 import org.junit.Assert;
 import org.junit.Test;
+import string.palindrom.PalindromeGeneral;
+import string.palindrom.PalindromeSpecial;
 
 import java.text.Collator;
 
