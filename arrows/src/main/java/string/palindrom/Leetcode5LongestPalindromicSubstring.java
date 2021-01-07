@@ -27,11 +27,12 @@ public class Leetcode5LongestPalindromicSubstring {
 
     int[] radius = new int[N];
     // when index==0, for "#"
-    int maxRight = 0, axis = 0;
-    int si = 0; // first longest palindromic sub-string center index in T
+    int maxRight = 0,
+        c = 0; // axis or center of palindrome which has the rightmost boundary character
+    int rc = 0; // first longest palindromic sub-string center index in T
     for (int i = 1; i < N; i++) {
       if (i <= maxRight) {
-        int mirror = 2 * axis - i; // axis-(i-axis)
+        int mirror = 2 * c - i; // axis-(i-axis)
         radius[i] = Math.min(maxRight - i, radius[mirror]);
         if (radius[mirror] != maxRight - i) {
           // need not update maxRight, axis, and result
@@ -48,14 +49,54 @@ public class Leetcode5LongestPalindromicSubstring {
 
       if (i + radius[i] > maxRight) {
         maxRight = i + radius[i];
-        axis = i;
+        c = i;
       }
       // application: longest palindromic sub-string
-      if (radius[i] > radius[si]) {
-        si = i;
+      if (radius[i] > radius[rc]) {
+        rc = i;
       }
     }
-    int f = (si - radius[si]) / 2;
-    return s.substring(f, f + radius[si]);
+    int f = (rc - radius[rc]) / 2;
+    return s.substring(f, f + radius[rc]);
+  }
+
+  /** when the division character is not easy to find,use virtual augmented string */
+  public String longestPalindrome2(String s) {
+    if (s == null || s.length() == 0) return s;
+    int N = 2 * s.length() + 1;
+    int[] radius = new int[N];
+    // when index==0, for virtual division character
+    int c = 0; // axis or center of palindrome which has the rightmost boundary character
+    int rc = 0; // first longest palindromic sub-string center index in T
+    for (int i = 1; i < N; i++) {
+      int maxRight = c + radius[c];
+      if (i <= maxRight) {
+        int mirror = 2 * c - i; // axis-(i-axis)
+        radius[i] = Math.min(maxRight - i, radius[mirror]); // reuse
+        if (radius[mirror] != maxRight - i) {
+          // need not update maxRight, axis, and result
+          continue;
+        }
+      }
+
+      for (int l = i - (1 + radius[i]), r = i + (1 + radius[i]); ; ) {
+        if (l < 0 || r == N || (l & 1) == 1 && s.charAt(l / 2) != s.charAt(r / 2)) {
+          break;
+        }
+        radius[i]++;
+        l--;
+        r++;
+      }
+
+      if (i + radius[i] > c + radius[c]) {
+        c = i;
+      }
+      // application: longest palindromic sub-string
+      if (radius[i] > radius[rc]) {
+        rc = i;
+      }
+    }
+    int f = (rc - radius[rc]) / 2;
+    return s.substring(f, f + radius[rc]);
   }
 }
