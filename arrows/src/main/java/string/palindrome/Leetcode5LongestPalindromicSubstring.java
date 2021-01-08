@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package string.palindrom;
+package string.palindrome;
 
 public class Leetcode5LongestPalindromicSubstring {
   public String longestPalindrome(String s) {

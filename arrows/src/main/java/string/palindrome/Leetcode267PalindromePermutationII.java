@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package string.palindrom;
+package string.palindrome;
 
 import java.util.ArrayList;
 import java.util.Arrays;
