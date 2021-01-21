@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package arithmetic.prime;
+package math.prime;
 
 import java.util.Arrays;
 

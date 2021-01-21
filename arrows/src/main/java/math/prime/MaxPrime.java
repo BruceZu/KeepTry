@@ -13,25 +13,23 @@
 // limitations under the License.
 //
 
-package arithmetic.prime;
+package math.prime;
 
 import java.math.BigInteger;
 
 public class MaxPrime {
-    public static void main(String[] args) {
-        long start = System.currentTimeMillis();
-        // 2^74_207_281 - 1
-        BigInteger bigPrime = BigInteger.ONE.shiftLeft(74_207_281).subtract(BigInteger.ONE);
-        long mid = System.currentTimeMillis();
+  public static void main(String[] args) {
+    long start = System.currentTimeMillis();
+    // 2^74_207_281 - 1
+    BigInteger bigPrime = BigInteger.ONE.shiftLeft(74_207_281).subtract(BigInteger.ONE);
+    long mid = System.currentTimeMillis();
 
-        String s = bigPrime.toString();
-        long end = System.currentTimeMillis();
+    String s = bigPrime.toString();
+    long end = System.currentTimeMillis();
 
-        System.out.printf("Took %.3f seconds to create 2^74_207_281 - 1 and %.3f second toString it%n",
-                (mid - start) / 1e3, (end - mid) / 1e3);
-        System.out.println(s);
-    }
+    System.out.printf(
+        "Took %.3f seconds to create 2^74_207_281 - 1 and %.3f second toString it%n",
+        (mid - start) / 1e3, (end - mid) / 1e3);
+    System.out.println(s);
+  }
 }
-
-
-

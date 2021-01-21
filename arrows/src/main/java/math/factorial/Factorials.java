@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package arithmetic.factorial;
+package math.factorial;
 
 /**
  * <pre>
