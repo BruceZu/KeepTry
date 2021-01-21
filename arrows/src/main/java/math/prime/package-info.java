@@ -17,4 +17,4 @@
  * https://en.wikipedia.org/wiki/Mersenne_prime
  * https://en.wikipedia.org/wiki/Largest_known_prime_number
  */
-package arithmetic.prime;
+package math.prime;
