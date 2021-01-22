@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package math;
+package string.palindrome;
 
 public class Leetcode866PrimePalindrome {
 
