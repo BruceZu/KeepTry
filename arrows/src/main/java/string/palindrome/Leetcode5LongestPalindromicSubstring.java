@@ -64,39 +64,39 @@ public class Leetcode5LongestPalindromicSubstring {
   public String longestPalindrome2(String s) {
     if (s == null || s.length() == 0) return s;
     int N = 2 * s.length() + 1;
-    int[] radius = new int[N];
+    int[] rad = new int[N];
     // when index==0, for virtual division character
     int c = 0; // axis or center of palindrome which has the rightmost boundary character
     int rc = 0; // first longest palindromic sub-string center index in T
     for (int i = 1; i < N; i++) {
-      int maxRight = c + radius[c];
-      if (i <= maxRight) {
+      int rMost = c + rad[c];
+      if (i <= rMost) {
         int mirror = 2 * c - i; // axis-(i-axis)
-        radius[i] = Math.min(maxRight - i, radius[mirror]); // reuse
-        if (radius[mirror] != maxRight - i) {
+        rad[i] = Math.min(rMost - i, rad[mirror]); // reuse
+        if (i + rad[mirror] != rMost) {
           // need not update maxRight, axis, and result
           continue;
         }
       }
 
-      for (int l = i - (1 + radius[i]), r = i + (1 + radius[i]); ; ) {
+      for (int l = i - (1 + rad[i]), r = i + (1 + rad[i]); ; ) {
         if (l < 0 || r == N || (l & 1) == 1 && s.charAt(l / 2) != s.charAt(r / 2)) {
           break;
         }
-        radius[i]++;
+        rad[i]++;
         l--;
         r++;
       }
 
-      if (i + radius[i] > c + radius[c]) {
+      if (i + rad[i] > c + rad[c]) {
         c = i;
       }
       // application: longest palindromic sub-string
-      if (radius[i] > radius[rc]) {
+      if (rad[i] > rad[rc]) {
         rc = i;
       }
     }
-    int f = (rc - radius[rc]) / 2;
-    return s.substring(f, f + radius[rc]);
+    int f = (rc - rad[rc]) / 2;
+    return s.substring(f, f + rad[rc]);
   }
 }
