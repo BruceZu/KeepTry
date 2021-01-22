@@ -88,81 +88,81 @@ import java.util.Set;
  *      // 16:32 ~57~17:02
  */
 public class Leetcode267PalindromePermutationII {
-    private void nextChoice(char[] arr, int i, int j) {
-        if (i != j) {
-            arr[i] ^= arr[j];
-            arr[j] ^= arr[i];
-            arr[i] ^= arr[j];
-        }
+  private void swap(char[] arr, int i, int j) {
+    if (i != j && arr[i] != arr[j]) {
+      arr[i] ^= arr[j];
+      arr[j] ^= arr[i];
+      arr[i] ^= arr[j];
+    }
+  }
+
+  private void mirror(char[] arr) {
+    int i = 0, j = arr.length - 1;
+    while (i < j) {
+      arr[j] = arr[i];
+      i++;
+      j--;
+    }
+  }
+
+  private void permute(int cur, char[] arr, List re) {
+    if (cur == arr.length / 2 - 1) {
+      mirror(arr);
+      re.add(new String(arr));
+      return;
     }
 
-    private void mirror(char[] arr) {
-        int i = 0, j = arr.length - 1;
-        while (i < j) {
-            arr[j] = arr[i];
-            i++;
-            j--;
-        }
+    Set usedChoice = new HashSet(arr.length / 2 - 1 - cur + 1);
+    for (int i = cur; i <= arr.length / 2 - 1; i++) {
+      char ic = arr[i];
+      if (!usedChoice.contains(ic)) {
+        usedChoice.add(ic);
+
+        swap(arr, cur, i);
+        permute(cur + 1, arr, re);
+        swap(arr, cur, i);
+      }
+    }
+  }
+
+  public List<String> generatePalindromes(String str) {
+    //
+    List re = new ArrayList();
+    if (str == null || str.length() == 0) {
+      return re;
+    }
+    if (str.length() == 1) {
+      re.add(str);
+      return re;
     }
 
-    private void permute(int cur, char[] arr, List re) {
-        if (cur == arr.length / 2 - 1) {
-            mirror(arr);
-            re.add(new String(arr));
-            return;
-        }
+    //  "ababacabbc334 "
+    //   "334aaaabbbbcc"
+    char[] arr = str.toCharArray();
+    int size = 0;
+    Character middle = null;
+    boolean oddArrMiddleFound = false;
 
-        Set usedChoice = new HashSet(arr.length / 2 - 1 - cur + 1);
-        for (int i = cur; i <= arr.length / 2 - 1; i++) {
-            char ic = arr[i];
-            if (!usedChoice.contains(ic)) {
-                usedChoice.add(ic);
-
-                nextChoice(arr, cur, i);
-                permute(cur + 1, arr, re);
-                nextChoice(arr, cur, i);
-            }
-        }
+    Arrays.sort(arr);
+    for (int i = 0; i <= arr.length - 1; i++) { // need sort
+      char cur = arr[i];
+      if (i < arr.length - 1 && cur == arr[i + 1]) {
+        arr[size++] = cur;
+        i++;
+        continue;
+      }
+      if ((arr.length & 1) == 1 && !oddArrMiddleFound) {
+        middle = cur;
+        oddArrMiddleFound = true;
+        continue;
+      }
+      return re;
+    }
+    if ((arr.length & 1) == 1) {
+      arr[arr.length / 2] = middle;
     }
 
-    public List<String> generatePalindromes(String str) {
-        //
-        List re = new ArrayList();
-        if (str == null || str.length() == 0) {
-            return re;
-        }
-        if (str.length() == 1) {
-            re.add(str);
-            return re;
-        }
-
-        //  "ababacabbc334 "
-        //   "334aaaabbbbcc"
-        char[] arr = str.toCharArray();
-        int size = 0;
-        Character middle = null;
-        boolean oddArrMiddleFound = false;
-
-        Arrays.sort(arr);
-        for (int i = 0; i <= arr.length - 1; i++) { // need sort
-            char cur = arr[i];
-            if (i < arr.length - 1 && cur == arr[i + 1]) {
-                arr[size++] = cur;
-                i++;
-                continue;
-            }
-            if ((arr.length & 1) == 1 && !oddArrMiddleFound) {
-                middle = cur;
-                oddArrMiddleFound = true;
-                continue;
-            }
-            return re;
-        }
-        if ((arr.length & 1) == 1) {
-            arr[arr.length / 2] = middle;
-        }
-
-        permute(0, arr, re);
-        return re;
-    }
+    permute(0, arr, re);
+    return re;
+  }
 }

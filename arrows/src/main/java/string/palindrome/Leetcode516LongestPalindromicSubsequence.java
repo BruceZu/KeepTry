@@ -19,18 +19,21 @@ public class Leetcode516LongestPalindromicSubsequence {
   public int longestPalindromeSubseq(String s) {
     if (s == null || s.length() == 0) return 0;
     int N = s.length();
+    // 'You may assume that the maximum length of s is 1000.'
+    // so use int type is enough
     int[][] dp = new int[N][N];
     // initial, others are default 0
     for (int i = 0; i < N; i++) dp[i][i] = 1;
-
-    for (int i = 0; i < N; i++) {
-      // need calculate all dp[0<=j<i][i]
-      for (int j = i - 1; j >= 0; j--) { // backward to use known to get unknown
-        if (s.charAt(j) == s.charAt(i)) {
+    for (int r = 0; r < N; r++) {
+      // need calculate all dp[0<= j <i][i]
+      for (int l = r - 1; l >= 0; l--) { // backward to use known to get unknown
+        if (s.charAt(l) == s.charAt(r)) {
           // palindrome symmetry
-          dp[j][i] = 2 + dp[j + 1][i - 1]; // (j==i-1)?2:2+dp[j+1][i-1];
+          dp[l][r] = 2 + dp[l + 1][r - 1]; // (j==i-1)?2:2+dp[j+1][i-1];
+          // dp[l][r] is 0 when l > r
         } else {
-          dp[j][i] = Math.max(dp[j + 1][i], dp[j][i - 1]);
+          dp[l][r] = Math.max(dp[l + 1][r], dp[l][r - 1]);
+          // the dp[l + 1][r] need calculate with j backward
         }
       }
     }
