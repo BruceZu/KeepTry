@@ -15,52 +15,34 @@
 
 package string.palindrome;
 
-/**
- * <pre>
- * considering only alphanumeric characters and ignoring cases.
- * string might be empty? we define empty string as valid palindrome.
- *
- * Two Pointers
- * String
- *
- * @see <a href="https://leetcode.com/problems/valid-palindrome/">leetcode</a>
- */
 public class Leetcode125ValidPalindrome {
-
-    static public boolean isAlphanumeric(char c) {
-        return 'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z' || '0' <= c && c <= '9';
+  // O(N)
+  public boolean isPalindrome(String s) {
+    // 'string might be empty? we define empty string as valid palindrome.'
+    if (s.isEmpty() || s.length() == 1) {
+      return true;
     }
-
-    // 11ms
-    public static boolean isPalindrome(String s) {
-        int l = -1, r = s.length();
-        while (l <= r) {
-            l++;
-            while (l < r && !(isAlphanumeric(s.charAt(l)))) {
-                l++;
-            }
-
-            if (l == r) {
-                return true;
-            }
-            r--;
-            while (l < r && !(isAlphanumeric(s.charAt(r)))) {
-                r--;
-            }
-            if (r == l) {//odd
-                return true;
-            }
-            if (Character.toLowerCase(s.charAt(l)) != Character.toLowerCase(s.charAt(r))) {
-                return false;
-            }
-        }
-        return true;
+    int l = 0, r = s.length() - 1;
+    char cl, cr;
+    while (true) {
+      // 'considering only alphanumeric characters and ignoring cases.'
+      while (!Character.isLetterOrDigit(s.charAt(l)) && l < r) l++;
+      while (!Character.isLetterOrDigit(s.charAt(r)) && l < r) r--;
+      if (l >= r) return true;
+      // 'considering only alphanumeric characters and ignoring cases.'
+      if (Character.toLowerCase(s.charAt(l)) == Character.toLowerCase(s.charAt(r))) {
+        l++;
+        r--;
+      } else {
+        return false;
+      }
     }
+  }
 
-    // 32 ms
-    public static boolean isPalindrome2(String str) {
-        String s = str.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
-        String rev = new StringBuffer(s).reverse().toString();
-        return s.equals(rev);
-    }
+  // 32 ms
+  public static boolean isPalindrome2(String str) {
+    String s = str.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+    String rev = new StringBuffer(s).reverse().toString();
+    return s.equals(rev);
+  }
 }
