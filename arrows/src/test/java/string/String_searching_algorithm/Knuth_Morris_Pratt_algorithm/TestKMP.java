@@ -24,11 +24,11 @@ import java.util.Arrays;
 
 @RunWith(Parameterized.class)
 public class TestKMP {
-  @Parameterized.Parameters(name = "{index} {0} {1} {2}")
+  @Parameterized.Parameters(name = "{index}, {0}, {1}, {2}")
   public static Iterable<Object[]> data() {
-
     return Arrays.asList(
         new Object[][] {
+          {"PARTICIPATE IN PARACHUTE", "CHUT", 19},
           {"ABCABD", "CA", 2},
           {"ABAABAAC", "CA", -1},
           {"ABAABAAC", "ABAAC", 3},
@@ -59,7 +59,8 @@ public class TestKMP {
 
   @Test(timeout = 100L, expected = Test.None.class)
   public void testKMP() {
-    Assert.assertEquals(expected, KMP.firstMatchPosition(txt, str));
-    Assert.assertEquals(expected, KMP.forceWay(txt, str));
+    Assert.assertEquals(expected, KMP.indexOfFirstFoundByKMP(txt, str));
+    Assert.assertEquals(expected, KMP.indexOfFirstFoundByKMPNoComments(txt, str));
+    Assert.assertEquals(expected, KMP.indexOfFirstFoundByKMPMerge(txt, str));
   }
 }
