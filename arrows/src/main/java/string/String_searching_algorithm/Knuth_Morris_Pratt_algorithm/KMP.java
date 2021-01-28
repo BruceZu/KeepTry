@@ -15,157 +15,158 @@
 
 package string.String_searching_algorithm.Knuth_Morris_Pratt_algorithm;
 
-import java.util.Arrays;
-
-/**
- * <a href ="https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm">wiki</a>
- * <pre>
- *   O(m+n)  s[] length is n, W[] length is m
- */
 public class KMP {
-    /**
-     * <pre>
-     * Partial Match Table("failure function") of W
-     * - Assume W length is at least 1.
-     * - Assume W does not contain supplementary character
-     * <img src="../../../../resources/KMP_partial_T.png" height="450" width="500">
-     * O(m), where m is the length of W
-     *
-     * The PMT determines the distance and how to decide the wi and si.
-     * The goal of the table is: not to let any character of S match successfully more than once .
-     *
-     * Meaning of value of T[i] is:
-     * - The length of LP/S of substring with index [0, i-1]
-     * - The index of W to which try to compare the current S[si] if current W[i] is ame same as S[si].
-     *
-     * When index is 0 and 1 there is no proper suffix and prefix of the given substring.
-     * when the W[0] is not match. move W 1 index it is same as si++.
-     * This is the meaning of -1 of T[0]; This is special case handled before using PMT.
-     *
-     * When the W[1] is not match the only choice is move one step to try to compare W[0] with current S[si]
-     * This is the meaning of 0 of T[0].
-     * The performance improvement here is if W[0] is equal to w[1], means
-     * W[0] is also not same as current S[si], so T[1]=T[0]=-1.
-     * In every calculating step this performance improvement is applied.
-     */
-    static int[] newIndexToTry(String word) {
-        if (word == null || word.isEmpty()) return null;
-        char[] W = word.toCharArray();
-        int[] T = new int[W.length];
+  // O(N）
+  public static int[] getWidestBorderLength(char[] I) {
+    if (I == null || I.length == 0) return null;
+    // N >= 1
+    int N = I.length;
+    // In KMP it is called as the failure function lookup table
+    int[] len = new int[N];
 
-        int i = 0; // index in T[]
-        int l = -1; // length of the LP/S of string end up at W[i-1].
-        T[i] = l;
-        // T[0]=-1; if S[si] is not same as W[0], S[si] need align with -1 of W to let
-        // S[si+1] compare W[0]
-
-        l++;
-        i++;
-        while (i < W.length) {
-            T[i] = l;
-            // for next
-            char c = W[i];
-            if (W[l] == c) { // So w[l] is also not same as current s[si].
-                T[i] = T[l]; // * Performance feature. T[i] can use the value of T[l]. Not affect l
-            }
-            // W[l] != c. W[l] has the possibility it is same with s[si]. Need try.
-            // Done
-            // Prepare LP/S of substr [0~i] for calculating T[i+1] via
-            // looking for the index of the end char of LP of LP/S of string [0~i], W[index] == c
-            while (l >= 0 && W[l] != c) l = T[l];
-            // l is index here, need l>=0,if not found, now l is -1.
-
-            i++;
-            l++; // becomes the length
+    // For index is 0 or after loop cur index is 0
+    // - No len[d-1] value to refer and base on it to calculate len[d]
+    // - For sub-string str[0], its widest border length is 0. Allow empty prefixes and suffixes.
+    //   In Java len[0] default value is 0;
+    for (int d = 0; d < N; d++) {
+      int i = d; // Do not change d
+      /*
+      // loop 1 or loop 2
+      // loop 1:
+      while (i > 0) { // At most check len[d-1] steps.
+        int mi = len[i - 1];
+        // mi is length of widest border of sub-staring [0, i-1] of I
+        // mi is also mirror index, mi - 1 + 1, used to compare with S[u].
+        if (I[mi] == I[d]) {
+          len[d] = mi + 1;
+          break;
         }
+        i = mi;
+      }
+      */
 
-        return T;
+      // loop 2
+      while (0 < i && I[len[i - 1]] != I[d]) i = len[i - 1];
+      if (i != 0) len[d] = len[i - 1] + 1;
+      if (i == 0) len[d] = 0; // default;
     }
-    // Get the index in S of the first match of give W string.
-    // O(n+m), n is the length of S, m is the length of W
-    static int firstMatchPosition(String S, String W) {
-        if (W == null || S == null || W.length() > S.length()) {
-            return -1;
-        }
+    return len;
+  }
 
-        if (W.isEmpty()) {
-            return 0;
-        }
-        if (S.isEmpty()) return -1;
+  public static int indexOfFirstFoundByKMP(String strS, String strI) {
+    // O(M + N):
+    if (strS == null || strI == null || strI.length() > strS.length()) return -1;
+    char[] S = strS.toCharArray(), I = strI.toCharArray();
+    int M = S.length, N = I.length;
+    int u = 0, d = 0;
+    int[] len = getWidestBorderLength(I);
+    while (true) {
+      while (u < M && d < N && S[u] == I[d]) { // Three conditions
+        u++;
+        d++;
+      }
+      if (d == N) return u - N;
+      // Check i fistly before checking s. If need fins all matched sub-strings,
+      // then collect  result here and continue
+      if (u == M) return -1;
+      // Move d in I right forward, or move u in S left forward
+      if (d == 0) {
+        u++;
+      } else {
+        d = len[d - 1]; // d >= 1
 
-        int NI[] = newIndexToTry(W);
-        int si = 0;
-        int wi = 0;
-        while (si < S.length()) { // when si is S.length; firstly check wi, then check si.
-            if (W.charAt(wi) == S.charAt(si)) {
-                // both wi and si go ahead 1 step.
-                si++;
-                wi++;
-                if (wi == W.length()) {
-                    return si - W.length();
-                }
-            } else {
-                if (NI[wi] == -1) si++; //  wi is 0 now, si go ahead 1 step
-                else
-                    wi = NI[wi]; // fantastic. si is still, wi is backtracking try, at most wi steps
-            }
+        // Performance improvement, not change algorithm time:
+        // Replace above one line by the following loop 1 or loop 2
+        /*
+                // loop 1
+                int i = d; // do not change d
+                while (0 < i && I[len[i - 1]] == I[d]) i = len[i - 1];
+                if (i > 0) d = len[i - 1];
+                else d = 0;
+        */
+
+        /*
+        // loop 2
+        int i = d; // do not change d
+        while (0 < i) { // 1> i >= 1. It is possible to has back forward mirror
+          int mi = len[i - 1];
+          if (I[mi] != I[i]) { // 2> stop find back forward. move to mirror index and leave loop
+            i = mi;
+            break;
+          }
+          i = mi; // 3> move to mirror index and continue find back forward.
         }
-        return -1;
+        // i still can be
+        //  - 0, and I[0] is still same as I[d] which is != S[u],
+        //    in this case move S back forward. that means to compare S[u+1] with I[0]
+        //  - 0, and I[0] != I[d]
+        //  - not 0, and I[0] != I[d]
+        d = i;
+        */
+      }
     }
+  }
 
-    // ---------------------------------------------------------------------------------------------
+  // ---------------------------- No comments version -----------------------------
+  public static int[] getWidestBorderLengthNoComments(char[] I) {
+    if (I == null || I.length == 0) return null;
+    int N = I.length;
+    int[] len = new int[N];
 
-    public static void main(String[] args) {
-        System.out.println(KMP.firstMatchPosition("ABCABD", "CA"));
-        System.out.println(KMP.firstMatchPosition("ABAABAAC", "CA"));
-
-        System.out.println(Arrays.toString(KMP.newIndexToTry("ABCDABD")));
-        System.out.println(Arrays.toString(KMP.newIndexToTry("ABACABABC")));
-        System.out.println(Arrays.toString(KMP.newIndexToTry("PARTICIPATE IN PARACHUTE")));
+    for (int d = 0; d < N; d++) {
+      int i = d;
+      while (0 < i && I[len[i - 1]] != I[d]) i = len[i - 1];
+      if (i != 0) len[d] = len[i - 1] + 1;
     }
-    /**
-     * <pre>
-     * haystack = "hello world"
-     * needle = "world"
-     * return 6
-     *
-     * haystack length is m
-     * needle length is n
-     * O(n*(m-n))
-     *
-     * Give a worse case
-     *
-     * @param haystack
-     * @param needle
-     * @return index of the char from where the needle appears for the fist time.
-     */
-    public static int forceWay /*used for test*/(String haystack, String needle) {
-        // check corner cases
-        if (haystack == null || needle == null) {
-            return -1;
-        }
-        if (needle.isEmpty()) {
-            return 0;
-        }
-        //
-        int max = haystack.length() - needle.length();
-        for (int i = 0; i <= max; i++) { // care it is <= not <
-            char curC = haystack.charAt(i);
-            if (curC == needle.charAt(0)) {
+    return len;
+  }
 
-                boolean found = true;
-                for (int j = 1; j < needle.length(); j++) {
-                    if (needle.charAt(j) != haystack.charAt(i + j)) {
-                        found = false;
-                        break;
-                    }
-                }
-
-                if (found) {
-                    return i;
-                }
-            }
-        }
-        return -1;
+  public static int indexOfFirstFoundByKMPNoComments(String strS, String strI) {
+    if (strS == null || strI == null || strI.length() > strS.length()) return -1;
+    char[] S = strS.toCharArray(), I = strI.toCharArray();
+    int M = S.length, N = I.length;
+    int u = 0, d = 0;
+    int[] len = getWidestBorderLengthNoComments(I);
+    while (true) {
+      while (u < M && d < N && S[u] == I[d]) {
+        u++;
+        d++;
+      }
+      if (d == N) return u - N;
+      if (u == M) return -1;
+      if (d == 0) {
+        u++;
+      } else {
+        d = len[d - 1];
+      }
     }
+  }
+  // ---------------------------- Merge together version -----------------------------
+  public static int indexOfFirstFoundByKMPMerge(String strS, String strI) {
+    if (strS == null || strI == null || strI.length() > strS.length()) return -1;
+    char[] S = strS.toCharArray(), I = strI.toCharArray();
+    int M = S.length, N = I.length;
+    // prepare widest border array
+    int[] len = new int[N];
+    for (int d = 0; d < N; d++) {
+      int i = d;
+      while (0 < i && I[len[i - 1]] != I[d]) i = len[i - 1];
+      if (i != 0) len[d] = len[i - 1] + 1;
+    }
+    // compare
+    int u = 0, d = 0;
+    while (true) {
+      while (u < M && d < N && S[u] == I[d]) {
+        u++;
+        d++;
+      }
+      if (d == N) return u - N;
+      if (u == M) return -1;
+      if (d == 0) {
+        u++;
+      } else {
+        d = len[d - 1];
+      }
+    }
+  }
 }
