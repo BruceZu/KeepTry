@@ -26,7 +26,7 @@ public class PrimesNotGreatThanN {
    */
   public static List<Integer> getPrimesLessNotGreatThan(Integer N) {
     List<Integer> primes = new ArrayList<>();
-
+    // This algorithm is restricted by the the max possible index Integer.MAX_VALUE
     boolean[] isNotPrime = new boolean[N + 1]; // marks, default false, 'it is prime'.
     for (int n = 2; n <= N; n++) { // each number be handle only once
       if (!isNotPrime[n]) {
@@ -47,5 +47,12 @@ public class PrimesNotGreatThanN {
       }
     }
     return primes;
+  }
+
+  public static void main(String[] args) {
+    // 46337 is the biggest prime < Math.sqrt(Integer.MAX_VALUE)
+    int n = (int) Math.sqrt(Integer.MAX_VALUE);
+    List<Integer> primes = getPrimesLessNotGreatThan((int) Math.sqrt(Integer.MAX_VALUE));
+    System.out.println(primes.get(primes.size() - 1) == 46337);
   }
 }
