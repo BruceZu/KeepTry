@@ -23,6 +23,19 @@ package tree.binarytree;
  * - No use stack and recursion.
  * - not modify tree structure and Node data structure.
  *
+ * Think:
+ *  - how to end the loop?
+ *  - for 3 kinds of traversal order, what is the difference between
+ *    node has not left subtree and left subtree has been handled
+ *  - how to use the method {@link MorrisTraversal#isRightLinked(Node)}
+ *
+ *  All possible binary scenario:
+ *    current node | left subtree | right subtree
+ *    null
+ *  1>  x           | null         | null
+ *  2>  x           | null         | x
+ *  3>  x           | x            | null
+ *  4>  x           | x            | x
  */
 public class MorrisTraversal {
   static class Node {
@@ -36,98 +49,96 @@ public class MorrisTraversal {
     }
   }
 
+  public MorrisTraversal() {
+    super();
+  }
+
   /**
    * <pre>
-   *  let n's left sub tree's right most child pointer (that would otherwise be null)
-   *  point to the in-order successor of the node (if it exists), it is n.
+   *  1> If node 'n' has not left child, return false.
+   *  2> Else find out the 'n''s in-order predecessor child, or its left sub tree's right most
+   *     child pointer
+   *     If the 'n''s in-order predecessor child.r == null, this means node 'n''s left subtree
+   *     has not been processed, then let child.r = node 'n'. (This is a memory mark to show
+   *     weather node 'n''s left subtree as been processed) and return true.
+   *     Else let child.r = null, and return false.
    *
-   *   true: created thread.
-   *   false: deleted thread, or not applicable when n there is no left sub tree.
+   *  Caller can understand result
+   *  - 'true' as node 'n''s left subtree has not been processed
+   *  - 'false' as node 'n' has no left sub tree. or 'n''s left subtree has been processed
    */
-  private static boolean thread(Node n) {
-    if (n.l != null) {
-      Node most = n.l; // left sub tree right most node
-
-      while (most.r != null && most.r != n) {
-        most = most.r;
-      }
-      if (most.r == null) {
-        most.r = n;
-        return true;
-      } else {
-        most.r = null;
-        return false;
-      }
+  public static boolean isRightLinked(Node n) {
+    if (n.l == null) return false;
+    Node pred = n.l; // left sub tree right most node, node 'n''s predecessor child in-order
+    while (pred.r != null && pred.r != n) {
+      pred = pred.r;
     }
-    return false;
+    if (pred.r == null) {
+      pred.r = n;
+      return true;
+    } else {
+      pred.r = null;
+      return false;
+    }
   }
 
   public static String inOrder(Node root) {
     StringBuilder r = new StringBuilder();
     Node n = root;
-    start: // start handle current tree
-    while (true) {
-      if (n == null) return r.toString();
-      if (n.l != null) {
-        if (thread(n)) {
-          n = n.l; // continue left subtree from start:
-        } else {
-          // left subtree is done.
-          r.append(n.name);
-          n = n.r; // continue right subtree from start:
-        }
-      } else { // reached left most node. now the inorder: null, n, n.r
-        r.append(n.name);
-        n = n.r; // continue right subtree || threaded parent from start:
+    /*
+    The tree rightmost node.r is null.
+    {@link MorrisTraversal#isRightLinked(MorrisTraversal.Node)} will check whether current.l is null.
+    Code in loop will switch current node to it's left subtree only when the left subtree is not
+    null.
+    */
+    while (n != null) {
+      if (isRightLinked(n)) {
+        // current node has left subtree and the left subtree has not been processed. switch
+        // current node to its left subtree
+        n = n.l;
+        continue;
       }
+      // current node has not left,reached left most node., or left subtree has been
+      // processed
+      r.append(n.name);
+      n = n.r; // continue right subtree
     }
+    return r.toString();
   }
 
   public static String preOrder(Node root) {
     StringBuilder r = new StringBuilder();
     Node n = root;
-    start: // start handle current tree
-    while (true) {
-      if (n == null) return r.toString();
-      // pre order: n, n.l, n.r
-      // r.append(n.name); is wrong here. you maybe is on the back way from left sub tree.
+    while (n != null) {
+      // r.append(n.name); is wrong here. when current node's left subtree has been handled
       // So put off handling after checking n.l existence, even put off it after checking thread.
-      if (n.l != null) {
-        if (thread(n)) {
-          r.append(n.name);
-          n = n.l; // continue left subtree from start:
-        } else { // left subtree is done for pre-order: n, n.l, n.r. next is handle n.r
-          n = n.r; // continue right subtree from start:
-        }
-      } else {
-        // n, n.l==null, n.r
+      if (isRightLinked(n)) {
         r.append(n.name);
-        n = n.r; // continue right subtree || threaded parent from start:
+        n = n.l;
+        continue;
       }
+      // current node has not left subtree.
+      if (n.l == null) {
+        r.append(n.name);
+      } // else current node has left subtree which has been processed.
+      n = n.r;
     }
+    return r.toString();
   }
 
   public static String postOrder(Node root) {
     StringBuilder r = new StringBuilder();
     Node n = root;
-    start: // handle current tree
-    while (true) {
-      if (n == null) break; // do not return directly. Root's right line is left if root is not null
-
-      // post-order: n.l, n.r, n; check left subtree firstly
-      if (n.l != null) {
-        if (thread(n)) {
-          n = n.l; // continue left subtree from start:
-        } else {
-          // is left subtree n.l done for post-order: n.l, n.r, n ? No.
-          printRightLineBottomUpOf(n.l, r); // now left subtree is done.
-          n = n.r; // continue right subtree from start
-          // not way to handle n, pending
-        }
-      } else { // n.l==null, n.r, n
-        n = n.r; // continue right subtree || threaded parent from start
-        // no way to handle n, pending
+    while (n != null) {
+      if (isRightLinked(n)) {
+        n = n.l;
+        continue;
       }
+      // n has left subtree but it has been processed or h has not left subtree
+      if (n.l != null) {
+        printRightLineBottomUpOf(n.l, r); // now left subtree is done.
+      }
+      n = n.r;
     }
     if (root != null) printRightLineBottomUpOf(root, r);
     return r.toString();
@@ -137,48 +148,45 @@ public class MorrisTraversal {
   public static String postOrder2(Node root) {
     StringBuilder r = new StringBuilder();
     Node n = root;
-
     while (n != null) {
-      if (n.l != null) {
-        if (thread(n)) {
-          n = n.l;
-        } else {
-          printRightLineBottomUpOf(n.l, r);
-          n = n.r;
-        }
-      } else {
-        n = n.r;
+      if (isRightLinked(n)) {
+        n = n.l;
+        continue;
       }
+      if (n.l != null) {
+        printRightLineBottomUpOf(n.l, r);
+      }
+      n = n.r;
     }
-    printRightLineBottomUpOf(root, r);
+    if (root != null) printRightLineBottomUpOf(root, r);
     return r.toString();
   }
 
   /** The algorithm guarantee the space complexity O(1), without using stack */
   private static void printRightLineBottomUpOf(Node top, StringBuilder result) {
     if (top == null) return;
-
-    Node r = null; // initial value
-    Node n;
-    while ((n = top) != r) {
-      while (n.r != r) n = n.r;
-      result.append(n.name);
-      r = n; // r is picked
+    Node end = null; // initial value
+    while (end != top) {
+      Node p = top; // need printed
+      while (p.r != end) p = p.r;
+      result.append(p.name);
+      end = p;
     }
   }
 
   // --------------------------------------------------------------------------//
   public static void main(String[] args) {
-
     // null
     System.out.println(inOrder(null).equals(""));
     System.out.println(preOrder(null).equals(""));
     System.out.println(postOrder(null).equals(""));
+    System.out.println(postOrder2(null).equals(""));
     // one node
     Node root = new Node("A");
     System.out.println(inOrder(root).equals("A"));
     System.out.println(preOrder(root).equals("A"));
     System.out.println(postOrder(root).equals("A"));
+    System.out.println(postOrder2(root).equals("A"));
 
     Node l = new Node("L");
     Node r = new Node("R");
@@ -188,6 +196,7 @@ public class MorrisTraversal {
     System.out.println(inOrder(root).equals("LA"));
     System.out.println(preOrder(root).equals("AL")); //
     System.out.println(postOrder(root).equals("LA"));
+    System.out.println(postOrder2(root).equals("LA"));
     // no left subtree
     root.l = null;
     root.r = r;
@@ -195,11 +204,13 @@ public class MorrisTraversal {
     System.out.println(inOrder(root).equals("AR"));
     System.out.println(preOrder(root).equals("AR"));
     System.out.println(postOrder(root).equals("RA"));
+    System.out.println(postOrder2(root).equals("RA"));
     // has both left and right subtree
     root.l = l;
     System.out.println(inOrder(root).equals("LAR"));
     System.out.println(preOrder(root).equals("ALR")); //
     System.out.println(postOrder(root).equals("LRA"));
+    System.out.println(postOrder2(root).equals("LRA"));
 
     // other case.
     Node n1 = new Node("1");
@@ -222,5 +233,6 @@ public class MorrisTraversal {
     System.out.println(inOrder(n1).equals("325461798"));
     System.out.println(preOrder(n1).equals("123456789"));
     System.out.println(postOrder(n1).equals("356429871"));
+    System.out.println(postOrder2(n1).equals("356429871"));
   }
 }
