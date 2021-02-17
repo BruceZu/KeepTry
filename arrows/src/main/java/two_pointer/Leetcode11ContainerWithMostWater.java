@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package array_two_pointer;
+package two_pointer;
 
 public class Leetcode11ContainerWithMostWater {
 
