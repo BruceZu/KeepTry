@@ -21,51 +21,52 @@ import java.util.Set;
 import java.util.function.BiFunction;
 
 public abstract class IGraphWithAdjacentNodesAbstractImp implements IGraph {
-    protected List<Node> nodes;
-    protected IBinaryHeap<Node> evaluating;
-    protected Node cur;
-    protected Set<Node> evaluated;
+  protected List<Node> nodes;
+  protected IBinaryHeap<Node> evaluating;
+  protected Node cur;
+  protected Set<Node> evaluated;
 
-    public IGraphWithAdjacentNodesAbstractImp(List<Node> nodes, Node start) {
-        this.cur = start;
-        this.nodes = nodes;
-        evaluating = new IBinaryHeap<>(nodes.size());
-        evaluated = new HashSet<>(nodes.size());
-    }
+  public IGraphWithAdjacentNodesAbstractImp(List<Node> nodes, Node start) {
+    this.cur = start;
+    this.nodes = nodes;
+    evaluating = new IBinaryHeap<>(nodes.size());
+    evaluated = new HashSet<>(nodes.size());
+  }
 
-    @Override
-    public void initVertexDistanceStatus() {
-        nodes.stream().forEach(e -> e.setShortestDistanceToI(Integer.MAX_VALUE));
-        cur.setShortestDistanceToI(0);
-        evaluating.offer(cur);
-    }
+  @Override
+  public void initVertexDistanceStatus() {
+    nodes.stream().forEach(e -> e.setShortestDistanceToI(Integer.MAX_VALUE));
+    cur.setShortestDistanceToI(0);
+    evaluating.offer(cur);
+  }
 
-    @Override
-    public void selectCurrentVertex() {
-        cur = evaluating.poll();
-        evaluated.add(cur);
-    }
+  @Override
+  public void selectCurrentVertex() {
+    cur = evaluating.poll();
+    evaluated.add(cur);
+  }
 
-    @Override
-    public void updateCutWithCurrentVertex(BiFunction distCalculator) {
-        for (Node neighbor : cur.getNeighborWeighMap().keySet()) {
-            if (!evaluated.contains(neighbor)) {
-                int viaCur = (Integer) distCalculator.apply(cur, neighbor);
+  @Override
+  public void updateCutWithCurrentVertex(BiFunction distCalculator) {
+    for (Node neighbor : cur.getNeighborWeighMap().keySet()) {
+      if (evaluated.contains(neighbor)) {
+        continue;
+      }
+      int viaCur = (Integer) distCalculator.apply(cur, neighbor);
 
-                if (viaCur < 0) { // distance may be MAX_VALUE
-                    viaCur = Integer.MAX_VALUE;
-                }
-                if (viaCur < neighbor.getShortestDistanceToI()) {
-                    neighbor.setShortestDistanceToI(viaCur);
-                    neighbor.setVertexToI(cur);
-                    if (evaluating.contains(neighbor)) {
-                        evaluating.shiftUp(neighbor); // O(logN)
-                    }
-                }
-                if (!evaluating.contains(neighbor)) {
-                    evaluating.offer(neighbor); // O(logN)
-                }
-            }
+      if (viaCur < 0) { // distance may be MAX_VALUE
+        viaCur = Integer.MAX_VALUE;
+      }
+      if (viaCur < neighbor.getShortestDistanceToI()) {
+        neighbor.setShortestDistanceToI(viaCur);
+        neighbor.setVertexToI(cur);
+        if (evaluating.contains(neighbor)) {
+          evaluating.shiftUp(neighbor); // O(logN)
         }
+      }
+      if (!evaluating.contains(neighbor)) {
+        evaluating.offer(neighbor); // O(logN)
+      }
     }
+  }
 }

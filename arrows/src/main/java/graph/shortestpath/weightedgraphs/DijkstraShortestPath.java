@@ -51,7 +51,9 @@ import java.util.Map;
  *         for other node:  shortest distance is Integer.MAX_VALUE;
  *                          predecessor node is null.
  *
- * Set<Node>:  evaluated nodes, have found the shortest paths from start node .
+ * Set<Node>:  evaluated nodes, have found the shortest paths from start node. without it
+ *             will make program run in endless loop of switch start node and next selected neighbor
+ *             node. But it will not affect any node' shortest distance value.
  * Heap<Node>: under evaluating. a border between settled node and left nodes.
  *
  * use a binary heap which keep the node position in the binary heap array to get O(logV)
@@ -86,90 +88,81 @@ import java.util.Map;
  *
  */
 public class DijkstraShortestPath {
-    public static void main(String[] args) {
-        // todo test dircted graph;
+  public static void main(String[] args) {
+    // todo test directed graph;
 
-        /**
-         * <pre>
-         *          f    -- 9 --  e
-         *        /   \             \
-         *       /     \             \
-         *     14       2            6
-         *     /         \            \
-         *  a   - 9 -     c   - 11 -   d
-         *   \           /           /
-         *    7        10          15
-         *      \      /        /
-         *       \    /      /
-         *            b
-         */
-        Map<Node, Integer> startNodeDistanceTo = new HashMap();
-        Map<Node, Integer> bNodeDistanceTo = new HashMap();
-        Map<Node, Integer> cNodeDistanceTo = new HashMap();
-        Map<Node, Integer> dNodeDistanceTo = new HashMap();
-        Map<Node, Integer> eNodeDistanceTo = new HashMap();
-        Map<Node, Integer> fNodeDistanceTo = new HashMap();
+    /**
+     * <pre>
+     *          f    -- 9 --  e
+     *        /   \             \
+     *       /     \             \
+     *     14       2            6
+     *     /         \            \
+     *  a   - 9 -     b   - 11 -   d
+     *   \           /           /
+     *    7        10          15
+     *      \      /        /
+     *       \    /      /
+     *            c
+     */
+    Map<Node, Integer> aNei = new HashMap();
+    Map<Node, Integer> cNei = new HashMap();
+    Map<Node, Integer> bNei = new HashMap();
+    Map<Node, Integer> dNei = new HashMap();
+    Map<Node, Integer> eNei = new HashMap();
+    Map<Node, Integer> fNei = new HashMap();
 
-        Node start = new Node("a", startNodeDistanceTo);
+    Node a = new Node("a", aNei);
+    Node b = new Node("b", bNei);
+    Node c = new Node("c", cNei);
+    Node d = new Node("d", dNei);
+    Node e = new Node("e", eNei);
+    Node f = new Node("f", fNei);
 
-        Node b = new Node("b", bNodeDistanceTo);
-        Node c = new Node("c", cNodeDistanceTo);
-        Node e = new Node("e", eNodeDistanceTo);
-        Node f = new Node("f", fNodeDistanceTo);
-        Node end = new Node("d", dNodeDistanceTo);
+    aNei.put(f, 14);
+    aNei.put(b, 9);
+    aNei.put(c, 7);
 
-        startNodeDistanceTo.put(b, 7);
-        startNodeDistanceTo.put(c, 9);
-        startNodeDistanceTo.put(f, 14);
+    bNei.put(a, 9);
+    bNei.put(f, 2);
+    bNei.put(d, 11);
+    bNei.put(c, 10);
 
-        bNodeDistanceTo.put(start, 7);
-        bNodeDistanceTo.put(c, 10);
-        // bNodeDistanceTo.put(c, Integer.MAX_VALUE); TEST 1
-        bNodeDistanceTo.put(end, 15);
-        // bNodeDistanceTo.put(end, Integer.MAX_VALUE); // TEST 2   this not path between start a
-        // and end d
+    cNei.put(a, 7);
+    cNei.put(b, 10);
+    cNei.put(d, 15);
 
-        cNodeDistanceTo.put(start, 9);
-        cNodeDistanceTo.put(b, 10);
-        cNodeDistanceTo.put(end, 11);
-        // cNodeDistanceTo.put(end, Integer.MAX_VALUE); // TEST 2
-        cNodeDistanceTo.put(f, 2);
+    dNei.put(c, 15);
+    dNei.put(b, 11);
+    dNei.put(e, 6);
 
-        fNodeDistanceTo.put(start, 14);
-        fNodeDistanceTo.put(c, 2);
-        fNodeDistanceTo.put(e, 9);
+    eNei.put(f, 9);
+    eNei.put(d, 6);
 
-        eNodeDistanceTo.put(f, 9);
-        eNodeDistanceTo.put(end, 6);
-        // eNodeDistanceTo.put(end, Integer.MAX_VALUE); // TEST 2
+    fNei.put(e, 9);
+    fNei.put(b, 2);
+    fNei.put(a, 14);
 
-        dNodeDistanceTo.put(e, 6);
-        // dNodeDistanceTo.put(e, Integer.MAX_VALUE); // TEST 2
-        dNodeDistanceTo.put(c, 11);
-        // dNodeDistanceTo.put(c, Integer.MAX_VALUE); // TEST 2
-        dNodeDistanceTo.put(b, 15);
-        // dNodeDistanceTo.put(b, Integer.MAX_VALUE); // TEST 2
-
-        Collection<Edge> sp =
-                MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
-                        new IGraphWithAdjacentNodesDijkstraImp(
-                                new ArrayList<Node>() {
-                                    {
-                                        add(start);
-                                        add(b);
-                                        add(c);
-                                        add(e);
-                                        add(f);
-                                        add(end);
-                                    }
-                                },
-                                start,
-                                end));
-        sp.stream()
-                .forEach(
-                        edge -> {
-                            System.out.println(edge.toString());
-                        });
-        // a-c-d
-    }
+    Collection<Edge> sp =
+        MinimumSpanningTreePrimShortestPathDijkstra.mstOrSp(
+            new IGraphWithAdjacentNodesDijkstraImp(
+                new ArrayList<Node>() {
+                  {
+                    add(a);
+                    add(b);
+                    add(c);
+                    add(e);
+                    add(f);
+                    add(d);
+                  }
+                },
+                a,
+                d));
+    sp.stream()
+        .forEach(
+            edge -> {
+              System.out.println(edge.toString());
+            });
+    // a-b-d
+  }
 }
