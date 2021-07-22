@@ -18,18 +18,17 @@ package tree.segment_tree;
 import java.util.function.BiFunction;
 
 public class Leetcode307RangeSumQueryMutable {
-  // ----- ST with completed binary tree --------------------------------------
-  // ----- BS its self is a full balanced binary tree -------------------------
+  // ----- ST with a full balanced binary tree --------------------------------
   static class NumArray3 {
     private final BiFunction<Integer, Integer, Integer> f;
-    private final int[] ST; // 1-based index
+    private final int[] ST;
     private final int L;
 
     public NumArray3(int[] A) {
       f = (a, b) -> a + b;
       L = A.length;
       int N = (int) Math.pow(2, (int) Math.ceil(Math.log(L) / Math.log(2)));
-      ST = new int[2 * N]; // L+N is not enough e.g. L=15000, N=16384.
+      ST = new int[2 * N];
       build(A);
     }
 
@@ -79,7 +78,8 @@ public class Leetcode307RangeSumQueryMutable {
       return sumRange(1, 0, L - 1, x, y);
     }
   }
-  // -----------------------------------ST with perfect tree-------------------
+
+  // ----- ST with a perfect binary tree --------------------------------------
   static class NumArray2 {
     private final int[] ST;
     private final int N;
@@ -145,10 +145,7 @@ public class Leetcode307RangeSumQueryMutable {
       return a;
     }
   }
-  // --------------------------- ST with completed binary tree ----------------
-  /*
-   build ST with completed tree. all operation are bottom-up
-  */
+  // ----- ST with full complete binary tree ----------------------------------
   static class NumArray1 {
     private final int[] ST;
     private final int L;
@@ -208,7 +205,8 @@ public class Leetcode307RangeSumQueryMutable {
         int idx = i + 1;
         t[idx] += A[i]; // +=, not =, BIT for prefix sum.
         int next = idx + (idx & -idx);
-        if (next <= A.length) t[next] += t[idx]; // update parent, +=, not =; it is  t[idx], not A[i]
+        if (next <= A.length)
+          t[next] += t[idx]; // update parent, +=, not =; it is  t[idx], not A[i]
       }
     }
 

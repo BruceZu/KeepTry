@@ -18,24 +18,25 @@ package tree.segment_tree;
 import java.util.function.BiFunction;
 
 /*
- build ST with completed tree. All operation are bottom-up
+ build ST with full complete tree. All operation are bottom-up
 */
-public class SegmentTreeRMQ {
+public class SegmentTreeRMQWithFullCompleteBT {
   private final int[] ST;
   private final int L;
   private final BiFunction<Integer, Integer, Integer> f;
 
   // O(L) time
-  public SegmentTreeRMQ(int[] A) {
-    f = (a, b) -> Math.min(a, b); // for RMQ
+  public SegmentTreeRMQWithFullCompleteBT(int[] A) {
+    f = (a, b) -> Math.min(a, b); // for range minimum query (RMQ)
     L = A.length;
-    ST = new int[2 * L];
+    ST = new int[2 * L]; // 1-based index
     // keep value not index of A[]
     for (int i = 0; i < L; i++) ST[i + L] = A[i];
     for (int i = L - 1; i >= 1; i--) ST[i] = f.apply(ST[i << 1], ST[i << 1 | 1]);
   }
 
-  // O(logL) time
+  // O(logL) time i is the index in original array, v is the value of
+  // original array A[i]
   public void update(int i, int v) {
     i = L + i;
     ST[i] = v;

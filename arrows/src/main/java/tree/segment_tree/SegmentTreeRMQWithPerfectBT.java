@@ -18,7 +18,6 @@ package tree.segment_tree;
 import java.util.function.BiFunction;
 /* build ST with perfect tree -------------------------------------------------
 Basic
-  like the trick of heap sort.
   N = 2^{ceil(log^L)}
   E.g. for a original flat array A[] with length 5
       Build ST with a perfect binary tree:
@@ -43,14 +42,14 @@ Basic
   function f can be min/max/sum/greatest common divisor in a index range.
   ST works with any associative operation
 */
-public class SegmentTreeRMQPerfectBT {
+public class SegmentTreeRMQWithPerfectBT {
   private final int[] ST;
   private final int N;
   private final BiFunction<Integer, Integer, Integer> f;
 
   // O(N) time
-  public SegmentTreeRMQPerfectBT(int[] A) {
-    f = (a, b) -> Math.min(a, b);
+  public SegmentTreeRMQWithPerfectBT(int[] A) {
+    f = (a, b) -> Math.min(a, b); // for range minimum query (RMQ)
     int L = A.length;
     N = (int) Math.pow(2, (int) Math.ceil(Math.log(L) / Math.log(2)));
     ST = new int[N << 1];
@@ -124,29 +123,8 @@ public class SegmentTreeRMQPerfectBT {
     return queryTopDown(1, 0, N - 1, x, y);
   }
 
-  /* bottom-up
-   based on 1-based index
-   at each level:
-   - the index of the fist element of ST[] is power of 2. even number
-   - each pair element with even, odd index has the same parent ST node.
-   for the l index:
-     if l is odd then need count its value before move it right with 1 step and jump to parent index from there.
-     means result will cover current BS[l] but not cover its parent. it is right child of its parent node
-     else result will cover its parent and ignore it.
-   for the r index:
-    if r is even then need count its value before move it left with 1 step and jump to parent index from there.
-    means result will cover current BS[r] but not cover its parent. it is left child of its parent node
-    else result will cover its parent and ignore it.
-
-   stop the loop when l>r;
-   when l==r:
-     if it is odd: r will pick it up, l will ignore it.
-     if it is even:  l will pick it up, r will ignore it.
-   If operation is idempotent (E.g. minimum), both if-statements can be omitted
-   and rewrite body of the for-loop in a single line:
-   a = min(a, min(a[L], a[R])); https://codeforces.com/blog/entry/1256
-  */
-  public int query(int l, int r) { // on index range [l, r] in original flat array A[]
+  // bottom-up
+  public int query(int l, int r) { // min value in index range [l, r] in original flat array A[]
     l += N;
     r += N;
     // initial answer a with

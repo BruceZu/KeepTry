@@ -18,26 +18,20 @@ package tree.segment_tree;
 import java.util.function.BiFunction;
 
 /*
-  build ST with completed tree, But ST itself is a full balanced binary tree.
-  ST in this case keeps value, not index of value in original flat array A[]
-  ST need at most storage N + N - 1
-  N = 2^{ceil(log^L)}
-  L is the length of original flat array A[]
-  ST is 1-based index, the length is 2 * N
-  Why isn't it L + N?
-      L   N   L+N   index   issue
-      12  16  28    0~27    ST[14](9,10) need left child  ST[28](9,9)
-      13, 16  29    0~28    ST[14](    ) need right child ST[29](11,11)
-      20, 32  52    0~51    ST[28](    ) need left child  ST[56](15,15)
-  A[i] child index is 2 * i, 2 * i^1
+  build ST with a full and balanced binary tree.
+  all operation is top-down-top
+  ST nodes number at most is N + N - 1
+   - N = 2^{ceil(log^L)}
+   - L is the length of original flat array A[]
+  ST use 1-based index array, the length is 2 * N, and A[i] child index is 2 * i, 2 * i^1
 */
-class SegmentTreeRMQCompletedBT {
+class SegmentTreeRMQWithFullBalancedBT {
   private final BiFunction<Integer, Integer, Integer> f;
-  private final int[] ST; // 1-based index
+  private final int[] ST; // 1-based index array
   private final int L;
 
-  SegmentTreeRMQCompletedBT(int[] A) {
-    f = (a, b) -> Math.min(a, b);
+  SegmentTreeRMQWithFullBalancedBT(int[] A) {
+    f = (a, b) -> Math.min(a, b); // for range minimum query (RMQ)
     L = A.length;
     int N = (int) Math.pow(2, (int) Math.ceil(Math.log(L) / Math.log(2)));
     ST = new int[N << 1];
@@ -48,7 +42,7 @@ class SegmentTreeRMQCompletedBT {
     build(1, 0, L - 1, A);
   }
 
-  // top-down, O(L) time
+  // top-down, O(N) time
   private void build(int idx, int l, int r, int[] A) {
     if (l == r) {
       ST[idx] = A[l]; // Leaf node
@@ -57,7 +51,7 @@ class SegmentTreeRMQCompletedBT {
     int m = l + r >>> 1;
     build(idx << 1, l, m, A);
     build(idx << 1 ^ 1, m + 1, r, A);
-    ST[idx] = f.apply(ST[idx << 1], ST[idx << 1 ^ 1]); // merge
+    ST[idx] = f.apply(ST[idx << 1], ST[idx << 1 ^ 1]); // merge from bottom-up
   }
 
   /* top-down
@@ -65,9 +59,9 @@ class SegmentTreeRMQCompletedBT {
   Assume i in [l, r]
   v is A[i]
   idx is the index of ST[]
-  ST[idx] covered the index range [l,r] in A[]
+  ST[idx] node's application covers the index range [l,r] in A[]
   This function update ST[] when A[i] is updated to value v;
-  O(logL)
+  O(logN)
    */
   private void update(int idx, int l, int r, int i, int v) {
     if (l == r) {
@@ -86,27 +80,40 @@ class SegmentTreeRMQCompletedBT {
 
   /* top-down
   l,r,x,y are index of original flat array A[]
-  Assume [l, r] contains [x,y]
-  ST[idx] covered index range[l, r]
-  query the min/max/sum/... of elements in the index range[x,y] in A[]
-  Idea:
-  [l, r] and [x,y] form 4 status:  EMPTY, IN_MIDDLE, SIDE, FULL.
-  - EMPTY -> end;
-  - FULL  -> binary search: find or result is not here.
-             looking for only node(s) that match exactly with the queried range
-  - MIDDLE ---cut---> EMPTY, MIDDLE || SIDE
-  - SIDE   ---cut---> SIDE, EMPTY   || SIDE, FULL
+  Assume initially [l, r] contains [x,y]
+  ST[idx] node's application covers index range[l, r]
+  application: the min/max/sum/... of elements in the index range[x,y] in A[]
 
-   Start status can be any status.
-   O(logL) time.
-   Note: [x,y] keep immutate
+  query() Idea: recursion with status-machine conversion
+  4 status formed by [l, r], [x,y]
+      EMPTY:     y <  l || r < x ; no overlap
+      FULL:      x <= l && r <= y; [l, r] is covered by [x, y]
+
+      SIDE:      x <= l or r <= y, some left or right part of [l, r] is not in [x, y], other part in [x, y]
+      IN_MIDDLE: l < x  and  y < r, left and right side of [l, r] is not in [x, y], middle part in [x, y]
+
+      EMPTY and FULL is status to stop recursion
+
+  initial status can be one of MIDDLE, FULL, SIDE.
+   m = l+r >>> 1,
+  keep [x,y] immutable, meanwhile use m cut [l, r]
+  each half and [x,y] form one of 4 status
+
+    - EMPTY -> end the conversion, no valid result;
+    - FULL  -> end the conversion, check ST[idx] which is cover [l,r]
+               [l,r] match exactly the queried range
+    - MIDDLE  --- need continue cut into 2 haves ---> EMPTY  MIDDLE || SIDE  SIDE || SIDE EMPTY
+    - SIDE    --- need continue cut into 2 haves--->  SIDE, FULL || EMPTY FULL || SIDE, EMPTY
+
+   O(logN) time.
+
   */
   private int query(int idx, int l, int r, int x, int y) {
-    //  [l ,r]  are all outside [x,y]
-    // default value for not applied index range[l,r]
-    // for sum: 0
-    // for min: Integer.MAX_VALUE
-    // for max: Integer.MIN_VALUE,
+    // EMPTY:  [l ,r]  are all outside [x,y]
+    //    default value for not applied index range[l,r]
+    //    for sum: 0
+    //    for min: Integer.MAX_VALUE (current code is for range minimum query (RMQ))
+    //    for max: Integer.MIN_VALUE,
     if (y < l || r < x) return Integer.MAX_VALUE; // EMPTY
     if (x <= l && r <= y) return ST[idx]; // FULL
     // MIDDLE or SIDE, need cut
@@ -118,7 +125,7 @@ class SegmentTreeRMQCompletedBT {
     return query(1, 0, L - 1, x, y);
   }
 
-  // other feature ------------------------------------------------------------
+  // Other features ============================================================
   int[] Z; // Z[idx] keeps lazy increment(s) of each element in index range covered by ST[idx]
   /* top-down
   O(logL) time.
