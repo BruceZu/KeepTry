@@ -149,9 +149,7 @@ public class TopologicalSort {
         }
       }
 
-      if (r.size() != V) {
-        return null; // there is circle
-      }
+      if (r.size() != V) return null; // there is circle
       return r;
     }
   }

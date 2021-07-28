@@ -34,12 +34,12 @@ public class IGraphWithAdjacentNodesDijkstraImp extends IGraphWithAdjacentNodesA
 
     @Override
     public Status currentStatus() {
-        if (evaluating.isEmpty()
-                || evaluating.peek().getShortestDistanceToI() == Integer.MAX_VALUE) {
+        if (q.isEmpty()
+                || q.peek().getShortestDistanceToI() == Integer.MAX_VALUE) {
             return Status.SP_NO_RESULT; // no way
         }
 
-        if (evaluating.peek() == end) {
+        if (q.peek() == end) {
             return Status.DONE;
         }
         return Status.ING;

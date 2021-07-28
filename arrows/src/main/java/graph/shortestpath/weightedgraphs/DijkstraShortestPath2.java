@@ -58,15 +58,15 @@ public class DijkstraShortestPath2 {
       if (cur == end) {
         return true;
       }
-      for (Node neighbor : cur.getNeighborWeighMap().keySet()) {
-        int alt = cur.getShortestDistanceToI() + cur.getNeighborWeighMap().get(neighbor);
+      for (Node n : cur.getNeighborWeighMap().keySet()) {
+        int alt = cur.getShortestDistanceToI() + cur.getNeighborWeighMap().get(n);
         if (alt < 0) {
           alt = Integer.MAX_VALUE;
         }
-        if (alt < neighbor.getShortestDistanceToI()) {
-          neighbor.setShortestDistanceToI(alt);
-          neighbor.setVertexToI(cur);
-          evaluating.shiftUp(neighbor); // O(logN)
+        if (alt < n.getShortestDistanceToI()) {
+          n.setShortestDistanceToI(alt);
+          n.setVertexToI(cur);
+          evaluating.shiftUp(n); // O(logN)
         }
       }
     }

@@ -43,31 +43,31 @@ import java.util.Map;
 public class IBinaryHeap<T extends Comparable<T>> extends AbstractQueue<T> {
 
   private int size;
-  private Object[] heap;
+  private Object[] array;
 
   // track the element index in array,null value means the key is not in binary heap
-  private Map<T, Integer> indexes;
+  private Map<T, Integer> map;
 
   private void doubleSize() {
-    if (heap.length == Integer.MAX_VALUE) throw new IllegalStateException();
-    int newCapacity = heap.length << 1;
+    if (array.length == Integer.MAX_VALUE) throw new IllegalStateException();
+    int newCapacity = array.length << 1;
     if (newCapacity < 0) newCapacity = Integer.MAX_VALUE;
-    heap = Arrays.copyOf(heap, newCapacity);
+    array = Arrays.copyOf(array, newCapacity);
   }
 
   private void shiftDown(T n, int cur) {
     if (size == 0) return;
     while (cur <= (size >>> 1)) { // has child, not leaf node, same as   cur<<1  <= size
       int li = cur << 1, ri = li + 1, ci = li;
-      T c = (T) heap[li];
-      if (ri <= size && c.compareTo((T) heap[ri]) > 0) {
-        c = (T) heap[ri];
+      T c = (T) array[li];
+      if (ri <= size && c.compareTo((T) array[ri]) > 0) {
+        c = (T) array[ri];
         ci = ri;
       }
 
       if (c.compareTo(n) < 0) {
-        heap[cur] = c;
-        indexes.put(c, cur);
+        array[cur] = c;
+        map.put(c, cur);
         cur = ci;
       } else {
         break;
@@ -76,18 +76,19 @@ public class IBinaryHeap<T extends Comparable<T>> extends AbstractQueue<T> {
     // when no element is left after poll: need not allocate the current n. return above
     // when 1 element is left ... need re-allocate ....
     // when more ... need re-allocate ....
-    heap[cur] = n;
-    indexes.put(n, cur);
+    array[cur] = n;
+    map.put(n, cur);
   }
 
-  private void shiftUp(T n, int cur) {
-    while (cur > 1) {
-      int pi = cur >>> 1;
-      T p = (T) heap[pi];
+  // i is index of n in current status
+  private void shiftUp(T n, int i) {
+    while (i > 1) {
+      int pi = i >>> 1;
+      T p = (T) array[pi];
       if (n.compareTo(p) < 0) {
-        heap[cur] = p;
-        indexes.put(p, cur);
-        cur = pi;
+        array[i] = p;
+        map.put(p, i);
+        i = pi;
       } else {
         // handle n out of while loop
         break;
@@ -97,20 +98,22 @@ public class IBinaryHeap<T extends Comparable<T>> extends AbstractQueue<T> {
     //   need allocate n and need not go in loop.
     // - when n has already in heap and the updated value is not smaller enough to
     //   re-allocate n, the following 2 lines are redundant.
-    heap[cur] = n;
-    indexes.put(n, cur);
+    array[i] = n;
+    map.put(n, i);
   }
 
   private Integer indexOf(T n) {
-    return indexes.get(n);
+    return map.get(n);
   }
 
   public IBinaryHeap(int capacity) {
-    // keep data from index 1: calculate parent with indexOf/2. child: 2＊k, 2＊k+1
-    // (keep data from index 0: calculate parent with (indexOf-1)/2.child: 2＊k+1,2＊k+2)
+    //  1-based index:
+    //  - parent index i=> child index:  i << 1 , i << 1 |1
+    //  - child index  i=> parent index: i >>> 1;
+
     size = 0; // current size of nodes
-    heap = new Object[capacity];
-    indexes = new HashMap();
+    array = new Object[capacity];
+    map = new HashMap();
   }
 
   public void shiftUp(T n) {
@@ -121,9 +124,7 @@ public class IBinaryHeap<T extends Comparable<T>> extends AbstractQueue<T> {
   @Override
   public boolean offer(T n) {
     if (n == null) throw new NullPointerException();
-    if (size == heap.length - 1) {
-      doubleSize();
-    }
+    if (size == array.length - 1) doubleSize();
     size++;
     shiftUp(n, size);
     return true;
@@ -131,25 +132,19 @@ public class IBinaryHeap<T extends Comparable<T>> extends AbstractQueue<T> {
 
   @Override
   public T poll() {
-    if (size == 0) {
-      throw null;
-    }
-    T result = (T) heap[1];
-
-    T n = (T) heap[size];
-    heap[size] = null;
-    indexes.remove(result);
+    if (size == 0) throw null;
+    T result = (T) array[1];
+    T n = (T) array[size];
+    array[size] = null;
+    map.remove(result);
     size--;
-
-    if (size != 0) {
-      shiftDown(n, 1);
-    }
+    if (size != 0) shiftDown(n, 1);
     return result;
   }
 
   @Override
   public T peek() {
-    return (size == 0) ? null : (T) heap[1];
+    return (size == 0) ? null : (T) array[1];
   }
 
   @Override
@@ -164,7 +159,7 @@ public class IBinaryHeap<T extends Comparable<T>> extends AbstractQueue<T> {
 
       @Override
       public T next() {
-        return (T) heap[from++];
+        return (T) array[from++];
       }
     };
   }

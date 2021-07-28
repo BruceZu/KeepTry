@@ -22,14 +22,14 @@ import java.util.function.BiFunction;
 
 public abstract class IGraphWithAdjacentNodesAbstractImp implements IGraph {
   protected List<Node> nodes;
-  protected IBinaryHeap<Node> evaluating;
+  protected IBinaryHeap<Node> q;
   protected Node cur;
   protected Set<Node> evaluated;
 
   public IGraphWithAdjacentNodesAbstractImp(List<Node> nodes, Node start) {
     this.cur = start;
     this.nodes = nodes;
-    evaluating = new IBinaryHeap<>(nodes.size());
+    q = new IBinaryHeap<>(nodes.size());
     evaluated = new HashSet<>(nodes.size());
   }
 
@@ -37,12 +37,12 @@ public abstract class IGraphWithAdjacentNodesAbstractImp implements IGraph {
   public void initVertexDistanceStatus() {
     nodes.stream().forEach(e -> e.setShortestDistanceToI(Integer.MAX_VALUE));
     cur.setShortestDistanceToI(0);
-    evaluating.offer(cur);
+    q.offer(cur);
   }
 
   @Override
   public void selectCurrentVertex() {
-    cur = evaluating.poll();
+    cur = q.poll();
     evaluated.add(cur);
   }
 
@@ -60,12 +60,12 @@ public abstract class IGraphWithAdjacentNodesAbstractImp implements IGraph {
       if (viaCur < neighbor.getShortestDistanceToI()) {
         neighbor.setShortestDistanceToI(viaCur);
         neighbor.setVertexToI(cur);
-        if (evaluating.contains(neighbor)) {
-          evaluating.shiftUp(neighbor); // O(logN)
+        if (q.contains(neighbor)) {
+          q.shiftUp(neighbor); // O(logN)
         }
       }
-      if (!evaluating.contains(neighbor)) {
-        evaluating.offer(neighbor); // O(logN)
+      if (!q.contains(neighbor)) {
+        q.offer(neighbor); // O(logN)
       }
     }
   }
