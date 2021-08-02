@@ -95,7 +95,7 @@ public class Leetcode253MeetingRoomsII {
    Idea: sort the meetings with end time
          always select the meeting which finished firstly than any other
          once it is selected then any meeting whose start time is < the end
-         time of selected meeting will can not be arranged.
+         time of selected meeting will not be arranged.
 
    O(NlogN) time, O(1) extra space
   */

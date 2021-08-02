@@ -18,24 +18,47 @@ package binarysearch;
 import java.util.*;
 
 public class Leetcode315CountofSmallerNumbersAfterSelf {
+  /*
+  You are given an integer array nums and
+  you have to return a new counts array. The counts array has the
+  property where counts[i] is the number of smaller elements to
+  the right of nums[i].
+
+
+  Input: nums = [5,2,6,1]
+  Output: [2,1,1,0]
+
+  Input: nums = [-1]
+  Output: [0]
+
+  Input: nums = [-1,-1]
+  Output: [0,0]
+
+
+    1 <= nums.length <= 10^5
+    -10^4 <= nums[i] <= 10^4
+   */
 
   /*
   Skill:
   - if binary search result x is a negative number
     then the index should be got by -(x+1) = -x-1 = (~x+1)-1 = ~x
-  - duplicated number will be take as not same (a, b) -> a >= b ? 1 : -1
-      when a == b, b is insert at the index of a, a is moved back.
+  - duplicated number will be taken as not same (a, b) -> a >= b ? 1 : -1
+      when a == b, they will not be token as same.
+                   if inserting the one not existing in list b,
+                   b would be inserted at the index of the existing one a and
+                   a would be moved right.
     to make the result of   Collections.binarySearch(l, A[i], (a, b) -> a >= b ? 1 : -1)
     always be negative
   Idea: intuitive
-  log(N!) = O(NlogN) time
+  log(N^2) time
   */
   public static List<Integer> countSmaller(int[] A) {
     Integer[] r = new Integer[A.length];
-    List<Integer> l = new ArrayList<>(); // is a sorted list
+    List<Integer> l = new ArrayList<>(A.length); // is a sorted list
     for (int i = A.length - 1; i >= 0; i--) {
       r[i] = ~Collections.binarySearch(l, A[i], (a, b) -> a >= b ? 1 : -1);
-      l.add(r[i], A[i]); // O(1) for ArrayList.
+      l.add(r[i], A[i]); // no matter ArrayList or LinkedList it O(N)
     }
     return Arrays.asList(r);
   }

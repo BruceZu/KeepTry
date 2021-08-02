@@ -17,24 +17,54 @@ package stack;
 
 public class Leetcode921MinimumAddtoMakeParenthesesValid {
   /*
-   Given a parentheses string, return the minimum
-    number of parentheses we must add to make the resulting string valid.
-   s.length <= 1000
-   s only consists of '(' and ')' characters.
+    921. Minimum Add to Make Parentheses Valid
+    A parentheses string is valid if and only if:
 
+        empty string,
+        It can be written as AB (A concatenated with B), where A and B are valid strings, or
+        It can be written as (A), where A is a valid string.
+
+    You are given a parentheses string s.
+    In one move, you can insert a parenthesis at any position of the string.
+    For example, if s = "()))", you can insert an opening parenthesis to be
+    "(()))" or a closing parenthesis to be "())))".
+
+    Return the minimum number of moves required to make s valid.
+
+
+    Input: s = "())"
+    Output: 1
+
+    Input: s = "((("
+    Output: 3
+
+
+    Input: s = "()"
+    Output: 0
+
+
+    Input: s = "()))(("
+    Output: 4
+
+    Constraints:
+        1 <= s.length <= 1000
+        s[i] is either '(' or ')'.
+  */
+
+  /*
    Idea:
-     A string is valid if number of '(' and ')' are same
-     and during the calculating process, number of '(' - number of ')'
-     has non-negative value;
+     who firstly appear?
+      -')': required to make valid
+      -'(': next neighbor ')' can pair it.
+            next neighbor '(' can increase the number of it, but can be redundant.
   */
   public int minAddToMakeValid(String S) {
-    int r = 0, l = 0;  // r: redundant ), l: redundant (
+    int r = 0, l = 0;
     for (int i = 0; i < S.length(); ++i) {
-      l += S.charAt(i) == '(' ? 1 : -1;
-      // It is guaranteed bal >= -1
-      if (l == -1) {
-        r++; //
-        l++; //  back to balanced 0
+      if (S.charAt(i) == '(') l++;
+      else { // ')'
+        if (l > 0) l--;
+        else r++;
       }
     }
 

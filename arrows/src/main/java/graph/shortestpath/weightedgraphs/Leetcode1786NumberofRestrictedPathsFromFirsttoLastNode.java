@@ -23,7 +23,7 @@ public class Leetcode1786NumberofRestrictedPathsFromFirsttoLastNode {
     '
     - a given undirected weighted connected graph.
     - a given positive integer n which denotes that the graph has n nodes labeled from 1 to n
-    - a given aray edges where each edges[i] = [ui, vi, weights]  denotes that there is an edge
+    - a given array edges where each edges[i] = [ui, vi, weights]  denotes that there is an edge
       between nodes ui and vi with weight equal to weights.
     - concept 'path' from node start to node end is a sequence of nodes [z0, z1, z2, ..., zk]
       such that z0 = start and zk = end and there is an edge between zi and zi+1 where 0 <= i <= k-1.

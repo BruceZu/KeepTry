@@ -16,17 +16,54 @@
 package greedy;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Comparator;
 
 public class Leetcode1326MinimumNumberofTapstoOpentoWateraGarden {
-  // delete covered tap by selected tap
-  // at last check it can cover all garden
+
+  /*
+    1326. Minimum Number of Taps to Open to Water a Garden
+    a one-dimensional garden on the x-axis.
+
+    The garden starts at the point 0 and ends at the point n.
+    (i.e The length of the garden is n).
+
+    n + 1 taps located at points [0, 1, ..., n] in the garden.
+
+    Given an integer n and an integer array ranges of length n + 1 where
+    ranges[i] (0-indexed) means the i-th tap can water the area [i - ranges[i], i + ranges[i]]
+
+    Return the minimum number of taps that should be open to water the whole garden,
+    If the garden cannot be watered return -1.
+
+
+    Input: n = 5, ranges = [3,4,1,1,0,0]
+    Output: 1
+
+    Input: n = 3, ranges = [0,0,0,0]
+    Output: -1
+
+
+    Input: n = 7, ranges = [1,2,1,0,2,1,0,1]
+    Output: 3
+
+
+    Input: n = 8, ranges = [4,0,0,0,0,0,0,0,4]
+    Output: 2
+
+
+    Input: n = 8, ranges = [4,0,0,0,4,0,0,0,4]
+    Output: 1
+
+
+      1 <= n <= 10^4
+      ranges.length == n + 1
+      0 <= ranges[i] <= 100
+
+  */
+
   /*
   Greedy
-   1. from the range create intervals:
-      the start point at least is 0; ** else for [4,0,0,0,4,0,0,0,4] it will select 2 **
-
-   2. sort(O(NlogN)) ranges by start in ascending order and end in descending order
+    sort(O(NlogN)) ranges by start in ascending order and end in descending order
     -------------(selected)
     ------
     ---
@@ -36,102 +73,85 @@ public class Leetcode1326MinimumNumberofTapstoOpentoWateraGarden {
               ----------------(selected)
               ------
 
+     O(NlogN) time, O(1） space
 
-   3 in the sorted result with the specified order
-     the first one should be selected as one of result.
-     which is next one?
-     right way is to select from the scope where each interval has
-     overlap with the previous one. not the scope where each interval
-     has the same start point.
-     in the specific scope, select the one with rightmost point
-     if its right most point >value of previous one.
-     it is selected.
-   4 at each time after updating the right most value, also
-     check if it have covered the target n.
-   5 at each time run into a interval whose start time > rightmost
-     then return -1
-
-   O(NlogN)
+     r: rightmost point can be reached with it to hook next batch and from next batch select next right most
+     nr: next rightmost
+     need cover all garden;
+     need check r, nr and current tap left point
+     once the last batch intervals is over.
+     current tap belongs to next batch from which to select longest one to hook with current
+     rightmost point
+     to make sure cover all garden with lest taps
   */
-  /*
-      1 <= n <= 10^4
-      ranges.length == n + 1
-      0 <= ranges[i] <= 100
-     l:
-     - previous selected interval right time.
-     - also with it a batch is defined as  those following intervals whose start time
-       less than this value. overlapped ones.
-     r: the right point can reached by far
-  */
-  public static int minTapsOriginalGreedy(int n, int[] ranges) {
+  public static int minTapsOriginalGreedy2(int n, int[] ranges) {
     if (n <= 0 || ranges == null || ranges.length == 0) return 0;
-    // check each element value of ranges to be 0 <= ranges[i] <= 100
+
     int N = ranges.length;
     int[][] A = new int[ranges.length][2];
     for (int i = 0; i < N; i++) A[i] = new int[] {Math.max(0, i - ranges[i]), i + ranges[i]};
-    Arrays.sort(A, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);
+    Arrays.sort(A, Comparator.comparingInt(a -> a[0]));
 
-    int answer = 1;
-    int[] p = A[0]; // previous range
-    if (0 < p[0]) return -1;
-    int l = p[1], r = p[1];
-    if (r >= n) return answer;
-    for (int i = 1; i < A.length; i++) {
-      int[] cur = A[i];
-      if (cur[0] <= l) {
-        if (cur[1] > r) r = cur[1];
+    int answer = 0;
+    int r = 0, nr = 0;
+    for (int i = 0; i < A.length; i++) {
+      int[] c = A[i];
+      if (c[0] <= r) {
+        if (c[1] > nr) nr = c[1];
       } else {
-        // - till now can we know the last batch intervals is over.
-        //   so need to check whether there is one we can select into result.
-        // - for the last batch, need handle them after the loop is over
-        if (r != l) answer++;
-        if (r >= n) return answer;
-        l = r;
+        if (nr != r) answer++;
+        if (nr >= n) return answer;
+        r = nr;
         // last batch is end, start a new batch
-        if (l < cur[0]) return -1;
+        if (r < c[0]) return -1;
         else i--;
       }
     }
-    if (r != l) answer++;
-    if (r < n) return -1;
+
+    if (nr != r) answer++;
+    if (nr < n) return -1;
+    return answer;
+  }
+  /* 2 alternative
+   O(NlogN) -> O(N) time:
+   current special scenario enable using an array, length n+1,
+   to represent each tap interval.
+     -  index: start point tap interval
+     -  value: the right most one of intervals whose start point are same at index of array.
+
+  */
+  public static int minTapsOriginalGreedy(int n, int[] ranges) {
+    if (n <= 0 || ranges == null || ranges.length == 0) return 0;
+
+    int[] A = new int[n + 1];
+    for (int i = 0; i <= n; i++) A[Math.max(0, i - ranges[i])] = i + ranges[i];
+
+
+    int answer = 0;
+    int r = 0, nr = 0;
+    for (int i = 0; i <=n; i++) {
+      if (i <= r)  {
+        if (A[i] > nr) nr = A[i];
+      } else {
+        if (nr != r) answer++;
+        if (nr >= n) return answer;
+        r = nr;
+
+        if (r < i) return -1;
+        else i--;
+      }
+    }
+
+    if (nr != r) answer++;
+    if (nr < n) return -1;
     return answer;
   }
 
   /*DP ==========================================================================
-  the status transformation need care the overlap
-  O(2^N)
-  care corner case "3, [0,0,0,0]"
-  help function is to get minimum number of taps available index scope [i, n-1] to cover range [from, to]
-  */
-  public static int minTapsOriginalDP(int n, int[] ranges) {
-    return help(0, n, 0, ranges, new HashMap<String, Integer>());
-  }
-  //  Time Limit Exceeded
-  private static int help(int from, int to, int i, int[] ranges, HashMap<String, Integer> cache) {
-    if (i == ranges.length) return -1;
-    String key = Arrays.toString(new int[] {from, to}) + i;
-    if (cache.containsKey(key)) return cache.get(key);
-    int l = i - ranges[i], r = i + ranges[i];
-    int v = 0;
-    if (from < l || r <= from) {
-      v = help(from, to, i + 1, ranges, cache); // can not be used
-    } else if (r >= to) v = 1;
-    else {
-      int t1 = help(r, to, i + 1, ranges, cache); // temporary value 1 for used
-      int t2 = help(from, to, i + 1, ranges, cache); // not use
-      if (t1 != -1 && t2 != -1) v = Math.min(1 + t1, t2);
-      else if (t1 == -1 && t2 == -1) v = -1;
-      else if (t1 == -1) v = t2;
-      else if (t2 == -1) v = 1 + t1;
-    }
-    cache.put(key, v);
-    return cache.get(key);
-  }
-  /* --------------------------------------------------------------------------
    DP
    dp[i] is the minimum number of taps to water [0, i].
    Initialize dp[i] with max = n + 2
-   dp[0] = [0] need no tap to water nothing.
+   Note: dp[0] = [0] need no tap to water nothing.
 
    Find the leftmost point of garden to water with tap i.
    Find the rightmost point of garden to water with tap i.
@@ -142,7 +162,7 @@ public class Leetcode1326MinimumNumberofTapstoOpentoWateraGarden {
   public int minTaps3(int n, int[] A) {
     int[] dp = new int[n + 1];
     Arrays.fill(dp, n + 2);
-    dp[0] = 0;
+    dp[0] = 0; // !!
     for (int i = 0; i <= n; i++) {
       int l = Math.max(0, i - A[i]), r = Math.min(n, i + A[i]); // valid scope of current tap
       for (int j = l + 1; j <= r; j++) dp[j] = Math.min(dp[j], dp[l] + 1);

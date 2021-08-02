@@ -16,58 +16,90 @@
 package sort;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Leetcode1353MaximumNumberofEventsThatCanBeAttended {
 
   /*
-    1 <= events.length <= 10^5
-    events[i].length == 2
-    1 <= startDayi <= endDayi <= 10^5
+     Given an array of events where
+     events[i] = [startDayi, endDayi].
+     Every event i starts at startDayi and ends at endDayi.
 
-    Idea:
-    1> sort the meetings with start day + end day in ascending order
-    2> figure out the day scope of [1, max] possible to attend a meeting
-    3> for each day: if there is available meetings, then use a min heap keeping
-       the end day of each meeting. to select out the earlier closed one
-       to attend, the one
-        - will end earlier than any others.
-        - end day is today day or after today. or not finished yet
-        - has started.
-       those not be selected meetings, has started, are left in the
-       min heap and will take part in the next day's selection.
-  Note: put all meetings in min heap does not work
-      e.g. [[1,2],[1,2],[3,3],[1,5],[1,5]]
-           --
-           --
-           -----
-           -----
+     You can attend an event i at any day d where
+     startTimei <= d <= endTimei.
+     Notice that you can only attend one event at any time d.
+
+     Return the maximum number of events you can attend.
+
+      1 <= events.length <= 10^5
+      events[i].length == 2
+      1 <= startDayi <= endDayi <= 10^5
+
+  Input: events = [[1,2],[2,3],[3,4]]
+  Output: 3
+
+  Input: events= [[1,2],[2,3],[3,4],[1,2]]
+  Output: 4
+
+  Input: events = [[1,4],[4,4],[2,2],[3,4],[1,1]]
+  Output: 4
+
+  Input: events = [[1,100000]]
+  Output: 1
+
+  Input: events = [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]]
+  Output: 7
+
+  Input: events = [[1,5],[1,5],[1,5],[2,3],[2,3]]
+  Output: 5
+
+  Input: events = [[1,2],[1,2],[3,3],[1,5],[1,5]]
+             12345
              --
              --
-      the [3,3] is covered by [1,5],[1,5]
-      another case [1,5][1,5][3,4][3,4]
-        -----
-        -----
-          --
-          --
-   O(NlogN) time and space
-   */
+             -----
+             -----
+               --
+               --
+  Output: 5
+
+  Input: events = [1,5][1,5][3,4][3,4]
+          12345
+          -----
+          -----
+            --
+            --
+  Output: 4
+
+  sort by: start day in ascending order, then end day in ascending order
+  It is wrong to sort by: end day in ascending order, then start day in ascending order
+  E.g. [[1,5],[1,5],[1,5],[2,3],[2,3]], expect 5
+
+  check day by day, date starts from 1, not checking meeting by meeting,
+  this is useful when there are duplicated meetings cover more than 1 day
+
+  once a meeting is attended, discard it. and should not select next meeting from next one in above sorted array
+  E.g. [[1,5],[1,5],[1,5],[2,3],[2,3]], expect 5
+  So also need another min heap to select the right one in this scenario.
+
+  O(NlogN) time, O(N) space
+  */
   public static int maxEvents(int[][] A) {
-    if (A == null) return 0;
-    Arrays.sort(A, (a, b) -> (a[0] == b[0]) ? a[1] - b[1] : a[0] - b[0]); // O(NlogN)
-    int D = 0;
-    for (int[] e : A) D = Math.max(D, e[1]); // O(N）
+    // 1 <= events.length <= 10^5
+    Arrays.sort(A, (a, b) -> (a[0] == b[0]) ? a[1] - b[1] : a[0] - b[0]);
 
-    int r = 0, N = A.length, i = 0; // i is the index of meetings
-    Queue<Integer> e = new PriorityQueue(); // min heap of meeting's end day
-    // O(NlogN) for each meeting it will in and out only one time.
-    for (int d = 1; d <= D; d++) { // d is today.
-      while (i < N && A[i][0] == d) e.offer(A[i++][1]); // new candidates
-      while (!e.isEmpty() && e.peek() < d) e.poll(); // old candidate but has finished meeting
-      if (!e.isEmpty()) { // select the one will close firstly
-        e.poll();
+    Queue<int[]> q = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+    int r = 0, i = 0;
+    for (int d = 1; d <= 100000; d++) { // 1 <= startDayi <= endDayi <= 10^5
+      while (i < A.length && A[i][0] <= d && d <= A[i][1]) q.offer(A[i++]); // new
+
+      while (!q.isEmpty() && q.peek()[1] < d) q.poll(); // old
+
+      if (!q.isEmpty()) {
         r++;
+        q.poll();
       }
     }
     return r;
