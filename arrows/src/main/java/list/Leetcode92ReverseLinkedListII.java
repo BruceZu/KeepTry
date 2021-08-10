@@ -39,7 +39,7 @@ public class Leetcode92ReverseLinkedListII {
    l maybe the first node head so make a dumy Node.
    always return dumy.next at last;
 
-   before start:
+   before start:E
    pre-> [l ->...-> r]-> other
    H=pre  T=l
 
@@ -51,7 +51,7 @@ public class Leetcode92ReverseLinkedListII {
    H.next=pre; T.next=cur;
 
    Note:   1 <= left <= right <= n.
-  O(N) time, O(1) space
+   O(N) time, O(1) space
     */
   public ListNode reverseBetween(ListNode head, int left, int right) {
     if (head == null) return null;
