@@ -25,12 +25,12 @@ public class Leetcode133CloneGraph {
 
     public Node() {
       val = 0;
-      neighbors = new ArrayList<Node>();
+      neighbors = new ArrayList<>();
     }
 
     public Node(int _val) {
       val = _val;
-      neighbors = new ArrayList<Node>();
+      neighbors = new ArrayList<>();
     }
 
     public Node(int _val, ArrayList<Node> _neighbors) {
@@ -39,28 +39,41 @@ public class Leetcode133CloneGraph {
     }
   }
   // implement ------------------------------------------------------------------
+  /*
+  1 <= Node.val <= 100
+  Node.val is unique for each node.
+  Number of Nodes will not exceed 100.
+  There is no repeated edges and no self-loops in the graph.
+  The Graph is connected and all nodes can be visited starting from the given node.
+  */
+  /*
+  Understanding
+    it may have circle(s),
+    it is undirected graph
+  Idea:
+   DFS. With a created map of `node:its clone` to avoid duplicated clone
+   O(N) time and space
+
+   without Map, only a Set<Node> visited, no way to know if a given node is cloned or not
+   dfs return cloned node
+     - new root
+     - as neighbor of above layer cloned node
+     no matter it is one has been cloned or just cloned, need return to the above layer to
+     maintain the edges especially in circle
+  */
   public Node cloneGraph(Node node) {
-    /*
-    1 <= Node.val <= 100
-    Node.val is unique for each node.
-    Number of Nodes will not exceed 100.
-    There is no repeated edges and no self-loops in the graph.
-    The Graph is connected and all nodes can be visited starting from the given node.
-    */
-    /*
-    Idea:
-     recursion. With a created map of v: Node to avoid duplicated clone
-     O(N) time and space
-    */
-    return help(node, new HashMap<>());
+    return dfs(node, new HashMap<>());
   }
 
-  private Node help(Node n, Map<Integer, Node> created) {
+  // clone graph with root n
+  private Node dfs(Node n, Map<Integer, Node> map) {
     if (n == null) return null;
-    if (created.containsKey(n.val)) return created.get(n.val);
+    if (map.containsKey(n.val)) return map.get(n.val);
+
     Node c = new Node(n.val);
-    created.put(n.val, c);
-    for (Node nei : n.neighbors) c.neighbors.add(help(nei, created));
+    map.put(n.val, c);
+    for (Node nei : n.neighbors) c.neighbors.add(dfs(nei, map));
+
     return c;
   }
 }

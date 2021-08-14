@@ -214,14 +214,17 @@ public class Leetcode332ReconstructItinerary {
   public List<String> findItinerary(List<List<String>> tickets) {
     Map<String, PriorityQueue<String>> g = new HashMap<>();
     List<String> r = new LinkedList();
-    for (List<String> ticket : tickets) //  O(ElogE) time? sorting depends on the structure of the input graph.
+    for (List<String> ticket :
+        tickets) //  O(ElogE) time? sorting depends on the structure of the input graph.
     g.computeIfAbsent(ticket.get(0), k -> new PriorityQueue()).add(ticket.get(1));
-    visit("JFK", g, r); // O(E) time
+    dfs("JFK", g, r); // O(E) time
     return r;
   }
 
-  void visit(String f, Map<String, PriorityQueue<String>> g, List<String> r) {
-    while (g.containsKey(f) && !g.get(f).isEmpty()) visit(g.get(f).poll(), g, r);
+  void dfs(String f, Map<String, PriorityQueue<String>> g, List<String> r) {
+    while (g.containsKey(f) && !g.get(f).isEmpty()) {
+      dfs(g.get(f).poll(), g, r);
+    }
     r.add(0, f);
   }
 
@@ -238,10 +241,8 @@ public class Leetcode332ReconstructItinerary {
     Stack<String> s = new Stack<>();
     s.push("JFK");
     while (!s.isEmpty()) {
-      while (g.containsKey(s.peek()) && !g.get(s.peek()).isEmpty()) {
-        s.push(g.get(s.peek()).poll());
-      }
-      r.add(0, s.pop());
+      if (g.containsKey(s.peek()) && !g.get(s.peek()).isEmpty()) s.push(g.get(s.peek()).poll());
+      else r.add(0, s.pop());
     }
     return r;
   }

@@ -15,6 +15,9 @@
 
 package array;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PokerScore {
   /*
   Return score of cards
@@ -66,5 +69,68 @@ public class PokerScore {
     int maxScore = 0;
     for (int j = 0; j < v.length; j++) maxScore = Math.max(maxScore, 14 * (v[i] - 1) + i);
     return maxScore;
+  }
+
+  /*
+  Step 1: min_by_key
+
+  assert min_by_key("a", [{"a": 1, "b": 2}, {"a": 2}]) == {"a": 1, "b": 2}
+  assert min_by_key("a", [{"a": 2}, {"a": 1, "b": 2}]) == {"a": 1, "b": 2}
+  assert min_by_key("b", [{"a": 1, "b": 2}, {"a": 2}]) == {"a": 2}
+  assert min_by_key("a", [{}]) == {}
+  assert min_by_key("b", [{"a": -1}, {"b": -1}]) == {"b": -1}
+
+
+  Step 2: first_by_key
+  assert first_by_key("a", "asc", [{"a": 1}]) == {"a": 1}
+  assert first_by_key("a", "asc", [{"b": 1}, {"b": -2}, {"a": 10}]) in [{"b": 1}, {"b": -2}]
+  assert first_by_key("a", "desc", [{"b": 1}, {"b": -2}, {"a": 10}]) == {"a": 10}
+  assert first_by_key("b", "asc", [{"b": 1}, {"b": -2}, {"a": 10}]) == {"b": -2}
+  assert first_by_key("b", "desc", [{"b": 1}, {"b": -2}, {"a": 10}]) == {"b": 1}
+  assert first_by_key("a", "desc", [{}, {"a": 10, "b": -10}, {}, {"a": 3, "c": 3}]) == {"a": 10, "b": -10}
+
+  Step 3
+  Examples (in Python):
+
+  cmp = RecordComparator("a", "asc")
+  assert cmp.compare({"a": 1}, {"a": 2}) == -1
+  assert cmp.compare({"a": 2}, {"a": 1}) == 1
+  assert cmp.compare({"a": 1}, {"a": 1}) == 0
+  */
+  static class C {
+    String k;
+    boolean isAscending;
+
+    public C(String k, boolean isAscending) {
+      this.k = k;
+      this.isAscending = isAscending;
+    }
+
+    private int v(Map<String, Integer> map) {
+      if (!map.containsKey(k)) return 0;
+      int r = isAscending ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+      for (Map.Entry<String, Integer> e : map.entrySet())
+        if (e.getKey().equals(k))
+          r = isAscending ? Math.min(r, e.getValue()) : Math.max(r, e.getValue());
+      return r;
+    }
+
+    public int compare(Map<String, Integer> a, Map<String, Integer> b) {
+      int va = v(a), vb = v(b);
+      if (va < vb && isAscending || va > vb && !isAscending) return -1;
+      if (va == vb) return 0;
+      return 1;
+    }
+  }
+
+  Map<String, Integer> first_by_key(String key, Map<String, Integer>[] arr, boolean isAscending) {
+    if (arr == null || arr.length == 0) return new HashMap();
+    int r = 0;
+    C c = new C(key, isAscending);
+    for (int i = 1; i < arr.length; i++) {
+      int cr = c.compare(arr[r], arr[i]);
+      if (cr < 0) r = i;
+    }
+    return arr[r];
   }
 }
