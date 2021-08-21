@@ -15,22 +15,67 @@
 
 package string.palindrome;
 
-import java.util.Arrays;
+/*
+5. Longest Palindromic Substring
+Given a string s, return the longest palindromic substring in s.
 
+Input: s = "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+
+Input: s = "cbbd"
+Output: "bb"
+
+Input: s = "a"
+Output: "a"
+
+Input: s = "ac"
+Output: "a"
+
+Constraints:
+
+   1 <= s.length <= 1000
+   s consist of only digits and English letters.
+*/
 public class Leetcode5LongestPalindromicSubstring {
-  // Manacher's algorithm with virtual translated string
-  /** when the division character is not easy to find,use virtual augmented string */
-  public String longestPalindrome2(String s) {
-    if (s == null || s.length() == 0) return s;
-    int N = 2 * s.length() + 1;
-    int[] rad = Manacher.getRadiusOfVirtualTranslatedStringOf(s);
+  private int start, size;
 
-    int il /* index Of the longest radius */ = 0;
-    for (int i = 0; i < N; i++) {
-      if (rad[i] > rad[il]) il = i;
+  /*---------------------------------------------------------------------------
+   Idea: Expand from each i and i-1,i when i>0 toward 2 sides
+   O(N^2) time
+   O(N) space
+  */
+  public String longestPalindrome(String s) {
+    for (int i = 0; i < s.length(); i++) {
+      expand(s, i, i);
+      if (i > 0) expand(s, i - 1, i);
     }
+    return s.substring(start, start + size);
+  }
 
-    int si = (il - rad[il]) / 2;
-    return s.substring(si, si + rad[il]);
+  private void expand(String s, int l, int r) {
+    while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+      l--;
+      r++;
+    }
+    l++;
+    r--;
+    if (size < r - l + 1) {
+      start = l;
+      size = r - l + 1;
+    }
+  }
+
+  /*---------------------------------------------------------------------------
+   Idea:  Manacher's algorithm with virtual translated string
+  */
+  public String longestPalindrome2(String s) {
+    int[] v = Manacher.getRadiusOfVirtualTranslatedStringOf(s);
+    int idx = 0; // in virtual string the longest palindrome sub-string center index
+    int N = 2 * s.length() + 1;
+    for (int i = 0; i < N; i++) if (v[i] > v[idx]) idx = i;
+
+    int start = (idx - v[idx]) / 2;
+    return s.substring(start, start + v[idx]);
   }
 }

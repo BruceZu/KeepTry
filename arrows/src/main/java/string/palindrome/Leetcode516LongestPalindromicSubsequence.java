@@ -16,44 +16,64 @@
 package string.palindrome;
 
 public class Leetcode516LongestPalindromicSubsequence {
+  /*
+     516. Longest Palindromic Subsequence
+
+     Given a string s, find the longest palindromic subsequence's length in s.
+     A subsequence is a sequence that can be derived from another sequence by
+     deleting some or no elements without changing the order of the remaining elements.
+
+
+   Input: s = "bbbab"
+   Output: 4, "bbbb".
+
+   Input: s = "cbbd"
+   Output: 2, "bb".
+
+   Constraints:
+       1 <= s.length <= 1000
+       s consists only of lowercase English letters.
+  */
+
+  /*
+  top down
+  Sequence idea. use palindrome to defining the sequence
+  dfs + cache
+  */
+  public int longestPalindromeSubseq2(String s) {
+    int n = s.length();
+    int[][] c = new int[n][n];
+    return dfs(c, 0, n - 1, s);
+  }
+
+  private int dfs(int[][] c, int l, int r, String s) {
+    if (c[l][r] != 0) return c[l][r]; // 0 or cached
+    else if (s.charAt(l) == s.charAt(r)) {
+      if (l >= r - 2) c[l][r] = r - l + 1;
+      else c[l][r] = dfs(c, l + 1, r - 1, s) + 2;
+    } else c[l][r] = Math.max(dfs(c, l, r - 1, s), dfs(c, l + 1, r, s));
+    return c[l][r];
+  }
+
+  /*
+   Bottom up
+   `bbabc|b`
+   O(N^2) time and space
+  */
   public int longestPalindromeSubseq(String s) {
-    if (s == null || s.length() == 0) return 0;
     int N = s.length();
-    // 'You may assume that the maximum length of s is 1000.'
-    // so use int type is enough
     int[][] dp = new int[N][N];
-    // initial, others are default 0
-    for (int i = 0; i < N; i++) dp[i][i] = 1;
     for (int r = 0; r < N; r++) {
-      // need calculate all dp[0<= j <i][i]
-      for (int l = r - 1; l >= 0; l--) { // backward to use known to get unknown
+      for (int l = r; l >= 0; l--) {
         if (s.charAt(l) == s.charAt(r)) {
-          // palindrome symmetry
-          dp[l][r] = 2 + dp[l + 1][r - 1]; // (j==i-1)?2:2+dp[j+1][i-1];
-          // dp[l][r] is 0 when l > r
+          if (l >= r - 2) dp[l][r] = r - l + 1;
+          else dp[l][r] = 2 + dp[l + 1][r - 1];
         } else {
           dp[l][r] = Math.max(dp[l + 1][r], dp[l][r - 1]);
-          // the dp[l + 1][r] need calculate with j backward
+          //              the dp[l + 1][r] require calculate backward in the inner loop l
         }
       }
     }
     return dp[0][N - 1];
-  }
-
-  // top down
-  public int longestPalindromeSubseq2(String s) {
-    int n = s.length();
-    int[][] a = new int[n][n];
-    for (int i = 0; i < n; i++) a[i][i] = 1;
-    return helper(a, 0, n - 1, s);
-  }
-
-  private int helper(int[][] dp, int l, int r, String s) {
-    if (l >= r || dp[l][r] != 0) return dp[l][r]; // 0 or cached
-
-    if (s.charAt(l) == s.charAt(r)) dp[l][r] = helper(dp, l + 1, r - 1, s) + 2;
-    else dp[l][r] = Math.max(helper(dp, l, r - 1, s), helper(dp, l + 1, r, s));
-
-    return dp[l][r];
   }
 }

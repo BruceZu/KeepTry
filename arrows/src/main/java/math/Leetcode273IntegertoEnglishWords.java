@@ -19,27 +19,101 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Leetcode273IntegertoEnglishWords {
+  /*
+   273. Integer to English Words
+
+   Convert a non-negative integer num to its English words representation.
+
+   Input: num = 123
+   Output: "One Hundred Twenty Three"
+
+   Input: num = 12，345
+   Output: "Twelve Thousand Three Hundred Forty Five"
+
+   Input: num = 1，234，567
+   Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+
+   Input: num = 1，234，567，891
+   Output: "One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"
+
+   Input: num = 0
+   Output:"Zero"
+
+   Input: num = 1000
+   Output:"One Thousand"
+
+   Input: num = 1，000，010
+   Output:"One Million Ten"
+
+   Constraints:
+       0 <= num <= 2^31 - 1
+  */
 
   /*
-  O(N) time O(1) space
-  Idea: separate number by 3 length from right to left
-  Note:
-  - Add level name when l>=1 and current 3 level value is not 0
-  - if num is 0 return 'Zero' idrectly
-  - always check if current under parsed level, d__, d_, d is 0?
-  - add string operation always has a advanced " ", the result remove the left most " "
+  Idea:
+  divide and conquer: separate number by 3 length from right to left
+
+  max  2,147,483,647
+  Note the 0, and " ",
+
+  O(N) time
+  O(1) space is convert the map to function
   */
+
   public String numberToWords(int num) {
-    // '0 <= num <= 2^31 - 1'
-    // max  2,147,483,647
-    // 'a non-negative integer num'
-    // TODO: corner cases validation
-    Map<Integer, String> level = new HashMap();
+    if (num == 0) return "Zero";
+    String sb = "";
+    int l = 0;
+    while (true) {
+      String cur = parse3len(num % 1000, l);
+      if (cur != "") sb = cur + (sb.length() > 0 ? (" " + sb) : sb);
+      num /= 1000;
+      l++;
+      if (num == 0) return sb;
+    }
+  }
+
+  /*
+  0~20
+  21~99
+  100~999
+  0 is special
+  */
+  private String parse3len(int num, int l) {
+    if (num == 0) return "";
+    StringBuilder r = new StringBuilder();
+    if (num > 99) {
+      r.append(map.get(num / 100)).append(" ").append("Hundred");
+      num %= 100;
+    }
+
+    if (num >= 20) {
+      int t = num / 10;
+      if (r.length() > 0) r.append(" ");
+      r.append(map.get(t * 10));
+      num %= 10; // 0~9
+    }
+    // 0~19 or 0~9
+    if (num != 0) {
+      if (r.length() > 0) r.append(" ");
+      r.append(map.get(num));
+    }
+    if (l != 0) r.append(" " + level.get(l)); // decided by num !=0 and l!=0
+    return r.toString();
+  }
+
+  static Map<Integer, String> level = new HashMap();
+
+  static {
     level.put(1, "Thousand");
     level.put(2, "Million");
     level.put(3, "Billion");
+  }
 
-    Map<Integer, String> map = new HashMap();
+  static Map<Integer, String> map = new HashMap();
+
+  static {
+    map.put(0, "Zero");
     map.put(1, "One");
     map.put(2, "Two");
     map.put(3, "Three");
@@ -59,6 +133,7 @@ public class Leetcode273IntegertoEnglishWords {
     map.put(17, "Seventeen");
     map.put(18, "Eighteen");
     map.put(19, "Nineteen");
+
     map.put(20, "Twenty");
     map.put(30, "Thirty");
     map.put(40, "Forty");
@@ -67,33 +142,5 @@ public class Leetcode273IntegertoEnglishWords {
     map.put(70, "Seventy");
     map.put(80, "Eighty");
     map.put(90, "Ninety");
-    if (num == 0) return "Zero";
-    // each time append operation will add a advance " ".
-    String result = "";
-    int l = 0;
-    while (num != 0) {
-      int r = num % 1000;
-      StringBuilder sb = new StringBuilder();
-
-      // parse current level start----------
-      int h = r / 100;
-      if (h != 0) sb.append(" " + map.get(h) + " Hundred");
-      int t = r % 100;
-      if (t != 0) { // if 2 digital is 0 then need not do anything
-        if (t <= 20) sb.append(" " + map.get(t));
-        else {
-          int d = t % 10, dd = t - d;
-          if (dd != 0) sb.append(" " + map.get(dd));
-          if (d != 0) sb.append(" " + map.get(d));
-        }
-      }
-      if (r != 0 && l != 0) sb.append(" " + level.get(l)); // decided by r and l
-      // parse current level done----------
-      result = sb + result;
-      // next
-      num /= 1000;
-      l++;
-    }
-    return result.substring(1);
   }
 }

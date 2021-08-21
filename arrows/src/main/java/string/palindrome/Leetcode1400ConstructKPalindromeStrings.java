@@ -16,28 +16,53 @@
 package string.palindrome;
 
 public class Leetcode1400ConstructKPalindromeStrings {
+  /*
+    Given a string s and an integer k.
+    construct k non-empty palindrome strings using all the characters in s.
+
+    Return True if you can use all the characters in s to construct k palindrome strings
+    or False otherwise.
+
+  Input: s = "annabelle", k = 2
+  Output: true
+  Explanation: can construct two palindromes using all characters in s.
+  Some possible constructions
+  "anna" + "elble",
+  "anbna" + "elle",
+  "anellena" + "b"
+
+  Input: s = "leetcode", k = 3
+  Output: false
+  Explanation: impossible to construct 3 palindromes using all the characters of s.
+
+  Input: s = "true", k = 4
+  Output: true
+  Explanation: The only possible solution is to put each character in a separate string.
+
+  Input: s = "yzyzyzyzyzyzyzy", k = 2
+  Output: true
+  Explanation: Simply you can put all z's in one string and all y's in the other string.
+  Both strings will be palindrome.
+
+  Input: s = "cr", k = 7
+  Output: false
+  Explanation:  don't have enough characters in s to construct 7 palindromes.
+
+
+      1 <= s.length <= 10^5
+      All characters in s are lower-case English letters.
+      1 <= k <= 10^5
+
+     */
   public boolean canConstruct(String s, int k) {
-    if (s == null) return false;
-    if (s.length() == 0) {
-      if (k == 0) return true;
-      else return false;
-    }
-    if (k == 0) return false;
-
-    if (k > s.length()) return false;
-
     int c = 0;
-    for (int i = 0; i < s.length(); i++) {
-      // All characters in s are lower-case English letters.
-      c ^= 1 << s.charAt(i) - 'a';
-    }
-    int sumOdd = 0;
+    for (int i = 0; i < s.length(); i++) c ^= 1 << s.charAt(i) - 'a';
+    // how many 1 bit in the number c
+    int sum = 0;
     while (c != 0) {
       c &= (c - 1);
-      sumOdd++;
+      sum++;
     }
-
-    if (k < sumOdd) return false;
-    return true;
+    return sum <= k && k <= s.length();
   }
 }

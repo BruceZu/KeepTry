@@ -16,7 +16,15 @@
 package string.String_searching_algorithm.Knuth_Morris_Pratt_algorithm;
 
 public class KMP {
-  // O(N）
+  /*
+  len[i] the length of the widest prefix and suffix substring of substring [0,i]
+  `aaa`
+  for `a` len[0]=0
+  for `aa` len[1]=1
+  for `aaa` len[2]=2
+   O(N） time and space
+  */
+
   public static int[] getWidestBorderLength(char[] I) {
     if (I == null || I.length == 0) return null;
     // N >= 1
@@ -35,7 +43,7 @@ public class KMP {
       // loop 1:
       while (i > 0) { // At most check len[d-1] steps.
         int mi = len[i - 1];
-        // mi is length of widest border of sub-staring [0, i-1] of I
+        // mi is length of the widest border of sub-staring [0, i-1] of I
         // mi is also mirror index, mi - 1 + 1, used to compare with S[u].
         if (I[mi] == I[d]) {
           len[d] = mi + 1;
@@ -66,7 +74,7 @@ public class KMP {
         d++;
       }
       if (d == N) return u - N;
-      // Check i fistly before checking s. If need fins all matched sub-strings,
+      // Check i firstly before checking s. If need fins all matched sub-strings,
       // then collect  result here and continue
       if (u == M) return -1;
       // Move d in I right forward, or move u in S left forward
@@ -134,11 +142,8 @@ public class KMP {
       }
       if (d == N) return u - N;
       if (u == M) return -1;
-      if (d == 0) {
-        u++;
-      } else {
-        d = len[d - 1];
-      }
+      if (d == 0) u++;
+      else d = len[d - 1];
     }
   }
   // ---------------------------- Merge together version -----------------------------
@@ -146,7 +151,7 @@ public class KMP {
     if (strS == null || strI == null || strI.length() > strS.length()) return -1;
     char[] S = strS.toCharArray(), I = strI.toCharArray();
     int M = S.length, N = I.length;
-    // prepare widest border array
+    // prepare the widest border array
     int[] len = new int[N];
     for (int d = 0; d < N; d++) {
       int i = d;
@@ -162,11 +167,8 @@ public class KMP {
       }
       if (d == N) return u - N;
       if (u == M) return -1;
-      if (d == 0) {
-        u++;
-      } else {
-        d = len[d - 1];
-      }
+      if (d == 0) u++;
+      else d = len[d - 1];
     }
   }
 }

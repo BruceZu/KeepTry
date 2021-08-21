@@ -16,63 +16,156 @@
 package string.palindrome;
 
 /*
+214. Shortest Palindrome
 Given a string s, you can convert it to a palindrome by adding characters in front of it.
 Find and return the shortest palindrome you can find by performing this transformation.
 
 Example 1:
 Input: s = "aacecaaa"
-Output: "aaacecaaa"
+Output:   "aaacecaaa"
 
 Example 2:
 Input: s = "abcd"
 Output: "dcbabcd"
 
 Constraints:
-    0 <= s.length <= 5 * 104
+    0 <= s.length <= 5 * 10^4
     s consists of lowercase English letters only.
  */
 public class Leetcode214ShortestPalindrome {
-  /*
-  Other Idea
-   1 Fast Fourier Transform,Fourier transform coefficients.
-      https://hackmd.io/@firejox/HkBxRYbrN?type=view
-   2 BoyerMoore can be used here?
-  */
+  /* Idea 2 pointers ----------------------------------------------------------------
+   O(N^2) time and O(N) space
+    palindrome behavior:
+    l             l
+    aba   =>   aba
+      r        r
 
-  // hash ---------------------------------------------------------------------
-  // Basic idea. O(N) time and space
-  public static String shortestPalindrome5_1(String str) {
-    /*
-    0 <= s.length <= 5 * 104
-    */
+    no palindrome:
+    l                 l      l           l     l         l
+    abaxaybz =>  abaxaybz => abaxa => abaxa => aba => aba
+           r     r               r    r          r    r
+    get the width of the max palindrome substring starting from index 0.
+
+    result = zby|  ax| aba |xa  |ybz
+
+    Steps:
+      l: the width of the max palindrome starting from index 0 of given string
+         its possible value is [1, N].
+     - If at last, the l is on the N, then s is a palindrome, each move of r will make l move a step too
+     - Else current s is cut into [0,l-1],[l,N-1] 2 parts and
+       let [0,l-1] go on with recursion. [0,l-1]  is shorter than s
+       this guarantee the recursion will reach an end at last.
+  */
+  public String shortestPalindrome7(String s) {
+    if (s == null || s.length() <= 1) return s;
+    int N = s.length(), l = 0;
+    for (int r = N - 1; 0 <= r; r--) if (s.charAt(l) == s.charAt(r)) l++;
+    if (l == N) return s;
+    String tail = s.substring(l);
+    return new StringBuilder(tail).reverse() + shortestPalindrome7(s.substring(0, l)) + tail;
+  }
+  /*
+  Idea Manacher's algorithm  ------------------------------------------------------------------
+   O(N) time and space
+   */
+  public static String shortestPalindrome6(String s) {
+    if (s == null || s.length() <= 1) return s;
+    int[] v = Manacher.getRadiusOfVirtualTranslatedStringOf(s);
+
+    // '0 <= s.length <= 5 * 10^4'. So use int is enough
+    int N = 2 * s.length() + 1;
+    int w = 1; // at least 1: the palindromic sub-string with the first char
+    for (int i = N - 1; i >= 0; i--) {
+      if ((i - v[i]) / 2 == 0) {
+        w = Math.max(w, v[i]);
+        break;
+      }
+    }
+    return new StringBuilder(s.substring(w)).reverse() + s;
+  }
+
+  /* --------------------------------------------------------------------------
+  Idea:
+  widest prefix and suffix of  s + '#' + reversed s'
+  - without # it does not work, e.g. 'aaaa' => 'aaaaaaaa', widest prefix and suffix is 8 not 4
+  - this idea apply to KMP
+  O(N) time and space
+  */
+  public String shortestPalindrome5(String s) {
+    if (s == null || s.length() <= 1) return s;
+    String tmp = s + "#" + new StringBuilder(s).reverse();
+    char[] a = tmp.toCharArray();
+    int N = tmp.length();
+
+    int w[] = new int[N]; // the width of the widest prefix and suffix of string [0,i]
+    for (int i = 0; i < N; i++) {
+      int j = i;
+      while (j > 0 && a[w[j - 1]] != a[i]) j = w[j - 1];
+      if (j > 0) w[i] = w[j - 1] + 1;
+      // in Java, default w[i] is 0;
+    }
+    return new StringBuilder(s.substring(w[N - 1])).reverse() + s;
+  }
+
+  /* --------------------------------------------------------------------------
+  Idea:
+   KMP(Knuth–Morris–Pratt)
+   Find start index of s in its reverse
+   find `abaxyz` from `zyxaba` or find `aba` from `aba`
+  O(N) time and space
+  */
+  public String shortestPalindrome4(String s) {
+    if (s == null || s.length() <= 1) return s;
+    int N = s.length();
+    char[] I = s.toCharArray();
+    int[] w = new int[N];
+    for (int i = 0; i < N; i++) {
+      int j = i;
+      while (0 < j && I[w[j - 1]] != I[i]) j = w[j - 1];
+      if (0 < j) w[i] = w[j - 1] + 1;
+    }
+
+    char[] S = new StringBuilder(s).reverse().toString().toCharArray();
+    int u = 0, d = 0;
+    while (true) {
+      while (u < N && d < N && S[u] == I[d]) {
+        u++;
+        d++;
+      }
+      // d==N when s is palindrome
+      if (d == N || u == N) return new StringBuilder(s.substring(d)).reverse() + s;
+      if (d == 0) u++;
+      else d = w[d - 1];
+    }
+  }
+
+  /* Idea hash ----------------------------------------------------------------
+  O(N) time
+  O(N) space, not take in account the substring comparing used to avoid hash collision
+
+  base is 26
+  modulus: Mersenne prime 8191
+  em: the value of b^{j}%m, initial value is 1 used by the right most char,
+      keep updating it used for next char in extending hash from right to left
+  max: keep tracking the last char index of the longest palindrome starting from str[0]
+  */
+  public static String shortestPalindrome3(String str) {
     if (str.length() <= 1) return str;
-    char[] s = str.toCharArray();
-    char[] s2 = new StringBuilder(str).reverse().toString().toCharArray();
-    int N = str.length();
-    // hash of substring s[0]...s[i]
-    int hash = 0;
-    // hash of substring s[N-(i+1)]...S[N-1]
-    int h = 0;
-    // base use 26, because "s consists of lowercase English letters only."
-    int b = 26;
-    // modulus Mersenne prime
-    int m = 8191;
-    // b^{j}%m
-    int em = 1;
-    // last char index of longest palindrome starting from str[0]
+    char[] s = str.toCharArray(), s2 = new StringBuilder(str).reverse().toString().toCharArray();
+    int N = str.length(), hl = 0, hr = 0, b = 26, m = 8191, em = 1;
     int max = 0;
     for (int i = 0; i < N; i++) {
-      int c = s[i] - 'a';
-      hash = hash * b % m + c;
+      int cl = s[i] - 'a';
+      hl = (hl * b % m + cl) % m;
 
-      int c2 = s2[N - 1 - i] - 'a';
-      h = (c2 * em % m + h) % m;
-      em = b * em % m;
-      if (hash == h) {
-        // double check by compare 2 sub-string values
+      int cr = s2[N - 1 - i] - 'a';
+      hr = (cr * em % m + hr) % m;
+      em = em * b % m; // used by next cr
+
+      if (hl == hr) { // double check by compare 2 sub-string values
         boolean same = true;
         for (int x = 0; x <= i; x++) {
-          if (s[x] != s2[N - 1 - i + x]) { // Note: it is N - 1 - i + x here.
+          if (s[x] != s2[N - 1 - (i - x)]) { // Note: it is N - 1 - i + x here.
             same = false;
             break;
           }
@@ -83,18 +176,29 @@ public class Leetcode214ShortestPalindrome {
     return new StringBuilder(str.substring(max + 1)).reverse().append(str).toString();
   }
 
-  // Hash O(N) time O(1) space ------------------------------------------------
-  public static String shortestPalindrome5_2(String s) {
+  /*
+  Idea Hash  ------------------------------------------------------------------
+  without tmp char array, make space O(1)
+  Improvement of above solution by observation
+  - the `cl` is same as `cr`
+  - when hl==hr, if 2 substrings are same, plus one is the other reverse version,
+        then substring[0, i] SHOULD be a palindrome, so just check
+        from 0 and i toward centering side.
+
+  O(N) time
+  O(1) space, not take in account the substring comparing used to avoid hash collision
+   */
+  public static String shortestPalindrome2(String s) {
     if (s.length() <= 1) return s;
-    int N = s.length(), hash = 0, h = 0, b = 26, m = 8191, em = 1;
+    int N = s.length(), hl = 0, hr = 0, b = 26, m = 8191, em = 1;
     int max = 0;
     for (int i = 0; i < N; i++) {
       int c = s.charAt(i) - 'a';
-      hash = hash * b % m + c;
+      hl = hl * b % m + c;
 
-      h = (c * em % m + h) % m;
-      em = b * em % m;
-      if (hash == h) {
+      hr = (c * em % m + hr) % m;
+      em = em * b % m;
+      if (hl == hr) {
         int l = 0, r = i;
         while (l <= r && s.charAt(l++) == s.charAt(r--))
           ;
@@ -103,130 +207,39 @@ public class Leetcode214ShortestPalindrome {
     }
     return new StringBuilder(s.substring(max + 1)).reverse().append(s).toString();
   }
-  // hash ---------------------------------------------------------------------
-  // O(N) time and O(1) space
-  // Same as JDK String.hashcode()
-  // To use base 31 and default modulus is Integer.MAX_VALUE+1(it is -1 actually)
-  public static String shortestPalindrome5_3(String s) {
+
+  /*
+  Idea Hash  ------------------------------------------------------------------
+
+   Same as JDK String.hashcode()
+   base: 31
+   modulus: Integer.MAX_VALUE+1(it is Integer.MIN_VALUE actually)
+
+  O(N) time
+  O(1) space, not take in account the substring comparing used to avoid hash collision
+   */
+  public static String shortestPalindrome(String s) {
     if (s.length() <= 1) return s;
-    int N = s.length(), hash = 0, h = 0, b = 31, em = 1, max = 0;
+    int N = s.length(), hl = 0, hr = 0, b = 31, em = 1, max = 0;
     for (int i = 0; i < N; i++) {
       int c = s.charAt(i);
-      hash = hash * b + c;
+      hl = hl * b + c;
 
-      h = c * em + h;
+      hr = c * em + hr;
       em = b * em;
-      if (hash == h) {
+      if (hl == hr) {
         int l = 0, r = i;
         while (l <= r && s.charAt(l++) == s.charAt(r--))
           ;
         if (l > r) max = i;
-        // Here if no double check by compare 2 sub-string values
-        // Leetcode still accept it and report
-        // "Runtime: 1 ms, faster than 100.00% of Java online submissions for Shortest Palindrome."
-        // But this only show Leetcode's test cases are not enough to spot this bug
-        //
       }
     }
     return new StringBuilder(s.substring(max + 1)).reverse().append(s).toString();
   }
-
-  // With Manacher's algorithm, O(N) time and space ---------------------------
-  public static String shortestPalindrome4(String s) {
-    if (s == null || s.length() <= 1) return s;
-    int[] r = Manacher.getRadiusOfVirtualTranslatedStringOf(s);
-
-    // '0 <= s.length <= 5 * 104'. So use int is enough
-    int N = 2 * s.length() + 1;
-    int w = 1; // at least 1: the palindromic sub-string with the first char
-    for (int i = 0; i < N; i++) {
-      if ((i - r[i]) / 2 == 0) {
-        w = Math.max(w, r[i]);
-      }
-    }
-    return new StringBuilder(s.substring(w)).reverse().toString() + s;
-  }
-
-  // Widest border idea, O(N) time and space ----------------------------------
-  public String shortestPalindrome3(String s) {
-    if (s == null || s.length() <= 1) return s;
-    /*
-    Widest border, or widest prefix and suffix of  s + '#' + s'
-    It does not work to apply widest border idea directly to s + s' reverse
-    See case of 'aabba', N=5,
-            concatenate it with its reverse to be: 'aabbaabbaa',
-            w[]:  0100123456 ,
-            w[2*N - 1]==6 6 > N, s.substring(6) will out of index.
-         or case 'aaaaa'  concatenate it with its reverse: 'aaaaaaaaaa',
-    So, use s + '#' + s' reverse.
-    Why select '#' and it works?
-    Because `s consists of lowercase English letters only`
-    */
-    String concatenated = s + "#" + new StringBuilder(s).reverse().toString();
-    char[] I = concatenated.toCharArray();
-    int N = concatenated.length();
-
-    int w[] = new int[N];
-    for (int d = 0; d < N; d++) {
-      int i = d;
-      while (0 < i && I[w[i - 1]] != I[d]) i = w[i - 1];
-      if (0 < i) w[d] = w[i - 1] + 1;
-    }
-    return new StringBuilder(s.substring(w[N - 1])).reverse().toString() + s;
-  }
-
-  // KMP(Knuth–Morris–Pratt), O(N) time and space. Find s from its reverse ----
-  public String shortestPalindrome2(String s) {
-    if (s == null || s.length() <= 1) return s;
-    int N = s.length();
-    // '0 <= s.length <= 5 * 104'
-    // 's consists of lowercase English letters only.'
-    char[] I = s.toCharArray();
-    int[] w = new int[N];
-    for (int d = 0; d < N; d++) {
-      int i = d;
-      while (0 < i && I[w[i - 1]] != I[d]) i = w[i - 1];
-      if (0 < i) w[d] = w[i - 1] + 1;
-    }
-
-    char[] S = new StringBuilder(s).reverse().toString().toCharArray();
-    int u = 0, d = 0;
-    while (true) {
-      while (u < N && d < N && S[u] == I[d]) {
-        u++;
-        d++;
-      }
-      // if(d == N)..., no happen in this case
-      if (u == N) {
-        return new StringBuilder(s.substring(d)).reverse().toString() + s;
-      }
-      if (d == 0) u++;
-      else d = w[d - 1];
-    }
-  }
-
-  // 2 pointers. O(N^2) time and O(N) space --------------------------------------
-  public String shortestPalindrome1(String s) {
-    if (s == null || s.length() <= 1) return s;
-    int N = s.length();
-    int l = 0;
-    for (int r = N - 1; 0 <= r; r--) {
-      // "s consists of lowercase English letters only."
-      if (s.charAt(l) == s.charAt(r)) {
-        l++;
-      }
-    }
-    // Let the size of the max palindrome starting from s[0] is l.
-    // Now Palindrome's attribute makes l be in scope [l+1, N].
-    // - If it is on the N, then each move step of r has made l move a step too
-    //   That means the s is a palindrome
-    // - Else current s is cut into [0,l),[l,N-1] 2 parts and
-    //   let [0,l) go on with recursion. [0,l)  is shorter than s
-    //   this guarantee the recursion will reach an end at last.
-    if (l == N) return s;
-    String tail = s.substring(l);
-    return new StringBuilder(tail).reverse().toString()
-        + shortestPalindrome1(s.substring(0, l))
-        + tail;
-  }
+  /*
+  Idea(TODO)
+   1 Fast Fourier Transform,Fourier transform coefficients.
+      https://hackmd.io/@firejox/HkBxRYbrN?type=view
+   2 BoyerMoore can be used here?
+  */
 }

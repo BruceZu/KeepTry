@@ -43,4 +43,14 @@ public class Leetcode121BestTimetoBuyandSellStock {
     }
     return r;
   }
+
+  public int maxProfit(int ps[]) {
+    int min = ps[0];
+    int r = 0;
+    for (int p : ps) {
+      min = Math.min(p, min);
+      r = Math.max(r, p - min);
+    }
+    return r;
+  }
 }

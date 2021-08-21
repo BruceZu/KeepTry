@@ -127,10 +127,10 @@ public class Leetcode269AlienDictionary {
     for (Character c : all) {
       q.offer(c);
     }
-    StringBuilder result = new StringBuilder();
+    StringBuilder r = new StringBuilder();
     while (!q.isEmpty()) {
       Character c = q.poll();
-      result.append(c);
+      r.append(c);
       // Note: the last valid character has not `out`. In this case provide a empty
       // set else it is null point
       for (Character o : out.getOrDefault(c, new HashSet<>())) {
@@ -144,14 +144,11 @@ public class Leetcode269AlienDictionary {
         }
       }
     }
-    if (!in.isEmpty())
-      return ""; // or: `result.length()!= all nodes number` which can be got after all is initiated
-    return result.toString();
+    if (!in.isEmpty()) return "";
+    // or: `result.length()!= all nodes number` which can be got after all is initiated
+    return r.toString();
   }
 
-  public static void main(String[] args) {
-    alienOrder(new String[] {"ac", "ab", "zc", "zb"});
-  }
   // DFS ----------------------------------------------------------------------
   /*
   C is the total length of all the words
@@ -179,24 +176,21 @@ public class Leetcode269AlienDictionary {
 
     // Step 2: DFS to build up the output list.
     //  contains(k): ever visited: contains, v: whether in current path,
-    Map<Character, Boolean> mark = new HashMap<>();
+    Map<Character, Boolean> v = new HashMap<>();
     StringBuilder r = new StringBuilder();
-    for (Character c : out.keySet()) if (merged(c, mark, r, out)) return "";
+    for (Character c : out.keySet()) if (dfs(c, v, r, out)) return "";
     if (r.length() < out.size()) return "";
     return r.reverse().toString();
   }
 
   // merged 2 function: find a circle?(1) + calculate Topological Sort Order(2)
-  private static boolean merged(
-      Character c,
-      Map<Character, Boolean> mark,
-      StringBuilder r,
-      Map<Character, Set<Character>> out) {
-    if (mark.containsKey(c)) return mark.get(c);
-    mark.put(c, true);
-    for (char o : out.get(c)) if (merged(o, mark, r, out)) return true;
+  private static boolean dfs(
+      Character c, Map<Character, Boolean> v, StringBuilder r, Map<Character, Set<Character>> out) {
+    if (v.containsKey(c)) return v.get(c);
+    v.put(c, true);
+    for (char o : out.get(c)) if (dfs(o, v, r, out)) return true;
     r.append(c);
-    mark.put(c, false);
+    v.put(c, false);
     return false;
   }
 }

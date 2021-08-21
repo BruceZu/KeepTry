@@ -32,12 +32,6 @@ import java.util.Set;
  *  [2,1,1]
  * ]
  * Subscribe to see which companies asked this question
- *
- *  Tags  Backtracking
- *  Similar Problems
- * (M) Next Permutation
- * (M) Permutations
- * (M) Palindrome Permutation II
  *  ====================================================================================================
  * Note:
  *   use 'Set used...', do not need sort the input firstly.

@@ -21,78 +21,105 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * <pre>
- * 267. Palindrome Permutation II
- * Difficulty: Medium
- * Given a string s, return all the palindromic permutations (without duplicates) of it.
- * Return an empty list if no palindromic permutation could be form.
- *
- * For example:
- *
- * Given s = "aabb", return ["abba", "baab"].
- *
- * Given s = "abc", return [].
- *
- * Hint:
- *
- * If a palindromic permutation exists, we just need to generate the first half of the string.
- * To generate all distinct permutations of a (half of) string, use a similar approach
- * from: Permutations II or Next Permutation.
- *
- * Tags Backtracking
- * Similar Problems
- *       (M) Next Permutation
- *       (M) Permutations II
- *       (E) Palindrome Permutation
- *
- * ========================================================================================
- *   "a b a b a c a b b c 3 3 4 "
- *  the left side:
- *    1.  <strong>sort</strong>.
- *
- *  index     0  1  2  3  4  5  6  7  8  9 10 11 12
- *           "3  3  4  a  a  a  a  b  b  b  b  c  c"
- *
- *    2.  loop:
- *       if find pair, keep one. (need sort in advance)
- *       if length is odd and find single char, allocate it to middle.
- *       (only when the string length is odd and there is only one single char is valid)
- *
- *
- *            0  1  2  3  4  5  6  7  8  9 10 11 12
- *           "3  a  a  b  b  c  4  b  b  b  b  c  c"
- *                              |
- *                            13/2
- *       the middle character:
- *           kept till the loop is over, then allocate it to the middle index
- *           avoiding <strong>break the pairs in the loop</strong>.
- *
- *    3. permuteLeftMirrorRight each number to get a permutation of left
- *       "3  a  a  b  b  c "
- *
- *      check duplicated:
- *           now the arr left is sorted. <strong>BUT</strong> if use swap way to permute current number
- *           of a permutation, <strong>MUST</strong> need a set to check
- *           if current choice is used, see {@link probability.permutation.Leetcode47PermutationsII2}
- *
- *      because this is permuteLeftMirrorRight the left half, so at least assume
- *      <strong>the arr length is 2</strong>.
- *
- *    4. once got a permutation of left, mirror -> right side.
- *
- *    5. & need in ()
- *
- *    ======================================================================================
- *
- *      // 16:32 ~57~17:02
+/*
+267. Palindrome Permutation II
+
+  Given a string s, return all the palindromic permutations (without duplicates) of it.
+  return the answer in any order. If s has no palindromic permutation, return an empty list.
+
+    1 <= s.length <= 16
+    s consists of only lowercase English letters.
+
+   Given s = "aabb", return ["abba", "baab"].
+   Given s = "abc", return [].
+
+ Hint:
+ If a palindromic permutation exists, we just need to generate the first half of the string.
+ To generate all distinct permutations of a (half of) string, use a similar approach
+ from: `Permutations II` or `Next Permutation`.
+*/
+/*
+ Idea:
+ "a b a b a c a b b c 3 3 4 "
+
+  1.  sort and get the left side   "3  a  a  b  b  c "
+     if find pair, keep one.
+     if length is odd and find single char, allocate it to middle.
+     (if string length is odd and there is more one single char it is invalid)
+
+             0  1  2  3  4  5  6  7  8  9 10 11 12
+            "3  a  a  b  b  c  4  ................"
+                               |
+                             13/2
+
+     kept the middle character till the loop is over, then allocate it to the middle index
+     avoiding break the pairs in the loop
+
+ 2.  check duplicated:
+     now the arr left is sorted.
+     need a set to check if current choice is used, see  Leetcode47PermutationsII2
+     because this is the left half, so at least assume  the arr length is 2
+ 3. once got a permutation of left, mirror -> right side.
+
+ O((N/2)!) time. Used for permutation
+ O(N) space
  */
 public class Leetcode267PalindromePermutationII {
-  private void swap(char[] arr, int i, int j) {
-    if (i != j && arr[i] != arr[j]) {
-      arr[i] ^= arr[j];
-      arr[j] ^= arr[i];
-      arr[i] ^= arr[j];
+  public List<String> generatePalindromes(String str) {
+    List r = new ArrayList();
+    if (str.length() == 1) {
+      r.add(str);
+      return r;
+    }
+
+    char[] a = str.toCharArray();
+    int size = 0;
+    Character middle = null;
+    boolean oddArrMiddleFound = false;
+
+    Arrays.sort(a); // "ababacabbc334" sort -> "334aaaabbbbcc"
+    for (int i = 0; i <= a.length - 1; i++) {
+      char ci = a[i];
+      if (i < a.length - 1 && ci == a[i + 1]) {
+        a[size++] = ci;
+        i++;
+        continue;
+      }
+      if ((a.length & 1) == 1 && !oddArrMiddleFound) {
+        middle = ci;
+        oddArrMiddleFound = true;
+        continue;
+      }
+      return r; // can not form palindrome
+    }
+    // "334aaaabbbbcc" -> "3aabbc......", middle is `4`
+    if ((a.length & 1) == 1) {
+      a[a.length / 2] = middle;
+    }
+    // "3aabbc4......"
+    dfs(0, a, r);
+    return r;
+  }
+
+  private void dfs(int curIndex, char[] a, List r) {
+    if (curIndex == a.length / 2 - 1) {
+      mirror(a);
+      r.add(new String(a));
+      return;
+    }
+
+    //  "3aabbc4......"
+    // used chars/choices for current position of permutation
+    // select choices from [current index, a.length / 2 - 1]
+    Set<Character> used = new HashSet(a.length / 2 - 1 - curIndex + 1);
+    for (int i = curIndex; i <= a.length / 2 - 1; i++) {
+      char ci = a[i];
+      if (!used.contains(ci)) {
+        used.add(ci);
+        swap(a, curIndex, i);
+        dfs(curIndex + 1, a, r);
+        swap(a, curIndex, i);
+      }
     }
   }
 
@@ -105,64 +132,60 @@ public class Leetcode267PalindromePermutationII {
     }
   }
 
-  private void permute(int cur, char[] arr, List re) {
-    if (cur == arr.length / 2 - 1) {
-      mirror(arr);
-      re.add(new String(arr));
-      return;
-    }
-
-    Set usedChoice = new HashSet(arr.length / 2 - 1 - cur + 1);
-    for (int i = cur; i <= arr.length / 2 - 1; i++) {
-      char ic = arr[i];
-      if (!usedChoice.contains(ic)) {
-        usedChoice.add(ic);
-
-        swap(arr, cur, i);
-        permute(cur + 1, arr, re);
-        swap(arr, cur, i);
-      }
+  private void swap(char[] arr, int i, int j) {
+    if (i != j && arr[i] != arr[j]) {
+      int t = arr[i] ^ arr[j];
+      arr[j] ^= t;
+      arr[i] ^= t;
     }
   }
 
-  public List<String> generatePalindromes(String str) {
-    //
-    List re = new ArrayList();
-    if (str == null || str.length() == 0) {
-      return re;
-    }
-    if (str.length() == 1) {
-      re.add(str);
-      return re;
-    }
+  /*---------------------------------------------------------------------------
+  Idea:
+    use a set to kee result  to remove duplicated
+    use an independent canPermutePalindrome() to check the possibility to form palindrome
+   */
 
-    //  "ababacabbc334 "
-    //   "334aaaabbbbcc"
-    char[] arr = str.toCharArray();
-    int size = 0;
-    Character middle = null;
-    boolean oddArrMiddleFound = false;
+  Set<String> r = new HashSet<>();
 
-    Arrays.sort(arr);
-    for (int i = 0; i <= arr.length - 1; i++) { // need sort
-      char cur = arr[i];
-      if (i < arr.length - 1 && cur == arr[i + 1]) {
-        arr[size++] = cur;
-        i++;
-        continue;
+  public List<String> generatePalindromes_(String s) {
+    int[] f = new int[128];
+    char[] half = new char[s.length() / 2];
+    if (!canPermutePalindrome(s, f)) return new ArrayList<>();
+    char middleChar = 0;
+    int k = 0;
+    for (int i = 0; i < f.length; i++) {
+      if (f[i] % 2 == 1) middleChar = (char) i;
+      for (int j = 0; j < f[i] / 2; j++) half[k++] = (char) i;
+    }
+    dfs(half, 0, middleChar);
+    return new ArrayList<>(r);
+  }
+
+  public boolean canPermutePalindrome(String s, int[] f) {
+    int oddCount = 0;
+    for (int i = 0; i < s.length(); i++) {
+      f[s.charAt(i)]++;
+      if (f[s.charAt(i)] % 2 == 0) oddCount--;
+      else oddCount++;
+    }
+    return oddCount <= 1;
+  }
+
+  void dfs(char[] half, int p, char mchar) {
+    if (p == half.length) {
+      r.add(
+          new String(half)
+              + (mchar == 0 ? "" : mchar)
+              + new StringBuffer(new String(half)).reverse());
+    } else {
+      for (int i = p; i < half.length; i++) {
+        if (half[i] != half[p] || i == p) {
+          swap(half, p, i);
+          dfs(half, p + 1, mchar);
+          swap(half, p, i);
+        }
       }
-      if ((arr.length & 1) == 1 && !oddArrMiddleFound) {
-        middle = cur;
-        oddArrMiddleFound = true;
-        continue;
-      }
-      return re;
     }
-    if ((arr.length & 1) == 1) {
-      arr[arr.length / 2] = middle;
-    }
-
-    permute(0, arr, re);
-    return re;
   }
 }

@@ -18,82 +18,64 @@ package string.palindrome;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * <pre>
- * 266. Palindrome Permutation
- * https://leetcode.com/problems/palindrome-permutation/
- *
- * Difficulty: Easy
- * Given a string, determine if a permutation of the string could form a palindrome.
- *
- * For example,
- * "code" -> False, "aab" -> True, "carerac" -> True.
- *
- * Hint:
- *
- * Consider the palindromes of odd vs even length. What difference do you notice?
- * Count the frequency of each character.
- * If each character occurs even number of times, then it must be a palindrome.
- * How about character which occurs odd number of times?
- *
- * Company Tags Google Uber
- *
- * Tags: Hash Table
- *
- * Similar Problems
- * (M) Longest Palindromic Substring
- * (E) Valid Anagram
- * (M) Palindrome Permutation II
- * =============================================================================
- *
- * Assume:
- *    There is not <STRONG> supplementary characters </STRONG>
- *    Is char limited to that in <STRONG>  ASCII chart </STRONG>?
+/*
+266. Palindrome Permutation
+
+   Given a string, determine if a permutation of the string could form a palindrome.
+
+    "code" -> False,
+    "aab" -> True,
+    "carerac" -> True.
+
+    1 <= s.length <= 5000
+    s consists of only lowercase English letters.
+
+ Understanding:
+   So no supplementary characters
+ O(N) time, O(1) space
  */
 public class Leetcode266ParlindromePermutation {
-    public boolean canPermutePalindrome3(String s) {
-        char[] arr = s.toCharArray();
-        int[] evenOdd = new int[256];
+  public boolean canPermutePalindrome3(String s) {
+    char[] a = s.toCharArray();
+    int[] f = new int[256]; // Frequency number is even or odd
 
-        // index scope of times
-        int l = arr[0];
-        int r = arr[0];
+    // index scope of times
+    int l = a[0];
+    int r = a[0];
 
-        for (char c : arr) {
-            evenOdd[c] ^= 1;
-            l = Math.min(l, c);
-            r = Math.max(r, c);
-        }
-        int sum = 0;
-        for (int i = l; i <= r; i++) {
-            sum += evenOdd[i];
-        }
-        return (sum <= 1);
+    for (char c : a) {
+      f[c] ^= 1;
+      l = Math.min(l, c);
+      r = Math.max(r, c);
     }
+    int sum = 0;
+    for (int i = l; i <= r; i++) sum += f[i];
+    return (sum <= 1);
+  }
 
-    public boolean canPermutePalindrome2(String s) {
-        char[] arr = s.toCharArray();
-        int oddCount = 0;
-        int[] times = new int[128];
-        for (int i = 0; i < arr.length; i++) {
-            times[arr[i]]++;
-            oddCount = (times[arr[i]] % 2 == 0) ? oddCount - 1 : oddCount + 1;
-        }
-        return oddCount <= 1;
+  public boolean canPermutePalindrome2(String s) {
+    char[] a = s.toCharArray();
+    int oddCount = 0;
+    int[] f = new int[128];
+    for (int i = 0; i < a.length; i++) {
+      f[a[i]]++;
+      oddCount = (f[a[i]] % 2 == 0) ? oddCount - 1 : oddCount + 1;
     }
+    return oddCount <= 1;
+  }
 
-    public boolean canPermutePalindrome(String s) {
-        char[] arr = s.toCharArray();
-        Set<Character> addSub =  new HashSet ();
+  public boolean canPermutePalindrome(String s) {
+    char[] a = s.toCharArray();
+    Set<Character> set = new HashSet();
 
-        for (int i = 0; i < arr.length; i++) {
-            char  c= arr[i];
-            if(addSub.contains(c)){
-                addSub.remove(c);
-            }else{
-                addSub.add(c);
-            }
-        }
-        return addSub.size() <= 1;
+    for (int i = 0; i < a.length; i++) {
+      char c = a[i];
+      if (set.contains(c)) {
+        set.remove(c);
+      } else {
+        set.add(c);
+      }
     }
+    return set.size() <= 1;
+  }
 }
