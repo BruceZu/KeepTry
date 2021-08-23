@@ -135,21 +135,16 @@ public class Leetcode1178NumberofValidWordsforEachPuzzle {
   go ahead.
   O(1) time. 127. number of all subset of 7 elements
   */
-  private int validWords(int i, Trie node, Set<Character> puzzle, boolean seen, char hchar) {
-    if (node == null) return 0;
+  private int validWords(int i, Trie n, Set<Character> puzzle, boolean seen, char hchar) {
+    if (n == null) return 0;
 
     int sum = 0;
-    if (seen) sum += node.count;
+    if (seen) sum += n.count;
 
     for (char c : puzzle) {
-      if (hchar == c) sum += validWords(i + 1, node.next[c - 'a'], puzzle, true, hchar);
-      else sum += validWords(i + 1, node.next[c - 'a'], puzzle, seen, hchar);
+      if (hchar == c) sum += validWords(i + 1, n.next[c - 'a'], puzzle, true, hchar);
+      else sum += validWords(i + 1, n.next[c - 'a'], puzzle, seen, hchar);
     }
     return sum;
-  }
-
-  public static void main(String[] args) {
-
-
   }
 }
