@@ -147,7 +147,7 @@ public class Leetcode1268SearchSuggestionsSystem {
   Idea:
     sort + prefix character
     the above ideas does not use the property of searching words
-    there is prefixed words relation within the searching words 
+    there is prefixed words relation within the searching words
     - reuse last prefix found lower bound index as start index for searching current prefix lower bound index
     - if current prefix is not found then the left prefix will not be found too.
     So each product is accessed only once if not taking in time used to collect at most 3 suggestions.
