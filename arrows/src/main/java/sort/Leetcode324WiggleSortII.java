@@ -144,14 +144,18 @@ public class Leetcode324WiggleSortII {
 
     partition with pivotal is O(N) time O(1) space
    */
-  public static void wiggleSort(int[] a) {
+
+  int N;
+
+  public void wiggleSort(int[] a) {
+    N = a.length;
     // index of (left) median;
-    int m = a.length - 1 >> 1;
-    quickSelect(a, 0, a.length - 1, m);
+    int m = N - 1 >> 1;
+    quickSelect(a, 0, N - 1, m);
     partIn3ways(a, a[m]);
   }
 
-  public static void quickSelect(int[] a, int l, int r, int k) {
+  public void quickSelect(int[] a, int l, int r, int k) {
     while (true) {
       int p = separate(a, l, r);
       if (p == k) return;
@@ -162,7 +166,7 @@ public class Leetcode324WiggleSortII {
   /*
     [l, < pivotal value], pivotal it self,[ >= pivotal, r]
   */
-  private static int separate(int[] a, int l, int r) {
+  private int separate(int[] a, int l, int r) {
     int p = (l + r) >> 1, pv = a[p]; // keep pivot value before move it to index r
     swap(a, p, r);
     int s = l;
@@ -171,7 +175,7 @@ public class Leetcode324WiggleSortII {
     return s;
   }
 
-  private static void swap(int[] a, int l, int r) {
+  private void swap(int[] a, int l, int r) {
     if (l != r) {
       int t = a[l] ^ a[r];
       a[l] ^= t;
@@ -179,18 +183,17 @@ public class Leetcode324WiggleSortII {
     }
   }
 
-  public static void partIn3ways(int[] a, int p) {
-    int N = a.length;
+  public void partIn3ways(int[] a, int p) {
     int b = 0, s = N - 1; // for next Bigger, Smaller
     int i = 0; // original index in descending partitioned array
     while (i <= s) {
-      if (a[f(i, N)] > p) swap(a, f(i++, N), f(b++, N));
-      else if (a[f(i, N)] < p) swap(a, f(i, N), f(s--, N)); // i not move
+      if (a[f(i)] > p) swap(a, f(i++), f(b++));
+      else if (a[f(i)] < p) swap(a, f(i), f(s--)); // not move i
       else i++;
     }
   }
   // i's target array index
-  public static int f(int i, int N) {
+  public int f(int i) {
     return (2 * i + 1) % (N | 1);
   }
 }
