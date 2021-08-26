@@ -17,15 +17,50 @@ package math;
 
 public class Leetcode29DivideTwoIntegers {
   /*
+      29. Divide Two Integers
+
+    Given two integers dividend and divisor,
+    divide two integers without using multiplication, division, and mod operator.
+
+    Return the quotient after dividing dividend by divisor.
+
+    The integer division should truncate toward zero, which means losing
+    its fractional part. For example, truncate(8.345) = 8 and truncate(-2.7335) = -2.
+
+    Note: Assume we are dealing with an environment that could only
+    store integers within the 32-bit signed integer range: [−231, 231 − 1].
+    For this problem, assume that your function returns 231 − 1 when the division
+    result overflows.
+
+
+    Input: dividend = 10, divisor = 3
+    Output: 3
+    Explanation: 10/3 = truncate(3.33333..) = 3.
+
+    Input: dividend = 7, divisor = -3
+    Output: -2
+    Explanation: 7/-3 = truncate(-2.33333..) = -2.
+
+    Input: dividend = 0, divisor = 1
+    Output: 0
+
+    Input: dividend = 1, divisor = 1
+    Output: 1
+
+    Constraints:
+
+        -231 <= dividend, divisor <= 231 - 1
+        divisor != 0
+
+  */
+  /* Understanding
     "without using multiplication, division, and mod operator.
     Assume we are dealing with an environment that could only store
     integers within the 32-bit signed integer range: [−2^31, 2^31 − 1]"
     So
      - do not use long type and do not use overflow
      - do not use abs which also cause overflow
-
-    "-2^31 <= dividend, divisor <= 2^31 - 1
-    divisor != 0"
+   Note 'divisor != 0'
   */
 
   /*
@@ -72,7 +107,7 @@ public class Leetcode29DivideTwoIntegers {
        O(log_dr^d)) time and O(1) space.
 
   */
-  public int divideWithComment(int dividend, int divisor) {
+  public int divide_(int dividend, int divisor) {
     int d = dividend, dr = divisor;
     boolean isNegtive = false;
     if ((d >>> 31) + (dr >>> 31) == 1) isNegtive = true;
@@ -109,7 +144,7 @@ public class Leetcode29DivideTwoIntegers {
     return isNegtive ? r : -r;
   }
 
-  public int divideNoComment(int d, int dr) {
+  public int divide_NoComment(int d, int dr) {
     boolean isNegtive = false;
     if ((d >>> 31) + (dr >>> 31) == 1) isNegtive = true;
     if (dr == 0) return Integer.MAX_VALUE;
@@ -139,13 +174,26 @@ public class Leetcode29DivideTwoIntegers {
   Dividend ÷ divisor = quotient
   Idea:
       Binary Long Division
-       figure out the first position of `b` to align with `a` and start the binary long division.
-       and shift divisor to the right until can't shift it any further
-       So also need to know the right time to stop the binary long division.
+       10000b      a(16)
+          11b      b(3)
+       1> b -> 1100b; m=2
+          10000b   a
+           1100b   b
+       2> r=0; r=1<<m=100b
+          a=a-b=100b a
+                110b <=1100 b  m=1
+                 11b <=110  b  m=0
+          r+= 1<<m=101b
+
+          a=a-b=  1b a
+                  1b <= 11b b m=-1 stop
+         so r=101b(5)=16/3
+
       O(log_b^a)) time and O(1) space. b is Divisor, a is dividend
   */
 
   public static int divide(int a, int b) { // a/b=?
+    if (b == 0) return Integer.MAX_VALUE; // 'divisor != 0'
     // Special cases: overflow.
     if (a == Integer.MIN_VALUE && b == -1) return Integer.MAX_VALUE;
     if (a == Integer.MIN_VALUE && b == 1) return Integer.MIN_VALUE;

@@ -125,12 +125,12 @@ public class MyLinkedListTest {
         list.update(1, 3);
     }
 
-    @Test(timeout = 20L, expected = IndexOutOfBoundsException.class)
+    @Test(timeout = 200L, expected = IndexOutOfBoundsException.class)
     public void testGetOf() {
         list.get(0);
     }
 
-    @Test(timeout = 20L, expected = Test.None.class)
+    @Test(timeout = 200L, expected = Test.None.class)
     public void testEndNodeAfterDeleteHead() {
         assertThat(list.size()).isEqualTo(0);
         list.addBeforeHead("head");
@@ -139,7 +139,7 @@ public class MyLinkedListTest {
         assertThat(list.getEnd()).isNull();
     }
 
-    @Test(timeout = 20L, expected = Test.None.class)
+    @Test(timeout = 200L, expected = Test.None.class)
     public void testHeadNodeAfterDeleteEnd() {
         list.addBeforeHead("end");
         assertThat(list.deleteEnd().equals("end"));
@@ -168,7 +168,7 @@ public class MyLinkedListTest {
         assertThat(list.get(3)).isEqualTo("end");
     }
 
-    @Test(timeout = 20L, expected = Test.None.class)
+    @Test(timeout = 200L, expected = Test.None.class)
     public void deleteTest() {
         list.addBeforeHead("5");
         list.addBeforeHead("4");
@@ -192,7 +192,7 @@ public class MyLinkedListTest {
         assertThat(list.delete(0)).isEqualTo("2");
     }
 
-    @Test(timeout = 20L, expected = Test.None.class)
+    @Test(timeout = 200L, expected = Test.None.class)
     public void updateTest() {
         list.addBeforeHead("4");
         list.addBeforeHead("3");
@@ -221,7 +221,7 @@ public class MyLinkedListTest {
         assertThat(list.get(4)).isEqualTo("4");
     }
 
-    @Test(timeout = 20L, expected = Test.None.class)
+    @Test(timeout = 200L, expected = Test.None.class)
     public void getTest() {
         list.addBeforeHead("4");
         list.addBeforeHead("3");
@@ -234,7 +234,7 @@ public class MyLinkedListTest {
         assertThat(list.get(2)).isEqualTo("2");
     }
 
-    @Test(timeout = 20L, expected = Test.None.class)
+    @Test(timeout = 200L, expected = Test.None.class)
     public void equalsTest() {
         Assert.assertFalse(list.equals(null));
 

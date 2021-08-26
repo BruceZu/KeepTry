@@ -25,36 +25,22 @@ public class MergeSortNoRecursion {
     this.merger = merger;
   }
 
-  /**
-   * Merge sort an array without recursion. no thread safe
-   * <pre>
-   * Idea:
-   * 1>   decide the size of sub array from 1, then 2, 4 ,8, 16 .... while the size <= arr.length()
-   * 2>   with each size, loop arr from left:
-   *   21>     calculate the index of 2 sub arrays: [l, mid] and [mid+1, r]
-   *   22>     merge them in sort
-   * <a href="http://softwareengineering.stackexchange.com/questions/297160/why-is-mergesort-olog-n">O(NLOGN)</a>
-   */
-  // O(NlogN) runtime, O(N) space.
+  /*
+  Merge sort an array in Java use TimSort
+  @see sort.Leetcode912SortanArray
+  
+  O(NlogN) runtime, O(N) space.
+  */
   public static <T extends Comparable<T>> void mergeSortNoRecursion(T[] A) {
     if (A == null || A.length <= 1) return;
-    Comparable[] T = new Comparable[A.length]; // space O(N)
-    int L = 1; // sorted window length
-    // O(NlogN)
+    Comparable[] tmp = new Comparable[A.length];
+    int L = 1;
     while (L < A.length) {
-      int s = 0, m = s + L - 1; // first end
-      int e; // end index
-      // [s, m] and [m+1, e]
-      while (m < A.length - 1) {
-        e = s + 2 * L - 1;
-        e = Math.min(e, A.length - 1);
-        merger.mergeInsort(A, s, m, e, T);
-        // 2*L width window are sorted in ascending order
-
-        s = s + 2 * L;
-        m = s + L - 1;
+      int s = 0;
+      while (s + L <= A.length - 1) {
+        merger.mergeInsort(A, s, s + L - 1, Math.min(s + 2 * L - 1, A.length - 1), tmp);
+        s += 2 * L;
       }
-
       L = L << 1;
     }
   }

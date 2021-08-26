@@ -186,9 +186,7 @@ public class Common implements Merger {
   // get pivot index by calculate 3 member whose index are left, right and (left+right)/2
   public static <T extends Comparable<T>> int getPivotIndexUsingMedianOf3(
       T[] a, int l, int r, int m) {
-    if (r == l + 1) {
-      return l;
-    }
+    if (r == l + 1) return l;
 
     Comparable vl = a[l];
     Comparable vr = a[r];
@@ -215,11 +213,11 @@ public class Common implements Merger {
     if (lessThan(A[m], A[m + 1])) return; // already sorted
     System.arraycopy(A, s, T, s, e - s + 1);
     // merge from temp array
-    int l = s, r = m + 1;
-    int i = s;
-    while (!(l == m + 1 && r == e + 1)) {
-      if (r == e + 1 || l <= m && lessThan(T[l], T[r])) A[i++] = T[l++];
-      else A[i++] = T[r++];
+    int i = s, j = m + 1;
+    int k = s;
+    while (!(i == m + 1 && j == e + 1)) {
+      if (j == e + 1 || i <= m && lessThan(T[i], T[j])) A[k++] = T[i++];
+      else A[k++] = T[j++];
     }
   }
 }

@@ -34,7 +34,7 @@ public class Leetcode1twoSum {
     O(N) time and space
   */
 
-  public int[] twoSum(int[] nums, int target) {
+  static public int[] twoSum(int[] nums, int target) {
     if (nums == null || nums.length < 2) return null;
     Map<Integer, Integer> map = new HashMap();
     for (int i = 0; i < nums.length; i++) {

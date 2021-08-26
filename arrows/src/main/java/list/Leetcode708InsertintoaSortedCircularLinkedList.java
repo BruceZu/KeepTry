@@ -16,7 +16,7 @@
 package list;
 
 public class Leetcode708InsertintoaSortedCircularLinkedList {
-  class Node {
+  static class Node {
     public int val;
     public Node next;
 
@@ -31,73 +31,76 @@ public class Leetcode708InsertintoaSortedCircularLinkedList {
       next = _next;
     }
   }
-
-  // Implementation -------------------------------------------------------------------
   /*
-   Note:
-      1. no-descending order:
-         'Given a node from a Circular Linked List which is sorted in ascending order
-         But:
-         'If there are multiple suitable places for insertion,
-         you may choose any place to insert the new value.
-         After the insertion, the circular list should remain sorted.'
+  708. Insert into a Sorted Circular Linked List
 
-         This means actually it is no-descending order, not ascending order.
+   Given a Circular Linked List node, which is sorted in ascending order,
+   write a function to insert a value insertVal into the list such that it remains
+   a sorted circular list. The given node can be a reference to any single node
+   in the list and may not necessarily be the smallest value in the circular list.
 
-      2. It is a special case when there is only one element in the list.Just
-         connect each other and will always match the required no-descending order.
+   If there are multiple suitable places for insertion, you may choose any
+   place to insert the new value. After the insertion,
+   the circular list should remain sorted.
 
-      3. Find the start node, then convert question to common list.
-  	     Generally, use the rule comes from ascending order: between the end and
-         the start node there is an exception.
+   If the list is empty (i.e., the given node is null), you should create
+   a new single circular list and return the reference to that single node.
+   Otherwise, you should return the originally given node.
 
-  	     But with a no-descending order list with 2 or more elements,
-         A special scenario is when all elements are with the same value:
-         This requires checking if the head node is step back to the original start node.
-      4  find the right location for the given node. it can be before/after/in
-         the common list.
+   Input: head = [3,4,1], insertVal = 2
+   Output: [3,4,1,2]
 
-      5  The right place to check if the index goes back to the start node is
-         the end of the loop. If it is added to the loop condition then it will
-         not step into this loop.
+   Input: head = [], insertVal = 1
+   Output: [1]
 
-   O(N) time, O(1) space
+   Input: head = [1], insertVal = 0
+   Output: [1,0]
+
+   Input: head = [2,2], insertVal = 0
+   Output: [2,2,0]
+
+   Constraints:
+
+       0 <= Number of Nodes <= 5 * 10^4
+       -10^6 <= Node.val, insertVal <= 10^6
   */
 
+  /* -------------------------------------------------------------------
+   The circular list elements can be same， like [2,2]
+   1. find the node with max value.
+      then next one is the min.
+   2. compare the insertVal with `min`
+
+   Note: in step 1 and 2, avoid endless loop.
+         in step 2 use n.next.val, not n.val
+   O(N) time, O(1) space
+  */
   public Node insert(Node head, int insertVal) {
-    /*
-      0 <= Number of Nodes <= 5 * 10^4
-      -10^6 <= Node.val <= 10^6
-      -10^6 <= insertVal <= 10^6
-    */
-    Node n = new Node(insertVal);
-    if (head == null) { // empty
-      n.next = n;
-      head = n;
+    Node in = new Node(insertVal);
+    if (head == null) {
+      in.next = in;
+      return in;
+    }
+    if (head.next == head) { // this block can be saved
+      head.next = in;
+      in.next = head;
       return head;
     }
-    if (head == head.next) { // only one. special case.
-      head.next = n;
-      n.next = head;
+    // min=max can be same like[1], or [2,2]
+    Node n = head;
+    while (n.next != head && n.val <= n.next.val) n = n.next;
+    Node max = n;
+    Node min = n.next;
+    if (insertVal <= min.val) {
+      max.next = in;
+      in.next = min;
+      return head;
+    } else {
+      n = min;
+      while (n.next != min && n.next.val < insertVal) n = n.next;
+      in.next = n.next; // in.next, not in
+      n.next = in;
       return head;
     }
-    Node cur = head;
-    Node next = cur.next;
-    while (cur.val <= next.val) { // <= nod-descending. Do not validate boundary here
-      cur = next;
-      next = next.next;
-      if (cur == head) break; // here when all elements are with same value
-    }
-
-    Node start = next;
-    while (next.val < n.val) { // do not validate boundary here
-      cur = next;
-      next = next.next;
-      if (next == start) break;
-    }
-
-    cur.next = n;
-    n.next = next;
-    return head;
   }
 }

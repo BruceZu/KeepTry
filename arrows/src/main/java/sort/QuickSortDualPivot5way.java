@@ -21,133 +21,77 @@ import static common_lib.Common.same;
 import static common_lib.Common.swap;
 import static sort.InsertSort.insertSort;
 
-/**
- * <pre>
- * Improvement based on {@link QuickSortDualPivot3way  QuickSortDualPivot3way},
- * The improved content A and B are in {@link #improvedSelectAndLocateDualPivots(Comparable[], int, int) improvedSelectAndLocateDualPivots()} method
- *
- *  Improvement A:  find element <= pv2 before swap.
- *                  note: when there is no e <=pv2 between i and er, as current value is > pv2 so need er --;
- *
- *  Improvement B:  find out duplicated elements as pv1 or pv2
- *                  Note: At last, it is still 3 way. but using le, greatPv1, less Pv2, er to split
- *
- * @see <br><a href="http://permalink.gmane.org/gmane.comp.java.openjdk.core-libs.devel/2628">
- * Replacement of Quicksort in java.util.Arrays with new Dual-Pivot Quicksort
- * </a>
- */
+/*
+2 pivot can separate out at most 5 way
+- pivot1 == pivot2, at most 3 way
+- pivot1 != pivot2, possible 4 way.
+each loop clear out 2 way, need 2 loops
+
+Refer java.util.Arrays with new Dual-Pivot Quicksort
+  public static void sort(int[] a) {
+       DualPivotQuicksort.sort(a, 0, a.length - 1, null, 0, 0);
+  }
+*/
 public class QuickSortDualPivot5way {
+  public static <T extends Comparable<T>> void quickSortDualPivot(T[] a) {
+    if (a == null || a.length <= 1) return;
+    quicksort2p5way(a, 0, a.length - 1);
+  }
 
-    private static <T extends Comparable<T>> void doDualPivotQuickSort(T[] arr, int l, int r) {
-        if (l >= r) {
-            return;
-        }
+  private static <T extends Comparable<T>> void quicksort2p5way(T[] a, int l, int r) {
+    if (l >= r) return;
 
-        if (arr.length <= 5) {
-            insertSort(arr);
-            return;
-        }
+    if (a.length <= 5) {
+      insertSort(a);
+      return;
+    }
+    // 5 way range    [<pv1] [pv1] [ pv1< e <pv2] [pv2] [>pv2]
+    // g index value  l      0      2          3     1      r
+    int[] g = partition(a, l, r);
+    quicksort2p5way(a, l, g[0] - 1); // left side way
+    quicksort2p5way(a, g[1] + 1, r); // right side way
+    quicksort2p5way(a, g[2], g[3]);
+  }
 
-        int[] dualPivots = improvedSelectAndLocateDualPivots(arr, l, r);
-        int p1 = dualPivots[0], p2 = dualPivots[1];
-        int greatThanPv1 = dualPivots[2], lessThanPv2 = dualPivots[3];
+  /*
+  After the first loop
+          [< pv1], [ pv1 <= e <= pv2], [> pv2]
+                      |           |
+                      s           b
+                     g[0]        g[1]
 
-        doDualPivotQuickSort(arr, l, p1 - 1);
-        doDualPivotQuickSort(arr, p2 + 1, r);
-        if (lessThan(arr[p1], arr[p2])) {
-            doDualPivotQuickSort(arr, greatThanPv1, lessThanPv2);
-        }
+  If need the second loop, After the second loop
+         [< pv1],  [pv1....pv1], [ pv1< e < pv2], [pv2....pv2],  [> pv2]
+                                  |         |
+                                  s         b
+                                 g[2]      g[3]
+   */
+  private static <T extends Comparable<T>> int[] partition(T[] a, int l, int r) {
+    if (greatThan(a[l], a[r])) swap(a, l, r);
+    T pv1 = a[l];
+    T pv2 = a[r];
+
+    int s = l, b = r;
+    int i = l;
+    while (i <= b) {
+      if (lessThan(a[i], pv1)) swap(a, i++, s++);
+      else if (greatThan(a[i], pv2)) swap(a, i, b--);
+      else i++;
     }
 
-    public static <T extends Comparable<T>> void quickSortDualPivot(T[] arr) {
-        if (arr == null || arr.length <= 1) {
-            return;
-        }
-        doDualPivotQuickSort(arr, 0, arr.length - 1);
+    int[] result = new int[4];
+    result[0] = s;
+    result[1] = b;
+
+    if (same(pv1, pv2)) return result;
+    i = s;
+    while (i <= b) {
+      if (same(a[i], pv1)) swap(a, i++, s++);
+      else if (same(a[i], pv2)) swap(a, i, b--);
+      else i++;
     }
-
-    private static <T extends Comparable<T>> int[] improvedSelectAndLocateDualPivots(T[] arr, int l, int r) {
-        // todo:  Improvement of how to select pivots
-        if (greatThan(arr[l], arr[r])) {
-            swap(arr, l, r);
-        }
-        T pv1 = arr[l];
-        T pv2 = arr[r];
-
-        int le = l + 1, er = r - 1;
-        // 2
-        for (int i = le; i <= er; i++) {
-            Comparable v = arr[i];
-            if (lessThan(v, pv1)) {
-                swap(arr, i, le++);
-            } else if (greatThan(v, pv2)) {
-                // Improvement A:
-                while (er > i
-                        && greatThan(arr[er], pv2)) {
-                    er--;
-                }
-                if (er == i) {
-                    er--; // note:
-                    break;
-                }
-
-                swap(arr, i, er--);
-
-                if (lessThan(arr[i], pv1)) {
-                    swap(arr, i, le++);
-                }
-            }
-        }
-        /**<pre>
-         * now:
-         *                    pv1,  < pv1,   pv1 <= e <= pv2,   > pv2, pv2
-         *                                    |            |
-         *                                   le            er
-         */
-
-        // 3
-        swap(arr, l, --le);
-        swap(arr, r, ++er);
-
-        /**
-         * <pre>
-         *     Now:
-         *                    < pv1,  pv1,   pv1 <= e <= pv2,   pv2,   > pv2
-         *                             |      |            |     |
-         *                            le     ic            ci    er
-         *
-         *
-         * Improvement B:
-         * aim
-         *
-         *                   < pv1,    pv1....pv1,   pv1< e < pv2,   pv2....pv2,  > pv2
-         *                              |              |        |            |
-         *                             le              ic       ci          er
-         *
-         */
-        int ic = le + 1, ci = er - 1; // index of center field  pv1< e < pv2, included
-        if (lessThan(pv1, pv2) && er - le > 2) {
-            for (int i = ic; i <= ci; i++) {
-                Comparable v = arr[i];
-                if (same(v, pv1)) {
-                    swap(arr, i, ic++);
-                } else if (same(v, pv2)) {
-                    while (ci > i && same(arr[ci], pv2)) {
-                        ci--;
-                    }
-                    if (ci == i) {
-                        ci--;
-                        break;
-                    }
-
-                    swap(arr, i, ci--);
-
-                    if (same(arr[i], pv1)) {
-                        swap(arr, i, ic++);
-                    }
-                }
-            }
-        }
-        return new int[]{le, er, ic, ci};
-    }
+    result[2] = s;
+    result[3] = b;
+    return result;
+  }
 }

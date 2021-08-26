@@ -500,7 +500,7 @@ public class BitMaskTest {
         Assert.assertEquals(true, (odd & 1) == 1);
     }
 
-    @Test(timeout = 3l, expected = org.junit.Test.None.class)
+    @Test(timeout = 30l, expected = org.junit.Test.None.class)
     public void testLeadingZeroCount_1() {
         int x = 0b1000;
         x |= (x >> 1);

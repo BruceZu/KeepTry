@@ -15,75 +15,36 @@
 
 package sort;
 
-import java.util.Arrays;
-
 import static common_lib.Common.*;
-import static common_lib.Common.same;
-import static sort.InsertSort.insertSort;
 
-/**
- * <pre>
- *
- * O(N^2)
- *  1  n-1  1 9 8 7 6 5 4 3 2
- *  2  n-2  1 2 9 8 7 6 5 4 3
- *  3  n-3  1 2 3 9 8 7 6 5 4
- *  n-1 1   1 2 3 4 5 6 7 8 9
- *
- * average O(NlgN)
- *  1    n                       1
- *  2    n/2 + n/2               2
- *  3    n/4 + n/4 + n/4 + n/4   4
- *
- *  lgn  n                       n
- *
- *  Improvement: for tiny array using  Insertion sort
- * @see <a href="https://en.wikipedia.org/wiki/Quicksort">wiki Big O</a>
- */
 public class QuickSortOnePivot2way {
-    // select pivot and put it on the left side
-    // partition other items to 2 way: < pivot |  >= pivot
-    // allocate the pivot itself to its place in ascending ordered result.
-    //  < pivot, pivot, >= pivot
-    private static <T extends Comparable<T>> int locatePivotIndex(T[] arr, int l, int r) {
-        int pivotIndex = getPivotIndexUsingMedianOf3(arr, l, r, (l + r) / 2);
-        T pivot = arr[pivotIndex];
 
-        swap(arr, l, pivotIndex);
-        //Care:  now the pivot index is l
-        pivotIndex = l;
+  public static <T extends Comparable<T>> void quickSort(T[] arr) {
+    if (arr == null || arr.length <= 1) return;
+    quicksort(arr, 0, arr.length - 1);
+  }
+  // recursion
+  private static <T extends Comparable<T>> void quicksort(T[] arr, int l, int r) {
+    if (l >= r) return;
+    int pi = partition(arr, l, r);
+    quicksort(arr, l, pi - 1);
+    quicksort(arr, pi + 1, r);
+  }
+  /*
+    sort sub-array [l,r]
+       select pivot and put it on the left side
+       partition other items to 2 way: < pivot and  >= pivot
+       allocate the pivot itself to its place in ascending ordered result.
+       [l,< pivot], pivot itself,[>= pivot,r]
+  */
+  private static <T extends Comparable<T>> int partition(T[] a, int l, int r) {
+    int pi = getPivotIndexUsingMedianOf3(a, l, r, (l + r) / 2);
+    T pv = a[pi]; // keep pivot value before swap it to index l;
+    swap(a, l, pi);
 
-        int nextLestIndex = l + 1;
-        for (int i = l + 1; i <= r; i++) {
-            if (lessThan(arr[i], pivot)) {
-                swap(arr, i, nextLestIndex++);
-            }
-        }
-        int locatedPivotIndex = nextLestIndex-1;
-        swap(arr, pivotIndex, locatedPivotIndex);
-        return locatedPivotIndex;
-    }
-
-    /**
-     * @param l   left index included
-     * @param r   right index included
-     */
-    private static <T extends Comparable<T>> void call(T[] arr, int l, int r) {
-        // Range check in recursion.  Note: java.lang.ArrayIndexOutOfBoundsException
-        if (l >= r) {
-            return;
-        }
-
-        int p = locatePivotIndex(arr, l, r);
-        call(arr, l, p - 1); // Note: not 0
-        call(arr, p + 1, r); // Note: not arr.length
-    }
-
-    public static <T extends Comparable<T>> void quickSort(T[] arr) {
-        // Input check
-        if (arr == null || arr.length <= 1) { // Note: arr.length may be 0  and 1
-            return;
-        }
-        call(arr, 0, arr.length - 1); // Note
-    }
+    int s = l + 1; // index, swap next less than pv value into
+    for (int i = l + 1; i <= r; i++) if (lessThan(a[i], pv)) swap(a, i, s++);
+    swap(a, l, s - 1);
+    return s - 1;
+  }
 }

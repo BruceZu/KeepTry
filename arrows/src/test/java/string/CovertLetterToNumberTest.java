@@ -21,7 +21,7 @@ import org.junit.Test;
 import static string.CovertLetterToNumber.convert;
 
 public class CovertLetterToNumberTest {
-    @Test(timeout = 10L, expected = Test.None.class)
+    @Test(timeout = 100L, expected = Test.None.class)
     public void testSpecialPalindrome() {
         Assert.assertEquals(null, convert(null));
         Assert.assertEquals("", convert(""));

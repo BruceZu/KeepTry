@@ -33,18 +33,18 @@ public class SortTest {
     @Parameterized.Parameters(name = "test with {index} {0}")
     public static Iterable<Object[]> data() {
         List r = Arrays.asList(new Comparable[][][]{
-                {{2, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 6}, {0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9}},
-                {{2, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 6}, {0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9}},
-                {{9, 7, 6, 4, 3, 3}, {3, 3, 4, 6, 7, 9}},
-                {{7, 2, 3, 4, 7, 8, 7, 9, 7, 9, 8, 9, 13, 12, 10, 9}, {2, 3, 4, 7, 7, 7, 7, 8, 8, 9, 9, 9, 9, 10, 12, 13}},
-                {{1}, {1}},
-                {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 4}, {0, 1, 2, 3, 4, 4, 5, 6, 7, 8, 9}},
-                {{4, 5, 6, 7, 8, 9}, {4, 5, 6, 7, 8, 9}},
                 {{4, 9, 4, 4, 1, 4, 4, 4, 9, 4, 4, 1, 4}, {1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 9, 9}},
+                {{7, 2, 3, 4, 7, 8, 7, 9, 7, 9, 8, 9, 13, 12, 10, 9}, {2, 3, 4, 7, 7, 7, 7, 8, 8, 9, 9, 9, 9, 10, 12, 13}},
+                {{2, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 6}, {0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9}},
+                {{2, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 6}, {0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9}},
+                {{1}, {1}},
                 {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}, {0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9}},
                 {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9}},
                 {{'b', 'a', 'z'}, {'a', 'b', 'z'}},
-                {null, null}
+                {null, null},
+                {{4, 5, 6, 7, 8, 9}, {4, 5, 6, 7, 8, 9}},
+                {{9, 7, 6, 4, 3, 3}, {3, 3, 4, 6, 7, 9}},
+                {{9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 4}, {0, 1, 2, 3, 4, 4, 5, 6, 7, 8, 9}},
         });
         return r;
     }
@@ -61,7 +61,7 @@ public class SortTest {
         this.sorted = sorted;
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 200l, expected = Test.None.class)
     public void selectSortTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -93,7 +93,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 250l, expected = Test.None.class)
+    @Test(timeout = 450l, expected = Test.None.class)
     public void mergeSortTest2() {
         Comparable[] ar = clone(arr);
         // start test
@@ -109,7 +109,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 60l, expected = Test.None.class)
+    @Test(timeout = 600l, expected = Test.None.class)
     public void mergeSortTest4() {
         Comparable[] ar = clone(arr);
         // start test
@@ -117,7 +117,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 200l, expected = Test.None.class)
     public void mergeSortRecursionTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -125,7 +125,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 200l, expected = Test.None.class)
     public void mergeSortNoRecursionTest() {
         Comparable[] ar = clone(arr);
         // start test
@@ -149,7 +149,7 @@ public class SortTest {
         Assert.assertTrue(Arrays.equals(ar, sorted));
     }
 
-    @Test(timeout = 20l, expected = Test.None.class)
+    @Test(timeout = 200l, expected = Test.None.class)
     public void quickSortDualPivotTest() {
         Comparable[] ar = clone(arr);
         // start test

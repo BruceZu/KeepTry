@@ -19,49 +19,35 @@ import static common_lib.Common.lessThan;
 import static common_lib.Common.swap;
 
 public class InsertSort {
-    /**
-     * Ascending order
-     * The runtime is depends on the input. If the input is sorted already its runtime is O(n);
-     * It is used for partially-sorted arrays.
-     */
-    public static <T extends Comparable<T>> void insertSort(T[] arr) {
-        if (arr == null || arr.length <= 1) {
-            return;
-        }
-        insertSort(arr, 0, arr.length - 1);
-    }
+  /*
+   Ascending order
+   used for partially-sorted arrays.
+  */
+  public static <T extends Comparable<T>> void insertSort(T[] arr) {
+    if (arr == null || arr.length <= 1) return;
+    insertSort(arr, 0, arr.length - 1);
+  }
 
-    public static <T extends Comparable<T>> void insertSort(T[] arr, int left, int right) {
-        // Input check
-        if (arr == null || arr.length <= 1 || right == left) {
-            return;
-        }
-        T iv;
-        int curIndex;
-        for (int i = left + 1; i <= right; i++) {
-            iv = arr[i];
-            curIndex = i;
-            while (left < curIndex && lessThan(iv, arr[curIndex - 1])) {
-                swap(arr, curIndex, curIndex - 1);
-                curIndex--;
-            }
-        }
+  public static <T extends Comparable<T>> void insertSort(T[] arr, int l, int r) {
+    if (arr == null || arr.length <= 1 || r == l) return;
+    for (int i = l + 1; i <= r; i++) {
+      int j = i;
+      while (l < j && lessThan(arr[j], arr[j - 1])) {
+        swap(arr, j, j - 1);
+        j--;
+      }
     }
+  }
 
-    public static void insertSort(int[] arr, int left, int right) {
-        // Input check
-        if (arr == null || arr.length <= 1 || right == left) {
-            return;
-        }
-        int iv;
-        int curIndex;
-        for (int i = left + 1; i <= right; i++) {
-            iv = arr[i];
-            curIndex = i;
-            while (left < curIndex && iv < arr[curIndex - 1]) {
-                swap(arr, curIndex, curIndex - 1);
-                curIndex--;
-            }
-        }
+  // insert sort sub-array [l, r]
+  public static void insertSort(int[] a, int l, int r) {
+    if (a == null || a.length <= 1 || r == l) return;
+    for (int i = l + 1; i <= r; i++) {
+      int j = i;
+      while (j > l && a[j] < a[j - 1]) {
+        swap(a, j, j - 1);
+        j--;
+      }
     }
+  }
 }
