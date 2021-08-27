@@ -22,34 +22,64 @@ import java.util.Queue;
 
 public class Leetcode253MeetingRoomsII {
   /*
-  Use a min heap of end time: to keep end time used to judge if
-  there is free room compared with current meeting start time
-  Min heap of end time:
-     1. top's time is the one which can finished earlier than any other meeting,
-     thus provide free room.
-     2. size is the room number
-  O(NlogN) time and O(N）space
+   253. Meeting Rooms II
+
+
+    Given an array of meeting time intervals intervals where
+    intervals[i] = [starti, endi],
+    return the minimum number of conference rooms required.
+
+
+    Input: intervals = [[0,30],[5,10],[15,20]]
+    Output: 2
+
+
+    Input: intervals = [[7,10],[2,4]]
+    Output: 1
+
+    Constraints:
+
+        1 <= intervals.length <= 104
+        0 <= starti < endi <= 106
+  */
+
+  /*
+  Understanding
+    an end time `y]` must have a start time `[x`
+
+  */
+  /*---------------------------------------------------------------------------
+  Idea:
+   sort by start time in ascending order
+   min heap of end time
+   result is the size of heap
+
+  O(NlogN) time
+  O(N）space used by min heap, contain N elements in the worst case
   */
   public int minMeetingRooms(int[][] A) {
     if (A == null || A.length == 0) return 0;
-    Arrays.sort(A, Comparator.comparingInt(a -> a[0])); // Sort by start time
+    Arrays.sort(A, Comparator.comparingInt(a -> a[0]));
     Queue<Integer> q = new PriorityQueue<>(A.length, Comparator.comparingInt(a -> a));
-    q.add(A[0][1]); // end time
+    q.offer(A[0][1]); // end time
     for (int i = 1; i < A.length; i++) {
       if (q.peek() <= A[i][0]) q.poll();
-      q.add(A[i][1]); // overlap: no free room available, then need allocate a room
+      q.offer(A[i][1]);
     }
     return q.size();
   }
-  // Alternative ------------------------------------------------------------
-  //  O(NlogN) time and O(N）space
-  /*
+  /*---------------------------------------------------------------------------
+  Idea:
+
     Input: intervals = [[0,30],[5,10],[15,20]]
     Output: 2                10  20  30
                         0  5   15
     Input: intervals = [[7,10],[2,4]]
     Output: 1            4   10
                       2    7
+
+   O(NlogN) time
+   O(N）space
   */
   public int minMeetingRooms2(int[][] A) {
     if (A == null || A.length == 0) return 0;
@@ -63,15 +93,21 @@ public class Leetcode253MeetingRoomsII {
     Arrays.sort(s);
     int i = 0, j = 0, r = 0;
     while (i < A.length) {
-      if (e[j] <= s[i]) j++; // there is a free room
-      else r++;
-      i += 1;
+      if (s[i++] < e[j]) r++;
+      else j++;
     }
 
     return r;
   }
-  // Alternative ------------------------------------------------------------
-  // O(M) M is the max value of end
+  /*---------------------------------------------------------------------------
+  Idea:
+   O(M) M is the max value of end
+   when M is very large: split each interval into 2 cell
+       [start 1]
+       [end  -1]
+    2 N cells, sort in ascending O(NlogN) time, O(N) space
+    loop them and keep tracking the max sum of cell[1], O(N) time
+   */
   public static int minMeetingRooms3(int[][] A) {
     int l = 0;
     for (int[] i : A) l = Math.max(l, i[1]);
