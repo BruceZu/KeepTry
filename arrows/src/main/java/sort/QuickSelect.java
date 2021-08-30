@@ -61,8 +61,7 @@ public class QuickSelect {
       if (k < range[0]) r = range[0] - 1;
       else l = range[1] + 1;
     }
-    // left == right
-    return l;
+    return l; // left == right
   }
   /*
     move all elements of sub-array [l,r] in 3-ways by pivotal value
@@ -78,7 +77,6 @@ public class QuickSelect {
       else if (a[i] == pv) i++;
       else swap(a, i, b--); // i not move
     }
-    return new int[] {s, i - 1};
-    //  i-1 will always be the right morst index of pivot value
+    return new int[] {s, i - 1}; //  i-1 will always be the right morst index of pivot value
   }
 }
