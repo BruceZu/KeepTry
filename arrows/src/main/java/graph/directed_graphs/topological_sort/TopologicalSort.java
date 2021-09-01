@@ -171,18 +171,21 @@ public class TopologicalSort {
      - visit all nodes and edges
 
    But:
-   (1) requires to exit once meet visited node
-   (2) requires stop once meet visited node.
+   (1) exit once meet visited node
+   (2) stop once meet visited node.
 
-   (1) requires clean tracks on the back forward path
-   (2) requires never clean the visited record
+   (1) clean tracks on the back forward path
+   (2) not clean the visited record
 
    both function can be merged together
   */
   void dfs(Node n, Map<Node, Set<Node>> out, StringBuilder r, Set<Node> v) {
     if (v.contains(n)) return;
-    v.add(n);
-    for (Node o : out.get(n)) dfs(o, out, r, v);
+    else v.add(n);
+
+    for (Node o : out.get(n)) {
+      dfs(o, out, r, v);
+    }
     r.append(n); // Topological Order: Only all subtree are recorded can record current node.
   }
 
@@ -190,16 +193,22 @@ public class TopologicalSort {
   // hasCircle() with dfs_merged()
   boolean hasCircle(Node n, Map<Node, Set<Node>> out, Map<Node, Boolean> v) {
     if (v.containsKey(n)) return v.get(n);
-    v.put(n, true);
-    for (Node o : out.get(n)) if (hasCircle(o, out, v)) return true;
+    else v.put(n, true);
+
+    for (Node o : out.get(n)) {
+      if (hasCircle(o, out, v)) return true;
+    }
+
     v.put(n, false);
     return false;
   }
   // merged 2 function: find circle(1) + calculate Topological Sort Order(2)
   boolean dfs_merged(Node n, Map<Node, Boolean> v, StringBuilder r, Map<Node, Set<Node>> out) {
     if (v.containsKey(n)) return v.get(n);
-    v.put(n, true);
-    for (Node o : out.get(n)) if (dfs_merged(o, v, r, out)) return true;
+    else v.put(n, true);
+    for (Node o : out.get(n)) {
+      if (dfs_merged(o, v, r, out)) return true;
+    }
     v.put(n, false);
     r.append(n.v);
     return false;
