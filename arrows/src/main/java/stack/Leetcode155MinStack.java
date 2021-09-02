@@ -156,6 +156,8 @@ class MinStack__ {
 }
 /* ----------------------------------------------------------------------------
 Solution <1>
+ limitation: does not apply to long type
+
     stack diff, with diff of top - previous to create relation between top and previous min
     with signal of diff to identify current min is v or previous min
     thus with 1 known value to get the other unknown value via the relation.

@@ -33,18 +33,21 @@ public class Leetcode149MaxPointsonaLine {
   */
   /*
   Idea:
+  input check:
   - null point
   - 1 point
-  - 2 or more point
-    given (x1,y1), (x2,y2)
-    we can represent the line with 2 point or one point:
+  - 2 or more point:
+     given (x1,y1), (x2,y2)
+     we can represent the line with 2 point or one point:
       -1_1-   As `All the points are unique.`
               when x1!=x2 and y1!=y2
               calculate 2 points that the line crossing with the x-axis and y-axis:
-              (x,0), x=(y1x2-y2x1)/(y1-y2)
-              (0,y), y=(x1y2-x2y1)/(x1-x2)
-              watch the two lines: change y->x,x->y, get the second line from the first line
-              use x + "&" + y as key to represent the line. NOTE: y can be negative
+              (x,0), x=(y1x2-y2x1)/(y1-y2)   <1>
+              (0,y), y=(x1y2-x2y1)/(x1-x2)   <2>
+              watch the two lines:
+
+               in <1>, change y->x,x->y, then get the <2>
+               use x + "&" + y as key to represent the line. NOTE: y can be negative
 
       -1_2-  for lines passing (0,0), need extra a angle to distinguish them
               NOTE:
@@ -53,6 +56,7 @@ public class Leetcode149MaxPointsonaLine {
               - angle can be express by
                  int gcd = BigInteger.valueOf(x1 - x2).gcd(BigInteger.valueOf(y1 - y2)).intValue();
                  String angle=(x1 - x2) / gcd + "&" + (y1 - y2) / gcd;
+                 E.g.  6/8 = 3/4; angle =3&4;
                  k = "zero" + angle;
       -2_1-  when x1==x2: use "Y-"+x as key to represent vertical lines
       -2_2-  when y1==y2: use "X-"+y as key to represent horizon lines

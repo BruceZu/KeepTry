@@ -18,67 +18,39 @@ package dp.longestcommonsubsequence;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * <pre>
- * The Longest Common Subsequence (LCS) problem
- * given two strings: string S of length n, and string T of length m.
- *
- * Their longest common sub-sequence: the longest sequence of characters that appear left-to-right
- * (but not necessarily in a contiguous block) in both strings.
- *
- * For example, consider:  S = ABAZDC, T = BACBAD, the LCS has length 4 and is the string ABAD.
- *
- * Another way to look at it：finding　a 1-1 matching between some of the letters in S and
- * some of the letters in T such that none of the　edges in the matching cross each other.
- *
- * For instance, given two DNA fragments, the LCS gives information about what they have in common and
- * the best way to line them up.
- *
- * Solve the LCS problem using Dynamic Programming.
- *
- * As sub-problems we will look at `the LCS of a prefix of S and a prefix of T`, running over
- * all pairs of prefixes.
- *
- * 1> first: finding the length of the LCS
- *
- * say LCS[i,j] is the length of the LCS of S[1..i] with T[1..j].
- *
- * How can we solve for LCS[i,j] in terms of the LCS’s of the smaller problems?
- *
- * Case 1: what if S[i] != T[j]  Then, the desired sub-sequence has to ignore one of S[i] or T[j] so we
- * have:
- * LCS[i, j] = max(LCS[i − 1, j], LCS[i, j − 1]).
- *
- * Case 2: what if S[i] == T[j]  Then the LCS of S[1..i] and T[1..j] might as well match them up.
- * For instance, if I gave you a common subsequence that matched S[i] to an earlier location in
- * T, for instance, you could always match it to T[j] instead. So, in this case we have:
- * LCS[i, j] = 1 + LCS[i − 1, j − 1].
- *
- * 2> Find the sequence
- *
- */
-public class LCS {
+/*
+The Longest Common Subsequence (LCS) problem
+ 1> first: finding the length of the LCS
+  LCS[i, j] = max(LCS[i − 1, j], LCS[i, j − 1]).
+  LCS[i, j] = 1 + LCS[i − 1, j − 1].
+
+2> Find the sequence
+   when the LCS number == T
+   see the Leetcode727MinimumWindowSubsequence
+*/
+public class LongestCommonSubsequence {
   // runtime O(mn)
   public static int longestCommonSubsequenceLengthBottomUp(String S, String T) {
-    //corner cases checking
+    // corner cases checking
     if (S == null || S.isEmpty() || T == null || T.isEmpty()) return 0;
 
     char[] s = S.toCharArray(), t = T.toCharArray();
-    int cn = S.length(), rm = T.length();
-    int dp[][] = new int[rm + 1][cn + 1];
-    // benefit with initial zero index row and column; cons: when using the value of s and t. care the index
-    for (int c = 1; c <= cn; c++) {
-      for (int r = 1; r <= rm; r++) {
+    int M = S.length(), N = T.length();
+    int dp[][] = new int[N + 1][M + 1];
+    // benefit with initial zero index row and column; cons: when using the value of s and t. care
+    // the index
+    for (int c = 1; c <= M; c++) {
+      for (int r = 1; r <= N; r++) {
         if (s[c - 1] == t[r - 1]) dp[r][c] = 1 + dp[r - 1][c - 1];
         else dp[r][c] = Math.max(dp[r - 1][c], dp[r][c - 1]);
       }
     }
 
     // debugPrint(cn, rm, dp);
-    int r = rm, c = cn, left = dp[rm][cn];
+    int r = N, c = M, left = dp[N][M];
     List<String> all = new ArrayList<>();
     recursionFindAll(all, new char[left], dp, r, c, left, s, t);
-    return dp[rm][cn];
+    return dp[N][M];
   }
 
   private static void debugPrint(int cn, int rm, int[][] dp) {
@@ -111,24 +83,9 @@ public class LCS {
     }
   }
 
-  public static void main(String[] args) {
-    System.out.println(longestCommonSubsequenceLengthBottomUp("amd", "cagmbdld"));
-    System.out.println(longestCommonSubsequenceLengthBottomUp("ABAZDC", "BACBAD"));
-    System.out.println(longestCommonSubsequenceLengthBottomUp("AGGTAB", "GXTXAYB"));
-    System.out.println(longestCommonSubsequenceLengthBottomUp("q", "cagmbdld"));
-    System.out.println(longestCommonSubsequenceLengthBottomUp("d", "cagmbdld"));
-    System.out.println(longestCommonSubsequenceLengthBottomUp("lmdz", "qdcmz"));
-    System.out.println("========");
-    System.out.println(longestCommonSubsequenceLengthTopDown("amd", "cagmbdld"));
-    System.out.println(longestCommonSubsequenceLengthTopDown("ABAZDC", "BACBAD"));
-    System.out.println(longestCommonSubsequenceLengthTopDown("AGGTAB", "GXTXAYB"));
-    System.out.println(longestCommonSubsequenceLengthTopDown("q", "cagmbdld"));
-    System.out.println(longestCommonSubsequenceLengthTopDown("d", "cagmbdld"));
-    System.out.println(longestCommonSubsequenceLengthTopDown("lmdz", "qdcmz"));
-  }
   // runtime O(mn)
   public static int longestCommonSubsequenceLengthTopDown(String S, String T) {
-    //corner cases checking
+    // corner cases checking
     if (S == null || S.isEmpty() || T == null || T.isEmpty()) return 0;
 
     char[] s = S.toCharArray(), t = T.toCharArray();
