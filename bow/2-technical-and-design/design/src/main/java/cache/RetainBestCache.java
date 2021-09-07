@@ -81,6 +81,4 @@ interface DataSource<K, V extends Rankable> {
  No way to use only one TreeMap.
  TreeMap accept customized comparator object only in its constructor,
  So no way to transmit TreeMap object to the comparator
-
-
 */
