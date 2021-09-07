@@ -21,54 +21,85 @@ import java.util.List;
 import java.util.Map;
 
 public class Leetcode30SubstringwithConcatenationofAllWords {
-
   /*
-      1 <= s.length <= 104
-      s consists of lower-case English letters.
-      1 <= words.length <= 5000
-      1 <= words[i].length <= 30
-      words[i] consists of lower-case English letters.
-     "Return all starting indices of substring(s) in s that is
-      a concatenation of each word in words exactly once, in
-      any order, and without any intervening characters."
-     checking:
-      - one of them is null, empty;
-      Idea:
-       take the word in words, not char, as small unit.
-      M is s.length, N is ws.length, L is ws[0] length
-      N*L*M/L=M*N
-      O(M*N) time, O(N*L) space
+   30. Substring with Concatenation of All Words
+
+   You are given a string s and an array of strings words
+   of the same length. Return all starting indices of substring(s)
+   in s that is a concatenation of each word in words exactly once,
+   in any order, and without any intervening characters.
+
+   You can return the answer in any order.
+
+   Input: s = "barfoothefoobarman", words = ["foo","bar"]
+   Output: [0,9]
+   Explanation: Substrings starting at index 0 and 9 are "barfoo" and "foobar" respectively.
+   The output order does not matter, returning [9,0] is fine too.
+
+   Input: s = "wordgoodgoodgoodbestword", words = ["word","good","best","word"]
+   Output: []
+
+   Input: s = "barfoofoobarthefoobarman", words = ["bar","foo","the"]
+   Output: [6,9,12]
+
+   Constraints:
+
+       1 <= s.length <= 104
+       s consists of lower-case English letters.
+       1 <= words.length <= 5000
+       1 <= words[i].length <= 30
+       words[i] consists of lower-case English letters.
   */
+  /*
+    Watch: 'concatenation of each word in words exactly once,
+            in any order, and without any intervening characters.'
+            'strings words of the same length'
+     Input: s = "barfoothefoobarman", words = ["foo","bar"]  Output: [0,9]
+     Input: s = "xbarfoothefoobarman", words = ["foo","bar"]  Output: [1,10]
+     Input: s = "xxbarfoothefoobarman", words = ["foo","bar"]  Output: [2,11]
+     Input: s = "xxxbarfoothefoobarman", words = ["foo","bar"]  Output: [3,12]
+   Idea:
+     - start from 0~L-1
+     - take the word in words, not char, as the smallest unit.
+     - for each outer loop, convert words to map<w:frequency>, `R= ws.length;`  is left required word number.
+       R and map will be dirty and need re-initial.
+     - each step of index l and r of window is a word width
+     - The sliding window is fixed length L*N
 
+   O(M*L) time,
+   O(N*L) space,
+   M is s.length,
+   N is ws[0] length, also is required left number of words
+   L is ws.length,
+  */
   public List<Integer> findSubstring(String S, String[] ws) {
-    List<Integer> res = new ArrayList();
-    if (S == null || ws == null || S.length() == 0 || ws.length == 0) return res;
-    // at least S have one char
-    int L = ws[0].length();
-    for (int from = 0; from < L; from++) {
-      Map<String, Integer> m = new HashMap();
-      for (String w : ws) m.put(w, m.getOrDefault(w, 0) + 1);
+    List<Integer> a = new ArrayList();
+    for (int i = 0; i < ws[0].length(); i++) generalSolution(S, ws, i, a);
+    return a;
+  }
 
-      int n = ws.length; // required left number of words
-      int l = from, r = from; // current window[l, r)
-      while (r <= S.length() - L) { // O(S.length()) time
-        String w = S.substring(r, r + L);
+  private void generalSolution(String S, String[] ws, int from, List<Integer> a) {
+    int L = ws[0].length(), N = ws.length, R = N;
+    Map<String, Integer> m = new HashMap();
+    for (String w : ws) m.put(w, m.getOrDefault(w, 0) + 1);
+
+    int l = from, r = from;
+    while (r <= S.length() - L) {
+      String w = S.substring(r, r + L);
+      if (m.containsKey(w)) {
+        if (m.get(w) >= 1) R--;
+        m.put(w, m.get(w) - 1);
+      }
+      r = r + L;
+      if (r - l == L * N) {
+        if (R == 0) a.add(l);
+        w = S.substring(l, l + L);
         if (m.containsKey(w)) {
-          if (m.get(w) >= 1) n--;
-          m.put(w, m.get(w) - 1);
+          if (m.get(w) >= 0) R++;
+          m.put(w, m.get(w) + 1);
         }
-        r = r + L; // current window[l, r)
-        if (r - l == L * ws.length) {
-          if (n == 0) res.add(l);
-          String lw = S.substring(l, l + L);
-          if (m.containsKey(lw)) {
-            if (m.get(lw) >= 0) n++;
-            m.put(lw, m.get(lw) + 1);
-          }
-          l = l + L;
-        }
-      } // m is dirty, nee reset.
+        l = l + L;
+      }
     }
-    return res;
   }
 }
