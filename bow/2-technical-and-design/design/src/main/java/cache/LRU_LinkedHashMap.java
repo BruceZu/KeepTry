@@ -18,6 +18,7 @@ package cache;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+ // Leetcode 146. LRU Cache
 public class LRU_LinkedHashMap {
 
   private Map<Integer, Integer> map;

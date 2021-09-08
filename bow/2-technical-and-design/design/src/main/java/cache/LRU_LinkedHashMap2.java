@@ -17,9 +17,9 @@ package cache;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-public class Leetcode146LRU_LinkedHashMap {
-  // get and put must each run in O(1) average time complexity.
+// Leetcode 146. LRU Cache
+public class LRU_LinkedHashMap2 {
+  // get() and put() in O(1) average time
   class LRUCache extends LinkedHashMap {
     private int cap = 0;
 
