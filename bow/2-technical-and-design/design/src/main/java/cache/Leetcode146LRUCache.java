@@ -63,7 +63,9 @@ Constraints:
     At most 2 * 105 calls will be made to get and put.
  */
 
-public class Leetcode146LRUCache {}
+public class Leetcode146LRUCache {
+  // Solution: LRUCache-> LRU_LinkedHashMap or LRU_LinkedHashMap2 ( best )
+}
 
 /*
 Understand:
