@@ -21,12 +21,36 @@ import java.util.List;
 /*
 The Longest Common Subsequence (LCS) problem
  1> first: finding the length of the LCS
-  LCS[i, j] = max(LCS[i − 1, j], LCS[i, j − 1]).
-  LCS[i, j] = 1 + LCS[i − 1, j − 1].
+ same:  LCS[i, j] = 1 + LCS[i − 1, j − 1].
+ else:  LCS[i, j] = max(LCS[i − 1, j], LCS[i, j − 1]).
+       m a n b c q
+       0 0 0 0 0 0
+  x 0  0 0 0 0 0 0
+  a 0  0 1 1 1 1 1
+  y 0  0 1 1 1 1 1
+  b 0  0 1 1 2 2 2
+  c 0  0 1 1 2 3 3
+  z 0  0 1 1 2 3 3
 
 2> Find the sequence
    when the LCS number == T
    see the Leetcode727MinimumWindowSubsequence
+
+ The Longest Common sub-string (LCS) problem
+ difference:
+  same:  LCS[i, j] = 1 + LCS[i − 1, j − 1].
+  else:  LCS[i, j] = 0; // here
+       m a n b c q
+       0 0 0 0 0 0
+  x 0  0 0 0 0 0 0
+  a 0  0 0 1 0 0 0
+  y 0  0 0 0 0 0 0
+  b 0  0 0 0 1 0 0
+  c 0  0 0 0 0 2 0
+  z 0  0 0 0 0 0 0
+ tracking the longLen and longLenEndIdexOf one string
+ with them to get the Longest Common sub-string
+
 */
 public class LongestCommonSubsequence {
   // runtime O(mn)

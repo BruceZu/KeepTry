@@ -204,10 +204,10 @@ public class TopologicalSort {
   }
   // merged 2 function: find circle(1) + calculate Topological Sort Order(2)
   boolean dfs_merged(Node n, Map<Node, Boolean> v, StringBuilder r, Map<Node, Set<Node>> out) {
-    if (v.containsKey(n)) return v.get(n);
+    if (v.containsKey(n)) return v.get(n); //true: find circle
     else v.put(n, true);
     for (Node o : out.get(n)) {
-      if (dfs_merged(o, v, r, out)) return true;
+      if (dfs_merged(o, v, r, out)) return true; // find circle
     }
     v.put(n, false);
     r.append(n.v);
