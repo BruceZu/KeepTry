@@ -56,7 +56,7 @@ public class Leetcode210CourseScheduleii {
 
     List<Integer> r = new LinkedList();
     Map<Integer, Boolean> v = new HashMap<>();
-    // start from any node
+    // start from any node/course
     for (int n = 0; n < numCourses; n++) if (dfs(n, out, v, r)) return new int[0];
 
     int[] a = new int[numCourses];
@@ -68,7 +68,7 @@ public class Leetcode210CourseScheduleii {
   private static boolean dfs(int n, List<Integer>[] out, Map<Integer, Boolean> v, List<Integer> r) {
     if (v.containsKey(n)) return v.get(n);
     v.put(n, true);
-    for (int follow : out[n]) if (dfs(follow, out, v, r)) return true;
+    for (int o : out[n]) if (dfs(o, out, v, r)) return true;
     v.put(n, false);
     r.add(0, n);
     return false;

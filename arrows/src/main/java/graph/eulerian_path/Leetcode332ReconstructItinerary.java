@@ -210,13 +210,17 @@ public class Leetcode332ReconstructItinerary {
      =O(Elog(E/V))
    Space
     O(V+E) used by graph. The maximum depth of the recursion is E.
+
+    Note: while (g.containsKey(f) && !g.get(f).isEmpty()) {
+          It is not 'if'
+          use while replace for not if.
   */
   public List<String> findItinerary(List<List<String>> tickets) {
     Map<String, PriorityQueue<String>> g = new HashMap<>();
     List<String> r = new LinkedList();
-    for (List<String> ticket :
-        tickets) //  O(ElogE) time? sorting depends on the structure of the input graph.
-    g.computeIfAbsent(ticket.get(0), k -> new PriorityQueue()).add(ticket.get(1));
+    // O(ElogE) time? sorting depends on the structure of the input graph.
+    for (List<String> ticket : tickets)
+      g.computeIfAbsent(ticket.get(0), k -> new PriorityQueue()).add(ticket.get(1));
     dfs("JFK", g, r); // O(E) time
     return r;
   }
@@ -236,8 +240,9 @@ public class Leetcode332ReconstructItinerary {
   public List<String> findItinerary_(List<List<String>> tickets) {
     Map<String, PriorityQueue<String>> g = new HashMap<>();
     List<String> r = new LinkedList();
-    for (List<String> ticket : tickets) //  O(ElogE) time
-    g.computeIfAbsent(ticket.get(0), k -> new PriorityQueue()).add(ticket.get(1));
+    //  O(ElogE) time
+    for (List<String> ticket : tickets)
+      g.computeIfAbsent(ticket.get(0), k -> new PriorityQueue()).add(ticket.get(1));
     Stack<String> s = new Stack<>();
     s.push("JFK");
     while (!s.isEmpty()) {
