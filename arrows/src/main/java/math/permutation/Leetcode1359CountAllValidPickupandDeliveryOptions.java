@@ -64,7 +64,7 @@ public class Leetcode1359CountAllValidPickupandDeliveryOptions {
         1   1     [p1, d1]
         2   6     insert p2 into 3 possible place of [p1, d1] and has 3+2+1 =6 result
         3   90    6 *[insert p3 into 5 possible place of one of 2 order [p1 p2 d2 d3], and has
-                      5+4+3+2+1=6*5*0.5] = 90
+                      5+4+3+2+1=6*5*0.5 = 90
      So
      all possibility result of adding the nth order to a given n-1 order
        = p+(p-1) +...+1
