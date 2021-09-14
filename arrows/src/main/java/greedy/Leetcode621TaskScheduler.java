@@ -16,69 +16,82 @@
 package greedy;
 
 public class Leetcode621TaskScheduler {
+
+  /*
+   621. Task Scheduler
+
+    Given a characters array tasks, representing the tasks a CPU needs to do,
+    where each letter represents a different task. Tasks could be done in any order.
+    Each task is done in one unit of time. For each unit of time,
+    the CPU could complete either one task or just be idle.
+
+    However, there is a non-negative integer n that represents the cooldown
+    period between two same tasks (the same letter in the array), that is that
+    there must be at least n units of time between any two same tasks.
+
+    Return the least number of units of times that the CPU will take to
+    finish all the given tasks.
+
+
+    Example 1:
+
+    Input: tasks = ["A","A","A","B","B","B"], n = 2
+    Output: 8
+    Explanation:
+    A -> B -> idle -> A -> B -> idle -> A -> B
+    There is at least 2 units of time between any two same tasks.
+
+    Example 2:
+
+    Input: tasks = ["A","A","A","B","B","B"], n = 0
+    Output: 6
+    Explanation: On this case any permutation of size 6 would work since n = 0.
+    ["A","A","A","B","B","B"]
+    ["A","B","A","B","A","B"]
+    ["B","B","B","A","A","A"]
+    ...
+    And so on.
+
+    Example 3:
+
+    Input: tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2
+    Output: 16
+    Explanation:
+    One possible solution is
+    A -> B -> C -> A -> D -> E -> A -> F -> G -> A -> idle -> idle -> A -> idle -> idle -> A
+
+
+    Constraints:
+
+        1 <= task.length <= 104
+        tasks[i] is upper-case English letter.
+        The integer n is in the range [0, 100].
+
+  */
   /*
   Task Scheduler
-  The key is to find out number of left idles after arrangement
-  But don't need actually arrange them.
-  Answer = idles + number of tasks.
+  Watch and observe: need cool-down time unit or not
 
-  After arrangement
-  1> left idles > 0
-  2> left idles = 0
-
-  Find out the number 'mfn' of all tasks with max frequency `mf`:
-   - if `mfn` -1 >= n:
-     then left idles = 0 because other tasks can be distributed into the intervals,
-     as their frequency  < `mf`.
-   - `mfn` -1 < n:
-     There are idles need distribute other tasks into them:
-       if `otherTasks` >= available idles number `holes`: no idles left.
-           all otherTasks are distributed into the intervals
-       if `otherTasks`  < `holes`. There are idles left.
-           int this scenario the least number of units of times that the CPU will
-           take to finish all the given tasks:
-                   holes - otherTasks + total
-              or:  intervals * (n + 1) + mfn
-              or:  holes + mfn * mf
     O(N) time, Need not sort. Only need to know the max frequency and number of it
     O(1) space.
    */
 
-  public static int leastInterval(char[] tasks, int n) {
-    /*
-    TODO: corner cases validation
+  // return the least number of units of times that the CPU
+  // will take to finish all the given tasks.
+  public static int leastInterval(char[] tasks, int cooldownPeirods) {
+    int[] f = new int[26];
+    for (int t : tasks) f[t - 'A']++;
+    int max = 0, max_n = 0; // Max frequency, number of tasks with max frequency
+    for (int i = 25; i >= 0; i--) if (f[i] > max) max = f[i];
+    for (int i = 25; i >= 0; i--) if (f[i] == max) max_n++;
 
-    1 <= task.length <= 104
-    tasks[i] is upper-case English letter.
-    The integer n is in the range [0, 100].
-     */
-    int[] f = new int[26];
-    for (int t : tasks) f[t - 'A']++;
-    int mf = 0, mfn = 0; // Max frequency, number of tasks with max frequency
-    for (int i = 25; i >= 0; i--) if (f[i] > mf) mf = f[i];
-    for (int i = 25; i >= 0; i--) if (f[i] == mf) mfn++;
-    int total = tasks.length; // Total tasks
-    if (mfn - 1 >= n) return total; // Available idles = 0
-    int intervals = mf - 1;
-    int holes = intervals * (n - (mfn - 1)); // Available idles > 0
-    int otherTasks = total - mfn * mf; // tasks whose frequency < max frequency
-    if (holes <= otherTasks) return total; // left idles = 0
-    //  left idles >=1
-    return holes - otherTasks + total;
-    // or:  intervals * (n + 1) + mfn
-    // or:  holes + mfn * mf
-  }
-  // no comments version
-  public static int leastInterval2(char[] tasks, int n) {
-    int[] f = new int[26];
-    for (int t : tasks) f[t - 'A']++;
-    int mf = 0, mfn = 0; // Max frequency, number of tasks with max frequency
-    for (int i = 25; i >= 0; i--) if (f[i] > mf) mf = f[i];
-    for (int i = 25; i >= 0; i--) if (f[i] == mf) mfn++;
-    if (mfn - 1 >= n) return tasks.length;
-    int holes = (mf - 1) * (n - (mfn - 1));
-    int otherTasks = tasks.length - mfn * mf;
-    if (holes <= otherTasks) return tasks.length;
-    return holes - otherTasks + tasks.length;
+    int N = tasks.length; // Total tasks
+    if (max_n - 1 >= cooldownPeirods) return N;
+
+    int is = max - 1; // intervals
+    int holes = is * (cooldownPeirods - (max_n - 1)); // planned cooldown holes
+    int otherTasks = N - max_n * max;
+    if (holes <= otherTasks) return N; // otherTasks use out all planned cooldown  holes
+    return holes - otherTasks + N; //
   }
 }
