@@ -14,6 +14,7 @@
 //
 
 /**
- * http://mnemstudio.org/clustering-k-means-example-1.htm
+ * <a href="https://en.wikipedia.org/wiki/Bloom_filter">wiki</a>
+ * <a href="https://brilliant.org/wiki/bloom-filter/">bloom-filter</a>
  */
-package k_Means;
+package bloom_filter;

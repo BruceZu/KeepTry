@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package doublepoint;
+package double_pointers;
 
 import java.util.Arrays;
 import java.util.HashMap;

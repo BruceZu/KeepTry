@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package doublepoint;
+package double_pointers;
 
 /**
  * Do not allocate extra space for another array, you must do this in place with constant memory.

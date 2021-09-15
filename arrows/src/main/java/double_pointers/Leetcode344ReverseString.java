@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package doublepoint;
+package double_pointers;
 
 /**
  * <a href="https://leetcode.com/problems/reverse-string/#/description">Leetcode</a>

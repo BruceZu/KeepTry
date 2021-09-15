@@ -34,4 +34,4 @@
  * http://ticki.github.io/blog/skip-lists-done-right/
  */
 
-package Skip_Lists;
+package skip_lists;

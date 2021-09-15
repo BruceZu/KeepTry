@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package doublepoint;
+package double_pointers;
 
 public class Leetcode1781SumofBeautyofAllSubstrings {
   /*

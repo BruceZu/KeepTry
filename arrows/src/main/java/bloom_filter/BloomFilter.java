@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package Bloom_filter;
+package bloom_filter;
 
 /**
  * http://blog.csdn.net/hguisu/article/details/7866173
