@@ -28,11 +28,11 @@ import java.util.*;
     Note that beginWord does not need to be in wordList.
     sk == endWord
 
-Given two words, beginWord and endWord, and a dictionary wordList,
-return all the shortest transformation sequences from beginWord to endWord,
-or an empty list if no such sequence exists.
+    Given two words, beginWord and endWord, and a dictionary wordList,
+    return all the shortest transformation sequences from beginWord to endWord,
+    or an empty list if no such sequence exists.
 
-Each sequence should be returned as a list of the words [beginWord, s1, s2, ..., sk].
+    Each sequence should be returned as a list of the words [beginWord, s1, s2, ..., sk].
 
 
 
@@ -53,16 +53,12 @@ Explanation: There are 2 shortest transformation sequences:
 
 
 Input:
-beginWord = "hit",
-endWord = "cog",
+beginWord = "hit", endWord = "cog",
 wordList = ["hot","dot","dog","lot","log"]
-
 Output: []
 
 
-Input: s = "a";
-       e = "c";
-       arr = new String[]{"a", "b", "c"};
+Input: s = "a";  e = "c"; arr = new String[]{"a", "b", "c"};
 Output: [['a','c']]
 
 Constraints:
@@ -84,60 +80,41 @@ Understanding
       'All the words in wordList are unique.'.
        end word may not be in the dictionary.
    2  BFS
-      once find the target string then stop further level expanding
-      2-1 how to keep the path and what data structure should be in queue
-      2-2 how to avoid revisiting a string in dictionary?
-       - should not visit string already in the path
-       - how about other string in other path but in above level?
-          if that path reach target string, then that path is shorter than current path.
-          so current path need not repeat left part of that path.
-          if that path can not reach target string at last then need not to go that way.
-       so any string on any path visited at previous level should not be visited again
-       for current level: current path visited string can also be used by another path at the same level
-       so take these string as visited only after all path of current level are processed
-
-       `find a possible string from dictionary, if it is visited then do not use it in current path`
-       this is same as remove the visited string from dictionary and find possible dictionary
-       this also make sure no edge between any 2 strings at the same layer
-
-       E.g. at same ith step, some 2 path merge at one point:
-         red -> rex -> tex->
-         red -> ted -> tex->
-         or
-           p a r i s
-          /          \
-      -->              p a r k s -->
-          \          /
-           m a r k s
-
-       String s = "magic";
-       String e = "pearl";
-       String[] arr = new String[]{ ... };
-
-       expected answer:
-         [["magic", "manic", "mania", "maria", "maris", "paris", "parks", "perks", "peaks", "pears", "pearl"],
-                                                                   |
-          ["magic", "manic", "mania", "maria", "marta", "marty", "party", "parry", "perry", "peary", "pearl"],
-          ["magic", "manic", "mania", "maria", "marta", "marty", "marry", "merry", "perry", "peary", "pearl"],
-          ["magic", "manic", "mania", "maria", "marta", "marty", "marry", "parry", "perry", "peary", "pearl"],
-          ["magic", "manic", "mania", "maria", "maris", "marks", "parks", "perks", "peaks", "pears", "pearl"]]
-                                                                   |
-       wrong answer(lost one):
-         [["magic", "manic", "mania", "maria", "maris", "paris", "parks", "perks", "peaks", "pears", "pearl"],
-           ["magic", "manic", "mania", "maria", "marta"," marty", "party", "parry", "perry", "peary"," pearl"]
-          ["magic", "manic", "mania", "maria", "marta"," marty", "marry", "parry", "perry", "peary", "pearl"],
-          ["magic", "manic", "mania", "maria", "marta", "marty", "marry", "merry", "perry", "peary", "pearl"],
-          ]
-        So do not tag the 'parks' as visited only when on path at the current level is handled
+      once find the target string then stop further level expanding-> shortest(s)
+      2-1 how to keep the path？ it is graph: Map<from, Set<to>>, need build the graph, nodes and edges.
+          once find the end word the graph is enough and stop. then dfs find out all path from start to end word
+      2-2 avoid revisiting a string in dictionary? Use the directory itself to remove visited word
+       - To make sure the shortest path:
+         not visit string already visited in the path
+         not visit string in other path but at the above level
+           - one more paths can merge into one path at a point/word
+           so the right time to mark a word as visited should be after all current level words are calculated out
+           E.g.
+               red -> rex -> tex->
+               red -> ted -> tex->
+           or
+               p a r i s
+              /          \
+              -->              p a r k s -->
+              \          /
+               m a r k s
+               Do not tag the 'parks' as visited only when one path at the current level is handled
 
      3  DFS.
         how to improve performance avoid visited longer path if one path is find.
 
-  N is the size of directory, K is the length of word.
-  O(NK^2+α) time
-      assuming that every layer except the first and the last layer in the DAG has x
-      number of words and is fully connected to the next layer. Let h represent the
-      height of the DAG, so the total number of paths will be
+
+  O(N*K^2+α) time
+    every word will be traversed and for each word, we will find the neighbors
+    25*K*K
+    O(K2).  all the N words will be O(N*K^2)
+
+    N is the size of directory,
+    K is the length of word.
+    α is the number of possible paths from beginWord to endWord in the directed graph
+      assuming that every layer except the first and the last layer in the DAG has x number of words
+      and is fully connected to the next layer.
+      Let h represent the height of the DAG, so the total number of paths will be
       x^h, h= (N-2)/x .
       so x^{(N-2)/x}  total paths,
       which is maximized when x=2.718, which we will round to 3  because x must be an integer.
@@ -185,11 +162,14 @@ public class Leetcode126WordLadderII {
       }
       if (newL.contains(end)) return true;
       for (String str : newL) q.offer(str);
-      D.removeAll(newL);
+      D.removeAll(newL); // the right time: to mark word in the new layer is visited
     }
     return false;
   }
 
+  // only change one char: K is word length, K*25
+  // check existence in directory O(K)
+  // in total K*25*K, O(k^2) time
   private Set<String> transformed(String str, Set<String> D) {
     Set<String> r = new HashSet();
     char[] arr = str.toCharArray();
@@ -206,12 +186,12 @@ public class Leetcode126WordLadderII {
     return r;
   }
 
-  private void dfsPaths(String k, int size) {
-    if (k.equals(end)) shortests.add(Arrays.asList(Arrays.copyOf(tmpPath, size)));
-    if (graph.containsKey(k)) {
-      for (String t : graph.get(k)) {
-        tmpPath[size] = t;
-        dfsPaths(t, size + 1);
+  private void dfsPaths(String w, int size) {
+    if (w.equals(end)) shortests.add(Arrays.asList(Arrays.copyOf(tmpPath, size)));
+    if (graph.containsKey(w)) {
+      for (String nextW : graph.get(w)) {
+        tmpPath[size] = nextW;
+        dfsPaths(nextW, size + 1);
       }
     }
   }
