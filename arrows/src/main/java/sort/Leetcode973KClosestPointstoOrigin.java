@@ -15,15 +15,44 @@
 
 package sort;
 
-import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Leetcode973KClosestPointstoOrigin {
   /*
-  You may return the answer in any order.
-  The answer is guaranteed to be unique (except for the order that it is in).
+      973. K Closest Points to Origin
 
+    Given an array of points where points[i] = [xi, yi]
+    represents a point on the X-Y plane and an integer k,
+    return the k closest points to the origin (0, 0).
+
+    The distance between two points on the X-Y plane is the Euclidean distance
+     (i.e., √(x1 - x2)2 + (y1 - y2)2).
+
+    You may return the answer in any order.
+    The answer is guaranteed to be unique (except for the order that it is in).
+
+
+    Input: points = [[1,3],[-2,2]], k = 1
+    Output: [[-2,2]]
+    Explanation:
+    The distance between (1, 3) and the origin is sqrt(10).
+    The distance between (-2, 2) and the origin is sqrt(8).
+    Since sqrt(8) < sqrt(10), (-2, 2) is closer to the origin.
+    We only want the closest k = 1 points from the origin, so the answer is just [[-2,2]].
+
+    Input: points = [[3,3],[5,-1],[-2,4]], k = 2
+    Output: [[3,3],[-2,4]]
+    Explanation: The answer [[-2,4],[3,3]] would also be accepted.
+
+
+
+    Constraints:
+        1 <= k <= points.length <= 10^4
+        -10^4 < xi, yi < 10^4
+
+  */
+  /*
   Idea: keep a max heap with size of K
   O(N*longK) time. O(K) space
    */
@@ -31,24 +60,11 @@ public class Leetcode973KClosestPointstoOrigin {
     Queue<int[]> q = // max heap
         new PriorityQueue<>((b, a) -> a[0] * a[0] + a[1] * a[1] - b[0] * b[0] - b[1] * b[1]);
     for (int[] p : points) {
-      if (q.size() < k) q.offer(p);
-      else { // q.size==k
-        int[] t = q.peek();
-        if (p[0] * p[0] + p[1] * p[1] < t[0] * t[0] + t[1] * t[1]) {
-          q.poll();
-          q.offer(p);
-        }
-      }
+      q.offer(p);
+      if (q.size() > k) q.poll();
     }
     int[][] r = new int[k][];
-    while (k > 0) {
-      r[--k] = q.poll();
-    }
+    while (k > 0) r[--k] = q.poll();
     return r;
-  }
-  // use ArrayList sort directly. O(NlogN) time O(1) space
-  public int[][] kClosest2(int[][] points, int k) {
-    Arrays.sort(points, (a, b) -> a[0] * a[0] + a[1] * a[1] - b[0] * b[0] - b[1] * b[1]);
-    return Arrays.copyOfRange(points, 0, k);
   }
 }

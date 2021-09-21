@@ -20,265 +20,313 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-/**
- * 317. Shortest Distance from All Buildings
- * https://leetcode.com/problems/shortest-distance-from-all-buildings/
- * Difficulty: Hard <pre>
- * You want to build a house on an empty land which reaches all buildings
- * in the shortest amount of distance. You can only move up, down, left and right.
- * You are given a 2D grid of values 0, 1 or 2, where:
- *
- * Each 0 marks an empty land which you can pass by freely.
- * Each 1 marks a building which you cannot pass through.
- * Each 2 marks an obstacle which you cannot pass through.
- * For example, given three buildings at (0,0), (0,4), (2,2), and an obstacle at (0,2):
- *
- * 1 - 0 - 2 - 0 - 1
- * |   |   |   |   |
- * 0 - 0 - 0 - 0 - 0
- * |   |   |   |   |
- * 0 - 0 - 1 - 0 - 0
- * The point (1,2) is an ideal empty land to build a house, as the total travel distance of 3+3+1=7 is minimal. So return 7.
- *
- * Note:
- * There will be at least one building. If it is not possible to build such house according to the above rules, return -1.
- *
- *  Company Tags Google Zenefits
- *  Tags Breadth-first Search
- *  Similar Problems (M) Walls and Gates (H) Best Meeting Point
+/*
+Leetcode 317. Shortest Distance from All Buildings
+
+You are given an m x n grid of values 0, 1, or 2, where:
+    each 0 marks an empty land that you can pass by freely,
+    each 1 marks a building that you cannot pass through, and
+    each 2 marks an obstacle that you cannot pass through.
+
+You want to build a house on an empty land that reaches all buildings in the shortest total travel distance.
+You can only move up, down, left, and right.
+
+Return the shortest travel distance for such a house.
+If it is not possible to build such a house according to the above rules, return -1.
+
+The total travel distance is the sum of the distances between the houses
+of the friends and the meeting point.
+The distance is calculated using Manhattan Distance, where distance(p1, p2) = |p2.x - p1.x| + |p2.y - p1.y|.
+
+
+Input: grid = [
+[1,0,2,0,1],
+[0,0,0,0,0],
+[0,0,1,0,0]
+]
+Output: 7
+Explanation: Given three buildings at (0,0), (0,4), (2,2), and an obstacle at (0,2).
+The point (1,2) is an ideal empty land to build a house,
+as the total travel distance of 3+3+1=7 is minimal.
+So return 7.
+
+Input: grid = [[1,0]]
+Output: 1
+
+Input: grid = [[1]]
+Output: -1
+
+Constraints:
+    m == grid.length
+    n == grid[i].length
+    1 <= m, n <= 50
+    grid[i][j] is either 0, 1, or 2.
+    There will be at least one building in the grid.
  */
 public class Leetcode317ShortestDistancefromAllBuildings {
+  /*
+  Watch:
+   graph with each edge to have the same weight of 1.
+   BFS can be used to find the shortest path between a starting cell and any other reachable cell.
 
-    /**
-     * <pre>
-     * Solution 1
-     * Runtime: O(m^2 * n^2)?
-     */
-    public static int shortestDistance(int[][] grid) {
-        if (grid == null || grid.length == 0 || grid[0].length == 0) {
-            return 0;
-        }
-        int m = grid.length, n = grid[0].length;
-        // distance from a spot to all the buildings
-        int[][] dinstancesToBuildings = new int[m][n];
-        // how many buildings a spot has connects to
-        int[][] reachedBuildingsNum = new int[m][n];
+  BFS from building to empty cell.
+  When there are fewer houses than empty lands, then this approach will require less time
+  than the previous approach and vice versa.
 
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 1) {
-                    bfsSpacePotDistancesAndFoundBuildingsNum(
-                            grid, i, j, dinstancesToBuildings, reachedBuildingsNum);
-                }
-            }
-        }
+  Prepare distance[][] sum, distance[i][j] keeps steps from cell[i][j] to all or part buildings
+  because some building maybe not reachable
+  So need to know distance[i][j] is of all or part buildings, a way is keep num[i][j] for checking
 
-        // buildings in grid
-        // O(m*n)
-        int buildingsNum = 0;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 1) {
-                    buildingsNum++;
-                }
-            }
+  At last check the smallest cell value of distance[i][j] sum and num[i][j]=total building number
+
+  Runtime O((M*N）^2)
+  Space O(M*N)
+  M is rows number
+  N is column number
+  */
+  static int m, n;
+  static int[] d4 = {-1, 0, 1, 0, -1};
+
+  public static int shortestDistance__(int[][] g) {
+    m = g.length;
+    n = g[0].length;
+    // sum[i][j]keep sum distance from an empty sum[i][j] cell to num[i][j] buildings
+    int[][] sum = new int[m][n];
+    int[][] num = new int[m][n];
+
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        if (g[i][j] == 1) { // a building
+          bfs(g, i, j, sum, num);
         }
-        int min = Integer.MAX_VALUE;
-        boolean findOne = false;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 0) {
-                    if (reachedBuildingsNum[i][j] == buildingsNum) {
-                        findOne = true;
-                        min = Math.min(min, dinstancesToBuildings[i][j]);
-                    }
-                }
-            }
-        }
-        return findOne ? min : -1;
+      }
     }
 
-    /**
-     * <pre>
-     * // -  for performance: counts buildings numbers found during the bfs
-     *        If a building cannot connect to all the other buildings. Then no solution, return -1.
-     * -  for found space pot:
-     *      - add the distances from current building
-     *      - add the building nums reached from this space pot. check it is valid or not later
-     */
-    private static void bfsSpacePotDistancesAndFoundBuildingsNum(
-            int[][] grid,
-            int _x,
-            int _y,
-            int[][] dinstancesToBuildings,
-            int[][] reachedBuildingsNum) {
+    int total = 0; // total buildings number in grid
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        if (g[i][j] == 1) {
+          total++;
+        }
+      }
+    }
+    int r = Integer.MAX_VALUE;
+    boolean findOne = false;
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        if (g[i][j] == 0 && num[i][j] == total) {
+          findOne = true;
+          r = Math.min(r, sum[i][j]);
+        }
+      }
+    }
+    return findOne ? r : -1;
+  }
 
-        int m = grid.length, n = grid[0].length;
+  private static void bfs(int[][] g, int i, int j, int[][] sum, int[][] num) {
+    Queue<Integer> q = new LinkedList<>();
+    boolean[][] vis = new boolean[m][n];
+    q.offer(i * n + j);
+    vis[i][j] = true;
 
-        Queue<Integer> queue = new LinkedList<>();
-        boolean[][] visited = new boolean[m][n];
+    int steps = 0;
+    while (!q.isEmpty()) {
+      steps++;
+      for (int size = q.size(); size > 0; size--) {
+        int cur = q.poll();
+        j = cur % n;
+        i = cur / n;
+        for (int k = 0; k < 4; ++k) {
+          int r = i + d4[k], c = j + d4[k + 1];
+          if (r >= 0 && r < m && c >= 0 && c < n && g[r][c] == 0 && !vis[r][c]) {
+            vis[r][c] = true;
 
-        queue.offer(_x * n + _y);
-        visited[_x][_y] = true;
-        int[] dxy = {-1, 0, 1, 0, -1}; // directions
-        // All buildings should connect to each other. Else so solution.
-        // int foundBuildingsNum = 1; // include itself. for performance
+            sum[r][c] += steps;
+            num[r][c]++;
 
-        int steps = 0;
-        while (!queue.isEmpty()) {
+            q.offer(r * n + c);
+          }
+        }
+      }
+    }
+  }
+
+  /*---------------------------------------------------------------------------
+  BFS from Empty Land to All buildings
+  Runtime O((M*N）^2)
+  Space O(M*N) used by BFS
+  M is rows number
+  N is column number
+  */
+  public static int shortestDistance_(int[][] grid) {
+    m = grid.length;
+    n = grid[0].length;
+
+    int total = 0; // building numbers
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        if (grid[i][j] == 1) {
+          total++;
+        }
+      }
+    }
+
+    int r = Integer.MAX_VALUE;
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        if (grid[i][j] == 0) { // an empty cell
+          r = Math.min(r, bfs(grid, i, j, total));
+        }
+      }
+    }
+    return r == Integer.MAX_VALUE ? -1 : r;
+  }
+  /*
+    from each space point to calculate all distance from it to reachable buildings
+    if it cannot reach all houses, return MAX value to make it be ignored
+  */
+  private static int bfs(int[][] g, int i, int j, int total) {
+    Queue<Integer> q = new LinkedList<>();
+    Set<Integer> v = new HashSet<>();
+    int sum = 0;
+    int num = 0;
+    int steps = 0;
+    m = g.length;
+    n = g[0].length;
+
+    q.offer(i * n + j);
+    v.add(i * n + j);
+
+    while (!q.isEmpty()) {
+      steps++;
+      for (int size = q.size(); size > 0; size--) {
+        int cur = q.poll();
+        i = cur / n;
+        j = cur % n;
+        for (int k = 0; k < 4; ++k) {
+          int x = i + d4[k], y = j + d4[k + 1];
+          if (x >= 0 && x < m && y >= 0 && y < n && !v.contains(x * n + y) && g[x][y] != 2) {
+            v.add(x * n + y);
+            if (g[x][y] == 1) {
+              num++;
+              sum += steps;
+            }
+            if (g[x][y] == 0) q.offer(x * n + y);
+          }
+        }
+      }
+    }
+    return num == total ? sum : Integer.MAX_VALUE;
+  }
+
+  /*
+    BFS from Houses to Empty Land (Optimized)
+
+    using a `visited` variable to mark visited cells. it is only used for
+    a building, it is local variable.
+
+    Alternative: use the provided grid: During the first BFS we can change the visited empty cell values from 0 to -1. next building -1->-2, and so on...
+    It is global variable and will affect different BFS for different buildings.
+    each BFS only visit cell that is reachable from all buildings.
+
+
+    The `num` variable is can be saved too. this requires carefully tracking the result.
+      - only when sum[][] is changed
+      - need re-initial to be MAX for each building.
+    In short get the minimum value for each building updated sum[][].
+  */
+
+  public static int shortestDistance(int[][] g) {
+    int d4[][] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    int M = g.length;
+    int N = g[0].length;
+
+    int[][] sum = new int[M][N];
+    int empty = 0; // empty cell value
+    int a = Integer.MAX_VALUE;
+
+    for (int i = 0; i < M; ++i) {
+      for (int j = 0; j < N; ++j) {
+        if (g[i][j] == 1) { // a building
+          a = Integer.MAX_VALUE;
+          Queue<int[]> q = new LinkedList<>();
+          q.offer(new int[] {i, j});
+
+          int steps = 0;
+          while (!q.isEmpty()) {
             steps++;
-            int size = queue.size();
-            while (size-- != 0) {
-                Integer cur = queue.poll();
-                _y = cur % n;
-                _x = cur / n;
-                // try 4 directions
-                for (int i = 0; i < 4; ++i) {
-                    int x = _x + dxy[i], y = _y + dxy[i + 1];
-                    if (x < 0 || x >= m || y < 0 || y >= n) {
-                        continue;
-                    }
-                    //                    // a building: performance
-                    //                    if (grid[x][y] == 1 && !visited[x][y]) {
-                    //                        visited[x][y] = true;
-                    //                        foundBuildingsNum++;
-                    //                    }
-                    // a space spot
-                    if (grid[x][y] == 0 && !visited[x][y]) {
-                        visited[x][y] = true;
-                        queue.offer(x * n + y);
-                        dinstancesToBuildings[x][y] += steps;
-                        reachedBuildingsNum[x][y]++;
-                    }
+            for (int s = q.size(); s > 0; s--) {
+              int[] cur = q.poll();
+
+              for (int[] d : d4) {
+                int r = cur[0] + d[0], c = cur[1] + d[1];
+
+                if (r >= 0 && r < M && c >= 0 && c < N && g[r][c] == empty) {
+                  g[r][c]--; // here
+
+                  sum[r][c] += steps;
+                  q.offer(new int[] {r, c});
+
+                  a = Math.min(a, sum[r][c]);
                 }
+              }
             }
+          } // current building is done
+          empty--; // for next building
         }
+      }
     }
+    return a == Integer.MAX_VALUE ? -1 : a;
+  }
 
-    // solution 2 -----------------------------------
-    // O(m^2 * n^2)
-    public static int shortestDistance3(int[][] grid) {
-        if (grid == null || grid.length == 0 || grid[0].length == 0) {
-            return 0;
-        }
+  /* --------------------------------------------------------------------------
+  some scenario test
+  */
+  public static void main(String[] args) {
+    int[][] grid =
+        new int[][] {
+          {1, 0, 2, 0, 1},
+          {0, 0, 0, 0, 0},
+          {0, 0, 1, 0, 0}
+        };
+    System.out.println(shortestDistance(grid) == 7);
+    System.out.println(shortestDistance__(grid) == 7);
+    System.out.println(shortestDistance_(grid) == 7);
 
-        int buildingsNum = 0;
-        int m = grid.length, n = grid[0].length;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 1) {
-                    buildingsNum++;
-                }
-            }
-        }
+    // There is building (2,3) not reachable by all empty cells
+    grid =
+        new int[][] {
+          {1, 0, 2, 2, 2, 0},
+          {0, 0, 2, 0, 2, 0},
+          {1, 0, 2, 1, 2, 0},
+          {0, 0, 2, 2, 2, 0},
+          {1, 0, 0, 0, 0, 0}
+        };
+    System.out.println(shortestDistance__(grid) == -1);
+    System.out.println(shortestDistance_(grid) == -1);
 
-        int minLen = Integer.MAX_VALUE;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == 0) {
-                    // from each space point to calculate all distance from it to houses
-                    // if it cannot reach all houses, return MAX value to be ignored
-                    minLen = Math.min(minLen, bfsDistancesFromSpacePoint(grid, i, j, buildingsNum));
-                }
-            }
-        }
-        return minLen == Integer.MAX_VALUE ? -1 : minLen;
-    }
-
-    private static int bfsDistancesFromSpacePoint(int[][] grid, int _x, int _y, int buildingsNum) {
-        Queue<Integer> q = new LinkedList<>();
-        int[] dxy = {0, 1, 0, -1, 0}; // directions
-        Set<Integer> v = new HashSet<>(); // visited
-
-        //
-        int allDistancesToHouses = 0;
-        int foundBuildingsNum = 0;
-        int steps = 0;
-        //
-        int m = grid.length, n = grid[0].length;
-        q.offer(_x * n + _y);
-        v.add(_x * n + _y);
-        while (!q.isEmpty()) {
-            steps++;
-            int size = q.size();
-            while (size-- != 0) {
-                int cur = q.poll();
-                _x = cur / n;
-                _y = cur % n;
-                for (int k = 0; k < 4; ++k) {
-                    int x = _x + dxy[k], y = _y + dxy[k + 1];
-                    if (x < 0 || x >= m || y < 0 || y >= n) {
-                        continue;
-                    }
-                    if (!v.contains(x * n + y) && grid[x][y] != 2) {
-                        v.add(x * n + y);
-                        if (grid[x][y] == 1) {
-                            foundBuildingsNum++;
-                            allDistancesToHouses += steps;
-                            continue;
-                        }
-                        if (grid[x][y] == 0) {
-                            q.offer(x * n + y);
-                        }
-                    }
-                }
-            }
-        }
-        if (foundBuildingsNum != buildingsNum) return Integer.MAX_VALUE;
-        return allDistancesToHouses;
-    }
-
-    // test -----------------------------------
-    public static void main(String[] args) {
-        System.out.println(shortestDistance(null) == 0);
-        System.out.println(shortestDistance3(null) == 0);
-
-        System.out.println(shortestDistance(new int[][] {}) == 0);
-        System.out.println(shortestDistance3(new int[][] {}) == 0);
-
-        // There is circle where there is building and space pot
-        int[][] grid =
-                new int[][] {
-                    {1, 0, 2, 2, 2, 0},
-                    {0, 0, 2, 0, 2, 0},
-                    {1, 0, 2, 1, 2, 0},
-                    {0, 0, 2, 2, 2, 0},
-                    {1, 0, 0, 0, 0, 0}
-                };
-        System.out.println(shortestDistance(grid) == -1);
-        System.out.println(shortestDistance3(grid) == -1);
-        // case in Leetcode
-        grid =
-                new int[][] {
-                    {1, 0, 2, 0, 1},
-                    {0, 0, 0, 0, 0},
-                    {0, 0, 1, 0, 0}
-                };
-        System.out.println(shortestDistance(grid) == 7);
-        System.out.println(shortestDistance3(grid) == 7);
-        // There are circle where there are space points
-        // no space pot can connect to all buildings.
-        grid =
-                new int[][] {
-                    {1, 0, 0, 1, 0, 0, 1},
-                    {1, 0, 2, 2, 2, 0, 0},
-                    {0, 1, 2, 0, 2, 0, 0},
-                    {0, 0, 2, 2, 2, 0, 1},
-                    {0, 0, 0, 0, 0, 0, 1}
-                };
-        System.out.println(shortestDistance(grid) == -1);
-        System.out.println(shortestDistance3(grid) == -1);
-        // There are circle where there are space points
-        // Not all space pots cannot connect to all buildings.
-        grid =
-                new int[][] {
-                    {1, 0, 0, 1, 0, 0, 1},
-                    {1, 0, 2, 2, 2, 0, 0},
-                    {0, 0, 2, 0, 2, 0, 0},
-                    {0, 0, 2, 2, 2, 0, 1},
-                    {0, 0, 0, 0, 0, 0, 1}
-                };
-        System.out.println(shortestDistance(grid) == 31);
-        System.out.println(shortestDistance3(grid) == 31);
-    }
+    // E.g. the last building can not be reachable by empty cell[0][1]
+    grid =
+        new int[][] {
+          {1, 0, 0, 1, 0, 0, 1},
+          {1, 0, 2, 2, 2, 0, 0},
+          {0, 1, 2, 0, 2, 0, 0},
+          {0, 0, 2, 2, 2, 0, 1},
+          {0, 0, 0, 0, 0, 0, 1}
+        };
+    System.out.println(shortestDistance__(grid) == -1);
+    System.out.println(shortestDistance_(grid) == -1);
+    // all buildings are reachable from all empty cell
+    grid =
+        new int[][] {
+          {1, 0, 0, 1, 0, 0, 1},
+          {1, 0, 2, 2, 2, 0, 0},
+          {0, 0, 2, 0, 2, 0, 0},
+          {0, 0, 2, 2, 2, 0, 1},
+          {0, 0, 0, 0, 0, 0, 1}
+        };
+    System.out.println(shortestDistance__(grid) == 31);
+    System.out.println(shortestDistance_(grid) == 31);
+  }
 }

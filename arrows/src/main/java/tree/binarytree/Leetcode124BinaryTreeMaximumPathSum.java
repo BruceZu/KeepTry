@@ -196,23 +196,14 @@ public class Leetcode124BinaryTreeMaximumPathSum {
     if (n == null) return null;
     Integer l = fA(n.l), r = fA(n.r);
     if (l == null && r == null && !n.isAliveNode) return null;
-    // at least contains one alive node
-    int tmp = Integer.MIN_VALUE;
-    if (l != null) tmp = Math.max(tmp, l);
-    if (r != null) tmp = Math.max(tmp, r);
-    if (n.isAliveNode) {
-      if (tmp != Integer.MIN_VALUE) {
-        max =
-            Math.max(
-                max,
-                Math.max(
-                    tmp + n.v,
-                    (l == Integer.MIN_VALUE ? 0 : l) + n.v + (r == Integer.MIN_VALUE ? 0 : r)));
-      }
-      return tmp > 0 ? tmp + n.v : n.v;
-    } else { // at least one child tree contains alive node
-      if (l != null && r != null) max = Math.max(max, l + r + n.v);
-      return tmp + n.v;
-    }
+
+    int c = Integer.MIN_VALUE; // max length got from child tree that contains alive node
+    if (l != null) c = Math.max(c, l);
+    if (r != null) c = Math.max(c, r);
+
+    if (l != null && r != null) max = Math.max(max, l + n.v + r);
+    if (n.isAliveNode && c != Integer.MIN_VALUE) max = Math.max(max, c + n.v);
+
+    return n.v + (n.isAliveNode ? Math.max(c, 0) : c);
   }
 }

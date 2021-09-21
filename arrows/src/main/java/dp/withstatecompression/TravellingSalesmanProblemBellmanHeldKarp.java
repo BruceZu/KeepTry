@@ -17,11 +17,26 @@ package dp.withstatecompression;
 
 import java.util.Arrays;
 
-/**
- * refer paper <<Travelling Salesman Problem and Bellman-Held-Karp Algorithm Quang Nhat Nguyen May
- * 10, 2020>> http://www.math.nagoya-u.ac.jp/~richard/teaching/s2020/Quang1.pdf
- */
-public class TSPBellmanHeldKarp {
+/*
+  refer paper <<travelling salesman problem and Bellman-Held-Karp Algorithm Quang Nhat Nguyen May
+  10, 2020>> http://www.math.nagoya-u.ac.jp/~richard/teaching/s2020/Quang1.pdf
+*/
+public class TravellingSalesmanProblemBellmanHeldKarp {
+  /*
+  "Given
+  - a list of cities
+  - the distances between each pair of cities
+
+  what is the shortest possible route that visits each city exactly once and returns to the origin city?"
+   */
+
+  /*
+  Understanding
+    -  any 2 nodes has a edge make them connected,  This make is possible
+       to start from any node visited to a new node
+
+  */
+
   /*
    Input: double[][] D. the smallest distance from any city to other cities
          D[i][j] is the smallest distance from city 'from' to city 'to'
@@ -31,37 +46,32 @@ public class TSPBellmanHeldKarp {
    city is tagged with number: from 0 to N-1
         possible number of compression status, sub set of cities, in total 2^N status: 0～2^N -1
 
+   Start city:
+     Any city can be start city, but it does not change the result. So let city 0 as the
+     start city.
    dp[s][e]
     The minimum distance from start city 0, via each city in s and end at city e.
+    s: is the visited cities represented in compressed status
     dp[s][e]  is distance value, not cycle value.
+    always include city 0, so valid s is always an odd number
+    city 0 is the start city 0
+    when s={city 0} dp[1][0]=0; other dp[s][end city] initial value is MAX_VALUE
+
     E.g.:
-          dp[1][0] is 0; dp[x>1][0] is MAX_VALUE
+          Initialized value: dp[1][0] is 0;  dp[s=2^i>1][0] is MAX_VALUE,  1 is 2^(city index i = 0)
           ...
-          dp[1101][0] is MAX_VALUE
+          dp[1101][0] is MAX_VALUE (initialized)
           dp[1101][2] is city 0 -> vis city 3-> reach end city 2
-          dp[1101][3] is city 0 -> vis city 2-> reach end city 3
-                      = min{dp[101][0]+D[0][3],
-                            dp[101][2]+D[2][3]}
+          dp[1101][3] is city 0 -> vis city 2-> reach end city 3 = min{dp[101][0]+D[0][3],
+                                                                       dp[101][2]+D[2][3]}
 
           dp[101101][2] is city 0 -> vis city 3,5-> reach end city 2
           dp[101101][3] is city 0 -> vis city 2,5-> reach end city 3
-          dp[101101][5] is city 0 -> vis city 3,2-> reach end city 5
-
-          dp[101101][5] = min{dp[1101][0]+D[0][5],
-                              dp[1101][2]+D[2][5],
-                              dp[1101][3]+D[3][5]};
-
-    s: compression status,
-    always include city 0,when there is only one city, it is the start city 0, s is 2^0=1.
-    so valid s is always an odd number
-
-    when s={city 0} dp[1][0]=0; other dp[s][end city] initial value is MAX_VALUE
-
+          dp[101101][5] is city 0 -> vis city 3,2-> reach end city 5 = min{dp[1101][0]+D[0][5],
+                                                                           dp[1101][2]+D[2][5],
+                                                                           dp[1101][3]+D[3][5]};
     End city:
      when s has more cities than city 0, city 0 will not be the candidate of end city
-    Start city:
-     Any city can be start city, but it does not change the result. So let city 0 as the
-     start city.
 
   O(2^n*n^2) time
 
@@ -99,6 +109,7 @@ public class TSPBellmanHeldKarp {
 
     double r = Double.MAX_VALUE;
     // add distance from end city i to start city 0, become cycle
+    // then return the shortest one
     for (int e = 1; e < N; e++) r = Math.min(dp[M - 1][e] + D[e][0], r);
     return r;
   }

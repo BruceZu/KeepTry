@@ -15,31 +15,65 @@
 
 package dp;
 
-/*
-53. Maximum Subarray
-Find the contiguous subarray within an array
-  (containing at least one number) which has the largest sum.
-
- [−2,1,−3,4,−1,2,1,−5,4], [4,−1,2,1] sum = 6.
- [−2,1,−3,4,2,−5,4], [4,2] sum = 6.
- [4,2], [4,2] sum = 6.
- [-4,-2], [-2] sum = -2.
-
- [3,4,0,-7,7],itself, sum=7 there are more than sub-string with the max sum 7
- [3,4],itself,sum=7
-
- If: current sum is negative, why not start a new accumulate from next number?
- else: current sum>=0 still have change to accumulate up >= pre max and extending the length of sub-string
-
-*/
 public class Leetcode53MaximumSubarray {
+  /*
+    53. Maximum Subarray
+    Given an integer array nums, find the contiguous subarray
+    (containing at least one number)
+    which has the largest sum and return its sum.
+
+    A subarray is a contiguous part of an array.
+
+    Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+    Output: 6
+    Explanation: [4,-1,2,1] has the largest sum = 6.
+
+
+    Input: nums = [1]
+    Output: 1
+
+
+    Input: nums = [5,4,-1,7,8]
+    Output: 23
+
+
+
+    Constraints:
+
+        1 <= nums.length <= 3 * 10^4
+        -10^5 <= nums[i] <= 10^5
+
+  */
+  /*
+   Kadane's Algorithm
+   [−2,1,−3,4,−1,2,1,−5,4], [4,−1,2,1] sum = 6.
+   [−2,1,−3,4,2,−5,4], [4,2] sum = 6.
+   [4,2], [4,2] sum = 6.
+   [-4,-2], [-2] sum = -2.
+
+   [3,4,0,-7,7],itself, sum=7 there are more than sub-string with the max sum 7
+   [3,4],itself,sum=7
+
+   If: current sum is negative, why not start a new accumulate from next number?
+   else: current sum>=0 still have change to accumulate up >= pre max and extending the length of sub-string
+
+   O(N) time
+   O(1) space
+  */
+
   public int maxSubArray(int[] nums) {
-    int N = nums.length;
-    int r = nums[0], m = nums[0];
-    for (int i = 1; i < N; i++) {
-      m = ((m < 0) ? 0 : m) + nums[i];
-      r = m >= r ? m : r; // == is useful to figure out a case of sub-string with the max sum.
+    int r = -100000, sum = 0;
+    for (int i : nums) {
+      sum = Math.max(0, sum) + i;
+      r = Math.max(r, sum);
     }
     return r;
   }
+
+  /*
+  Follow up:
+  If you have figured out the O(n) solution,
+     try coding another solution using the divide and conquer approach,
+  which is more subtle.
+  see `Finding subsegments with the maximal sum`*/
 }
