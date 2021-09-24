@@ -155,61 +155,24 @@ public class TopologicalSort {
     public char v; // unique ID
   }
 
-  public String topologicalSortOrder(Map<Node, Set<Node>> out) {
+  public String topologicalSortOrder(Map<Node, Set<Node>> g) {
     Map<Node, Boolean> v = new HashMap<>();
-    for (Node o : out.keySet()) if (hasCircle(o, out, v)) return "";
-
     StringBuilder r = new StringBuilder();
-    Set<Node> set = new HashSet(); // visited
-    for (Node o : out.keySet()) dfs(o, out, r, set);
+    for (Node o : g.keySet()) {
+      if (dfs(o, v, r, g)) return null;
+    }
     return r.reverse().toString();
   }
-  /*
-   hasCircle`(1) with  `topological sort order`(2)
-   Both (1) and（2）
-     - start each node to try
-     - visit all nodes and edges
 
-   But:
-   (1) exit once meet visited node
-   (2) stop once meet visited node.
-
-   (1) clean tracks on the back forward path
-   (2) not clean the visited record
-
-   both function can be merged together
-  */
-  void dfs(Node n, Map<Node, Set<Node>> out, StringBuilder r, Set<Node> v) {
-    if (v.contains(n)) return;
-    else v.add(n);
-
-    for (Node o : out.get(n)) {
-      dfs(o, out, r, v);
-    }
-    r.append(n); // Topological Order: Only all subtree are recorded can record current node.
-  }
-
-  // use a set to keep visited node in current path is enough, here use a map to compare
-  // hasCircle() with dfs_merged()
-  boolean hasCircle(Node n, Map<Node, Set<Node>> out, Map<Node, Boolean> v) {
-    if (v.containsKey(n)) return v.get(n);
+  //  find circle + calculate Topological Sort Order
+  boolean dfs(Node n, Map<Node, Boolean> v, StringBuilder r, Map<Node, Set<Node>> g) {
+    if (v.containsKey(n)) return v.get(n); // true: find circle
     else v.put(n, true);
-
-    for (Node o : out.get(n)) {
-      if (hasCircle(o, out, v)) return true;
-    }
-
-    v.put(n, false);
-    return false;
-  }
-  // merged 2 function: find circle(1) + calculate Topological Sort Order(2)
-  boolean dfs_merged(Node n, Map<Node, Boolean> v, StringBuilder r, Map<Node, Set<Node>> out) {
-    if (v.containsKey(n)) return v.get(n); //true: find circle
-    else v.put(n, true);
-    for (Node o : out.get(n)) {
-      if (dfs_merged(o, v, r, out)) return true; // find circle
+    for (Node o : g.get(n)) {
+      if (dfs(o, v, r, g)) return true; // find circle
     }
     v.put(n, false);
+
     r.append(n.v);
     return false;
   }
@@ -235,5 +198,105 @@ public class TopologicalSort {
         .edge(3, 6);
     System.out.println(g.topologicalOrder());
     // [0, 1, 4, 7, 5, 2, 3, 6]
+  }
+
+  // cases ====================================================================
+  /**
+   * Consider you have services that need to be started, but they have the following dependency
+   * services which need to be started first
+   *
+   * <p>A -> [] B -> [C, F] C -> [] D -> [A, E] E -> [F] F -> []
+   *
+   * <p>Output: [A, C, F, B, E, D]
+   */
+  static class Solution {
+    public char[] topolicalOrder1(Map<Character, List<Character>> g) {
+      if (g == null) return null;
+      Map<Character, Boolean> visit = new HashMap<>();
+      StringBuilder sb = new StringBuilder();
+      for (Character server : g.keySet()) {
+        if (dfs(server, g, sb, visit)) return null;
+      }
+
+      return sb.toString()
+          .toCharArray(); // do not need reverse as dependencies is recorded before current task
+      // sb:  A C  F  B  E  D
+    }
+
+    private boolean dfs(
+        Character server,
+        Map<Character, List<Character>> g,
+        StringBuilder r,
+        Map<Character, Boolean> visit) {
+      if (visit.containsKey(server)) return visit.get(server);
+      visit.put(server, true);
+      for (Character c : g.get(server)) {
+        if (dfs(c, g, r, visit)) return true;
+      }
+      visit.put(server, false);
+
+      r.append(server);
+      return false;
+    }
+
+    /*
+    Tasks 0~tasks-1
+    each array in followingTask is:  [current task, following task1,  following task2]
+    */
+    public List<Integer> topolicalOrder2(Integer tasks, int[][] followingTasks) {
+      if (followingTasks == null) return null;
+
+      Map<Integer, Set<Integer>> g = new HashMap<>();
+
+      for (int[] a : followingTasks) {
+        int currentTask = a[0];
+        for (int i = 1; i < a.length; i++) {
+          g.putIfAbsent(currentTask, new HashSet<>());
+          g.get(currentTask).add(a[i]);
+        }
+      }
+      // g: current task - following task
+      //  [0, 1], [1, 2], [2, 0]
+      //  0->{1}
+      //  1->{2}
+      //  2->{0}
+
+      Map<Integer, Boolean> visit = new HashMap<>();
+      List<Integer> r = new ArrayList<>();
+
+      // ‘N’ tasks, labeled from ‘0’ to ‘N-1’
+      for (int t = 0; t < tasks; t++) {
+        boolean findCircle = dfs(t, g, r, visit);
+        if (findCircle) return null;
+      }
+
+      Collections.reverse(r); // required as following task are recorded before current one.
+      return r;
+      //     2, 1, 0 -> // 0 , 1 ,2
+    }
+
+    private boolean dfs(
+        int t, Map<Integer, Set<Integer>> g, List<Integer> r, Map<Integer, Boolean> visit) {
+      if (visit.containsKey(t)) return visit.get(t);
+      visit.put(t, true);
+
+      if (g.get(t) == null) { // when some task has not following tasks
+        g.putIfAbsent(t, new HashSet<>());
+      }
+      for (int c : g.get(t)) {
+        if (dfs(c, g, r, visit)) return true;
+      }
+      visit.put(t, false);
+
+      r.add(t);
+      return false;
+      // 2, 1, 0
+    }
+
+    public static void main(String[] args) {
+      Solution t = new Solution();
+      List<Integer> r = t.topolicalOrder2(3, new int[][] {{0, 1}, {1, 2}});
+      System.out.println(r.toString());
+    }
   }
 }
