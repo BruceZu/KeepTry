@@ -38,21 +38,25 @@ public class TravellingSalesmanProblemBellmanHeldKarp {
   */
 
   /*
-   Input: double[][] D. the smallest distance from any city to other cities
-         D[i][j] is the smallest distance from city 'from' to city 'to'
-         if D[i][j] is Double.MAX_VALUE, means  no way between city i to city j
-
-   city number: N = D.length.
+   Input: double[][] D.
+         D[i][j] the smallest distance of city i and j.
+         if D[i][j] is Double.MAX_VALUE, means no way between city i to city j
    city is tagged with number: from 0 to N-1
+   city number: N = D.length.
         possible number of compression status, sub set of cities, in total 2^N status: 0～2^N -1
 
    Start city:
      Any city can be start city, but it does not change the result. So let city 0 as the
      start city.
-   dp[s][e]
-    The minimum distance from start city 0, via each city in s and end at city e.
-    s: is the visited cities represented in compressed status
-    dp[s][e]  is distance value, not cycle value.
+   dp[s][e]:
+       s: visited cities
+       e: end city
+       dp[s][e]: the minimum distance of path starting from city 0
+                 via visited cities represented with bitmask s,
+                 end at city e.
+                 is distance value, not cycle value.
+
+
     always include city 0, so valid s is always an odd number
     city 0 is the start city 0
     when s={city 0} dp[1][0]=0; other dp[s][end city] initial value is MAX_VALUE
@@ -81,39 +85,75 @@ public class TravellingSalesmanProblemBellmanHeldKarp {
            when sc is 0, dp[s>1][0] is MAX_VALUE;  dp[1][0] is 0,
            sc is end city make sense only
            when s==1 or s include only the start city 0
-  */
-  public static double solution(double[][] D) {
-    if (D == null || D.length == 1) return 0;
-    int N = D.length, M = (1 << N);
 
-    double[][] dp = new double[M][N];
-    for (int i = 0; i < M; i++) Arrays.fill(dp[i], Double.MAX_VALUE);
-    dp[1][0] = 0; // (int) Math.pow(2, 0), city 0
+     At the end:
+        add distance from end city i to start city 0, become cycle
+        then return the shortest one
+        Note: the min{ cost[(1 << N) - 1][i] | i is [1, N]} is the
+              shortest path from vertex 0 visiting all vertex and end at x vertex.
+  */
+  public static double solution(double[][] g) {
+    if (g == null || g.length == 1) return 0;
+    int N = g.length, M = 1 << N;
+
+    double[][] cost = new double[M][N];
+    for (int i = 0; i < M; i++) Arrays.fill(cost[i], Double.MAX_VALUE);
+    cost[1][0] = 0; // (int) Math.pow(2, 0), city 0
 
     // bottom-up
-    for (int s = 1; s < M; s++) { // O(2^n)
-      if ((s & 1) != 1) continue;
+    for (int bit = 1; bit < M; bit++) { // O(2^n)
+      if ((bit & 1) != 1) continue;
 
-      // O(n^2)
-      for (int c = 1; c < N; c++) {
-        if ((s & (1 << c)) != 0) continue;
+      // O(n^2)  number of f + number of t = number of all vertex n
+      for (int t = 1; t < N; t++) { // `to` city
+        if ((bit & (1 << t)) != 0) continue;
 
-        for (int sc = 0; sc < N; sc++) { // dp[s][0] ==MAX_VALUE
-          if ((s & (1 << sc)) != 0) {
-            int ns = s | (1 << c);
-            dp[ns][c] = Math.min(dp[ns][c], dp[s][sc] + D[sc][c]);
+        for (int f = 0; f < N; f++) { // `from` city, dp[s][0] ==MAX_VALUE
+          if ((bit & (1 << f)) != 0) {
+            int nbit = bit | (1 << t);
+            cost[nbit][t] = Math.min(cost[nbit][t], cost[bit][f] + g[f][t]);
           }
         }
       }
     }
 
     double r = Double.MAX_VALUE;
-    // add distance from end city i to start city 0, become cycle
-    // then return the shortest one
-    for (int e = 1; e < N; e++) r = Math.min(dp[M - 1][e] + D[e][0], r);
+    for (int e = 1; e < N; e++) r = Math.min(cost[M - 1][e] + g[e][0], r);
     return r;
   }
 
+  /*   draw and watch a case:
+             0
+           /   \
+          1  -  2
+      Assume: start vertex is 0, any edge weight is 1
+
+             end    bitmask   shorted cost
+       init   0      001        0  ( other cost[v][bitmask] is MAX_VALUE)
+       start
+              1      011        1
+              2      101        1
+       -----------------------------
+        next loop
+              010 (x)
+              011
+          =>  2      111       min{MAX, cost[1][011]+1}=2
+       -----------------------------
+        next loop
+              100 (x)
+              101
+          =>   1     111       min{MAX,cost[2][101]+1}=2
+       -----------------------------
+        next loop
+              110 (X)
+              111
+            not `to` vertex
+       -----------------------------
+        next loop
+             1000 not < 10000 end loop
+
+       check min { cost[1][111], cost[2][111]} = 2
+  */
   // --------------------------------------------------------------------------------
   public static void main(String[] args) {
     // city 0 -> city 1 -> city 2 -> city 3 -> city 0

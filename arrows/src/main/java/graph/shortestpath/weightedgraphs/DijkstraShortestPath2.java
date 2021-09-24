@@ -26,7 +26,9 @@ import java.util.Set;
 
 /**
  * <pre>
+ *
  * Difference with DijkstraShortestPath
+ *
  *
  * put all nodes in heap in advance
  *
@@ -43,30 +45,24 @@ import java.util.Set;
 public class DijkstraShortestPath2 {
 
   public static boolean hashShortestPath(Set<Node> graph, Node end, Node start) {
-    IBinaryHeap<Node> evaluating = new IBinaryHeap(32);
+    IBinaryHeap<Node> q = new IBinaryHeap(32);
     graph.stream().forEach(n -> n.setShortestDistanceToI(Integer.MAX_VALUE));
     start.setShortestDistanceToI(0);
 
-    for (Node n : graph) {
-      evaluating.offer(n);
-    }
-    while (!evaluating.isEmpty()) {
-      Node cur = evaluating.poll();
-      if (cur.getShortestDistanceToI() == Integer.MAX_VALUE) {
-        return false;
-      }
-      if (cur == end) {
-        return true;
-      }
-      for (Node n : cur.getNeighborWeighMap().keySet()) {
-        int alt = cur.getShortestDistanceToI() + cur.getNeighborWeighMap().get(n);
-        if (alt < 0) {
-          alt = Integer.MAX_VALUE;
-        }
-        if (alt < n.getShortestDistanceToI()) {
-          n.setShortestDistanceToI(alt);
-          n.setVertexToI(cur);
-          evaluating.shiftUp(n); // O(logN)
+    for (Node n : graph) q.offer(n);
+
+    while (!q.isEmpty()) {
+      Node f = q.poll();
+      if (f.getShortestDistanceToI() == Integer.MAX_VALUE) return false;
+      if (f == end) return true;
+
+      for (Node t : f.getNeighborWeighMap().keySet()) {
+        int cost = f.getShortestDistanceToI() + f.getNeighborWeighMap().get(t);
+        if (cost < 0) cost = Integer.MAX_VALUE;
+        if (cost < t.getShortestDistanceToI()) {
+          t.setShortestDistanceToI(cost);
+          t.setVertexToI(f);
+          q.shiftUp(t); // O(logN)
         }
       }
     }
@@ -90,11 +86,8 @@ public class DijkstraShortestPath2 {
   // if there is not path between them, return false.
   public static String shortestPath(Set<Node> graph, Node start, Node end) {
     boolean hasPath = hashShortestPath(graph, end, start);
-    if (hasPath) {
-      return getShortestPath(end);
-    } else {
-      return "this not path betwen start " + start.getName() + " and end " + end.getName();
-    }
+    if (hasPath) return getShortestPath(end);
+    else return "this not path betwen start " + start.getName() + " and end " + end.getName();
   }
 
   // -------------------------------------------------------------

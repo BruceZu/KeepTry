@@ -23,22 +23,26 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * <pre>
- * when the weight of edge is negative number. Dijkstra algorithm does not work.
- *
- * Scenario:
- * provide: start node and end node;
- *          It maybe a directed graph or undirected graph.
- * confirm if it is not a spanning tree: if there is circle or the end node is a single vertex
- *          (A spanning tree is a subset of Graph G, which has all the vertices covered with
- *          minimum possible number of edges.
- *          Hence, a spanning tree does not have cycles and it cannot be disconnected.)
- *
- * Find shortest path or check if there is path between the start node and the end node.
- *
- * Data structure
- * Node:
+/*
+Dijkstra's Algorithm basically starts at the node that you choose
+ (the source node) and it analyzes the graph to find the shortest
+ path between that node and all the other nodes in the graph.
+
+ when the weight of edge is negative number. Dijkstra algorithm does not work.
+
+  Scenario:
+  provide: start node and end node;
+            It maybe a directed graph or undirected graph.
+  confirm if it is not a spanning tree: if there is circle or the end node is a single vertex
+            (A spanning tree is a subset of Graph G, which has all the vertices covered with
+           minimum possible number of edges.
+           Hence, a spanning tree does not have cycles and it cannot be disconnected.)
+
+  Find the shortest path or check if there is path between the start node and the end node.
+
+
+  Data structure
+  Node:
  *    map: neighbor:distance.
  *    int: current shortest path distance from start node
  *    node: predecessor node on the current shortest path.

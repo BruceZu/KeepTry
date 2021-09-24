@@ -16,14 +16,15 @@
 package graph.minimum_spanning_tree;
 
 import graph.Edge;
+import unionfind.UnionFind;
+import unionfind.UnionFindImp;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import unionfind.UnionFind;
-import unionfind.UnionFindImp;
 
 /**
  *
@@ -37,30 +38,30 @@ import unionfind.UnionFindImp;
  */
 public class MinimumSpanningTreeKruskal {
 
-    /**
-     * @param N = |V|, M = |E|
-     * @param edges graph represented by edges array
-     */
-    public static Collection<Edge> kruskal(int N, Edge[] edges) {
-        List<Edge> r = new ArrayList();
+  /**
+   * @param N = |V|, M = |E|
+   * @param edges graph represented by edges array
+   */
+  public static Collection<Edge> kruskal(int N, Edge[] edges) {
+    List<Edge> r = new ArrayList();
 
-        Arrays.sort(edges); // O(MlogM). M <= N(N-1)<N^2, O(MlogM)-> O(MlogN)
+    Arrays.sort(edges); // O(MlogM). M <= N(N-1)<N^2, O(MlogM)-> O(MlogN)
 
-        UnionFind<Integer> uf =
-                new UnionFindImp(IntStream.range(0, N).boxed().collect(Collectors.toSet()));
+    UnionFind<Integer> uf =
+        new UnionFindImp(IntStream.range(0, N).boxed().collect(Collectors.toSet()));
 
-        int ei = 0; // index of edges
-        Edge e; // current edge
-        do { //  O(M)
-            e = edges[ei];
-            int v1Root = uf.find(e.from), v2Root = uf.find(e.to);
-            if (v1Root != v2Root) {
-                // skip when v1Root == v2Root, else it will create circle
-                r.add(e);
-                uf.union(v1Root, v2Root);
-            }
-            ei++;
-        } while (r.size() < N - 1);
-        return r;
-    }
+    int i = 0; // index of edges
+    Edge e; // current edge
+    do { //  O(M)
+      e = edges[i];
+      int r1 = uf.find(e.from), r2 = uf.find(e.to);
+      if (r1 != r2) {
+        // skip when v1Root == v2Root, else it will create circle
+        r.add(e);
+        uf.union(r1, r2);
+      }
+      i++;
+    } while (r.size() < N - 1);
+    return r;
+  }
 }
