@@ -21,8 +21,7 @@ public class Leetcode1099TwoSumLessThanK {
   /*
   Ask: an array nums of integers and integer k
      return the maximum sum such that there exists
-     i < j with nums[i] + nums[j] = sum and
-     sum < k.
+     i < j with nums[i] + nums[j] < k.
      If no i, j exist satisfying this equation, return -1.
 
       1 <= nums.length <= 100
@@ -46,16 +45,16 @@ public class Leetcode1099TwoSumLessThanK {
     // 1 <= nums.length <= 100
     Arrays.sort(A);
     int l = 0, r = A.length - 1;
-    int re = -1;
+    int max = -1;
     while (l < r) {
       int sum = A[l] + A[r];
       if (sum >= k) r--;
       else {
-        if (sum > re) re = sum;
+        if (sum > max) max = sum;
         l++;
       }
     }
-    return re;
+    return max;
   }
 
   /* --------------------------------------------------------------------------
