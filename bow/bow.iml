@@ -53,5 +53,6 @@
     <orderEntry type="library" name="aopalliance-abi" level="project" />
     <orderEntry type="library" name="javax-inject-javax.inject-1" level="project" />
     <orderEntry type="library" name="guice_library-abi" level="project" />
+    <orderEntry type="library" name="total-global" level="application" />
   </component>
 </module>
