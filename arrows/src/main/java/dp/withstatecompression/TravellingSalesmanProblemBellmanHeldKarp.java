@@ -93,10 +93,11 @@ public class TravellingSalesmanProblemBellmanHeldKarp {
               shortest path from vertex 0 visiting all vertex and end at x vertex.
   */
   public static double solution(double[][] g) {
-    if (g == null || g.length == 1) return 0;
+    if (g == null || g.length == 1) return 0; // Assume at lest there are 2 cities.
     int N = g.length, M = 1 << N;
 
     double[][] cost = new double[M][N];
+    //  Do not user Integer.MAX_VALUE: cost[bit][f] + g[f][t] -> negative number
     for (int i = 0; i < M; i++) Arrays.fill(cost[i], Double.MAX_VALUE);
     cost[1][0] = 0; // (int) Math.pow(2, 0), city 0
 
@@ -110,14 +111,15 @@ public class TravellingSalesmanProblemBellmanHeldKarp {
 
         for (int f = 0; f < N; f++) { // `from` city, dp[s][0] ==MAX_VALUE
           if ((bit & (1 << f)) != 0) {
-            int nbit = bit | (1 << t);
-            cost[nbit][t] = Math.min(cost[nbit][t], cost[bit][f] + g[f][t]);
+            int next = bit | (1 << t);
+            cost[next][t] = Math.min(cost[next][t], cost[bit][f] + g[f][t]);
           }
         }
       }
     }
 
     double r = Double.MAX_VALUE;
+    // Assume at lest there are 2 cities.
     for (int e = 1; e < N; e++) r = Math.min(cost[M - 1][e] + g[e][0], r);
     return r;
   }
@@ -130,24 +132,24 @@ public class TravellingSalesmanProblemBellmanHeldKarp {
 
              end    bitmask   shorted cost
        init   0      001        0  ( other cost[v][bitmask] is MAX_VALUE)
-       start
+       start from 001, city 0, to city 1 and city 2.
               1      011        1
               2      101        1
        -----------------------------
-        next loop
+        next loop from now on, never from city 0.
               010 (x)
               011
-          =>  2      111       min{MAX, cost[1][011]+1}=2
+          =>  2      111       min{MAX, cost[1][011]+1}=2 from city 1 to city 2
        -----------------------------
         next loop
               100 (x)
               101
-          =>   1     111       min{MAX,cost[2][101]+1}=2
+          =>   1     111       min{MAX,cost[2][101]+1}=2 from city 2 to city 1
        -----------------------------
         next loop
               110 (X)
               111
-            not `to` vertex
+            not `to` city
        -----------------------------
         next loop
              1000 not < 10000 end loop
