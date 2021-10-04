@@ -39,7 +39,7 @@ public class KnapsackMax {
     }
   }
 
-  /*
+  /*  Multiple Knapsack
        dp[i][j] = max{ dp[i-1][ j - k*cost] + k*value }
        dp[i][j] = max{ dp[i-1][(j/cost)*cost + j%cost - k*cost] + k*value }
        dp[i][j] = max{ dp[i-1][(j/cost-k)*cost + j%cost] +k*value - (j/cost)*value }  + (j/cost)*value
@@ -51,7 +51,7 @@ public class KnapsackMax {
            d = j % cost
            cnt = j/cost
        When k=0
-       dp[i-1][(cnt-k)*cost + d] - (cnt-k)*value
+         dp[i-1][(cnt-k)*cost + d] - (cnt-k)*value
        = dp[i-1][j] - (cnt)*value
 
        The elements in the max{},not dp[i-1][j], is cut into groups, groups number = cost,
@@ -87,16 +87,16 @@ public class KnapsackMax {
   */
 
   private static void asMultipleKnapsack(int cost, int value, int count, int dp[]) {
-    int W = dp.length - 1;
-    // Slide window size is count +1. need keep element in advance of window to let imq refer.
-    int[] q = new int[W + 1];
+    // q: a slide window, its size is count +1. need keep element in advance of window to let imq
+    // refer.
+    int[] q = new int[dp.length];
     // Keep top is the max value's index of current q
     Deque<Integer> imq;
     for (int d = 0; d < cost; d++) { // group by j%cost[i]
       // cnt = j/cost[i]. cnt value is 0, 1, 2, 3, ..., with j is d, d+cost, d+2*cost, ...
       int i = -1;
-      imq = new LinkedList<>(); //
-      for (int j = d, cnt = 0; j <= W; j += cost, cnt++) {
+      imq = new LinkedList<>();
+      for (int j = d, cnt = 0; j <= dp.length - 1; j += cost, cnt++) {
         i++;
         int e = dp[j] - cnt * value; // new element
         // =======  [calculate the max in slide window of queue] START =======
@@ -149,7 +149,7 @@ public class KnapsackMax {
 
   // ------------------------- test ----------------------------------------------------------
   public static void main(String[] args) {
-    // Test my note book case with with multipleBackpack()
+    // Test my notebook case with multipleBackpack()
     int[][] items =
         new int[][] {
           new int[] {7, 9, 9},
