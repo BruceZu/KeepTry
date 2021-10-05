@@ -25,13 +25,14 @@ public class Leetcode332ReconstructItinerary {
    of one flight.
 
    Reconstruct the itinerary in order and return it.
-   - Must begin with "JFK".
+   - Must begin with "JFK". (Bruce: the result is affected by the start city)
    - If there are multiple valid itineraries, you should return the
      itinerary that has the smallest lexical order when read as a single string.
 
 
 
    You may assume all tickets form at least one valid itinerary.
+    (Bruce: this is important, itinerary means a path to connect all cities, some city can be visited more than once)
    You must use all the tickets once and only once.
 
     1 <= tickets.length <= 300
@@ -221,12 +222,12 @@ public class Leetcode332ReconstructItinerary {
     // O(ElogE) time? sorting depends on the structure of the input graph.
     for (List<String> ticket : tickets)
       g.computeIfAbsent(ticket.get(0), k -> new PriorityQueue()).add(ticket.get(1));
-    dfs("JFK", g, r); // O(E) time
+    dfs("JFK", g, r); // O(E) time. Not try all vertex like topological
     return r;
   }
 
   void dfs(String f, Map<String, PriorityQueue<String>> g, List<String> r) {
-    while (g.containsKey(f) && !g.get(f).isEmpty()) {
+    while (g.containsKey(f) && !g.get(f).isEmpty()) { // it is while not if
       dfs(g.get(f).poll(), g, r);
     }
     r.add(0, f);

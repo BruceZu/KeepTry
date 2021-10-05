@@ -145,7 +145,7 @@ public class Leetcode211AddandSearchWordDatastructuredesign {
              call recursion function
      */
     private boolean search(String word, TNode<Character> n) {
-      int i = 0; // used to next recursion to get get substring
+      int i = 0; // used to next recursion to get substring
       for (Character c : word.toCharArray()) {
         if (n.map.containsKey(c)) {
           n = n.map.get(c);
