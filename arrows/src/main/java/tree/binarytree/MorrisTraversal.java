@@ -27,7 +27,7 @@ package tree.binarytree;
  *  - how to end the loop?
  *  - for 3 kinds of traversal order, what is the difference between
  *    node has not left subtree and left subtree has been handled
- *  - how to use the method {@link MorrisTraversal#flap(Node)}
+ *  - how to use the method {@link MorrisTraversal#linkAndInLeftTree(Node)}
  *
  *  All possible binary scenario:
  *    current node | left subtree | right subtree
@@ -66,9 +66,9 @@ public class MorrisTraversal {
    *  Caller can understand result
    *  - 'true' as node 'n''s left subtree has not been processed, link is created
    *  - 'false' as node 'n' has no left sub tree. or 'n''s left subtree has been processed
-   *     link is broken.
+   *     link is broken. Anyway, 'false' means need not visit left subtree anymore.
    */
-  public static boolean flap(Node n) {
+  public static boolean linkAndInLeftTree(Node n) {
     if (n.l == null) return false;
     Node x = n.l; // left sub tree right most node, node 'n''s predecessor child in-order
     while (x.r != null && x.r != n) {
@@ -83,38 +83,18 @@ public class MorrisTraversal {
     }
   }
 
-  public static String inOrderWithComments(Node root) {
-    StringBuilder r = new StringBuilder();
-    Node n = root;
-    /*
-    The tree rightmost node.r is null. other non null node under processing always has right child
-    and can always switch to right subtree/linked parent.
-    {@link MorrisTraversal#isRightLinked(MorrisTraversal.Node)} will check whether current.l is null.
-    Code in loop will switch current node to it's left subtree only when the left subtree is not
-    null.
-    */
-    while (n != null) {
-      if (flap(n)) {
-        // current node has left subtree and the left subtree has not been processed. switch
-        // current node to its left subtree
-        n = n.l;
-        continue;
-      }
-      // current node has not left,reached left most node., or left subtree has been
-      // processed
-      r.append(n.name);
-      n = n.r; // continue right subtree
-    }
-    return r.toString();
-  }
+  /*
+   exit loop condition: right is null.
+        The tree rightmost node.r is null. other non-null node under processing always has right child
+        and can always switch to right subtree/linked parent.
 
-  public static String inOrder(Node root) {
+   case: Leetcode99RecoverBinarySearchTree
+  */
+  public static String inOrder(Node n) {
     StringBuilder r = new StringBuilder();
-    Node n = root;
     while (n != null) {
-      if (flap(n)) {
+      while (linkAndInLeftTree(n)) {
         n = n.l;
-        continue;
       }
       r.append(n.name);
       n = n.r;
@@ -128,7 +108,7 @@ public class MorrisTraversal {
     while (n != null) {
       // r.append(n.name); is wrong here. when current node's left subtree has been handled
       // So put off handling after checking n.l existence, even put off it after checking thread.
-      if (flap(n)) {
+      if (linkAndInLeftTree(n)) {
         r.append(n.name);
         n = n.l;
         continue;
@@ -146,31 +126,12 @@ public class MorrisTraversal {
     StringBuilder r = new StringBuilder();
     Node n = root;
     while (n != null) {
-      if (flap(n)) {
+      if (linkAndInLeftTree(n)) {
         n = n.l;
         continue;
       }
-      // n has left subtree but it has been processed or h has not left subtree
       if (n.l != null) {
         printRightLineBottomUpOf(n.l, r); // now left subtree is done.
-      }
-      n = n.r;
-    }
-    if (root != null) printRightLineBottomUpOf(root, r);
-    return r.toString();
-  }
-
-  /** without comments version */
-  public static String postOrder2(Node root) {
-    StringBuilder r = new StringBuilder();
-    Node n = root;
-    while (n != null) {
-      if (flap(n)) {
-        n = n.l;
-        continue;
-      }
-      if (n.l != null) {
-        printRightLineBottomUpOf(n.l, r);
       }
       n = n.r;
     }
@@ -193,40 +154,32 @@ public class MorrisTraversal {
   // --------------------------------------------------------------------------//
   public static void main(String[] args) {
     // null
-    System.out.println(inOrderWithComments(null).equals(""));
     System.out.println(preOrder(null).equals(""));
     System.out.println(postOrder(null).equals(""));
-    System.out.println(postOrder2(null).equals(""));
+
     // one node
     Node root = new Node("A");
-    System.out.println(inOrderWithComments(root).equals("A"));
     System.out.println(preOrder(root).equals("A"));
     System.out.println(postOrder(root).equals("A"));
-    System.out.println(postOrder2(root).equals("A"));
 
     Node l = new Node("L");
     Node r = new Node("R");
 
     // no right subtree
     root.l = l;
-    System.out.println(inOrderWithComments(root).equals("LA"));
     System.out.println(preOrder(root).equals("AL")); //
     System.out.println(postOrder(root).equals("LA"));
-    System.out.println(postOrder2(root).equals("LA"));
+
     // no left subtree
     root.l = null;
     root.r = r;
 
-    System.out.println(inOrderWithComments(root).equals("AR"));
     System.out.println(preOrder(root).equals("AR"));
     System.out.println(postOrder(root).equals("RA"));
-    System.out.println(postOrder2(root).equals("RA"));
     // has both left and right subtree
     root.l = l;
-    System.out.println(inOrderWithComments(root).equals("LAR"));
     System.out.println(preOrder(root).equals("ALR")); //
     System.out.println(postOrder(root).equals("LRA"));
-    System.out.println(postOrder2(root).equals("LRA"));
 
     // other case.
     Node n1 = new Node("1");
@@ -246,9 +199,7 @@ public class MorrisTraversal {
     n4.r = n6;
     n7.r = n8;
     n8.l = n9;
-    System.out.println(inOrderWithComments(n1).equals("325461798"));
     System.out.println(preOrder(n1).equals("123456789"));
     System.out.println(postOrder(n1).equals("356429871"));
-    System.out.println(postOrder2(n1).equals("356429871"));
   }
 }

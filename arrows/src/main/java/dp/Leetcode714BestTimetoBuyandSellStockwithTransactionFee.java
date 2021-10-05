@@ -24,40 +24,46 @@ public class Leetcode714BestTimetoBuyandSellStockwithTransactionFee {
      you must sell the stock before you buy again.
 
   From the Leetcode188BestTimetoBuyandSellStockIV
+  at most N-1 Transaction, [0,N-2]
   Easy to get this variation
   But is too slow  O(N^2) time and O(N) space
   */
   public int maxProfit2(int[] prices, int fee) {
     if (prices == null || prices.length <= 1) return 0;
     int N = prices.length;
-    int[] c = new int[N - 1]; // candidate-cost
+    int[] c = new int[N - 1];
     Arrays.fill(c, Integer.MAX_VALUE);
-    int[] pro = new int[N - 1];
+    int[] m = new int[N - 1]; // m[i] the max profit, money, for at most i times T
     for (int p : prices) {
       for (int k = 0; k <= N - 2; k++) {
-        c[k] = Math.min(c[k], p - (k == 0 ? 0 : pro[k - 1]));
-        pro[k] = Math.max(pro[k], p - c[k] - fee);
+        c[k] = Math.min(c[k], p - (k == 0 ? 0 : m[k - 1]));
+        m[k] = Math.max(m[k], p - c[k] - fee);
       }
     }
-    return pro[N - 1];
+    return m[N - 1];
   }
   /*
-  As the there is no limit on the times of TX 'as many transactions as you like'
+  As the there is no limit on the times of Transaction 'as many transactions as you like'
   Then the inner loop should not be there anymore
-  the state machine now for any day will be in only one of 2 status
-  - hold : comes from sold or rest
-  - sold : comes from hold or rest
+
+  State machine now for any day will be in only one of 2 status
+     hold---(rest)----> hold || sold---(buy) --->hold
+     sold---(rest)----> sold || hold---(sell)---> sold
+
+  2 status
+  3 action: buy sell rest
   O(N) time and O(1) space
    */
   public int maxProfit(int[] prices, int fee) {
     if (prices == null || prices.length <= 1) return 0;
-    int N = prices.length;
-    int h = Integer.MIN_VALUE; // do not start from this status
-    int s = 0;
+
+    // h,s: max profit in hold, sold status
+    int h = Integer.MIN_VALUE;
+    int s = 0; // only sold can buy
     for (int p : prices) {
-      h = Math.max(h, s - p);
+      h = Math.max(h, s - p); // cost cut
       s = Math.max(s, h + p - fee);
     }
-    return s;
+    return s; // only care the max profit in the last sold status
   }
 }

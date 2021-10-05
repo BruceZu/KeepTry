@@ -39,17 +39,36 @@ public class KnapsackMax {
     }
   }
 
-  /*  Multiple Knapsack
+  /*  Multiple Knapsack:
+     Scenario:
+                package size has limitation, each item has
+                   - size / per
+                   - value / per
+                   - quantity/count
+                how many item should be taken in package to get max value.
+                try best to put more items and get more value. not exactly
+
+                problem: to try spend all money
+
+       dp[i][j]: means [0, i] items achieved max value in j size space
+
        dp[i][j] = max{ dp[i-1][ j - k*cost] + k*value }
-       dp[i][j] = max{ dp[i-1][(j/cost)*cost + j%cost - k*cost] + k*value }
+       0 <= j <= W,
+       0 <= k <= min{count, j/cost}
+
+       make some conversion:
+
+       as j=(j/cost)*cost + j%cost, so
+       dp[i][j] = max{ dp[i-1][(j/cost)*cost + j%cost -k*cost] + k*value }
+       dp[i][j] = max{ dp[i-1][(j/cost-k)*cost + j%cost] +k*value }
+
+       minus (j/cost)*value in max{}, then let the result of max{} to add (j/cost)*value
        dp[i][j] = max{ dp[i-1][(j/cost-k)*cost + j%cost] +k*value - (j/cost)*value }  + (j/cost)*value
        dp[i][j] = max{ dp[i-1][(j/cost-k)*cost + j%cost] - (j/cost-k)*value }  + (j/cost)*value
+
+       let cnt = j/cost, d = j % cost
        dp[i][j] = max{ dp[i-1][(cnt-k)*cost + d] - (cnt-k)*value }  + cnt*value
-       Where
-           0 <= j <= W,
-           0 <= k <= min{count, j/cost}
-           d = j % cost
-           cnt = j/cost
+
        When k=0
          dp[i-1][(cnt-k)*cost + d] - (cnt-k)*value
        = dp[i-1][j] - (cnt)*value

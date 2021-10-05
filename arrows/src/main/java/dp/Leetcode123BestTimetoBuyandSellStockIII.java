@@ -59,24 +59,25 @@ public class Leetcode123BestTimetoBuyandSellStockIII {
   public int maxProfit(int[] p) {
     if (p.length == 0) return 0;
     int N = p.length;
-    int[] t = new int[N]; // temp table
-    // l is the max one transaction profit in the scope[0,i]
+    int[] maxl = new int[N]; // maxl[i] and l is the max one transaction profit in [0,i]
     int l = 0, min = Integer.MAX_VALUE;
     for (int i = 0; i < N; i++) {
-      if (p[i] < min) min = p[i];
-      else l = Math.max(l, p[i] - min);
-      t[i] = l;
+      l = Math.max(l, p[i] - min); // calculate profit firstly before update min
+      min = Math.min(min, p[i]);
+
+      maxl[i] = l;
     }
 
-    int max2 = Integer.MIN_VALUE; //  max2=left_profits[0,i]+right_profits[i,N-1]
+    int a = Integer.MIN_VALUE; //  a=left_profits[0,i]+right_profits[i,N-1]
     // r is the max one transaction profit in the scope[i,N-1]
     int r = 0, max = Integer.MIN_VALUE;
     for (int i = N - 1; i >= 0; i--) {
-      if (p[i] > max) max = p[i];
-      else r = Math.max(r, max - p[i]);
-      max2 = Math.max(max2, r + t[i]);
+      r = Math.max(r, max - p[i]); // calculate profit firstly before update max
+      max = Math.max(p[i], max);
+
+      a = Math.max(a, r + maxl[i]);
     }
-    return max2;
+    return a;
   }
 
   /* --------------------------------------------------------------------------
@@ -87,6 +88,7 @@ public class Leetcode123BestTimetoBuyandSellStockIII {
   "sell of transaction #2".
   Possible to buy->sell->buy->sell on the same day.
    Run cases:
+   day       1 2 3 4 5 6 7 8
    prices = [3,3,5,0,0,3,1,4]
    Output: 6.  Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
    Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
@@ -102,34 +104,37 @@ public class Leetcode123BestTimetoBuyandSellStockIII {
    Input: prices = [1]
    Output: 0
 
+  Note:
+
+      the order to calculate c1, p1, c2, p2 to make sure
+      "at most two transactions." means 0, or 1 or 2 transactions
+      "you must sell the stock before you buy again." but this can happen on one day
+
+      More general concept refer to Leetcode188BestTimetoBuyandSellStockIV
+      c1: minimum value of cost / price that we have seen so far at each step
+      m1: the maximum profit, money, of one transaction in [0, i] day scope, this value would be the answer
+          for the first problem in the series `Best Time to Buy and Sell Stock`
+      c2: minimum value of cost of reinvest the gained profit in the second transaction
+          Similar with transaction_1_cost, we try to find the lowest price so far,
+          which in addition would be partially compensated by the profits gained
+          from the first transaction.
+      m2:  the maximal profits with at most two transactions at each step.
+
+  Idea: Trying to find the minimum cost for first and second T
+        the second minimum cost depends on the max money of first T
+
   O(N) time O(1) space
     */
   public static int maxProfit2(int[] prices) {
     int c1 = Integer.MAX_VALUE, c2 = Integer.MAX_VALUE;
-    int p1 = 0, p2 = 0;
+    int m1 = 0, m2 = 0;
 
     for (int p : prices) {
-      // the order to calculate c1, p1, c2, p2 to make sure
-      //  "at most two transactions." means 0, or 1 or 2 transactions
-      //  "you must sell the stock before you buy again." but this can happen on one day
-      //
-      // More general concept refer to Leetcode188BestTimetoBuyandSellStockIV
-
-      // the minimal price value that we have seen so far at each step
-      c1 = Math.min(c1, p); // minimum value of cost
-      // the maximum profit if only one transaction is allowed
-      // at the end of the iteration, this value would be the answer
-      // for the first problem in the series `Best Time to Buy and Sell Stock`
-      p1 = Math.max(p1, p - c1); // max value
-
-      // reinvest the gained profit in the second transaction
-      // Similar with transaction_1_cost, we try to find the lowest price so far,
-      // which in addition would be partially compensated by the profits gained
-      // from the first transaction.
-      c2 = Math.min(c2, p - p1); // minimum value of cost
-      // the maximal profits with at most two transactions at each step.
-      p2 = Math.max(p2, p - c2); // max value of profit of total at most 2 transactions
+      c1 = Math.min(c1, p); // min cost
+      m1 = Math.max(m1, p - c1); // max money at most 1 T
+      c2 = Math.min(c2, p - m1); // min cost, update by today price- max money of T1 in [0,today].
+      m2 = Math.max(m2, p - c2); // max money at most 2 Ts
     }
-    return p2;
+    return m2;
   }
 }

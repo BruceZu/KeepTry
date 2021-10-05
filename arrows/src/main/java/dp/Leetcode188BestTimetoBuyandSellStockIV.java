@@ -30,39 +30,20 @@ public class Leetcode188BestTimetoBuyandSellStockIV {
      when K is bigger enough the answer is profit got by no times limitation transactions
      any times of transaction on the first day will get profit 0, as only one price
      the price diff is 0.
+     Idea same as `123. Best Time to Buy and Sell Stock III` just extended the column
+     so just column and column to update from top to downside
 
-     candidate-cost[k]: the cost value for the candidate kth transaction which is
-        assumed to be done by selling with today price
-        It is a minimum value selected from
-        0th price - 0                              ( happened on price[0] on 0th day)
-        1th price - profit of previous transaction ( happened on price[1] on 1th day)
-        2th price - profit of previous transaction ( happened on price[2] on 2th day)
-        ...
-        today price - profit of previous transaction ( happened on price[today] on today day)
-        it = min{it, current price minus cumulated profit after previous transaction, kept in
-        max-profit[k-1]}
-        The cost value may not happen( by buy action) on today
-        and it is affected by the previous 0~k-1 transaction.
-        initial value is MAX. for each transaction in -1 day the candidate-cost[k], which is a min value,
-        is MAX,
+     Details:
+     min-cost[k]:  may not happen( by buy action) on today
+              it is affected by the previous 0~k-1 transaction.
+        initial value is MAX.
 
-     max-profit[k]: profit value in hand after kth transaction's sell action which may
-        happen on a day before today.
-        it is a max value, selected from
-        it == max{it, current price - cost[k]}.
+     max-profit[k]: is the max profit at most k transactions
         The sell action of the kth transaction with max profit may not happen
-        today and in that case it has been calculated and kept in max-profixi].
+        today and in that case it has been calculated and kept in max-profix[].
         if the sell action of the ith transaction with max profit happens
         today, it depends on the just calculated cost[k].
-
-        max-profit[k] is also the profit after all 0-k transactions
         initial value is 0
-        max-profit[k-1]: when the 0th transaction buy action happen the
-                 cost will be today price - max-profit[k-1] which is 0.
-                 -1 out of 0 based index.
-       when current is the 1th transaction. the profit at hand is 0;
-       initialized with 0 which is the cumulated profit got after -1
-       transaction
 
     candidate-cost[k] in i days depends on
        - left:  candidate-cost[k] in i-1 days
@@ -82,28 +63,30 @@ public class Leetcode188BestTimetoBuyandSellStockIV {
   */
   public static int maxProfit(int K, int[] prices) {
     if (K == 0 || prices == null || prices.length <= 1) return 0;
-    int[] c = new int[K]; // candidate-cost
-    Arrays.fill(c, Integer.MAX_VALUE);
+    int[] c = new int[K]; // c[i] min cost for ith T ( transaction) it depends on m[i-1] when i>0
+    Arrays.fill(c, Integer.MAX_VALUE); // default MAX
 
-    int[] pro = new int[K];
+    int[] m = new int[K]; // m[i] max profit money for at most i times T, default 0
+
+    // column by column update
     for (int p : prices) {
       for (int k = 0; k < K; k++) {
-        c[k] = Math.min(c[k], p - (k == 0 ? 0 : pro[k - 1]));
-        pro[k] = Math.max(pro[k], p - c[k]);
+        c[k] = Math.min(c[k], p - (k == 0 ? 0 : m[k - 1]));
+        m[k] = Math.max(m[k], p - c[k]);
       }
     }
-    return pro[K - 1];
+    return m[K - 1];
   }
   /*
   The logic is same as above
             -1    day 0,    ...,      c-1,          c,           ..., N-1
-   tx 1
-   tx 2
-   tx 3
+   T  1
+   T  2
+   T  3
    ...       0   p(r-1)(0), ...,      p(r-1)(c-1)    p(r-1)(c)
-   tx r                               p(r)  (c-1)    p(r)  (c)
+   T  r                               p(r)  (c-1)    p(r)  (c)
    ...
-   tx k
+   T  k
 
    current the max profit `p(r)` after r transaction in first c days depends on
          - the max profit after r transaction in first c-1 days `p(r)(c-1)`
