@@ -184,7 +184,8 @@ public class Leetcode1382BalanceaBinarySearchTree {
                     ..
 
      after 2 times of left rotation =>
-
+       dumb
+          \
           2
        /    \
      1       4
@@ -204,6 +205,9 @@ public class Leetcode1382BalanceaBinarySearchTree {
        - while cur and cur.right is not null(x)
        - 7/2=3 times
     becomes:
+
+       dumb
+        \
          4
        /  \
       2    6
@@ -215,6 +219,9 @@ public class Leetcode1382BalanceaBinarySearchTree {
   left rotation is performed on every SECOND node of the list
        - while cur and cur.right is not null(x)
        - 3/2=1 time
+
+         dumb
+           \
            6
           /  \
          4    8
@@ -232,32 +239,32 @@ public class Leetcode1382BalanceaBinarySearchTree {
     //  m = [2^((int)log(n+1)]-1
     int m = (int) Math.pow(2, (int) (Math.log(sum + 1) / Math.log(2))) - 1;
     rebuildBST(dumb, sum - m);
-    for (m = m / 2; m > 0; m /= 2) {
+    for (m >>>= 1; m > 0; m >>>= 1) {
       rebuildBST(dumb, m);
     }
     return dumb.right;
   }
 
   // and return the number of all nodes
-  // dumb is the leaf of the list tree.
+  // d will be the leaf node at last
   static int toList(TreeNode d) {
     int sum = 0;
-    TreeNode cur = d.right;
-    while (cur != null) {
-      if (cur.left != null) {
-        TreeNode p = cur; // pointer to n
-        cur = cur.left;
+    TreeNode n = d.right;
+    while (n != null) {
+      if (n.left != null) {
+        TreeNode p = n; // pointer to n
+        n = n.left;
 
-        p.left = cur.right;
-        cur.right = p;
-        d.right = cur;
+        p.left = n.right;
+        n.right = p;
+        d.right = n;
       } else {
         // not change the tree structure, just go through along right sub-tree, so the outer
         // dumb.right will be
         // the left most node of the original tree
         sum++;
-        d = cur;
-        cur = cur.right;
+        d = n;
+        n = n.right;
       }
     }
     return sum;
@@ -265,17 +272,17 @@ public class Leetcode1382BalanceaBinarySearchTree {
 
   // left rotation with given times,  performed on every second node of the list
   static void rebuildBST(TreeNode dumb, int times) {
-    TreeNode cur = dumb.right;
-    while (times-- > 0) { // cur!=null  &&  cur.right!=null
-      TreeNode p = cur;
-      cur = cur.right;
+    TreeNode n = dumb.right;
+    while (times-- > 0) {
+      TreeNode p = n;
+      n = n.right;
 
-      dumb.right = cur;
-      p.right = cur.left;
-      cur.left = p;
+      dumb.right = n;
+      p.right = n.left;
+      n.left = p;
 
-      dumb = cur;
-      cur = cur.right;
+      dumb = n;
+      n = n.right;
     }
   }
 
