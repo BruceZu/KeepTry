@@ -18,11 +18,10 @@ package bfs;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * <pre>
- * 127. Word Ladder
- * Difficulty: Medium
- *
+/*
+
+ 127. Word Ladder
+
  * Given two words (beginWord and endWord), and a dictionary's word list,
  * find the length of shortest transformation sequence from beginWord to endWord,
  * such that:

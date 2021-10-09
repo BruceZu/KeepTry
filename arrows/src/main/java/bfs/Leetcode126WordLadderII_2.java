@@ -30,32 +30,22 @@ public class Leetcode126WordLadderII_2 {
   private String[] tmpPath;
   private List<List<String>> shortests;
 
-  // i is the index in tmpPath for the next string in path
-  private void dfsPaths(String key, int size) {
-    if (key.equals(end)) shortests.add(Arrays.asList(Arrays.copyOf(tmpPath, size)));
-    if (graph.get(key) == null) return;
-    for (String t : graph.get(key)) {
-      tmpPath[size] = t;
-      dfsPaths(t, size + 1);
-    }
-  }
+  public List<List<String>> findLadders(String begin, String end, List<String> wordList) {
+    shortests = new ArrayList<>();
+    Set<String> D = new HashSet<>(wordList);
+    if (!D.contains(end)) return shortests;
+    // 1 build graph
+    this.begin = begin;
+    this.end = end;
+    graph = new HashMap<>();
+    if (!bfsBuildDAG(D)) return shortests;
 
-  // Adjacency strings str and tra, str is in Left layer, tra is in right layer,
-  // tra is not in dictionary. but it is right layer, need it else no way to let meet happen
-  private Set<String> transformed(String word, Set<String> D, Set<String> ol) { // other Side Layer
-    Set<String> ts = new HashSet<>();
-    char ar[] = word.toCharArray();
-    for (int i = 0; i < word.length(); i++) {
-      char ci = ar[i];
-      for (char c = 'a'; c <= 'z'; c++) {
-        if (c == ci) continue;
-        ar[i] = c;
-        String t = String.valueOf(ar);
-        if (D.contains(t) || ol.contains(t)) ts.add(t);
-      }
-      ar[i] = ci;
-    }
-    return ts;
+    // 2 calculate the shortest path(s)
+    tmpPath = new String[wordList.size()];
+    tmpPath[0] = begin;
+    dfsPaths(begin, 1);
+
+    return shortests;
   }
 
   private boolean bfsBuildDAG(Set<String> D) {
@@ -96,22 +86,30 @@ public class Leetcode126WordLadderII_2 {
     }
     return false;
   }
-
-  public List<List<String>> findLadders(String begin, String end, List<String> wordList) {
-    shortests = new ArrayList<>();
-    Set<String> D = new HashSet<>(wordList);
-    if (!D.contains(end)) return shortests;
-    // 1 build graph
-    this.begin = begin;
-    this.end = end;
-    graph = new HashMap<>();
-    if (!bfsBuildDAG(D)) return shortests;
-
-    // 2 calculate the shortest path(s)
-    tmpPath = new String[wordList.size()];
-    tmpPath[0] = begin;
-    dfsPaths(begin, 1);
-
-    return shortests;
+  // Adjacency strings str and tra, str is in Left layer, tra is in right layer,
+  // tra is not in dictionary. but it is right layer, need it else no way to let meet happen
+  private Set<String> transformed(String word, Set<String> D, Set<String> ol) { // other Side Layer
+    Set<String> ts = new HashSet<>();
+    char ar[] = word.toCharArray();
+    for (int i = 0; i < word.length(); i++) {
+      char ci = ar[i];
+      for (char c = 'a'; c <= 'z'; c++) {
+        if (c == ci) continue;
+        ar[i] = c;
+        String t = String.valueOf(ar);
+        if (D.contains(t) || ol.contains(t)) ts.add(t);
+      }
+      ar[i] = ci;
+    }
+    return ts;
+  }
+  // i is the index in tmpPath for the next string in path
+  private void dfsPaths(String key, int size) {
+    if (key.equals(end)) shortests.add(Arrays.asList(Arrays.copyOf(tmpPath, size)));
+    if (graph.get(key) == null) return;
+    for (String t : graph.get(key)) {
+      tmpPath[size] = t;
+      dfsPaths(t, size + 1);
+    }
   }
 }

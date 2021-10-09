@@ -20,20 +20,40 @@ import java.util.*;
 /** <a href="https://leetcode.com/problems/course-schedule/?tab=Description">LeetCode</a> */
 public class Leetcode207CourseSchedule {
 
-  /**
-   * This problem is equivalent to finding if a cycle exists in a directed graph.
-   * <pre>
-   * If a cycle exists, no topological ordering exists and
-   * therefore it will be impossible to take all courses.
-   * https://www.coursera.org/specializations/algorithms
-   * https://en.wikipedia.org/wiki/Topological_sorting#Algorithms
-   *
-   * array keeps the edges with relation of N:1, 1:N
-   *
-   * assume there is not duplicated edge
-   * assume course id is number, start from 0.
-   *    "There are a total of n courses you have to take, labeled from 0 to n - 1."
-   */
+  /*
+  Leetcode  207. Course Schedule
+
+    There are a total of numCourses courses you have to take,
+    labeled from 0 to numCourses - 1.
+
+    You are given an array prerequisites where prerequisites[i] = [ai, bi]
+    indicates that you must take course bi first if you want to take course ai.
+
+    For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+
+    Return true if you can finish all courses. Otherwise, return false.
+
+    Input: numCourses = 2, prerequisites = [[1,0]]
+    Output: true
+    Explanation: There are a total of 2 courses to take.
+    To take course 1 you should have finished course 0. So it is possible.
+
+
+    Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+    Output: false
+    Explanation: There are a total of 2 courses to take.
+    To take course 1 you should have finished course 0,
+    and to take course 0 you should also have finished course 1. So it is impossible.
+
+
+    Constraints:
+
+    1 <= numCourses <= 105
+    0 <= prerequisites.length <= 5000
+    prerequisites[i].length == 2
+    0 <= ai, bi < numCourses
+    All the pairs prerequisites[i] are unique.
+  */
 
   // O(V + E)
   public static boolean canFinish__BFS_V_E(int numCourses, int[][] prerequisites) {
@@ -72,27 +92,30 @@ public class Leetcode207CourseSchedule {
   }
 
   // ----------------------------------------------------------------------------------------------------------------
+  // prerequisites: many array of [i, pre]
   public static boolean canFinish_DFS(int numCourses, int[][] prerequisites) {
-    List<Integer>[] followsOf = new ArrayList[numCourses];
+    List<Integer>[] out = new ArrayList[numCourses];
     for (int i = 0; i < numCourses; i++) { // O(V)
-      followsOf[i] = new ArrayList();
+      out[i] = new ArrayList();
     }
 
     for (int[] iToPre : prerequisites) { // O(E)
-      followsOf[iToPre[1]].add(iToPre[0]);
+      out[iToPre[1]].add(iToPre[0]); // out:  pre->i
     }
 
-    boolean[] isInCurVisitedPath = new boolean[numCourses];
-    //  boolean[] visited = new boolean[numCourses]; // performance improvement.
-    //  may using one variable with value as 0: unvisited, 1: visiting, 2:visited
-    for (int course = 0; course < numCourses; course++) { // DFS  O(V+E)
-      if (hasCircle(course, followsOf, /* visited, */ isInCurVisitedPath)) {
+    boolean[] vis = new boolean[numCourses];
+    // try from each course to see if there is circle
+    // when a loop start from a course is over the vis is back to its original status
+    // so need NOT re-initialize it
+    for (int c = 0; c < numCourses; c++) { // DFS  O(V+E)
+      if (hasCircle(c, out, vis)) {
         return false;
       }
     }
     return true;
   }
 
+  // i is course ID
   private static boolean hasCircle(int i, List<Integer>[] out, boolean[] visited) {
     if (visited[i]) return true;
     visited[i] = true;

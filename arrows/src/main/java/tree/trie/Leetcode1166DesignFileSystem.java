@@ -172,4 +172,8 @@ public class Leetcode1166DesignFileSystem {
       return n.v;
     }
   }
+  // followup:
+  //   path can be directory or file，
+  //   get all files in that directory or subdirectories
+
 }

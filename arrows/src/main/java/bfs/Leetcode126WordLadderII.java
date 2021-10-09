@@ -18,6 +18,8 @@ package bfs;
 import java.util.*;
 /*
   126. Word Ladder II
+    (Bruce: compared with `127. Word Ladder` which only ask the number
+           of all the content: all the shortest transformation sequences)
 
     A transformation sequence from word beginWord to word endWord using
     a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
@@ -126,45 +128,45 @@ Understanding
  */
 public class Leetcode126WordLadderII {
   private Map<String, Set<String>> graph; // current string: transformed string(s)
-  private String begin, end;
-  private String[] tmpPath;
-  private List<List<String>> shortests;
+  private String S, E; // start, end word
+  private String[] tmp;
+  private List<List<String>> ans; // shortest paths
 
-  public List<List<String>> findLadders(String begin, String end, List<String> wordList) {
-    shortests = new ArrayList();
+  public List<List<String>> findLadders(String S, String E, List<String> wordList) {
+    ans = new ArrayList();
     Set<String> D = new HashSet(wordList);
-    if (!D.contains(end)) return shortests;
+    if (!D.contains(E)) return ans;
 
-    this.begin = begin;
-    this.end = end;
+    this.S = S;
+    this.E = E;
     graph = new HashMap();
-    if (!bfsBuildGraph(D)) return shortests;
+    if (!bfsBuildGraph(D)) return ans;
 
-    tmpPath = new String[wordList.size()];
-    tmpPath[0] = begin;
-    dfsPaths(begin, 1);
-    return shortests;
+    tmp = new String[wordList.size()];
+    tmp[0] = S;
+    dfsPaths(S, 1);
+    return ans;
   }
 
   private boolean bfsBuildGraph(Set<String> D) {
     Queue<String> q = new LinkedList();
-    q.offer(begin);
-    D.remove(begin);
+    q.offer(S);
+    D.remove(S);
 
     while (!q.isEmpty()) {
-      Set<String> newL = new HashSet(); // reduce duplicate strings in next layer
+      Set<String> layer = new HashSet(); // reduce duplicate strings in next layer
       for (int i = q.size(); i >= 1; i--) {
-        String str = q.poll();
-        Set<String> ts = transformed(str, D);
+        String cur = q.poll();
+        Set<String> inexts = transformed(cur, D);
 
-        graph.put(str, ts);
-        newL.addAll(ts);
+        graph.put(cur, inexts);
+        layer.addAll(inexts);
       }
-      if (newL.contains(end)) return true;
-      for (String str : newL) q.offer(str);
-      D.removeAll(newL); // the right time: to mark word in the new layer is visited
+      if (layer.contains(E)) return true; // exist from here normally
+      for (String str : layer) q.offer(str);
+      D.removeAll(layer); // the right time to mark word in the new layer as visited
     }
-    return false;
+    return false; // not find the `end` word
   }
 
   // only change one char: K is word length, K*25
@@ -172,26 +174,26 @@ public class Leetcode126WordLadderII {
   // in total K*25*K, O(k^2) time
   private Set<String> transformed(String str, Set<String> D) {
     Set<String> r = new HashSet();
-    char[] arr = str.toCharArray();
-    for (int i = 0; i < arr.length; i++) {
-      char ci = arr[i];
+    char[] a = str.toCharArray();
+    for (int i = 0; i < a.length; i++) {
+      char ci = a[i];
       for (char c = 'a'; c <= 'z'; c++) {
         if (c == ci) continue;
-        arr[i] = c; // note
-        String t = String.valueOf(arr);
-        if (D.contains(t)) r.add(t);
+        a[i] = c; // note
+        String s = String.valueOf(a);
+        if (D.contains(s)) r.add(s);
       }
-      arr[i] = ci;
+      a[i] = ci;
     }
     return r;
   }
 
   private void dfsPaths(String w, int size) {
-    if (w.equals(end)) shortests.add(Arrays.asList(Arrays.copyOf(tmpPath, size)));
+    if (w.equals(E)) ans.add(Arrays.asList(Arrays.copyOf(tmp, size)));
     if (graph.containsKey(w)) {
-      for (String nextW : graph.get(w)) {
-        tmpPath[size] = nextW;
-        dfsPaths(nextW, size + 1);
+      for (String s : graph.get(w)) {
+        tmp[size] = s;
+        dfsPaths(s, size + 1);
       }
     }
   }

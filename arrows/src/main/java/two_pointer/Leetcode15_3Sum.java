@@ -16,33 +16,42 @@
 package two_pointer;
 
 import java.util.*;
-
 /*
-Ask:
- Given an integer array nums, return all the triplets
+15. 3Sum
+
+Given an integer array nums, return all the triplets
  [nums[i], nums[j], nums[k]] such that
- i != j, i != k, and j != k,
- and nums[i] + nums[j] + nums[k] == 0.
+  i != j, i != k,  and j != k,
+  and nums[i] + nums[j] + nums[k] == 0.
 
- Not duplicate triplets.
+Notice that the solution set must not contain duplicate triplets.
 
- Input: nums = [0,0,0]
- Output: [[0,0,0]]
+Example 1:
 
- Input: nums = [-1,0,1,2,-1,-4]
- Output: [[-1,-1,2],[-1,0,1]]
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+Example 2:
 
- Input: nums = []
- Output: []
+Input: nums = []
+Output: []
+Example 3:
 
- Input: nums = [0]
- Output: []
+Input: nums = [0]
+Output: []
 
- 0 <= nums.length <= 3000
- -10^5 <= nums[i] <= 10^5
+
+Constraints:
+
+0 <= nums.length <= 3000
+-10^5 <= nums[i] <= 10^5
+
  */
+
 public class Leetcode15_3Sum {
-  // sort + 2 pointers O(N^2)   time, O(1) space, not count the result.
+  /*
+  sort + 2 pointers
+  O(N^2) time, O(1) space, not count the result.
+  */
   public List<List<Integer>> threeSum(int[] a) {
     List<List<Integer>> re = new ArrayList<>();
     if (a == null || a.length <= 2) return re;
@@ -71,25 +80,37 @@ public class Leetcode15_3Sum {
   Idea: sort + binary search for 2sum
   find 2 sum from [L, R]
   find the right index idx in[L+1 ,R] to match sum=A[L]+A[idx]
+  Time:
   move one side in linear time: depends on the duplicate number,
                                worse case is O(N^2): [2,2,2,2,2] target is 4
   move the other side with binary search: logN! time, O(NlogN) time.
   O(1) space, not count the result.
+
+  Note:
+    Arrays.binarySearch(i, j+1, k) find k from [i,j]
+    "sorted  range contains multiple elements with the specified value,
+    there is no guarantee which one will be found"
+     -i-1=y; so i=-y-1;
+     if y='01', -y ='11', -y-1='10'
+     so ~y=-y-1
+     i=~y;
   */
   public List<List<Integer>> threeSumBS(int[] a) {
     int N = a.length;
     List<List<Integer>> re = new ArrayList<>();
-    Arrays.sort(a);
+    Arrays.sort(a); // O(NlogN)
+
     for (int i = 0; i <= N - 3; i++) {
-      if (i > 0 && a[i] == a[i - 1]) continue;
-      int L = i + 1, R = N - 1;
+      if (i > 0 && a[i] == a[i - 1]) continue; // duplicate of a[i]
+      int L = i + 1, R = N - 1; // i, [L, R]
       while (L < R) {
         int r = Arrays.binarySearch(a, L + 1, R + 1, 0 - a[i] - a[L]);
         if (r >= 0) {
           re.add(Arrays.asList(a[i], a[L], a[r]));
-          R = r;
+          R = r - 1;
         } else R = ~r - 1;
-        while (L < R && a[L] == a[L + 1]) L++;
+
+        while (L < R && a[L] == a[L + 1]) L++; // duplicate of a[L]
         L++;
       }
     }

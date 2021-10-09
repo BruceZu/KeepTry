@@ -19,7 +19,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 // Leetcode 146. LRU Cache
 public class LRU_LinkedHashMap2 {
-  // get() and put() in O(1) average time
+  /*
+  get() and put() in O(1) average time
+  */
   class LRUCache extends LinkedHashMap {
     private int cap = 0;
 
@@ -34,10 +36,12 @@ public class LRU_LinkedHashMap2 {
     // int get(int key) Return the value of the key if the key exists, otherwise return -1.
     public int get(int key) {
       return (int) super.getOrDefault(key, -1);
+      //
     }
 
     public void put(int key, int value) {
       super.put(key, value);
+      //
     }
   }
 }
