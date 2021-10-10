@@ -56,7 +56,8 @@ public class Leetcode68TextJustification {
      Note that the second line is also left-justified becase it contains only one word.
 
      Input: words =
-     ["Science","is","what","we","understand","well","enough","to","explain","to","a","computer.","Art","is","everything","else","we","do"], maxWidth = 20
+     ["Science","is","what","we","understand","well","enough","to","explain","to","a","computer.","Art","is","everything","else","we","do"],
+      maxWidth = 20
      Output:
      [
        "Science  is  what we",
@@ -101,19 +102,22 @@ public class Leetcode68TextJustification {
    O(N) time and O(1) space
   */
   public List<String> fullJustify(String[] words, int maxWidth) {
+
+    List<String> a = new ArrayList();
     int i = 0;
-    List<String> r = new ArrayList();
     while (i < words.length) {
       int j = i - 1, l = 0;
       // Note here: <=.  do not lost the ==
-      while (j + 1 < words.length && l + words[j + 1].length() + j + 1 - i <= maxWidth) {
+      // (j + 1 - i) is space number; l is current line words sum length, current line will include
+      // words [i, j]
+      while (j + 1 < words.length && l + words[j + 1].length() + (j + 1 - i) <= maxWidth) {
         j++;
         l += words[j].length();
       }
-      r.add(line(words, i, j, l, maxWidth));
+      a.add(line(words, i, j, l, maxWidth));
       i = j + 1;
     }
-    return r;
+    return a;
   }
 
   private String line(String[] words, int l, int r, int wl, int max) {
@@ -127,7 +131,7 @@ public class Leetcode68TextJustification {
     for (int i = l; i <= r; i++) {
       a.append(words[i]);
       if (i != r) {
-        if (r == words.length - 1) a.append(" ");
+        if (r == words.length - 1) a.append(" "); // last line
         else {
           for (int k = 1; k <= q; k++) a.append(" ");
           if (p-- >= 1) a.append(" ");
