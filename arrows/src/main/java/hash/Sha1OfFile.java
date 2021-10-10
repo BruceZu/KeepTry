@@ -15,7 +15,6 @@
 
 package hash;
 
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -48,7 +47,7 @@ public class Sha1OfFile {
                 sha1.update(buffer, 0, len);
                 len = input.read(buffer);
             }
-            return new HexBinaryAdapter().marshal(sha1.digest());
+            return new String(sha1.digest());
         }
     }
 

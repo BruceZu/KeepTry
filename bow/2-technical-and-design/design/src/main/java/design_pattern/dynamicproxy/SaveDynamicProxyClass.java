@@ -15,7 +15,7 @@
 
 package design_pattern.dynamicproxy;
 
-import sun.misc.ProxyGenerator;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,8 +23,8 @@ import java.io.IOException;
 
 public class SaveDynamicProxyClass {
 
-
-    public static void main(String[] args) throws IOException {
+   // ProxyGenerator is not in JDK 17
+/*    public static void main(String[] args) throws IOException {
         byte[] classFile = ProxyGenerator.generateProxyClass("TestProxyGen", Worker.class.getInterfaces());
         File file = new File("./DenamixProxyGen.class");
         file.setWritable(true);
@@ -32,5 +32,5 @@ public class SaveDynamicProxyClass {
         fos.write(classFile);
         fos.flush();
         fos.close();
-    }
+    }*/
 }

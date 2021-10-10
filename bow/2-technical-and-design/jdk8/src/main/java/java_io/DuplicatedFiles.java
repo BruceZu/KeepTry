@@ -15,7 +15,7 @@
 
 package java_io;
 
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+//  javax.xml.bind.annotation.adapters does not exist
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class DuplicatedFiles {
                 size = (int) Math.min(Integer.MAX_VALUE, f.length() - offset);
                 byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, offset, size);
             }
-            return new HexBinaryAdapter().marshal(sha2.digest());
+            return new String(sha2.digest());
         } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
             return "\\";
@@ -78,7 +78,8 @@ public class DuplicatedFiles {
                 byteBuffer.rewind();
                 size = ch.read(byteBuffer);
             }
-            return new HexBinaryAdapter().marshal(sha2.digest());
+
+            return new String(sha2.digest());
         } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
             return "\\";

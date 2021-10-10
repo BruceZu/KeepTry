@@ -17,72 +17,71 @@ package graph;
 
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class Node implements Comparable<Node>, IVertex {
-    // assume this is id and be distinguish
-    // when label it as digit from 0 to n-1, the Node can be
-    // translated to 3 array
-    private String name;
-    private Map<Node, Integer> neighDistMap; // immediate neighbors
+  // assume this is id and be distinguish
+  // when label it as digit from 0 to n-1, the Node can be
+  // translated to 3 array
+  private String name;
+  private Map<Node, Integer> neighDistMap; // immediate neighbors
 
-    private Integer shortestDisToI;
-    private IVertex vertexToI; // predecessor Node
+  private Integer shortestDisToI;
+  private IVertex vertexToI; // predecessor Node
 
-    public Node(String name, Map<Node, Integer> map) {
-        this.name = name;
-        this.neighDistMap = map;
-    }
+  public Node(String name, Map<Node, Integer> map) {
+    this.name = name;
+    this.neighDistMap = map;
+  }
 
-    @Override
-    public int compareTo(@NotNull Node o) {
-        Node with = o;
-        return this.equals(with) ? 0 : this.shortestDisToI.compareTo(with.shortestDisToI);
-    }
+  @Override
+  public int compareTo(@NotNull Node o) {
+    Node with = o;
+    return this.equals(with) ? 0 : this.shortestDisToI.compareTo(with.shortestDisToI);
+  }
 
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
+  @Override
+  public int hashCode() {
+    return name.hashCode();
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        Node with = (Node) obj;
-        return this.name.equals(with.getName());
-    }
+  @Override
+  public boolean equals(Object obj) {
+    Node with = (Node) obj;
+    return this.name.equals(with.getName());
+  }
 
-    @Override
-    public Map<Node, Integer> getNeighborWeighMap() {
-        return neighDistMap;
-    }
+  @Override
+  public Map<Node, Integer> getNeighborWeighMap() {
+    return neighDistMap;
+  }
 
-    @Override
-    public int getShortestDistanceToI() {
-        return this.shortestDisToI;
-    }
+  @Override
+  public int getShortestDistanceToI() {
+    return this.shortestDisToI;
+  }
 
-    @Override
-    public void setShortestDistanceToI(int v) {
-        this.shortestDisToI = v;
-    }
+  @Override
+  public void setShortestDistanceToI(int v) {
+    this.shortestDisToI = v;
+  }
 
-    @Override
-    public IVertex getVertexToI() {
-        return this.vertexToI;
-    }
+  @Override
+  public IVertex getVertexToI() {
+    return this.vertexToI;
+  }
 
-    @Override
-    public void setVertexToI(IVertex v) {
-        this.vertexToI = v;
-    }
+  @Override
+  public void setVertexToI(IVertex v) {
+    this.vertexToI = v;
+  }
 
-    @Override
-    public int getId() {
-        throw new NotImplementedException();
-    }
+  @Override
+  public int getId() {
+    throw new RuntimeException("Note implemented yet");
+  }
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
+  @Override
+  public String getName() {
+    return this.name;
+  }
 }

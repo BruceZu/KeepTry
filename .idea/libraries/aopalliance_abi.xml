@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="aopalliance-abi">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/buck-out/gen/lib/guice/__aopalliance__/aopalliance-aopalliance-1.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
