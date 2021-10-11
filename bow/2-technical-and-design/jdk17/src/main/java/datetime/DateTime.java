@@ -60,14 +60,32 @@ LocalDateTime dtime = LocalDateTime.parse(string, f);
  LocalDateTime t = LocalDateTime.ofInstant(inst, TimeZone.getDefault().toZoneId());
 */
 
+/*
+logic
+ -  input is in ascending order by timestamp, not 2 line have the same timestamp
+ -  log line format: epoch timestamp(in second),event_type,user_email
+              E.g.: 1623834502,invite_requested,john@gmail.com
+ - bolt: in same minute >= 5 req
+ - use the fist timestamp for "invite_requested" to calculate the average time
+ - no duplicated timestamp for  "invite_send" and "invite_activated"
+   calculate the average and verify the time of "invite_requested" <"invite_send" < "invite_activated"
+     1m2s,send,john
+     1m3s,req,john
+     1m5s,activated,john
+     1m6s,req,john
+     1m6s,req,john
+     1m6s,req,john
+     1m6s,req,john
+     1m6s,req,john
+
+ - user can activate their beta invite once Stripe has sent it to them.
+*/
 public class DateTime {
   Set<String> bolts = new HashSet<>();
   Map<String, Long> ave;
-
-  // user and req(same second)  counts
+  // User:  <Date without second, req counts>
   Map<String, Map<Date, Integer>> detect = new HashMap<>();
-  // user and  time of status 1,  2 ,  3 ]
-  Map<String, LocalDateTime[]> status = new HashMap<>();
+  Map<String, Long[]> status = new HashMap<>();
 
   public void process_invites(int N, String csvfilepath) throws IOException {
     try (BufferedReader fb = Files.newBufferedReader(Paths.get(csvfilepath))) {
@@ -81,6 +99,35 @@ public class DateTime {
     }
   }
 
+  private void parseLog(String log) throws ParseException {
+    String[] l = log.split(",");
+    long t = Long.valueOf(l[0]);
+    String eventType = l[1], userId = l[2];
+
+    if (bolts.contains(userId)) return;
+    status.putIfAbsent(userId, new Long[] {null, null, null});
+
+    if (eventType == "invite_requested") {
+      Date d = new Date(t);
+      d.setSeconds(0);
+      if (!detect.containsKey(userId)) {
+        detect.put(userId, new HashMap<>());
+        detect.get(userId).put(d, 1);
+      } else {
+        Map<Date, Integer> count = detect.get(userId);
+        count.put(d, count.getOrDefault(d, 0) + 1);
+        if (count.get(d) >= 5) bolts.add(userId);
+      }
+
+      if (status.get(userId)[0] != null) status.get(userId)[0] = t;
+    } else if (eventType == "invite_send") {
+      status.get(userId)[1] = t;
+    } else if (eventType == "invite_activated") {
+      Long a = status.get(userId)[0], b = status.get(userId)[1];
+      if (a != null && b != null && a < b && b < t) ave.put(userId, t - a);
+    }
+  }
+
   public String handle() throws ParseException {
     Long sum = 0l, count = 0l;
     for (Map.Entry<String, Long> e : ave.entrySet()) {
@@ -89,55 +136,5 @@ public class DateTime {
       count++;
     }
     return bolts.size() + " " + sum / count;
-  }
-
-  /*
-  log line format: timestamp,event_type,user_email
-             E.g.: 1623834502,invite_requested,john@gmail.com
-  */
-  private void parseLog(String log) throws ParseException {
-    String[] l = log.split(",");
-    long timestamp = Long.valueOf(l[0]);
-    String eventType = l[1], userId = l[2];
-
-    if (bolts.contains(userId)) return;
-    Instant inst = Instant.ofEpochMilli(timestamp);
-    LocalDateTime t = LocalDateTime.ofInstant(inst, TimeZone.getDefault().toZoneId());
-
-    if (eventType == "invite_requested") {
-      Date d = new Date(timestamp);
-      d.setSeconds(0);
-      if (!detect.containsKey(userId)) {
-        detect.put(userId, new HashMap<>());
-        detect.get(userId).put(d, 1);
-      } else {
-        Map<Date, Integer> count = detect.get(userId);
-        count.put(d, count.getOrDefault(d, 0) + 1);
-        if (count.get(d) >= 5) { // in same second >= 5 req
-          bolts.add(userId);
-          detect.remove(userId);
-          status.remove(userId);
-        }
-      }
-
-      // calculate the ave and verify the req<invite<activted time
-      status.putIfAbsent(userId, new LocalDateTime[] {null, null, null});
-      // use the fist timestamp for "invite_requested" will be used to calculate the average time
-      if (status.get(userId)[0] != null) status.get(userId)[0] = t;
-      // no duplicated timestamp for  "invite_send" and "invite_actived"
-    } else if (eventType == "invite_send") {
-      status.putIfAbsent(userId, new LocalDateTime[] {null, null, null});
-      status.get(userId)[1] = t;
-    } else if (eventType == "invite_actived") {
-      status.putIfAbsent(userId, new LocalDateTime[] {null, null, null});
-      status.get(userId)[2] = t;
-      LocalDateTime a = status.get(userId)[0];
-      LocalDateTime b = status.get(userId)[1];
-      if (a.isBefore(b) && b.isBefore(t)) {
-        ave.put(userId, Duration.between(a, t).toSeconds());
-      }
-    } else {
-      // ignore wrong event type
-    }
   }
 }
