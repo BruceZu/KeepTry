@@ -14,14 +14,20 @@
 //
 package datetime;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 /*
-Question comes from https://www.1point3acres.com/bbs/thread-801267-1-1.html
+Question comes from https://www.1point3acres.com/bbs/thread-796230-1-1.html
 Exercise Date and Time operation with JDK 17
 
 Date year month day
@@ -48,8 +54,12 @@ LocalDateTime dtime = LocalDateTime.parse(string, f);
  if (a.isBefore(b)) ...
  Duration.between(a, dtime).toSeconds());
 
+
+ Date d=new Date(long_timestamp)
+ Instant inst = Instant.ofEpochMilli(long_timestamp);
+ LocalDateTime t = LocalDateTime.ofInstant(inst, TimeZone.getDefault().toZoneId());
 */
-// which request time will be used as the one mapping to approved time
+
 public class DateTime {
   Set<String> bolts = new HashSet<>();
   Map<String, Long> ave;
@@ -59,10 +69,19 @@ public class DateTime {
   // user and  time of status 1,  2 ,  3 ]
   Map<String, LocalDateTime[]> status = new HashMap<>();
 
-  public String handle(List<String> logs) throws ParseException {
-    for (String log : logs) {
-      parseLog(log);
+  public void process_invites(int N, String csvfilepath) throws IOException {
+    try (BufferedReader fb = Files.newBufferedReader(Paths.get(csvfilepath))) {
+      String line;
+      while ((line = fb.readLine()) != null && N-- > 0) {
+        parseLog(line);
+      }
+      System.out.println(handle());
+    } catch (ParseException e) {
+      e.printStackTrace();
     }
+  }
+
+  public String handle() throws ParseException {
     Long sum = 0l, count = 0l;
     for (Map.Entry<String, Long> e : ave.entrySet()) {
       if (bolts.contains(e.getKey())) continue;
@@ -72,61 +91,53 @@ public class DateTime {
     return bolts.size() + " " + sum / count;
   }
 
-  // yyyy-MM-dd+HH:mm:ss  userID  status[1,2,3]
+  /*
+  log line format: timestamp,event_type,user_email
+             E.g.: 1623834502,invite_requested,john@gmail.com
+  */
   private void parseLog(String log) throws ParseException {
-    String[] l = log.split(" ");
-    String dt = l[0], userId = l[1], eventType = l[2];
+    String[] l = log.split(",");
+    long timestamp = Long.valueOf(l[0]);
+    String eventType = l[1], userId = l[2];
 
     if (bolts.contains(userId)) return;
-    DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd+HH:mm:ss");
-    LocalDateTime logtime = LocalDateTime.parse(dt, f);
+    Instant inst = Instant.ofEpochMilli(timestamp);
+    LocalDateTime t = LocalDateTime.ofInstant(inst, TimeZone.getDefault().toZoneId());
 
-    if (eventType == "1") {
-      // dt="2014-11-25+16:30:30";
-      SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd+HH:mm:ss");
-      Date d = sf.parse(dt);
+    if (eventType == "invite_requested") {
+      Date d = new Date(timestamp);
       d.setSeconds(0);
       if (!detect.containsKey(userId)) {
         detect.put(userId, new HashMap<>());
         detect.get(userId).put(d, 1);
       } else {
-        detect.get(userId).put(d, detect.get(userId).getOrDefault(d, 0) + 1);
-        if (detect.get(userId).get(d) >= 5) { // in same second >= 5 req
+        Map<Date, Integer> count = detect.get(userId);
+        count.put(d, count.getOrDefault(d, 0) + 1);
+        if (count.get(d) >= 5) { // in same second >= 5 req
           bolts.add(userId);
           detect.remove(userId);
           status.remove(userId);
         }
       }
-      // status: req time update, use the last req time as the one used to
+
       // calculate the ave and verify the req<invite<activted time
       status.putIfAbsent(userId, new LocalDateTime[] {null, null, null});
-      status.get(userId)[0] = logtime;
-
-    } else if (eventType == "2") {
+      // use the fist timestamp for "invite_requested" will be used to calculate the average time
+      if (status.get(userId)[0] != null) status.get(userId)[0] = t;
+      // no duplicated timestamp for  "invite_send" and "invite_actived"
+    } else if (eventType == "invite_send") {
       status.putIfAbsent(userId, new LocalDateTime[] {null, null, null});
-      status.get(userId)[1] = logtime;
-    } else if (eventType == "3") {
+      status.get(userId)[1] = t;
+    } else if (eventType == "invite_actived") {
       status.putIfAbsent(userId, new LocalDateTime[] {null, null, null});
-      status.get(userId)[2] = logtime;
-      LocalDateTime a = status.get(userId)[1];
+      status.get(userId)[2] = t;
+      LocalDateTime a = status.get(userId)[0];
       LocalDateTime b = status.get(userId)[1];
-      if (a.isBefore(b) && b.isBefore(logtime)) {
-        ave.put(userId, Duration.between(a, logtime).toSeconds());
+      if (a.isBefore(b) && b.isBefore(t)) {
+        ave.put(userId, Duration.between(a, t).toSeconds());
       }
     } else {
       // ignore wrong event type
     }
-  }
-
-  public static void main(String[] args) throws ParseException {
-    // there is not million second
-    SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd+HH:mm:ss");
-    String dt = "2014-11-25+16:30:20";
-    Date d = sf.parse(dt);
-    d.setSeconds(0);
-    dt = "2014-11-25+16:30:30";
-    Date d2 = sf.parse(dt);
-    d2.setSeconds(0);
-    System.out.println(d.equals(d2) == true);
   }
 }
