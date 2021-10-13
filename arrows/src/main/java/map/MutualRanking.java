@@ -98,9 +98,11 @@ public class MutualRanking {
       for (int i = 0; i <= iwish.length; i++) {
         if (hasMutualRanking(u, i)) ans.add(iwish[i]); // as usual
       }
-      // swap index and index-1
-      if (hasMutualRanking(u, r, r - 1)) ans.add(iwish[r]);
-      if (hasMutualRanking(u, r - 1, r)) ans.add(iwish[r - 1]);
+      if (r > 0) {
+        // swap index and index-1
+        if (hasMutualRanking(u, r, r - 1)) ans.add(iwish[r]);
+        if (hasMutualRanking(u, r - 1, r)) ans.add(iwish[r - 1]);
+      }
 
       Character[] a = new Character[ans.size()];
       return ans.toArray(a);
@@ -116,10 +118,11 @@ public class MutualRanking {
     int i = index;
     if (wish.containsKey(u) && wish.get(u).length > i) {
       ArrayList<Character> r = new ArrayList<>();
-      Character[] iwith = wish.get(u);
-      if (hasMutualRanking(u, i) != hasMutualRanking(u, i, i - 1)) r.add(iwith[i]);
-      if (hasMutualRanking(u, i - 1) != hasMutualRanking(u, i - 1, i)) r.add(iwith[i - 1]);
-
+      Character[] iwish = wish.get(u);
+      if (i > 0) {
+        if (hasMutualRanking(u, i) != hasMutualRanking(u, i, i - 1)) r.add(iwish[i]);
+        if (hasMutualRanking(u, i - 1) != hasMutualRanking(u, i - 1, i)) r.add(iwish[i - 1]);
+      }
       Character[] a = new Character[r.size()];
       return r.toArray(a);
     }
