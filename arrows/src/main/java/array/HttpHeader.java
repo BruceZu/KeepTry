@@ -83,8 +83,10 @@ Part 3
    parse_accept_language("fr-FR, fr, *", ["en-US", "fr-CA", "fr-FR"])
    returns: ["fr-FR", "fr-CA", "en-US"]
  */
-import java.util.*;
-import java.util.stream.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class HttpHeader {
   public static List<String> parseAcceptLanguage(String required, List<String> supported) {
@@ -146,5 +148,15 @@ public class HttpHeader {
         parseAcceptLanguage("fr-FR, fr", Arrays.asList("en-US", "fr-CA", "fr-FR"))
             .toString()
             .equals("[fr-FR, fr-CA]"));
+    // part 3
+    System.out.println(
+        parseAcceptLanguage("en-US, *", Arrays.asList("en-US", "fr-CA", "fr-FR"))
+            .toString()
+            .equals("[en-US, fr-CA, fr-FR]"));
+
+    System.out.println(
+        parseAcceptLanguage("fr-FR, fr, *", Arrays.asList("en-US", "fr-CA", "fr-FR"))
+            .toString()
+            .equals("[fr-FR, fr-CA, en-US]"));
   }
 }

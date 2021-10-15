@@ -23,6 +23,7 @@ public class MutualRanking {
   Question comes from https://www.1point3acres.com/bbs/thread-769296-1-1.html
                       https://www.1point3acres.com/bbs/thread-674646-1-1.html
                       https://www.1point3acres.com/bbs/thread-793699-1-1.html
+                      https://www.1point3acres.com/bbs/thread-806739-1-1.html
 
 
    user and wishlist represented with Map<Character, Character[]> wishlist
@@ -54,6 +55,37 @@ public class MutualRanking {
 
               changePair(c, 1)
               result is a b d
+
+              Every wishlist entry in the network is either "mutually ranked" or "not mutually ranked"
+              depending on the rank the other user gives that user's apartment in return.
+
+              The most common operation in the network is incrementing the rank of a single wishlist entry on a single user.
+              This swaps the entry with the entry above it in that user's list.
+              Imagine that, when this occurs, the system must recompute the "mutually-ranked-ness" of any pairings that
+              may have changed.
+
+              Write a function that takes a username and a rank representing the entry whose rank is being bumped up.
+              Return an array of the users whose pairings with the given user *would* gain or lose mutually-ranked
+              status as a result of the change, if it were to take place.
+              Call your function changed_pairings()
+              data = {
+               'a': ['c', 'd'],
+               'b': ['d', 'a', 'c'],
+               'c': ['a', 'b'],
+               'd': ['c', 'a', 'b'],
+              }
+              if d's second choice becomes their first choice, a and d will no longer be a mutually ranked pair
+              changed_pairings('d', 1) // returns ['a']
+
+              if b's third choice becomes thei‍‌‍‌‌‍‍‌‍‍‌‍‌‍‍‍‍‌r second choice, c and b will become a mutually ranked pair (mutual second-choices)
+              changed_pairings('b', 2) // returns ['c']
+
+              if b's second choice becomes their first choice, no mutually-ranked pairings are affected
+              changed_pairings('b', 1) // returns []
+
+              if d's second choice becomes their first choice, a and d will no longer be a mutually ranked pair
+              if b's third choice becomes their second choice, c and b will become a mutually ranked pair (mutual second-choices)
+              if b's second choice becomes their first choice, no mutually-ranked pairings are affected
 
     question 3-2
      after swap（rank， rank -1)
@@ -113,7 +145,7 @@ public class MutualRanking {
   after swap（rank， rank -1)
   the changed part of mutual list. do not change the provided wishlist map
   */
-  Character[] changedPairings(char user, int index) {
+  Character[] changed_pairings(char user, int index) {
     char u = user;
     int i = index;
     if (wish.containsKey(u) && wish.get(u).length > i) {
@@ -185,8 +217,8 @@ public class MutualRanking {
     wish.put('c', new Character[] {'d', 'a'});
     wish.put('d', new Character[] {'c', 'b'});
     t = new MutualRanking(wish);
-    System.out.println(Arrays.toString(t.changedPairings('a', 1)).equals("[c, b]"));
-    System.out.println(Arrays.toString(t.changedPairings('a', 2)).equals("[c]"));
+    System.out.println(Arrays.toString(t.changed_pairings('a', 1)).equals("[c, b]"));
+    System.out.println(Arrays.toString(t.changed_pairings('a', 2)).equals("[c]"));
 
     wish = new HashMap<>();
     wish.put('a', new Character[] {'b', 'c', 'd'});

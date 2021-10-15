@@ -18,13 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.SQLOutput;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 /*
 Question comes from https://www.1point3acres.com/bbs/thread-796230-1-1.html
@@ -80,7 +74,7 @@ logic
 
  - user can activate their beta invite once Stripe has sent it to them.
 */
-public class DateTime {
+public class BetaInvites {
   Set<String> bolts = new HashSet<>();
   Map<String, Long> ave;
   // User:  <Date without second, req counts>
