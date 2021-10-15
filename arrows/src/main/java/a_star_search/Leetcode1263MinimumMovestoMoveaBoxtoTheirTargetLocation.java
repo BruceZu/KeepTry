@@ -13,6 +13,8 @@
 // limitations under the License.
 //
 
+package a_star_search;
+
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Queue;

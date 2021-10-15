@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package bfs;
+package a_star_search;
 
 import java.util.*;
 
