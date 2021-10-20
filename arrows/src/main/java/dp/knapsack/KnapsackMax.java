@@ -40,7 +40,8 @@ public class KnapsackMax {
   }
 
   /*  Multiple Knapsack:
-     Scenario:
+      each product: Pi_quantity*Pi_space < total space
+      Scenario:
                 package size has limitation, each item has
                    - size / per
                    - value / per
@@ -48,86 +49,79 @@ public class KnapsackMax {
                 how many item should be taken in package to get max value.
                 try best to put more items and get more value. not exactly
 
-                problem: to try spend all money
+                problem: to try spent all money
 
        dp[i][j]: means [0, i] items achieved max value in j size space
 
        dp[i][j] = max{ dp[i-1][ j - k*cost] + k*value }
        0 <= j <= W,
-       0 <= k <= min{count, j/cost}
-
-       make some conversion:
-
-       as j=(j/cost)*cost + j%cost, so
-       dp[i][j] = max{ dp[i-1][(j/cost)*cost + j%cost -k*cost] + k*value }
-       dp[i][j] = max{ dp[i-1][(j/cost-k)*cost + j%cost] +k*value }
-
-       minus (j/cost)*value in max{}, then let the result of max{} to add (j/cost)*value
-       dp[i][j] = max{ dp[i-1][(j/cost-k)*cost + j%cost] +k*value - (j/cost)*value }  + (j/cost)*value
-       dp[i][j] = max{ dp[i-1][(j/cost-k)*cost + j%cost] - (j/cost-k)*value }  + (j/cost)*value
-
-       let cnt = j/cost, d = j % cost
-       dp[i][j] = max{ dp[i-1][(cnt-k)*cost + d] - (cnt-k)*value }  + cnt*value
-
-       When k=0
-         dp[i-1][(cnt-k)*cost + d] - (cnt-k)*value
-       = dp[i-1][j] - (cnt)*value
+       j - k*cost >= 0; so 0<=k<=j/cost
 
        The elements in the max{},not dp[i-1][j], is cut into groups, groups number = cost,
-       by the value of j % cost. Each group elements can form a queue, once it is queue,
-       then O(1) time is possible by sliding window to calculate the dp[i][j].
-       The queue elements come from dp[i-1][Jd] and it is not changed by dp[i][Jd].
-       So
-       1> One dimensional dp[Jd] is possible,
-       2> It is reasonable to calculate dp[Jd] with left to right order
+       Each group start from dp[i-1][0],dp[i-1][1],dp[i-1][2],...dp[i-1][cost-1]
 
-       First element of each groups:
-          queue 0              queue 1             queue 2              ...   queue cost-1
-          dp[i-1][0],          dp[i-1][1],         dp[i-1][2],          ... , dp[i-1][cost-1],
-       Calculate the new element with translate equation with k=0, so each queue extend as:
-          dp[i-1][0+ cost]- v, dp[i-1][1+ cost]- v, dp[i-1][2+ cost]- v, ... , dp[i-1][cost-1+ cost]- v,
-          dp[i-1][0+2cost]-2v, dp[i-1][1+2cost]-2v, dp[i-1][2+2cost]-2v, ... , dp[i-1][cost-1+2cost]-2v,
-          dp[i-1][0+3cost]-3v, dp[i-1][1+3cost]-3v, dp[i-1][2+3cost]-3v, ... , dp[i-1][cost-1+3cost]-3v,
-          dp[i-1][0+4cost]-4v, dp[i-1][1+4cost]-4v, dp[i-1][2+4cost]-4v, ... , dp[i-1][cost-1+4cost]-4v,
-          dp[i-1][0+5cost]-5v, dp[i-1][1+5cost]-5v, dp[i-1][2+5cost]-5v, ... , dp[i-1][cost-1+5cost]-5v,
-          dp[i-1][0+6cost]-6v, dp[i-1][1+6cost]-6v, dp[i-1][2+6cost]-6v, ... , dp[i-1][cost-1+6cost]-6v,
-          ...
-          dp[i-1][W-1]-(W-1)/cost)*v, dp[i-1][W]-(W)/cost)*v
-                                      (assume W%cost == 1)
+       watch: it is possible to use 1 dimensional array dp[j]
+       watch group i, start from j=gi the process:
+           gi,     gi+cost,        gi + 2*cost,     gi+ 3* cost,....,  gi+ n* cost< W
 
-       Window size is k+1,  k=min{count, j/cost}
-       To make simple use 1 dimensional array dp[j]
+        dp[gi]     dp[gi+cost]     dp[gi+2*cost]     dp[gi+3*cost]
+                   dp[gi]+v        dp[gi+cost]+v     dp[gi+2*cost]+v
+                                   dp[gi]+2v         dp[gi+cost]+2v
 
-       dp index: 0 .. W;
+          (1)       (2)            (3)               (4)
+
+        if current product quantity is 2
+        Watch (3)
+        seems to get new dp[gi + 2*cost]:
+          dp[gi+2*cost] -v
+          dp[gi+cost]    (reuse the item in (2))
+          dp[gi]+v       (reuse the item in (2))
+        once find the max, let max+v
+        Watch (2)
+        seems to get new dp[gi + cost]:
+          dp[gi+ cost] -v
+          dp[gi]    (reuse the item in (1))
+        once find the max, let max+v
+        watch back on (3) find the generay way:
+          dp[gi+2*cost] -2v
+          dp[gi+cost]-v    (reuse the item in new (2))
+          dp[gi]           (reuse the item in new (2))
+        once find the max, let max+2v
+
+       So avoid duplicated calculation use the queue keep elements:
+         dp[gi], dp[gi+cost]-v,dp[gi+2*cost] -2v, dp[gi+3*cost] -3v, ...
+
+       dp index: 0 ... W;
        O(W) W is the cost/pack‘s volume
        cost: current object type's cost,
        value: current object type's value,
        count: current object type's quantity
-  */
 
+  W is dp.length here, space limitation, W is split in groups,
+  use no-increasing queue: a slide window, its size <= count +1 which is comparable solution number
+  use 2 queue: keep value of queue element and keep sequence of queue element
+
+  dp[i] is calculated in groups and there is no conflict between any 2 groups
+  O(W) time and space for current product.
+  */
   private static void asMultipleKnapsack(int cost, int value, int count, int dp[]) {
-    // q: a slide window, its size is count +1. need keep element in advance of window to let imq
-    // refer.
-    int[] q = new int[dp.length];
-    // Keep top is the max value's index of current q
-    Deque<Integer> imq;
-    for (int d = 0; d < cost; d++) { // group by j%cost[i]
-      // cnt = j/cost[i]. cnt value is 0, 1, 2, 3, ..., with j is d, d+cost, d+2*cost, ...
-      int i = -1;
-      imq = new LinkedList<>();
-      for (int j = d, cnt = 0; j <= dp.length - 1; j += cost, cnt++) {
-        i++;
-        int e = dp[j] - cnt * value; // new element
+    int W = dp.length;
+    int[] vq = new int[dp.length];
+    Deque<Integer> sq;
+    for (int g = 0; g < cost; g++) {
+      sq = new LinkedList<>();
+      for (int j = g, n = 0; j < W; j += cost, n++) {
+        int e = dp[j] - n * value; // queue element
         // =======  [calculate the max in slide window of queue] START =======
-        q[i] = e;
-        while (!imq.isEmpty() && q[imq.peekLast()] < e) imq.removeLast();
-        imq.addLast(i); // keep index not value
+        vq[n] = e;
+        while (!sq.isEmpty() && vq[sq.peekLast()] < e) sq.removeLast();
+        sq.addLast(n); // keep index not value
         // index of element just out of window
-        int idx = i - (count + 1); // window size is count+1
-        if (idx >= 0 && imq.peekFirst() == idx) imq.removeFirst();
-        int max = q[imq.peekFirst()];
+        int idx = n - (count + 1); // window size is count+1
+        if (idx >= 0 && sq.peekFirst() == idx) sq.removeFirst();
+        int max = vq[sq.peekFirst()];
         // =======  [calculate the max in slide window of queue] END =======
-        dp[j] = max + cnt * value;
+        dp[j] = max + n * value;
       }
     }
   }
