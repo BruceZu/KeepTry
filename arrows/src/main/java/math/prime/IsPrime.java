@@ -35,7 +35,9 @@ public class IsPrime {
         }
         return true;
     }
-    
+    /*
+     Print out all prime <= n
+     */
     boolean[] isPrimes = new boolean[10000];
 
     public void fillSieve() {
