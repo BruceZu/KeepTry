@@ -18,6 +18,16 @@ package dp.withstatecompression;
 import java.util.Arrays;
 
 /*
+ The Hamiltonian Cycle Problem (HCP) and Travelling Salesman Problem (TSP)
+ are long-standing and well-known NP-hard problems.
+
+ The HCP is concerned with finding paths through a given graph such that those
+ paths visit each node exactly once after the start, and end where they began
+ (i.e., Hamiltonian cycles).
+
+ The TSP builds on the HCP and is concerned with computing the lowest cost Hamiltonian cycle
+ on a weighted (di)graph.
+
   refer paper <<travelling salesman problem and Bellman-Held-Karp Algorithm Quang Nhat Nguyen May
   10, 2020>> http://www.math.nagoya-u.ac.jp/~richard/teaching/s2020/Quang1.pdf
 */
