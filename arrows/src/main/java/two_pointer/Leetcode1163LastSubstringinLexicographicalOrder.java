@@ -17,139 +17,133 @@ package two_pointer;
 
 public class Leetcode1163LastSubstringinLexicographicalOrder {
   /*
-    return the last substring of s in lexicographical order.
+      return the last substring of s in lexicographical order.
 
-    1 <= s.length <= 4 * 10^5
-    s contains only lowercase English letters.
+      1 <= s.length <= 4 * 10^5
+      s contains only lowercase English letters.
 
-    Input: s = "abab"
-    Output: "bab"
+      Input: s = "abab"
+      Output: "bab"
 
-    Input: s = "leetcode"
-    Output: "tcode"
+      Input: s = "leetcode"
+      Output: "tcode"
 
-    Input: s = "eced"
-    Output: "ed"
+      Input: s = "eced"
+      Output: "ed"
 
-    Input: s =  "babcbd"
-    Output: d
+      Input: s =  "babcbd"
+      Output: d
 
-    Input: s = "xxxxaaaaaaxxxxz"
-    Output: "z"
+      Input: s = "xxxxaaaaaaxxxxz"
+      Output: "z"
 
-    Input: s = xabcdy
-    Output: y
+      Input: s = xabcdy
+      Output: y
 
-    Input: s = dcdcdx
-    Output: x
+      Input: s = dcdcdx
+      Output: x
 
-    Input: s = aaaaaaaaax
-    Output: x
+      Input: s = aaaaaaaaax
+      Output: x
 
-    Input: s = xxxxxxxxa
-    Output: xxxxxxxxa
+      Input: s = xxxxxxxxa
+      Output: xxxxxxxxa
 
-    Input: s = xabcdefgxabz
-    Output: xabz
+      Input: s = xabcdefgxabz
+      Output: xabz
 
-    Input: s = "vmjtxddvzm
-    Output: zm
+      Input: s = "vmjtxddvzm
+      Output: zm
 
 
-  Understand:
-    The answer is always a suffix of the given string
+    Understand:
+      The answer is always a suffix of the given string
   */
 
   /*
-  Idea:
-    last substring in lexicographical order is always a suffix array
-    so need to compare all suffix array.
-    Note can skip some suffix array if its index is common parts when comparing 2 other pre
-    suffix array
-    Details:
-    initially i=0,j=1.
-      i is always the start index of the result of compared ones,
-      j is always the start index of the next not compared one
-      l is the length of common prefix of i and j.
-        if l is not 0, it means there are some chars are common prefix of 2 suffix array start with i and j
-        s[i + l] is same as s[j + l]; then l++;
-        s[i + l] is not same as s[j + l]:
-         - if (s[i + l] > s[j + l]) { j = j + l + 1; l=0; }
-           e.g. xxxxxxxxa? or xabcdefgxaba?
-                xxxxxxxx      xabc
-          index i             i
-                xxxxxxxa      xaba
-          index j             j
-                xxxxxxa       aba
-                xxxxxa        ba
-                xxxxa         a
-                xxxa          ?
-                xxa
-                xa
-                a
-                ?
-              j skip some following index and jump to index of ?(any char) to restart compare with i
+          Idea:
+            compare all suffix substrings.
+            last substring in lexicographical order is always a suffix array
+            so need to compare all suffix array.
+            Observe: some suffices array can be skipped if its index belongs the common parts when comparing 2 other previous
+            suffix array
+            Details:
+            initially i=0,j=1.
+              i is always the start index of the last sub-string in lexicographical order by far
+              j is always the start index of the current suffix to be compared
+              l is the length of common prefix of i and j.
+                if l is not 0, it means there are some chars are common prefix of 2 suffix array start with i and j and
+                s[i] is the max char in the common prefix
+              operation:
+               if s[i + l] is same as s[j + l]; then l++;
+               else
+                 - if (s[i + l] > s[j + l]) { j = j + l + 1; l=0; }
+                   e.g. xabcxaba
+                        i   j
+                        l=3
+                        x=a[i]>= any value in scope a[index i...j+l]
 
-          - if (s[i + l] < s[j + l]) {
-                i = Math.max(i + l + 1, j);
-                j = i + 1;
-                l=0
-             }
-            E.g.:
-              a> There is overlap: aaaaaaxxxxz
-                         aaaaaa
-                  index  i
-                         aaaaax
-                  index  j
-                         aaax
-                         aax
-                         ax
-                         x
-                       i skip some following index and jump to index of x whose index is i+l+1>=j
+                  -else if (s[i + l] < s[j + l])
+                    E.g.:
+                      a> s[j+l] > s[i]
+                                 a a a a a a z
+                          index  i j
+                          next:
+                             i=j+l then j=i+1, l=0;
 
-              b> There is no overlap xabcdefgxabz
-                         xabc
-                index    i
-                         xabz
-                index    j
-                       i skip some following index and jump to index j, j>=i+l+1.
-           Why j is i+1. is there a way to improve it?
-                  seem j=j+l  ? but see `vmjtxddvzm`, l can be 0 then i==j at x it is wrong, j must > i.
-                       j=j+l+1? but see `babcbd`
-                                  index  012345
-                                when i=1, j=2, l=1,
-                                next i=2 it is wrong j=4, result is bd, not d
+                      b>   s[j+l] > s[i+l] but  s[j+l] <=s[i]
+       i+l<j         ----------------------   （1）
+       let i=j.then j=j+l+1, l=3;
+                           xabaaxaby
+                           i    j
+                         next
+                                i   j
+                      another case:
+                           "cacb"
+                            i j
+                              cacb
+                            l=1
+                         next:
+                            "cacb"
+                               i j
 
-  O(N) time, i, j always move forward, never step back.
-     some char can be revisited at most twice, once by l another by j.
-     because this only happen when there is no overlap of 2 suffix array starting at index i and j
-               e.g.   xabcdefgxabzmn
-               index  0123456789
-               when   xabc
-               index  i
-                      xabz, abz has been visited by l.
-               index  j
-               next:
-                    i is at index 8
-                    j is at index i+1=9,
-                    note 'ab' is less than x, so j will visited ab and skip them
-      So at most each char will be visited twice.
+      i+l>j         ----------------------   （2）
+      let period=j-i;
+      let i=j+(l/p)*p
+      then j=j+l+1, l=4;
+                           "m a a m a a m b"
+                            i     j
+                                  m a a m b
+                           "m a a m a a m a b"
+                          next          i     j
+
+     Note when i+l ==j, then only there is s[i+l]==s[j]
+       m a m a a
+           m a a
+
+    O(N) time,  watch l or j always move forward, never step back.
     O(1) space
-    */
+
+  */
   public static String lastSubstring(String Str) {
-    // 1 <= s.length
     char[] s = Str.toCharArray();
     int i = 0, j = i + 1, l = 0, N = s.length;
     while (j + l < N) {
       if (s[i + l] == s[j + l]) {
-        l++;
+        l++; // O(N)
         continue;
-      } else if (s[i + l] > s[j + l]) j = j + l + 1;
-      else {
-        i = Math.max(i + l + 1, j);
-        j = i + 1;
+      } else {
+        if (s[i + l] <= s[j + l]) {
+          // find new last substring in lexicographical order
+          if (s[j + l] > s[i]) i = j + l;
+          else { // 2 scenarios: i+l+1 < j or i+l+1 > j
+            int p = j - i;
+            i = j + (l / p) * p;
+          }
+        }
+        j = j + l + 1; // O(N)
+        l = 0;
       }
-      l = 0;
     }
     return Str.substring(i);
   }
