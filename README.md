@@ -1,5 +1,6 @@
-# KeepTry
-Algorithms + Data Structures.  DIY.
+### Nothing is final, Perfect practise makes perfect, Hang tough 
+
+Algorithms + Data Structures.   
 
 Environment:
 

@@ -71,6 +71,9 @@ public class Leetcode1248CountNumberofNiceSubarrays {
   }
   /*
   Hint: After replacing each even by zero and every odd by one can we use prefix sum to find answer
+        because '... if there are k odd numbers on it'
+        means the sum of odd is k, focus on the quantity of odd, E.g. for sub-array  [7, 7 ,7] k is 3 not 1
+
   move the focus from subarray to the other part of the wold
   O(N) time, space
    */
@@ -92,13 +95,14 @@ public class Leetcode1248CountNumberofNiceSubarrays {
   public int numberOfSubarrays__(int[] A, int k) {
     return atMost(A, k) - atMost(A, k - 1);
   }
-  //   O(N) time O(1) space
+  //   O(N) time O(1) space, God like simple
   public int atMost(int[] A, int n) {
     int a = 0, l = 0, k = 0; // window is [l, r], each time move one step
     for (int r = 0; r < A.length; r++) {
       k += A[r] & 1;
       while (k == n + 1) k -= A[l++] & 1;
       a += r - l + 1;
+      // number of all sub-array: end at r, including at most n odd number, or counter of odd number <= n
     }
     return a;
   }

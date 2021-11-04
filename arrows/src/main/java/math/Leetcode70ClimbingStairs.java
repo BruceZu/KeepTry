@@ -15,6 +15,8 @@
 
 package math;
 
+import java.math.BigInteger;
+
 public class Leetcode70ClimbingStairs {
   /*
     Leetcode 70. Climbing Stairs
@@ -66,5 +68,39 @@ public class Leetcode70ClimbingStairs {
     Binet's Formula
     O(logN) time
     O(1) space
+
+    Note: overflow need take in account.
   */
+  // O(N) N is the index, O(1) space
+  public static long fib(long index) {
+    if (index < 0) throw new RuntimeException("input is invalid");
+    if (index == 0 || index == 1) return 1;
+
+    BigInteger a = BigInteger.valueOf(1), b = BigInteger.valueOf(1);
+    long cur = 2;
+    while (cur <= index) {
+      BigInteger v = a.add(b);
+      if (v.longValue() < 0){
+        System.out.println(a.longValue());
+        System.out.println(a.longValue());
+        throw new RuntimeException("result is too big to calculate");
+      }
+      a = b;
+      b = v;
+      cur++;
+    }
+    return b.longValue();
+  }
+
+  public static void main(String[] paras) {
+    // index  0 1 2 3 4 5 6
+    // value. 1 1 2 3 5 8 13
+    System.out.println(fib(1) == 1);
+    System.out.println(fib(2) == 2);
+    System.out.println(fib(3) == 3);
+    System.out.println(fib(5) == 8);
+    System.out.println(fib(6) == 13);
+    System.out.println(fib(600));
+    System.out.println(fib(-1));
+  }
 }
