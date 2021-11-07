@@ -20,75 +20,60 @@ import java.util.Set;
 import java.util.Stack;
 
 public class Leetcode1249MinimumRemovetoMakeValidParentheses {
-  public String minRemoveToMakeValid1(String S) {
-    /*
+  /*
+      Leetcode 1249. Minimum Remove to Make Valid Parentheses
 
-        1 <= s.length <= 10^5
-        s[i] is one of  '(' , ')' and lowercase English letters.
+      Given a string s of '(' , ')' and lowercase English characters.
+      Your task is to remove the minimum number of parentheses  '(' or ')', in any positions
+      so that the resulting parentheses string is valid and return any valid string.
 
-    */
+      Formally, a parentheses string is valid if and only if:
+      It is the empty string, contains only lowercase characters, or
+      It can be written as AB (A concatenated with B), where A and B are valid strings, or
+      It can be written as (A), where A is a valid string.
 
-    /*
-    A: remove invalid ')'
-     1. search from left to right: ignore all ')' before meet the first '(': stack is empty.
-     2. continue to search
-      - '(':  push in stack.
-      - ')':  pop stack top. if stack is empty ignore it like 1.
-    B: if stack is not empty. go right to left with same logic to remove invalid '(
-       alternative: if keep index in string builder in stack then now the invalid '(' can be deleted directly.
+      Input: s = "lee(t(c)o)de)"
+      Output: "lee(t(c)o)de"
+      Explanation: "lee(t(co)de)" , "lee(t(c)ode)" would also be accepted.
 
-    minimum: means only delete invalid ones
-    // O(N) Time and space
-    */
+      Input: s = "a)b(c)d"
+      Output: "ab(c)d"
 
-    StringBuilder sb = new StringBuilder();
-    char[] s = S.toCharArray();
-    Stack<Character> st = new Stack();
-    // O(N)
-    for (char c : s) {
-      if (st.isEmpty() && c == ')') continue;
-      else {
-        if (c == '(') st.push(c);
-        if (c == ')') st.pop();
-        sb.append(c);
-      }
+
+      Input: s = "))(("
+      Output: ""
+      Explanation: An empty string is also valid.
+
+      Input: s = "(a(b(c)d)"
+      Output: "a(b(c)d)"
+
+
+      Constraints:
+      1 <= s.length <= 105
+      s[i] is either'(' , ')', or lowercase English letter.
+  */
+  /*
+  Observe:
+    - before meeting (,  any )  is invalid, need remove it
+    - any ) left without paired ( is invalid, need remove it
+    use Stack to keep invalid parentheses index, need to know its location in string
+
+  minimum: means only delete invalid ones
+  O(N) Time and space
+  */
+  public String minRemoveToMakeValid(String str) {
+    Stack<Integer> stack = new Stack();
+    for (int i = 0; i < str.length(); i++) {
+      if (str.charAt(i) == ')') {
+        if (!stack.isEmpty() && str.charAt(stack.peek()) == '(') stack.pop();
+        else stack.push(i);
+      } else if (str.charAt(i) == '(') stack.push(i);
     }
-    if (st.isEmpty()) return sb.toString();
-    s = sb.toString().toCharArray();
-    sb = new StringBuilder();
-    st = new Stack();
-    // O(N)
-    for (int i = s.length - 1; i >= 0; i--) {
-      char c = s[i];
-      if (st.isEmpty() && c == '(') continue;
-      else {
-        if (c == ')') st.push(c);
-        if (c == '(') st.pop();
-        sb.append(c);
-      }
+    StringBuilder r = new StringBuilder();
+    for (int i = str.length() - 1; i >= 0; i--) {
+      if (!stack.isEmpty() && stack.peek() == i) stack.pop();
+      else r.append(str.charAt(i));
     }
-    // O(N)
-    return sb.reverse().toString(); // need reverse
-  }
-
-  public String minRemoveToMakeValid(String s) {
-    Set<Integer> remove = new HashSet<>();
-    Stack<Integer> stack = new Stack<>();
-    for (int i = 0; i < s.length(); i++) {
-      if (s.charAt(i) == '(') stack.push(i);
-      if (s.charAt(i) == ')') {
-        if (stack.isEmpty()) remove.add(i); // redundant ')'
-        else stack.pop();
-      }
-    }
-
-    while (!stack.isEmpty()) remove.add(stack.pop()); // redundant '('
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < s.length(); i++) {
-      if (!remove.contains(i)) {
-        sb.append(s.charAt(i));
-      }
-    }
-    return sb.toString();
+    return r.reverse().toString();
   }
 }
