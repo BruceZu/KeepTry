@@ -164,6 +164,7 @@ public class Leetcode324WiggleSortII {
     }
   }
   /*
+    Ascending order
     [l, < pivotal value], pivotal it self,[ >= pivotal, r]
   */
   private int separate(int[] a, int l, int r) {

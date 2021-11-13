@@ -226,7 +226,7 @@ public class Leetcode692TopKFrequentWords {
       else r = pi - 1;
     }
   }
-  // Descending order
+  // Descending order, median as pivotal, partition in 2 ways
   private int partition(Map.Entry<String, Integer>[] a, int l, int r) {
     int pi = l + r >>> 1;
     Map.Entry<String, Integer> pv = a[pi];
