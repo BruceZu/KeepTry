@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package math.factorial;
+package math.factorial_gcd;
 
 /**
  * <pre>

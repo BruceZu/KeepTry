@@ -23,7 +23,7 @@ import java.util.List;
  * Next Permutation see {@link Leetcode31NextPermutation}
  * <p>
  * The way of factorials here is like: permutations number of [112] = 3!/2! = (1*2*3/ 1*2*1)
- * factorials see {@link math.factorial.Factorials}
+ * factorials see {@link math.factorial_gcd.Factorials}
  *
  * @see <a href="http://advancedmathtutoring.com/permutations-with-and-without-repetition/">Permutations With and Without Repetition</a>
  * @see <a href="https://discuss.leetcode.com/topic/50864/who-have-the-fast-resolution/8">leetcode discuss</a>

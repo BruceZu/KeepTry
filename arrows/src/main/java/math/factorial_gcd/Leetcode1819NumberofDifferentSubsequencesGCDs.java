@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package math.factorial;
+package math.factorial_gcd;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -90,9 +90,9 @@ public class Leetcode1819NumberofDifferentSubsequencesGCDs {
 
   static int gcd(int a, int b) {
     while (b != 0) {
-      int t = a;
+      int b_ = a % b;
       a = b;
-      b = t % b;
+      b = b_;
     }
     return a;
   }
