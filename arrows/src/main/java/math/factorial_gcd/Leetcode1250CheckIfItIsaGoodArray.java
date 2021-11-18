@@ -15,7 +15,9 @@
 
 package math.factorial_gcd;
 
-public class Leetcode {
+import java.util.*;
+
+public class Leetcode1250CheckIfItIsaGoodArray {
   /*
    1250. Check If It Is a Good Array
 
