@@ -22,119 +22,69 @@ import java.util.Set;
 
 public class Leetcode3LongestSubstringWithoutRepeatingCharacters {
   /*
-      3. Longest Substring Without Repeating Characters
+    Leetcode 3. Longest Substring Without Repeating Characters
 
     Given a string s, find the length of the longest substring without repeating characters.
-
-
-
-    Example 1:
 
     Input: s = "abcabcbb"
     Output: 3
     Explanation: The answer is "abc", with the length of 3.
 
-    Example 2:
-
     Input: s = "bbbbb"
     Output: 1
     Explanation: The answer is "b", with the length of 1.
 
-    Example 3:
 
     Input: s = "pwwkew"
     Output: 3
     Explanation: The answer is "wke", with the length of 3.
     Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
 
-    Example 4:
-
     Input: s = ""
     Output: 0
-
-
 
     Constraints:
 
         0 <= s.length <= 5 * 104
         s consists of English letters, digits, symbols and spaces.
   */
-  /*
-  checking s:
-    null, empty
-  Idea:
-    2 pointer sliding window
-    data structure:
-    - 2 pointer for current window [l, ...] r,
-      l and r is initialized as 0
-      sliding window [l ,...] r, is not in window,
-      r is the index of next char will be  in window or the length where
-      calculate the max for the last time  and break the loop.
-    - set represent the window unique chars
-    O(N) time,
-    O(1) space, at more 128
-
-    int[26] for Letters 'a' - 'z' or 'A' - 'Z'
-    int[128] for ASCII
-    int[256] for Extended ASCII
-
-   */
-
-  public static int lengthOfLongestSubstring__(String s) {
-    if (s == null || s.length() == 0) return 0;
-    if (s.length() == 1) return 1;
-    char[] a = s.toCharArray();
-    int l = 0, r = 0;
-
-    int max = 0;
-    Set<Character> uni = new HashSet();
-    while (r < a.length) {
-      while (r < a.length && !uni.contains(a[r])) {
-        uni.add(a[r]);
-        r++;
-      }
-      max = Math.max(max, r - l);
-      if (r == a.length) break; // note here
-      while (a[l] != a[r]) { // r should be a valid index
-        uni.remove(a[l]);
-        l++;
-      }
-      uni.remove(a[l]);
-      l++;
-    }
-    return max;
-  }
 
   /*
-   how to keep` r` out of window but always in valid index range?
-   thus `l` will never care about overflow
-   Let l do all things it may need to do before moving r.
-   -  r in window now, before moving the r do:
-   -  remove duplicate, this requires a Map or bucket not Set.
-   -  before duplicated appears: there is no duplicated, and tracing max length is done
+  sliding window:
+  each time take in one element at index r
+    - if window does not contain it, add it directly
+    - else: firstly updating map and l till window does not contain the char at r, then add the char.
+  map keep char and frequency
+  can use a array as the map.
+
+  O(N) time,
+  O(Min{N,m}) space, map is upper bounded by the size of the string n and the size of the charset/alphabet m.
   */
-  public static int lengthOfLongestSubstring_(String s) {
-    if (s == null || s.length() == 0) return 0;
-    int[] f = new int[128];
-    char[] a = s.toCharArray();
-    int l = 0, r = 0, max = 0;
-    while (r < s.length()) {
-      int c = a[r];
-      f[c]++;
-
-      while (f[c] == 2) {
-        f[a[l]]--;
-        l++;
+  public int lengthOfLongestSubstring_(String str) {
+    if (str == null || str.length() == 0) return 0;
+    char[] arr = str.toCharArray();
+    Map<Character, Integer> map = new HashMap<>();
+    int l = 0, r = 0, a = 0;
+    for (; r < arr.length; r++) {
+      char cur = arr[r];
+      if (!map.containsKey(cur)) {
+        map.put(cur, 1);
+        a = Math.max(a, r - l + 1);
+      } else {
+        while (map.containsKey(cur)) {
+          char lv = arr[l];
+          map.put(lv, map.get(lv) - 1);
+          if (map.get(lv) == 0) map.remove(lv);
+          l++;
+        }
+        map.put(cur, 1);
       }
-      max = Math.max(r - l + 1, max);
-
-      r++;
     }
-    return max;
+    return a;
   }
 
   /*
-     it is slow to move `l` one char by one char till find the duplicated char?
+    it is slow to move `l` one char by one char till find the duplicated char?
      Map<Char, its index>, when a char is found duplicated
      - tracking max
      - move l to be Math.max(map.get(a[r]) + 1, l);
@@ -147,19 +97,20 @@ public class Leetcode3LongestSubstringWithoutRepeatingCharacters {
        map.put(char, r)
    It is still
    O(N) time,
-   O(1) space, at more 128
+   O(m) space, at most 128
   */
-  public static int lengthOfLongestSubstring(String s) {
+  public int lengthOfLongestSubstring(String s) {
     if (s == null || s.length() == 0) return 0;
     Map<Character, Integer> map = new HashMap<>(); // char -> current index
     char[] a = s.toCharArray();
     int l = 0, r = 0, max = 0;
-    while (r < s.length()) {
-      if (map.containsKey(a[r])) {
+    for (; r < a.length; r++) {
+      char cur = a[r];
+      if (map.containsKey(cur)) {
         max = Math.max(max, r - l);
-        l = Math.max(map.get(a[r]) + 1, l);
+        l = Math.max(map.get(cur) + 1, l); // at least move to index of map.get(cur) + 1
       }
-      map.put(a[r], r);
+      map.put(cur, r);
     }
     max = Math.max(max, r - l);
     return max;
