@@ -62,8 +62,3 @@ Once you are using PUT you are refering to a resource or single item, possibly i
 
 PUT /users/john HTTP/1.1
 you are telling to the server update, or create if it doesn't exist, the john resource under the users collection.
------------------------------------------------------------------------------------------------------------------
-http://restcookbook.com/HTTP%20Methods/put-vs-post/
-
-which one should I use in my RESTful design?
-You do not need to support both PUT and POST.
