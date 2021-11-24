@@ -16,6 +16,7 @@
       <sourceFolder url="file://$MODULE_DIR$" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/2-technical-and-design/jdk17/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/2-technical-and-design/jdk17/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
