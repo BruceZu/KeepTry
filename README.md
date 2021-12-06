@@ -1,4 +1,4 @@
-### Nothing is final, Perfect practise makes perfect, Hang tough 
+### Nothing is final. Practise makes perfect. Hang tough 
 
 Algorithms + Data Structures.   
 

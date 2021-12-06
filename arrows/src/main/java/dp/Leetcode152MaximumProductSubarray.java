@@ -15,100 +15,137 @@
 
 package dp;
 
-/**
- * <pre>
- * 152. Maximum Product Subarray
- * Difficulty: Medium
- * Find the contiguous subarray within an array (containing at least one number) which has the largest product.
- *
- * For example, given the array [2,3,-2,4],
- * the contiguous subarray [2,3] has the largest product = 6.
- *
- * Tags
- *      Array
- *      Dynamic Programming
- * Similar Problems
- *      (M) Maximum Subarray
- *      (E) House Robber
- *      (M) Product of Array Except Self
- *   ==============================================================
- *      product of 2 negative number will be positive
- *
- *    Idea:
- *      same like Kadane Algorithm
- *
- *   @see <a href="https://leetcode.com/problems/maximum-product-subarray/">leetcode</a>
- */
 public class Leetcode152MaximumProductSubarray {
-    // O(N)
-    public static int maxProduct(int[] A) {
-        if (A.length == 0) {
-            return 0;
-        }
+  /*
 
-        int max = A[0]; // in set of possible solutions ending at index i
-        int min = A[0];
-        // in set of possible solutions ending at index i. product of 2 negative numbers is positive
-        // that is why need a min here.
-        int r = A[0];
+    152. Maximum Product Subarray
+    Given an integer array nums, find a contiguous non-empty subarray
+    within the array that has the largest product, and return the product.
 
-        int newMax, newMin;
-        for (int i = 1; i < A.length; i++) {
-            newMax = Math.max(Math.max(max * A[i], min * A[i]), A[i]);
-            newMin = Math.min(Math.min(max * A[i], min * A[i]), A[i]);
-            r = Math.max(newMax, r);
+    It is guaranteed that the answer will fit in a 32-bit integer.
+    A subarray is a contiguous subsequence of the array.
 
-            max = newMax;
-            min = newMin;
-        }
-        return r;
+
+   Input: nums = [2,3,-2,4]
+   Output: 6
+   Explanation: [2,3] has the largest product 6.
+
+
+   Input: nums = [-2,0,-1]
+   Output: 0
+   Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
+
+
+   Constraints:
+
+   1 <= nums.length <= 2 * 104
+   -10 <= nums[i] <= 10
+   The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+  */
+
+  /*
+  product of 2 negative number will be positive
+  Idea:
+  same like Kadane Algorithm
+  O(N) time, O(1) space
+  */
+  public static int maxProduct(int[] A) {
+    if (A.length == 0) return 0;
+
+    int max = A[0]; // max product of all sub arrays  ending at index i, initial value is A[0]
+    int min = A[0]; // min product of all sub arrays  ending at index i, initial value is A[0]
+    int r = A[0];
+
+    int max_, min_; // next max and min
+    for (int i = 1; i < A.length; i++) {
+      max_ = Math.max(Math.max(max * A[i], min * A[i]), A[i]);
+      min_ = Math.min(Math.min(max * A[i], min * A[i]), A[i]);
+      r = Math.max(max_, r);
+
+      max = max_;
+      min = min_;
+    }
+    return r;
+  }
+
+  /*
+  Observations:
+    negative numbers is even or odd.
+    odd: either the left end one or the right end one should be counted,
+
+    scanning from left and from right to see.
+    0 is delimiter, product accumulation will be reset to 1
+    O(N) time and O(1) spaces
+  */
+  public static int maxProduct2(int[] nums) {
+    int max = Integer.MIN_VALUE;
+    int N = nums.length;
+
+    int p = 1;
+    for (int i = 0; i < N; i++) {
+      max = Math.max(p *= nums[i], max);
+      if (nums[i] == 0) {
+        p = 1;
+      }
     }
 
-    /**
-     * Not DP Idea: observations: negative numbers is even or odd. odd: either the left end one or
-     * the right end one should be counted,
-     *
-     * <p>scanning from left and from right to see. 0 is delimiter, product accumulation will be
-     * reset to 1 O(N)
-     */
-    public static int maxProduct2(int[] nums) {
-        int r = Integer.MIN_VALUE;
-        int len = nums.length;
-
-        int product = 1;
-        for (int i = 0; i < len; i++) {
-            r = Math.max(product *= nums[i], r);
-            if (nums[i] == 0) {
-                product = 1;
-            }
-        }
-
-        product = 1;
-        for (int i = len - 1; i >= 0; i--) {
-            r = Math.max(product *= nums[i], r);
-            if (nums[i] == 0) {
-                product = 1;
-            }
-        }
-        return r;
+    p = 1;
+    for (int i = N - 1; i >= 0; i--) {
+      max = Math.max(p *= nums[i], max);
+      if (nums[i] == 0) {
+        p = 1;
+      }
     }
+    return max;
+  }
 
-    //-----------------------------------------------
+  /*
+   Amazon OA question
+   given int array with length >=1, value is 1 or -1
+   output is the length of the max sub array whose member product is 1
 
-    // TODO float?
-    public static void main(String[] args) {
-        System.out.println(maxProduct(new int[] {-2, 0, -1}));
-        System.out.println(maxProduct(new int[] {0, 0, 0}));
-        System.out.println(maxProduct(new int[] {0, 0, -2, 0}));
-        System.out.println(maxProduct(new int[] {0, 0, 3, 0}));
-        System.out.println(maxProduct(new int[] {1, 2, -1, 3, -2, -1}));
-        System.out.println(maxProduct(new int[] {1, 2, 3, 2, -1, 2, 4, 5, 7 - 1, 1, 2}));
-
-        System.out.println(maxProduct2(new int[] {-2, 0, -1}));
-        System.out.println(maxProduct2(new int[] {0, 0, 0}));
-        System.out.println(maxProduct2(new int[] {0, 0, -2, 0}));
-        System.out.println(maxProduct2(new int[] {0, 0, 3, 0}));
-        System.out.println(maxProduct2(new int[] {1, 2, -1, 3, -2, -1}));
-        System.out.println(maxProduct2(new int[] {1, 2, 3, 2, -1, 2, 4, 5, 7 - 1, 1, 2}));
+   same like Kadane Algorithm
+   update each max sub array ending at current index i and with element product 1 or -1
+   and maintain the length of max sub array in the whole given array scope and whose element product is 1
+   O(N) time and O(1) space
+  */
+  public static int lengthOfMaxSubArray(int[] A) {
+    int max = 0;
+    int L1 = 0; // length of max sub array ending at current index i and product of element is 1
+    int L_1 = 0; // length of max sub array ending at current index i and product of element is -1
+    for (int v : A) {
+      if (v == 1) {
+        L1++;
+        if (L_1 != 0) L_1++;
+      } else {
+        // v is -1
+        int tmp = L1;
+        L1 = L_1 == 0 ? 0 : L_1 + 1;
+        L_1 = tmp == 0 ? 1 : tmp + 1;
+      }
+      max = Math.max(max, L1);
     }
+    return max;
+  }
+  // -----------------------------------------------
+
+  public static void main(String[] args) {
+    System.out.println(maxProduct(new int[] {-2, 0, -1}));
+    System.out.println(maxProduct(new int[] {0, 0, 0}));
+    System.out.println(maxProduct(new int[] {0, 0, -2, 0}));
+    System.out.println(maxProduct(new int[] {0, 0, 3, 0}));
+    System.out.println(maxProduct(new int[] {1, 2, -1, 3, -2, -1}));
+    System.out.println(maxProduct(new int[] {1, 2, 3, 2, -1, 2, 4, 5, 7 - 1, 1, 2}));
+
+    System.out.println(maxProduct2(new int[] {-2, 0, -1}));
+    System.out.println(maxProduct2(new int[] {0, 0, 0}));
+    System.out.println(maxProduct2(new int[] {0, 0, -2, 0}));
+    System.out.println(maxProduct2(new int[] {0, 0, 3, 0}));
+    System.out.println(maxProduct2(new int[] {1, 2, -1, 3, -2, -1}));
+    System.out.println(maxProduct2(new int[] {1, 2, 3, 2, -1, 2, 4, 5, 7 - 1, 1, 2}));
+
+    System.out.println(lengthOfMaxSubArray(new int[] {1, -1, -1, 1, 1, -1}));
+    System.out.println(lengthOfMaxSubArray(new int[] {1, -1, -1, -1, 1, 1}));
+    System.out.println(lengthOfMaxSubArray(new int[] {-1, -1, 1, -1, 1, 1}));
+  }
 }
