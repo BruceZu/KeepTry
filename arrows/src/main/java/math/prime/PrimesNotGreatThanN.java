@@ -20,9 +20,12 @@ import java.util.List;
 
 public class PrimesNotGreatThanN {
   /*
+    Any number is filtered out once by its minimum prime factor
+
     N: 2< N < Integer.MAX_VALUE.
-    This algorithm is restricted by  the max possible index Integer.MAX_VALUE
+    This algorithm is restricted by the max possible index Integer.MAX_VALUE
     With a boolean array to mark all number to be prime by default
+    
     For each number 2~N.
       - if it is still marked as prime, then collect it in a list, we care the order of them.
       - use the current number mark all `product=cur number * some collected prime<=N` as false
@@ -41,29 +44,29 @@ public class PrimesNotGreatThanN {
                 18 minimum factor is 2, 2*(3*3)
          So any current number n, n can only mark product which is p*n, and p<= minor factor of n, thus p
          is also the minor factor of the product number.
-   O(N) time and space
+   O((N^2)/(ln^n)) time
+   O(N)  space
   */
   public static List<Integer> getPrimesLessNotGreatThan(Integer N) {
     if (N == Integer.MAX_VALUE) throw new RuntimeException("No support:" + N);
-    List<Integer> primes = new ArrayList<>();
+    List<Integer> list = new ArrayList<>(); // primes
     //
     boolean[] isNotPrime = new boolean[N + 1]; // default false, 'it is prime'.
-    for (int n = 2; n <= N; n++) {
-      if (!isNotPrime[n]) {
-        primes.add(n);
+    for (int i = 2; i <= N; i++) {
+      if (!isNotPrime[i]) {
+        list.add(i);
       }
       // for all p <= minimum factor of current number n
-      for (int p : primes) {
-        if (n * p > N) {
-          break; // overflow
-        }
-        isNotPrime[p * n] = true; // each number only be mark only once
-        if (n % p == 0) {
+      for (int p : list) {
+        if (p * i > N) break; // overflow
+
+        isNotPrime[p * i] = true; // each number only be mark only once
+        if (i % p == 0) {
           break;
         }
       }
     }
-    return primes;
+    return list;
   }
 
   public static void main(String[] args) {

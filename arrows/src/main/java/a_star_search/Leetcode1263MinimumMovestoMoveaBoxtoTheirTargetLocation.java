@@ -22,14 +22,14 @@ import java.util.Set;
 
 public class Leetcode1263MinimumMovestoMoveaBoxtoTheirTargetLocation {
   /*
-  Ask pushes box in a grid of  m x n, ach element is a wall, floor, or a box.
+  Ask pushes box in a grid of  m x n, each element is a wall, floor, or a box.
       to the target position 'T'
       rules:
         Player 'S' and can move up, down, left, right if it is a floor (empty cell).
         Floor: '.'
         Wall : '#'
         only one box 'B', one target cell 'T'
-        Player 'S' cannot walk through the box.
+        Player 'S' can NOT walk through the box.
 
   Return the minimum number of pushes
   return -1 if it is impossible
@@ -59,7 +59,7 @@ public class Leetcode1263MinimumMovestoMoveaBoxtoTheirTargetLocation {
    Solution:
     find the initial location of B, S, T
     A * search: BFS + priority queue.
-                a priority queue keeping status + heuristic = manhattan + steps
+                a priority queue keeping status + heuristic(manhattan + steps)
                 avoid repeating visited status: locations of person and box
       initial status in priority queue
       loop while queue is not empty
@@ -73,7 +73,7 @@ public class Leetcode1263MinimumMovestoMoveaBoxtoTheirTargetLocation {
             from current status: person try walk a step toward 4 directions if
             person can walk: in grid and no # at next cell
             if the next cell for person to walk is box location and box's next cell
-            is allow it to move:
+            is allowed it to move:
                it is move box
             else
                it is only person walk.

@@ -282,3 +282,23 @@ public class Leetcode394DecodeString {
     return new String(sb); // loop over or meet ']'
   }
 }
+
+/*
+  a>  encoding  aaabcdddddddddd => 3abc10d.   single char `x` need not to be `1x` : compare cur char with previous char,
+                                                                                  - if same the collect the previous one, count=0. preChar = cur;
+                                                                                  - else count++
+
+  b> decoding  3abc10d => aaabcdddddddddd.  if meet char then decoding it. note single char `x` need not to be `1x`;
+                                            else it is digit, use a Stringbuilder keep the digit
+  c> input is steam, each time consume a char and print out current decoding result:
+     use Stirngbuilder keep the immute part, possible mute part:  counter,  preChar. note single char `x` need not to be `1x`;
+     initial prechar is null, count=0;
+        if(preChar==null||cur==preChar){
+           count++;
+           preChar=cur; // note here
+           return immute.toString() + (count>1? count+cur: cur);
+        }
+ rule:
+  1. consume one char each time:
+  2. encoding: loop over means reach a char=null, also collect the last part '10d'
+ */
