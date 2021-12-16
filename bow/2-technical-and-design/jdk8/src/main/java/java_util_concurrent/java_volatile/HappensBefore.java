@@ -17,39 +17,40 @@ package java_util_concurrent.java_volatile;
 
 public class HappensBefore {
 
-    private Object product = null;
-    private volatile boolean hasNew;
+  private Object product = null;
+  private volatile boolean hasNew;
 
-    public Object consume() {
-        while (!hasNew) {}
+  public Object consume() {
+    while (!hasNew) {}
 
-        System.out.println("Consumed");
+    System.out.println("Consumed");
 
-        Object r = product;
-        hasNew = false;
-        return r;
-    }
+    Object r = product;
+    hasNew = false;
+    return r;
+  }
 
-    public void put(Object o) {
+  public void put(Object o) {
 
-        while (hasNew) {}
+    while (hasNew) {}
 
-        System.out.println("new is ready");
-        product = new Object();
-        hasNew = true;
-    }
+    System.out.println("new is ready");
+    product = new Object();
+    hasNew = true;
+  }
 
-    public static void main(String[] args) {
-        HappensBefore target = new HappensBefore();
-        new Thread(
-                        () -> {
-                            while (true) target.put(new Object());
-                        })
-                .start();
-        new Thread(
-                        () -> {
-                            while (true) target.consume();
-                        })
-                .start();
-    }
+  public static void main(String[] args) {
+    HappensBefore target = new HappensBefore();
+    new Thread(
+            () -> {
+              while (true) target.put(new Object());
+            })
+        .start();
+
+    new Thread(
+            () -> {
+              while (true) target.consume();
+            })
+        .start();
+  }
 }

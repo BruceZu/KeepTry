@@ -20,100 +20,95 @@ import java.util.Stack;
 import static java.lang.Thread.sleep;
 
 /**
- * 2 stacks work as a queue
- * more consumers
- * more producers
- * make the running time of get be O(1). blocking when there is no message.
+ * 2 stacks work as a queue more consumers more producers make the running time of get be O(1).
+ * blocking when there is no message.
  */
 public class WaitAndNotify {
-    public static void main(String args[]) {
-        final int FULL_SIZE = 2;
-        final Stack in = new Stack();
-        final Stack out = new Stack();
-        final Object monitor = new Object();
-        final Object lockAllGet = new Object();
-        final Object lockAllPut = new Object();
+  public static void main(String args[]) {
+    final int FULL_SIZE = 2;
+    final Stack in = new Stack();
+    final Stack out = new Stack();
+    final Object monitor = new Object();
+    final Object lockAllGet = new Object();
+    final Object lockAllPut = new Object();
 
-        Runnable put = new Runnable() {
-            private void move() {
-                synchronized (in) {
-                    synchronized (out) {
-                        while (!in.empty()) {
-                            out.push(in.pop());
-                        }
-                        System.out.println("moved data");
-                    }
-                }
+    Runnable put =
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              while (true) {
+                putMessage();
+              }
+            } catch (InterruptedException e) {
+              e.printStackTrace();
             }
+          }
 
-            private void putMessage() throws InterruptedException {
-                synchronized (lockAllPut) {
-                    if (in.size() == FULL_SIZE) {
-                        // wait till condition is met
-                        while (in.size() == FULL_SIZE) {
-                            synchronized (monitor) {
-
-                                monitor.wait();
-                            }
-                            move();
-                        }
-                    }
-
-                    synchronized (in) {
-                        in.push(new java.util.Date().toString());
-                        System.out.println("added");
-                    }
+          private void putMessage() throws InterruptedException {
+            synchronized (lockAllPut) {
+              // wait out is empty then do move from in to out stack
+              while (in.size() == FULL_SIZE) { // while not if
+                synchronized (monitor) {
+                  monitor.wait();
                 }
-            }
+                moveAll();
+              }
 
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        putMessage();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+              synchronized (in) {
+                in.push(new java.util.Date().toString());
+                System.out.println("added");
+              }
             }
+          }
+
+          private void moveAll() {
+            synchronized (in) { // that is why use lockAllPut and lockAllGet
+              synchronized (out) {
+                while (!in.empty()) {
+                  out.push(in.pop());
+                }
+                System.out.println("moved all data from in to out");
+              }
+            }
+          }
         };
 
-        Runnable get = new Runnable() {
-            private String getMessage() throws InterruptedException {
-                synchronized (lockAllGet) {
-                    if (out.empty()) {
-                        while (out.empty()) {
-                            synchronized (monitor) {
-                                monitor.notify();
-                            }
-                            sleep(10l);
-                        }
-                    }
-
-                    String message = (String) out.peek();
-                    out.pop();
-                    System.out.println("get");
-                    return message;
-                }
+    Runnable get =
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              while (true) {
+                getMessage();
+              }
+            } catch (InterruptedException e) {
+              e.printStackTrace();
             }
+          }
 
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        getMessage();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+          private synchronized String getMessage() throws InterruptedException {
+            synchronized (lockAllGet) {
+              while (out.empty()) { // while not if
+                synchronized (monitor) {
+                  monitor.notify();
                 }
+                sleep(10l);
+              }
+
+              String message = (String) out.peek();
+              out.pop();
+              System.out.println("get");
+              return message;
             }
+          }
         };
 
-        new Thread(put).start();
-        new Thread(put).start();
+    new Thread(put).start();
+    new Thread(put).start();
 
-        new Thread(get).start();
-        new Thread(get).start();
-        new Thread(get).start();
-    }
+    new Thread(get).start();
+    new Thread(get).start();
+    new Thread(get).start();
+  }
 }

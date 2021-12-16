@@ -53,10 +53,10 @@ public class VolatileTest {
             new Thread(
                             new Runnable() {
                                 CyclicBarrier barrier;
-                                CountDownLatch c;
+                                CountDownLatch latch;
 
                                 public Runnable set(CountDownLatch cdl, CyclicBarrier barrier) {
-                                    this.c = cdl;
+                                    this.latch = cdl;
                                     this.barrier = barrier;
                                     return this;
                                 }
@@ -64,7 +64,7 @@ public class VolatileTest {
                                 @Override
                                 public void run() {
                                     try {
-                                        c.await();
+                                        latch.await();
                                         Thread.currentThread().sleep(100l);
                                         v++;
                                         vl++;

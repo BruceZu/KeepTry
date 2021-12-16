@@ -16,60 +16,67 @@
 package java_util_concurrent.countDownLatchCyclicBarrierSemaphore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 public class SleepSort {
-    // non-negative integers
-    public static List<Integer> sleepSort(List<Integer> num) {
-        final List<Integer> r = Collections.synchronizedList(new ArrayList());
-        CountDownLatch start = new CountDownLatch(1);
-        CountDownLatch finish = new CountDownLatch(num.size());
-        /* barrier is redundant here*/
-        CyclicBarrier barrier = new CyclicBarrier(num.size(), new Runnable() {
-            @Override
-            public void run() {
-                // System.out.println("Done");
-                // System.out.println(Arrays.toString(r.toArray()));
-            }
-        });
-        for (Integer n : num) {
-            new Thread(new Runnable() {
+  public static void main(String[] args) {
+    sleepSort(Arrays.asList(3, 2, 1, 5, 8, 3, 2));
+  }
+  // non-negative integers
+  public static List<Integer> sleepSort(List<Integer> num) {
+    final List<Integer> sortedResult = Collections.synchronizedList(new ArrayList());
+    CountDownLatch start = new CountDownLatch(1);
+    CountDownLatch finish = new CountDownLatch(num.size());
+
+    CyclicBarrier barrier =
+        new CyclicBarrier(
+            num.size(),
+            () -> {
+              System.out.println("Done");
+              System.out.println(Arrays.toString(sortedResult.toArray()));
+            });
+    for (Integer n : num) {
+      new Thread(
+              new Runnable() {
                 private CountDownLatch start;
                 private CountDownLatch finish;
                 private CyclicBarrier barrier;
                 private Integer n;
 
-                public Runnable set(Integer n, CountDownLatch start, CountDownLatch finish, CyclicBarrier barrier) {
-                    this.n = n;
-                    this.start = start;
-                    this.finish = finish;
-                    this.barrier = barrier;
-                    return this;
+                public Runnable set(
+                    Integer n, CountDownLatch start, CountDownLatch finish, CyclicBarrier barrier) {
+                  this.n = n;
+                  this.start = start;
+                  this.finish = finish;
+                  this.barrier = barrier;
+                  return this;
                 }
 
                 @Override
                 public void run() {
-                    try {
-                        start.await();
-                        Thread.currentThread().sleep(n);
-                        r.add(n);
-                        finish.countDown();
-                        barrier.await();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                  try {
+                    start.await();
+                    Thread.currentThread().sleep(n);
+                    sortedResult.add(n);
+                    finish.countDown();
+                    barrier.await();
+                  } catch (Exception e) {
+                    e.printStackTrace();
+                  }
                 }
-            }.set(n, start, finish, barrier)).start();
-        }
-        start.countDown();
-        try {
-            finish.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return r;
+              }.set(n, start, finish, barrier))
+          .start();
     }
+    start.countDown();
+    try {
+      finish.await();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    return sortedResult;
+  }
 }

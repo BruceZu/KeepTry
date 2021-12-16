@@ -134,7 +134,7 @@ class BoundedBlockingQueue {
   private Condition empty = lock.newCondition();
 
   private int[] q;
-  private int r = 0, w = 0, size = 0;
+  private int /* index or read and write */ r = 0, w = 0, size = 0;
 
   public BoundedBlockingQueue(int capacity) {
     q = new int[capacity];
@@ -163,12 +163,12 @@ class BoundedBlockingQueue {
       while (size == 0) {
         empty.await();
       }
-      int a = q[r++];
-
+      int a = q[r];
+      r++;
       r %= q.length;
       size--;
-      full.signal();
 
+      full.signal();
       return a;
     } finally {
       lock.unlock();
