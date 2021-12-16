@@ -27,7 +27,12 @@ public class RequestRateLimiter {
     return proxy.get(URL).shouldOffer(URL);
   }
 }
-
+/*
+ How about the rule also based on customer?
+ customer session then per URL
+ where to keep the status? end user can access from different nodes
+    - distributed cache?
+*/
 class RequestRateLimiterPerAPI {
   private int WIN_WIDTH = 500; // in milliseconds
   private int LIMIT_REQUESTS = 10; // per window
