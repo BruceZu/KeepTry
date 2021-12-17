@@ -15,6 +15,7 @@
 
 package tree.b_tree;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -85,6 +86,9 @@ public class Leetcode545BoundaryofBinaryTree {
    leaf nodes between the lower layer node of left and right injects
    O(N) time, space
   The idea is wrong with the order: left boundary,leaf, right boundary
+  Do not need BFS, as at each level, the both sides are the only concerned part
+  for a level there is in total only one node, no way to distinguish it is of left boundary or right boundary
+
 
   key: understanding the definition of
        - `left most node`, it is a leaf node, it is not the left most node in binary search tree
@@ -109,7 +113,7 @@ public class Leetcode545BoundaryofBinaryTree {
         with a stack to keep the order.
    O(N) time, space
    */
-  public List<Integer> boundaryOfBinaryTree_(TreeNode root) {
+  public List<Integer> boundaryOfBinaryTree__(TreeNode root) {
     List<Integer> a = new LinkedList<>();
     if (root == null) return a;
     a.add(root.val);
@@ -168,9 +172,9 @@ public class Leetcode545BoundaryofBinaryTree {
     }
   }
   /* --------------------------------------------------------------------------
-   void function
+   no return value, void recursion function
   */
-  public List<Integer> boundaryOfBinaryTree(TreeNode node) {
+  public List<Integer> boundaryOfBinaryTree_(TreeNode node) {
     List<Integer> a = new LinkedList<>();
     if (node == null) return a;
 
@@ -213,6 +217,104 @@ public class Leetcode545BoundaryofBinaryTree {
       a.add(node.val); // on the backward road
     }
     // stop all when node is a leaf
+  }
+  /* --------------------------------------------------------------------------
+  iterator replaces recursion function
+  */
+  public List<Integer> boundaryOfBinaryTree(TreeNode node) {
+    List<Integer> a = new ArrayList<>();
+    if (node == null) return a;
+    if (!(node.left == null && node.right == null)) a.add(node.val);
+
+    TreeNode t = node.left;
+    while (t != null) {
+      if (!(t.left == null && t.right == null)) a.add(t.val);
+      t = t.left != null ? t.left : t.right;
+    }
+
+    addLeaves(a, node);
+
+    Stack<Integer> s = new Stack<>();
+    t = node.right;
+    while (t != null) {
+      if (!(t.left == null && t.right == null)) s.push(t.val);
+      t = t.right != null ? t.right : t.left;
+    }
+
+    while (!s.empty()) a.add(s.pop());
+    return a;
+  }
+  // Assume node is not null
+  public void addLeaves(List<Integer> res, TreeNode node) {
+    if (node.left == null && node.right == null) { // isLeaf
+      res.add(node.val);
+      return;
+    }
+    if (node.left != null) addLeaves(res, node.left);
+    if (node.right != null) addLeaves(res, node.right);
+  }
+
+  /* --------------------------------------------------------------------------
+  status conversion
+  Observation:
+   Preorder + filter out middle nodes + stack for the right boundary  => possible in one loop
+   status transaction: current node decided by
+       - parent node status
+       - current node is left of right node
+       - sibling node's existence
+  flag:
+      0: root,
+      1: left boundary
+      2: right boundary
+      3: other(leaf and middle not of root/left/right boundary)
+  O(N) time, space
+  */
+  public List<Integer> boundaryOfBinaryTree___(TreeNode root) {
+    List<Integer> L = new LinkedList<>(), R = new LinkedList<>(), leaves = new LinkedList<>();
+
+    preorder(root, L, R, leaves, 0);
+    L.addAll(leaves);
+    L.addAll(R);
+    return L;
+  }
+
+  public void preorder(
+      TreeNode n, List<Integer> LB, List<Integer> RB, List<Integer> leaves, int nflag) {
+    if (n == null) return;
+    if (isRB(nflag)) RB.add(0, n.val);
+    else if (isLB(nflag) || isRoot(nflag)) LB.add(n.val);
+    else if (isLeaf(n)) leaves.add(n.val);
+
+    preorder(n.left, LB, RB, leaves, leftChildFlag(n, nflag));
+    preorder(n.right, LB, RB, leaves, rightChildFlag(n, nflag));
+  }
+  // critical logic is here to figure out the left child is of 1|2|3
+  public int leftChildFlag(TreeNode p, int pflag) {
+    if (isLB(pflag) || isRoot(pflag)) return 1;
+    else if (isRB(pflag) && p.right == null) return 2;
+    else return 3;
+  }
+  // ... right child is of 1|2|3
+  public int rightChildFlag(TreeNode p, int pflag) {
+    if (isLB(pflag) && p.left == null) return 1;
+    else if (isRB(pflag) || isRoot(pflag)) return 2;
+    else return 3;
+  }
+
+  public boolean isLeaf(TreeNode cur) {
+    return (cur.left == null && cur.right == null);
+  }
+
+  public boolean isRB(int flag) {
+    return (flag == 2);
+  }
+
+  public boolean isLB(int flag) {
+    return (flag == 1);
+  }
+
+  public boolean isRoot(int flag) {
+    return (flag == 0);
   }
 
   // --------------------------------------------------------------------------
