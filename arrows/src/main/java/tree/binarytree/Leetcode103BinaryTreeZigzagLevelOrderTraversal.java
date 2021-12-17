@@ -68,21 +68,17 @@ public class Leetcode103BinaryTreeZigzagLevelOrderTraversal {
 
     Queue<TreeNode> q = new LinkedList<>();
     q.add(root);
-    boolean even = true;
+    boolean even = true; // of level in q
 
     while (!q.isEmpty()) {
       LinkedList<Integer> level = new LinkedList<>();
       int n = q.size();
       while (n-- >= 1) {
-        TreeNode node = q.poll();
-        if (node.left != null) {
-          q.offer(node.left);
-        }
-        if (node.right != null) {
-          q.offer(node.right);
-        }
+        TreeNode node = q.poll(); // always keep next level from left to right
+        if (node.left != null) q.offer(node.left);
+        if (node.right != null) q.offer(node.right);
 
-        if (even) level.add(node.val);
+        if (even) level.add(node.val); // current level from q.
         else level.addFirst(node.val);
       }
       ans.add(level);
