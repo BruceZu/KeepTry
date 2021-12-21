@@ -18,7 +18,7 @@ package tree.segment_tree;
 import java.util.function.BiFunction;
 
 /*
- build ST with full complete tree. All operation are bottom-up
+ build ST with full(children) complete(level) tree. All operation are bottom-up
 */
 public class SegmentTreeRMQWithFullCompleteBT {
   private final int[] ST;
