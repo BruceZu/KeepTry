@@ -20,9 +20,9 @@ import java.lang.reflect.Constructor;
 public class TestDefendReflectForLazyLoadedSingleton {
     public static void main(String[] args) {
         try {
-            DoubleCheckedLockingSingleton.getInstance();
+            DBSingleton.getInstance();
             // new DoubleCheckedLockingSingleton();
-            final Class<?> c = Class.forName("design_pattern_singleton.DoubleCheckedLockingSingleton");
+            final Class<?> c = Class.forName("design_pattern_singleton.DBSingleton");
             final Constructor<?> constructor = c.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();

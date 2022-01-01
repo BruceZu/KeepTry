@@ -1,4 +1,4 @@
-//  Copyright 2016 The Sawdust Open Source Project
+//  Copyright 2021 The KeepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,4 +13,8 @@
 // limitations under the License.
 //
 
-package reference_cache_GC;
+package java_references;
+
+public class CleanerCase {
+  // java.lang.ref.Cleaner
+}

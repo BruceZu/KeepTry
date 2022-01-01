@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package abstract_class_interface;
+package java_interface_abstractclass;
 
 import java.io.Serializable;
 
@@ -51,7 +51,7 @@ public abstract class My_Abstrct implements My_Interface, Cloneable, Serializabl
 class Concrete extends My_Abstrct implements My_Interface {
 
     @Override
-    public String getMy_name() {
+    public String getName() {
         return null;
     }
 

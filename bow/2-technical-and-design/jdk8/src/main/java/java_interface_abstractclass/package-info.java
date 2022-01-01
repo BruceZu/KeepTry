@@ -37,6 +37,7 @@
  *          abstract                                Y                 Y (default)
  *          protected                               Y
  *          private                                 Y
+ *          default                                 ?                  Y
  *        Method
  *            synchronized                          Y                  N
  *            strictfp                              Y                  N
@@ -85,4 +86,4 @@
  * abstract class establishes "is a" relation with concrete classes.
  * interface provides "has a" capability for classes.
  */
-package abstract_class_interface;
+package java_interface_abstractclass;
