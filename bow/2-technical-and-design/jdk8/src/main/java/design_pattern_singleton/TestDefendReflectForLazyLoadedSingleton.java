@@ -18,16 +18,16 @@ package design_pattern_singleton;
 import java.lang.reflect.Constructor;
 
 public class TestDefendReflectForLazyLoadedSingleton {
-    public static void main(String[] args) {
-        try {
-            DBSingleton.getInstance();
-            // new DoubleCheckedLockingSingleton();
-            final Class<?> c = Class.forName("design_pattern_singleton.DBSingleton");
-            final Constructor<?> constructor = c.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            constructor.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+  public static void main(String[] args) {
+    try {
+      D.getInstance();
+      // new DoubleCheckedLockingSingleton();
+      final Class<?> c = Class.forName("design_pattern_singleton.D");
+      final Constructor<?> constructor = c.getDeclaredConstructor();
+      constructor.setAccessible(true);
+      constructor.newInstance();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 }

@@ -29,23 +29,24 @@ import java.io.Serializable;
  * Intention is to minimize cost of synchronization and improve performance,
  * by only locking critical section of code, the code which creates instance of Singleton class.
  */
-public class DBSingleton implements Cloneable, Serializable {
+// double checked locking of Singleton.
+public class D implements Cloneable, Serializable {
 
   // static and volatile
-  private static volatile DBSingleton INSTANCE;
+  private static volatile D INSTANCE;
 
   // static
-  public static DBSingleton getInstance() {
+  public static D getInstance() {
     if (INSTANCE == null) {
       // lock on class
-      synchronized (DBSingleton.class) {
+      synchronized (D.class) {
         if (INSTANCE == null) {
           //                    1. using SecurityManager
           //
           // http://technonstop.com/java-singleton-reflection-and-lazy-initialization
           //                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
           //                        public Object run() {
-          INSTANCE = new DBSingleton();
+          INSTANCE = new D();
           //                            return null;
           //                        }
           //                    });
@@ -57,7 +58,7 @@ public class DBSingleton implements Cloneable, Serializable {
   }
 
   // 1   private constructor
-  private DBSingleton() throws UnsupportedOperationException {
+  private D() throws UnsupportedOperationException {
     // 2 Reflection can access private fields and methods,
     // which opens a threat of another instance
     //        1. using SecurityManager
@@ -71,7 +72,7 @@ public class DBSingleton implements Cloneable, Serializable {
     StackTraceElement[] s = e.getStackTrace();
     if (s.length >= 2) {
       String caller = s[1].getClassName();
-      String me = DBSingleton.class.getName();
+      String me = D.class.getName();
       if (!caller.equals(me)) throw e;
     }
     // construct ....
@@ -100,7 +101,7 @@ public class DBSingleton implements Cloneable, Serializable {
     String classname = "design_pattern_singleton.DBSingleton";
 
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
-    if (loader == null) loader = DBSingleton.class.getClassLoader();
+    if (loader == null) loader = D.class.getClassLoader();
     try {
       Class c = loader.loadClass(classname);
       c.newInstance();

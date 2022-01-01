@@ -16,22 +16,20 @@
 package design_pattern_singleton;
 
 /**
- * Former is called lazy loading because Singleton instance is
- * created only when client calls getInstance() method while later is called early loading
+ * Former is called lazy loading because Singleton instance is created only when client calls
+ * getInstance() method while later is called early loading
  *
- * because Singleton instance is created when class is loaded into memory.
+ * <p>because Singleton instance is created when class is loaded into memory.
+ */
+public class C {
+  // static final
+  // initialized when class is loaded into memory.
+  private static final C INSTANCE = new C();
 
-  */
-public class Singleton {
-    // static final
-    // initialized when class is loaded into memory.
-    private static final Singleton INSTANCE = new Singleton();
+  private C() {}
 
-    private Singleton() {
-    }
-
-    // static factory method
-    public static Singleton getSingleton() {
-        return INSTANCE;
-    }
+  // static factory method
+  public static C getSingleton() {
+    return INSTANCE;
+  }
 }
