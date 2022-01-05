@@ -190,20 +190,26 @@ interface MenuStream {
   String nextLine();
 }
 
+enum Type {
+  CATEGORY,
+  ENTREE,
+  OPTION
+}
+
 public class MenuParserImp implements Parser {
   public Set<Menu> parsing(MenuStream stream) {
     Set<Menu> result = new HashSet<>();
     Map<Double, List<Double>> nexts = new HashMap<>();
     Map<Double, Menu> map = new HashMap<>();
     double ID;
-    String type;
+    Type type;
     String name;
     float price = 0;
     String cur = null;
     List<Double> list = null;
     while (true) {
       ID = Double.valueOf(stream.nextLine());
-      type = stream.nextLine();
+      type = Type.valueOf(stream.nextLine());
       name = stream.nextLine();
       if (!type.equals(Category.class.getSimpleName().toUpperCase()))
         price = Float.valueOf(stream.nextLine());
@@ -220,15 +226,15 @@ public class MenuParserImp implements Parser {
       }
       Menu m = null;
       switch (type) {
-        case "CATEGORY":
+        case CATEGORY:
           m = new Category(ID, name);
           break;
-        case "ENTREE":
+        case ENTREE:
           Entree e = new Entree(ID, name);
           e.put(price);
           m = e;
           break;
-        case "OPTION":
+        case OPTION:
           Option o = new Option(ID, name);
           o.put(price);
           m = o;
@@ -280,6 +286,6 @@ public class MenuParserImp implements Parser {
   }
 
   public static void main(String[] args) {
-    // Todo
+   // Todo
   }
 }
