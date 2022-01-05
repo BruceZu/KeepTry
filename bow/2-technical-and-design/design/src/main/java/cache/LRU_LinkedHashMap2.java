@@ -32,6 +32,7 @@ public class LRU_LinkedHashMap2 {
 
     protected boolean removeEldestEntry(Map.Entry e) {
       return size() > cap;
+      //
     }
     // int get(int key) Return the value of the key if the key exists, otherwise return -1.
     public int get(int key) {

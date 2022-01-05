@@ -28,8 +28,7 @@ public class LRU_LinkedHashMap {
         new LinkedHashMap<Integer, Integer>(capacity, 0.75f, true) {
           @Override
           protected boolean removeEldestEntry(Map.Entry eldest) {
-            return size() > capacity;
-            //
+            return size() > capacity; // it is not ==
           }
         };
   }

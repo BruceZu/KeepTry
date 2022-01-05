@@ -139,7 +139,7 @@ class LRUCache {
       list.visit(map.get(key));
       return; // must return
     }
-    if (map.size() == capacity) map.remove(list.removeOld().k);
+    if (map.size() == capacity) map.remove(list.removeOld().k); // remove it from DL and Map
 
     Node newNode = new Node(key, value);
     map.put(key, newNode);
