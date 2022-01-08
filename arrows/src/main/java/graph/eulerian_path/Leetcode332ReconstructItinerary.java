@@ -406,3 +406,120 @@ class HierholzerSolution {
     ans.offerFirst(f);
   }
 }
+/* ----------------------------------------------------------------------------
+
+  undirected graph, maybe there is circle by multiple nodes
+  transmit a file from a given node, each node should be visited at lest once.
+  E.g.
+
+A -- B -- C
+|    |
+E -- D
+stat node is A
+one possible path is :a-b-c-b-d-e-a
+
+`2 nodes are neighbor` means there are 2 directed edge between them to show
+ neighbor relationship of each other.
+
+neighbor permutation backtracking over more methods
+*/
+
+interface File {
+  boolean sendTo(Handler n, StringBuilder path);
+}
+
+interface Handler {
+  boolean receive(File f, StringBuilder path);
+
+  String getName();
+}
+
+class FileImp implements File {
+  private final int nodeNum;
+  Set<Handler> set;
+
+  public FileImp(int nodeNum) {
+    this.nodeNum = nodeNum;
+    set = new HashSet<>();
+  }
+
+  private boolean visitAllNodeNum() {
+    return set.size() == nodeNum;
+  }
+
+  private void visited(Handler n) {
+    set.add(n);
+  }
+
+  private void unVisited(Handler n) {
+    set.remove(n);
+  }
+
+  @Override
+  public boolean sendTo(Handler n, StringBuilder path) {
+    path.append(n.getName());
+
+    visited(n);
+    if (visitAllNodeNum()) return true;
+
+    if (n.receive(this, path)) return true;
+
+    unVisited(n);
+    path.deleteCharAt(path.length() - 1);
+    return false;
+  }
+}
+
+class Node implements Handler {
+  // return true: if path via current node is right
+  // backtracking neighbors' permutation, which available one should be tried  firstly matter
+  @Override
+  public boolean receive(File f, StringBuilder path) {
+    int trys = 0;
+    while (neighbors.size() > trys) {
+      Handler e = neighbors.removeLast();
+      if (f.sendTo(e, path)) return true;
+      else {
+        neighbors.offerFirst(e);
+        trys++;
+      }
+    }
+    return false;
+  }
+
+  public static void main(String[] args) {
+    File f = new FileImp(5);
+    Node a = new Node("A"),
+        b = new Node("B"),
+        c = new Node("C"),
+        d = new Node("D"),
+        e = new Node("E");
+    a.addNeighbor(b, e);
+    b.addNeighbor(a, d, c);
+    c.addNeighbor(b);
+    e.addNeighbor(a, d);
+    d.addNeighbor(b, e);
+
+    Node start = a;
+    StringBuilder path = new StringBuilder();
+    if (f.sendTo(start, path)) System.out.println(path);
+    else System.out.println("No valid path");
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  String name;
+  Deque<Handler> neighbors;
+
+  public void addNeighbor(Node... nodes) {
+    for (Node n : nodes) neighbors.add(n);
+  }
+
+  public Node(String name) {
+    this.name = name;
+    this.neighbors = new LinkedList<>();
+  }
+}
