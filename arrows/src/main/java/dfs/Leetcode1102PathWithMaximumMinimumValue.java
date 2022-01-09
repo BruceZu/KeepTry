@@ -18,7 +18,7 @@ package dfs;
 import java.util.*;
 
 public class Leetcode1102PathWithMaximumMinimumValue {
-  /* 1102. Path With Maximum Minimum Value
+  /* Leetcode 1102. Path With Maximum Minimum Value
    Given an m x n integer matrix grid, return the
    maximum score of a path starting at (0, 0) and ending at (m - 1, n - 1)
    moving in the 4 cardinal directions.
@@ -88,9 +88,10 @@ public class Leetcode1102PathWithMaximumMinimumValue {
   }
   /*---------------------------------------------------------------------------
   Idea:
-   get cell value range, and sort it
-   Binary search to find the upper boundary cell value
-   test each one's connection with DFS or BFS
+   get cells whose value <= smaller of start and end node
+   sort them;
+   Binary search to find the upper boundary cell that makes start and end node connected
+   test connection with DFS or BFS
    here is BFS
   O(M*N*logV) time, V is distinct cell value number, at most it is M*N
   O(M*N) space
@@ -102,33 +103,38 @@ public class Leetcode1102PathWithMaximumMinimumValue {
     for (int i = 0; i < M; i++)
       for (int j = 0; j < N; j++) if (grid[i][j] <= small) set.add(grid[i][j]);
 
-    Integer[] value = new Integer[set.size()];
-    set.toArray(value);
-    Arrays.sort(value);
+    Integer[] le = new Integer[set.size()];
+    set.toArray(le);
+    Arrays.sort(le);
     if (bfs(grid, M, N, small)) return small;
-    int l = 0, r = value.length - 1;
-    while (l < r - 1) {
+    int l = 0,
+        r =
+            le.length
+                - 1; // l is index of cell can make connected, r is index of cell can not make
+                     // connected
+    while (l < r - 1) { // at lest 3 cells
       int mid = l + r >>> 1;
-      if (bfs(grid, M, N, value[mid])) l = mid;
+      if (bfs(grid, M, N, le[mid])) l = mid;
       else r = mid;
     }
-    return value[l];
+    return le[l];
   }
 
   private boolean bfs(int[][] grid, int M, int N, int small) {
     Queue<int[]> q = new LinkedList<>();
-    Set<Integer> v = new HashSet<>();
+    Set<Integer> vis = new HashSet<>();
 
-    v.add(0);
-    q.offer(new int[] {0, 0});
+    vis.add(0);
+    q.offer(new int[] {0, 0}); // from start node
     while (!q.isEmpty()) {
       int[] cur = q.poll();
-      if (cur[0] == M - 1 && cur[1] == N - 1) return true;
+      if (cur[0] == M - 1 && cur[1] == N - 1) return true; // find end node
       for (int[] d : d4) {
         int nr = d[0] + cur[0], nc = +d[1] + cur[1];
         int id = nr * N + nc;
-        if (!v.contains(id) && nr >= 0 && nc >= 0 && nr < M && nc < N && grid[nr][nc] >= small) {
-          v.add(id);
+        // enlarging the boundary with neighbor: not visited, valid indexed, and value >= small
+        if (!vis.contains(id) && nr >= 0 && nc >= 0 && nr < M && nc < N && grid[nr][nc] >= small) {
+          vis.add(id);
           q.offer(new int[] {nr, nc});
         }
       }
@@ -140,6 +146,11 @@ public class Leetcode1102PathWithMaximumMinimumValue {
   Idea:
    sort all cell by cell value in descending
    union found the visited cell one by one and check start cell and end cell connection
+
+   in descending order: mark current cell as visited, if its neighbor is visited then
+   union them.
+   then check start cell and end cell connection： if connected now then this current neighbor
+   is the last straw
 
   O(M*N*log(M*N)) time
   O(M*N) space
@@ -153,14 +164,15 @@ public class Leetcode1102PathWithMaximumMinimumValue {
     int k = 0;
     for (int i = 0; i < M; i++) for (int j = 0; j < N; j++) g[k++] = new int[] {i, j, grid[i][j]};
     Arrays.sort(g, (a, b) -> b[2] - a[2]);
-    Set<Integer> v = new HashSet<>();
+    Set<Integer> vis = new HashSet<>();
     for (int[] c : g) {
-      int ID = c[0] * N + c[1];
-      v.add(ID);
+      int curId = c[0] * N + c[1];
+      vis.add(curId);
       for (int[] d : d4) {
-        int nr = d[0] + c[0], nc = d[1] + c[1];
-        int id = nr * N + nc;
-        if (nr >= 0 && nc >= 0 && nr < M && nc < N && v.contains(id)) union(root, rank, ID, id);
+        int r_ = d[0] + c[0], c_ = d[1] + c[1];
+        int nId = r_ * N + c_;
+        if (r_ >= 0 && c_ >= 0 && r_ < M && c_ < N && vis.contains(nId))
+          union(root, rank, curId, nId);
         if (find(root, 0) == find(root, M * N - 1)) return c[2];
       }
     }
@@ -204,14 +216,19 @@ public class Leetcode1102PathWithMaximumMinimumValue {
   }
   /*---------------------------------------------------------------------------
   Idea:
-    Djkstra
-      weight is not shorted distance, instead it is the min node value in the path.
-      affect the Heap sort priority.
-      any path further weight only <= current weight.
-      max heap keep item [row, column, min node value on the path]
+    Dijkstra
+      not `shorted path` here. it is the min node value in the path.
+      E.g.
+       - each cell value means shorted distance to dangerous, and the calculated path is the safest path
+       - each cell value is bandwidth, and the calculated path is the best bandwidth path
+      max heap:  each entry is [row, column, min node value on the path]
+
     The heap at most keep M*N items
     So O(M*N*logV) time, V is distinct cell value number, at most it is M*N
-       O(M*N) space
+       O(M*N) space: every cell will be calculated at most once.
+                     each polled one or relexed one is the one which has the max value in the boundary cells kept
+                     in the heap. so need not add a new entry using the visited cell: [r, c, min value] as
+                     the value is same as the visited one in the heap, the min value is the cell original value.
    */
 
   public int maximumMinimumPath(int[][] grid) {
@@ -225,14 +242,14 @@ public class Leetcode1102PathWithMaximumMinimumValue {
       int[] cur = q.poll();
       if (cur[0] == M - 1 && cur[1] == N - 1) return cur[2];
       for (int[] d : d4) {
-        int nr = cur[0] + d[0], nc = cur[1] + d[1];
-        int id = nr * N + nc; // note it is N not M
-        if (!v.contains(id) && nr >= 0 && nc >= 0 && nr < M && nc < N) {
+        int r = cur[0] + d[0], c = cur[1] + d[1];
+        int id = r * N + c; // note it is N not M
+        if (!v.contains(id) && r >= 0 && c >= 0 && r < M && c < N) {
           v.add(id);
-          q.offer(new int[] {nr, nc, Math.min(cur[2], grid[nr][nc])});
+          q.offer(new int[] {r, c, Math.min(cur[2], grid[r][c])});
         }
       }
     }
-    return -1; // never come here;
+    return -1; // no valid path
   }
 }
