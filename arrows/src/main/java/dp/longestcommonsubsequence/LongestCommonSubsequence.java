@@ -21,6 +21,11 @@ import java.util.List;
 /*
 The Longest Common Subsequence (LCS) problem
  1> first: finding the length of the LCS
+ LCS[i][j]: keep the longest common sequence length of
+            string a (indexth 1~i) and
+            string b (indexth 1~j)
+
+ if 2 current char value are:
  same:  LCS[i, j] = 1 + LCS[i − 1, j − 1].
  else:  LCS[i, j] = max(LCS[i − 1, j], LCS[i, j − 1]).
        m a n b c q
@@ -36,7 +41,7 @@ The Longest Common Subsequence (LCS) problem
    when the LCS number == T
    see the Leetcode727MinimumWindowSubsequence
 
- The Longest Common sub-string (LCS) problem
+ The Longest Common sub-string (LCA) problem
  difference:
   same:  LCS[i, j] = 1 + LCS[i − 1, j − 1].
   else:  LCS[i, j] = 0; // here
@@ -54,27 +59,48 @@ The Longest Common Subsequence (LCS) problem
 */
 public class LongestCommonSubsequence {
   // runtime O(mn)
-  public static int longestCommonSubsequenceLengthBottomUp(String S, String T) {
+  public static int longestCommonSubsequenceLengthBottomUp(String A, String B) {
     // corner cases checking
-    if (S == null || S.isEmpty() || T == null || T.isEmpty()) return 0;
+    if (A == null || A.isEmpty() || B == null || B.isEmpty()) return 0;
 
-    char[] s = S.toCharArray(), t = T.toCharArray();
-    int M = S.length(), N = T.length();
+    char[] a = A.toCharArray(), b = B.toCharArray();
+    int M = A.length(), N = B.length();
     int dp[][] = new int[N + 1][M + 1];
-    // benefit with initial zero index row and column; cons: when using the value of s and t. care
-    // the index
-    for (int c = 1; c <= M; c++) {
-      for (int r = 1; r <= N; r++) {
-        if (s[c - 1] == t[r - 1]) dp[r][c] = 1 + dp[r - 1][c - 1];
-        else dp[r][c] = Math.max(dp[r - 1][c], dp[r][c - 1]);
+    // initial zero for  0th /row,  0th/column;
+    for (int i = 1; i <= M; i++) { // 1 based index in dp
+      for (int j = 1; j <= N; j++) { // 1 based index in dp
+        if (a[i - 1] == b[j - 1]) dp[j][i] = 1 + dp[j - 1][i - 1];
+        else dp[j][i] = Math.max(dp[j - 1][i], dp[j][i - 1]);
       }
     }
 
     // debugPrint(cn, rm, dp);
-    int r = N, c = M, left = dp[N][M];
+    int r = N, c = M, len = dp[N][M];
     List<String> all = new ArrayList<>();
-    recursionFindAll(all, new char[left], dp, r, c, left, s, t);
+    recursionFindAll(all, new char[len], dp, r, c, len, a, b);
     return dp[N][M];
+  }
+
+  // from right bottom corner to backtrack all LCS strings along the dp direction
+  public static void recursionFindAll(
+      List<String> all, char[] one, int[][] dp, int i, int j, int len, char[] a, char[] b) {
+    if (len == 0) {
+      all.add(new String(one));
+      System.out.println(one);
+      return;
+    }
+
+    if (dp[i][j] == dp[i - 1][j - 1] + 1 && a[j - 1] == b[i - 1]) {
+      one[len - 1] = a[j - 1];
+      recursionFindAll(all, one, dp, i - 1, j - 1, len - 1, a, b);
+    } else {
+      if (dp[i][j] == dp[i - 1][j]) {
+        recursionFindAll(all, one, dp, i - 1, j, len, a, b);
+      }
+      if (dp[i][j] == dp[i][j - 1]) {
+        recursionFindAll(all, one, dp, i, j - 1, len, a, b);
+      }
+    }
   }
 
   private static void debugPrint(int cn, int rm, int[][] dp) {
@@ -86,53 +112,28 @@ public class LongestCommonSubsequence {
     }
   }
 
-  public static void recursionFindAll(
-      List<String> all, char[] one, int[][] dp, int r, int c, int left, char[] s, char[] t) {
-    if (left == 0) {
-      all.add(new String(one));
-      System.out.println(one);
-      return;
-    }
-
-    if (dp[r][c] == dp[r - 1][c - 1] + 1 && s[c - 1] == t[r - 1]) {
-      one[left - 1] = s[c - 1];
-      recursionFindAll(all, one, dp, r - 1, c - 1, left - 1, s, t);
-    } else {
-      if (dp[r][c] == dp[r - 1][c]) {
-        recursionFindAll(all, one, dp, r - 1, c, left, s, t);
-      }
-      if (dp[r][c] == dp[r][c - 1]) {
-        recursionFindAll(all, one, dp, r, c - 1, left, s, t);
-      }
-    }
-  }
-
-  // runtime O(mn)
-  public static int longestCommonSubsequenceLengthTopDown(String S, String T) {
+  // runtime O(mn) find out one, may have more result.
+  public static int twoStrLongestCommonSubsequenceLengthTopDown(String A, String B) {
     // corner cases checking
-    if (S == null || S.isEmpty() || T == null || T.isEmpty()) return 0;
-
-    char[] s = S.toCharArray(), t = T.toCharArray();
-    int cn = S.length(), rm = T.length();
-    Integer[][] log = new Integer[rm + 1][cn + 1];
-    int result = valueOf(cn, rm, s, t, log);
-    debugPrint(cn, rm, log);
-    return result;
+    if (A == null || A.isEmpty() || B == null || B.isEmpty()) return 0;
+    char[] s = A.toCharArray(), s2 = B.toCharArray();
+    int M = A.length(), N = B.length();
+    Integer[][] cache = new Integer[N + 1][M + 1];
+    int ans = valueOf(M, N, s, s2, cache);
+    debugPrint(M, N, cache);
+    return ans;
   }
 
   // recursion Top-Down
-  private static int valueOf(int col, int row, char[] s, char[] t, Integer[][] log) {
-    if (log[row][col] != null) return log[row][col]; // add this. use memorized result
-    int result;
-    if (col == 0 || row == 0) {
-      result = 0;
-    } else if (s[col - 1] == t[row - 1]) {
-      result = 1 + valueOf(col - 1, row - 1, s, t, log);
-    } else {
-      result = Math.max(valueOf(col - 1, row, s, t, log), valueOf(col, row - 1, s, t, log));
-    }
-    log[row][col] = result; // memorizing
-    return result;
+  private static int valueOf(int ith, int jth, char[] a, char[] b, Integer[][] cache) {
+    if (cache[jth][ith] != null) return cache[jth][ith]; // add this. use memorized result
+    int ans;
+    if (ith == 0 || jth == 0) ans = 0;
+    else if (a[ith - 1] == b[jth - 1]) ans = 1 + valueOf(ith - 1, jth - 1, a, b, cache);
+    else ans = Math.max(valueOf(ith - 1, jth, a, b, cache), valueOf(ith, jth - 1, a, b, cache));
+
+    cache[jth][ith] = ans; // memorizing
+    return ans;
   }
 
   private static void debugPrint(int cn, int rm, Integer[][] dp) {
