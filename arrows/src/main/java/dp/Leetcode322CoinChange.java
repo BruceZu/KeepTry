@@ -18,39 +18,180 @@ package dp;
 import java.util.Arrays;
 
 public class Leetcode322CoinChange {
-    // Runtime complexity O(A*coins.length)
-    public static int coinChange(int[] coins, int A) {
-        if (A < 1) return 0;
-        int[] min = new int[A + 1];
-        for (int i = 1; i <= A; i++) {
-            min[i] = Integer.MAX_VALUE; // from i=1, default to no resolution
-        }
-        boolean sort = false;
-        if (Math.log(coins.length) / Math.log(2) <= A) {
-            Arrays.sort(coins);
-            sort = true;
-        }
+  /*
+    Leetcode 322. Coin Change
 
-        // min[0] = 0;  used to return the min[left] = 0, indirectly help the min[each coin] == 1
+    You are given an integer array coins representing coins of different denominations and
+    an integer amount representing a total amount of money.
 
-        for (int Ai = 0; Ai < A; Ai++) {
-            if (min[Ai] == Integer.MAX_VALUE) continue; // has solution. next line will add 1 to it.
-            for (int coin : coins) {
-                if (0 <= Ai + coin && Ai + coin <= A)
-                    min[Ai + coin] = Math.min(min[Ai + coin], min[Ai] + 1);
-                else if (sort) break;
-            }
+    Return the fewest number of coins that you need to make up that amount.
+    If that amount of money cannot be made up by any combination of the coins, return -1.
+
+    You may assume that you have an infinite number of each kind of coin.
+
+
+    Input: coins = [1,2,5], amount = 11
+    Output: 3
+    Explanation: 11 = 5 + 5 + 1
+
+
+    Input: coins = [2], amount = 3
+    Output: -1
+
+
+    Input: coins = [1], amount = 0
+    Output: 0
+
+
+    Constraints:
+
+    1 <= coins.length <= 12
+    1 <= coins[i] <= 231 - 1
+    0 <= amount <= 104
+  */
+  /*
+   infinite number of each kind of coin
+   greedy does not work in this case.
+   backtracking all possible way is polynomial time
+   dp[t] = min{ dp[t-vi] | vi in given v[] and vi<=t}
+   dp[0]=0, other default is MAX
+
+  */
+  // Time Limit Exceeded -------------------------------------------------------
+  public int coinChange_____(int[] coins, int T) {
+    return bt(0, coins, T);
+  }
+
+  private int bt(int i, int[] coins, int T) {
+    if (T == 0) return 0;
+    if (i < coins.length && T > 0) {
+      int maxn = T / coins[i];
+      int minCost = Integer.MAX_VALUE;
+      for (int n = 0; n <= maxn; n++) {
+        if (T >= n * coins[i]) {
+          int res = bt(i + 1, coins, T - n * coins[i]);
+          if (res != -1) minCost = Math.min(minCost, res + n);
         }
-        return min[A] == Integer.MAX_VALUE ? -1 : min[A];
+      }
+      return (minCost == Integer.MAX_VALUE) ? -1 : minCost;
     }
-    //-----------------------------------------------------------------------------
-    public static void main(String[] args) {
-        System.out.println("result: " + coinChange(new int[] {1}, 0));
-        System.out.println("result: " + coinChange(new int[] {1, 2, 4, 5}, 8));
-        System.out.println("result: " + coinChange(new int[] {2}, 3));
-        System.out.println("result: " + coinChange(new int[] {1, 2, 5}, 11));
-        System.out.println("result: " + coinChange(new int[] {1}, 2));
-        System.out.println("result: " + coinChange(new int[] {470, 35, 120, 81, 121}, 9825));
-        System.out.println("result: " + coinChange(new int[] {1, 2147483647}, 2));
+    return -1;
+  }
+  // Time Limit Exceeded -------------------------------------------------------
+  private int min;
+
+  public int coinChange____(int[] coins, int T) {
+    min = T + 1;
+    if (T < 1) return 0;
+    bt(coins, T, 0);
+    return min == T + 1 ? -1 : min;
+  }
+
+  private void bt(int[] coins, int T, int count) {
+    if (T == 0) {
+      min = Math.min(min, count);
+      return;
     }
+    // continue
+    for (int v : coins) {
+      if (T - v >= 0) {
+        bt(coins, T - v, count + 1);
+      }
+    }
+  }
+
+  /* top down  ----------------------------------------------------------------
+  Watch the above solution process https://imgur.com/3Jk18aZ
+  Observer: there is repeated work when current target t changed in different layer
+  for keeping the repeated work: cache current target t and related min counts
+  and the comparison will be moved from the end of backtracking into inner loop
+  check all possible way top down layer by layer but with a cache
+  */
+  public int coinChange___(int[] coins, int T) {
+    if (T < 1) return 0;
+    return bt(coins, T, new int[T + 1]);
+  }
+
+  private int bt(int[] coins, int T, int[] cache) {
+    if (T == 0) return 0;
+    if (cache[T] != 0) return cache[T];
+    //
+    int min = Integer.MAX_VALUE;
+    for (int v : coins) {
+      if (T - v >= 0) {
+        int res = bt(coins, T - v, cache);
+        if (res >= 0 && res + 1 < min) min = res + 1;
+      }
+    }
+    // use -1, because Integer.MAX_VALUE+1 will be negative in rest+1
+    cache[T] = (min == Integer.MAX_VALUE) ? -1 : min;
+    //
+    return cache[T];
+  }
+
+  // Runtime complexity O(A*coins.length) -------------------------------------
+  // bottom up and using the already calculated previous value
+  public static int coinChange_(int[] coins, int T) {
+    if (T < 1) return 0;
+    int[] dp = new int[T + 1];
+    // Arrays.sort(coins);
+    dp[0] = 0;
+    // bottom up
+    for (int t = 1; t <= T; t++) {
+      dp[t] = Integer.MAX_VALUE;
+      for (int v : coins) {
+        if (v <= t && dp[t - v] != Integer.MAX_VALUE) {
+          dp[t] = Math.min(dp[t], dp[t - v] + 1);
+        }
+        // if (v > t) break;
+      }
+    }
+    return dp[T] == Integer.MAX_VALUE ? -1 : dp[T];
+  }
+  // do not use Integer.MAX_VALUE
+  public int coinChange__(int[] coins, int T) {
+    int MAX = T + 1;
+    int[] dp = new int[T + 1];
+    Arrays.fill(dp, MAX);
+    dp[0] = 0;
+    for (int t = 1; t <= T; t++) {
+      for (int v : coins) {
+        if (t - v >= 0) {
+          dp[t] = Math.min(dp[t], dp[t - v] + 1);
+        }
+      }
+    }
+    return dp[T] >= MAX ? -1 : dp[T];
+  }
+  // bottom up: extend out from current valid value ---------------------------
+  public static int coinChange(int[] coins, int T) {
+    if (T < 1) return 0;
+    int[] dp = new int[T + 1];
+    for (int i = 1; i <= T; i++) {
+      dp[i] = Integer.MAX_VALUE;
+    }
+    // dp[0] is 0;
+
+    Arrays.sort(coins);
+    // bottom up from valid dp[t]
+    for (int t = 0; t < T; t++) {
+      if (dp[t] == Integer.MAX_VALUE) continue; // not valid
+      for (int v : coins) {
+        if (0 <= t + v && t + v <= T) {
+          dp[t + v] = Math.min(dp[t + v], dp[t] + 1);
+        } else break;
+      }
+    }
+    return dp[T] == Integer.MAX_VALUE ? -1 : dp[T];
+  }
+  // -----------------------------------------------------------------------------
+  public static void main(String[] args) {
+    System.out.println("result: " + coinChange(new int[] {1}, 0));
+    System.out.println("result: " + coinChange(new int[] {1, 2, 4, 5}, 8));
+    System.out.println("result: " + coinChange(new int[] {2}, 3));
+    System.out.println("result: " + coinChange(new int[] {1, 2, 5}, 11));
+    System.out.println("result: " + coinChange(new int[] {1}, 2));
+    System.out.println("result: " + coinChange(new int[] {470, 35, 120, 81, 121}, 9825));
+    System.out.println("result: " + coinChange(new int[] {1, 2147483647}, 2));
+  }
 }
