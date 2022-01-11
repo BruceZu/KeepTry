@@ -1,4 +1,4 @@
-//  Copyright 2021 The KeepTry Open Source Project
+//  Copyright 2022 The KeepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package greedy;
+package intervals;
 
 import java.util.Arrays;
 import java.util.Comparator;
