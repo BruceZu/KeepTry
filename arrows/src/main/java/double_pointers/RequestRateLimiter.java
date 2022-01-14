@@ -18,6 +18,10 @@ package double_pointers;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/*
+ Fixed window size sliding window
+ Estimated approach
+ */
 public class RequestRateLimiter {
   // Map<String URL> , RequestRateLimiterPerAPI limiter>
   static Map<String, RequestRateLimiterPerAPI> proxy = new ConcurrentHashMap<>();
@@ -107,3 +111,12 @@ class RequestRateLimiterPerAPI {
     return preWCounter * (1 - per) + wCounter * per <= LIMIT_REQUESTS;
   }
 }
+/*
+Not fixed window sliding window
+accurate
+a lot of space of memory
+
+maintain the left valid boundary:
+  backend thread clean staled element => not accurate result
+  log(n) TreeSet<timestamp>
+*/

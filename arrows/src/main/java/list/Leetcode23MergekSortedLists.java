@@ -53,7 +53,7 @@ public class Leetcode23MergekSortedLists {
   Idea:
    select current min one each loop
    O(N*L) time.  N is node number, L is list array length
-   O(1) space
+   O(1) space, Note here.
    */
   public ListNode mergeKLists_(ListNode[] list) {
     if (list == null || list.length == 0) return null;
@@ -88,24 +88,23 @@ public class Leetcode23MergekSortedLists {
    Divide and Conquer
    O(N*logL) time, in total O(logL) loops, in each loop each node is accessed once.
              N is the node number
-   O(1) space
+   O(1) space. Note here. if using a min heap the space will be L
 
    */
   public ListNode mergeKLists(ListNode[] list) {
     if (list == null || list.length == 0) return null;
-    int size = list.length;
-    while (size > 1) { //O(logL) time
-      for (int i = 0; i < size; i++) {
+    int r = list.length - 1;
+    while (r > 0) { // O(logL) time
+      for (int i = 0; i <= r; i++) {
         if ((i & 1) == 0) list[i >>> 1] = list[i];
-        else list[i >>> 1] = merge(list[i >>> 1], list[i]);
+        else list[i >>> 1] = merge2(list[i >>> 1], list[i]);
       }
-
-      size = size + 1 >>> 1;
+      r = r >>> 1;
     }
     return list[0];
   }
 
-  private ListNode merge(ListNode a, ListNode b) {
+  private ListNode merge2(ListNode a, ListNode b) {
     ListNode dummy = new ListNode();
     ListNode cur = dummy;
     while (a != null && b != null) {
@@ -138,4 +137,21 @@ public class Leetcode23MergekSortedLists {
       this.next = next;
     }
   }
+  /*
+  Follow up 1
+  give sorted arrays int[][] a
+  if using min heap, with O(NlogL) time and O(L) space, this is not best solution
+  Queue<int[v, i, j]> q : triple type in min heap, v= a[i][j]
+       int[] top=q.poll();
+       if(top[2]!=a[i].length-1){
+         top[2]++;
+         q.offer(top);
+       }
+  Follow up 2
+    if any give array is too large to be consumed in memory
+  Follow up 3
+    if any give array is too large to be consumed in memory, but all value in the range 1-10
+    int[] A=new int[11];
+    A[v] keep the frequency of v and keep them in order.
+  */
 }

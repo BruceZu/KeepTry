@@ -92,7 +92,7 @@ public class Leetcode1779FindNearestPointThatHastheSameXorYCoordinate {
    O(NlogK) time
    O(QlogK) time
    N is the number of cities,
-   K is the max number of cities with same x or y coordinate and
+   K is the max number of cities with same x or y coordinate
    Q is the number of queries.
 
    Map.get(k) maybe null
@@ -103,7 +103,8 @@ public class Leetcode1779FindNearestPointThatHastheSameXorYCoordinate {
   public List<String> closestStraightCity(String[] citys, int[] xs, int[] ys, String[] queryCitys) {
     Map<String, int[]> cs = new HashMap<>(); // city name: (x,y)
     Map<Integer, TreeMap<Integer, String>> X = new HashMap<>();
-    // x line:  y1: city2 name( < city1name)  y3: city3 name
+    // x line:  y1: city2 name( < city1name)  y3: city3 name.  For the same (x,y) there are more
+    // cities?
     Map<Integer, TreeMap<Integer, String>> Y = new HashMap<>();
     // y line:  x1: city1 name, x2: city2 name
 
@@ -120,7 +121,7 @@ public class Leetcode1779FindNearestPointThatHastheSameXorYCoordinate {
       if (!Y.get(y).containsKey(x) || name.compareTo(Y.get(y).get(x)) < 0) {
         Y.get(y).put(x, name); // lexicographically order name
       }
-      cs.put(name, new int[] {x, y});
+      cs.put(name, new int[] {x, y}); // name is unique?
     }
 
     List<String> r = new ArrayList<>();
@@ -142,7 +143,7 @@ public class Leetcode1779FindNearestPointThatHastheSameXorYCoordinate {
 
   private void collect(Map<Integer, TreeMap<Integer, String>> L, int l, int v, List<Choice> four) {
     if (L.get(l) != null) {
-      Map.Entry<Integer, String> hi = L.get(l).higherEntry(v);
+      Map.Entry<Integer, String> hi = L.get(l).higherEntry(v); // runtime ??
       Map.Entry<Integer, String> low = L.get(l).lowerEntry(v);
       if (hi != null) four.add(new Choice(hi.getValue(), hi.getKey() - v));
       if (low != null) four.add(new Choice(low.getValue(), v - low.getKey()));
@@ -163,11 +164,77 @@ public class Leetcode1779FindNearestPointThatHastheSameXorYCoordinate {
     Leetcode1779FindNearestPointThatHastheSameXorYCoordinate t =
         new Leetcode1779FindNearestPointThatHastheSameXorYCoordinate();
 
-    t.closestStraightCity(
-        new String[] {"a", "c", "bc", "ab", "d"},
-        new int[] {1, 2, 2, 2, 2},
-        new int[] {1, 0, 4, 4, 5},
-        new String[] {"a", "c", "bc", "d", "ab"});
-    //         "NONE", "ab","d","ab","d"
+    System.out.println(
+        t.closestStraightCity(
+            new String[] {"a", "c", "bc", "ab", "d"},
+            new int[] {1, 2, 2, 2, 2},
+            new int[] {1, 0, 4, 4, 5},
+            new String[] {"a", "c", "bc", "ab", "d"}));
+    // [NONE, ab, d, d, ab]
+    System.out.println(
+        closestStraightCity(
+            Arrays.asList("a", "c", "bc", "ab", "d"),
+            Arrays.asList(1, 2, 2, 2, 2),
+            Arrays.asList(1, 0, 4, 4, 5),
+            // index      0  1  2  3  4
+            Arrays.asList("a", "c", "bc", "ab", "d")));
+    // [None, bc, d, d, bc]
+    // why result is not right?
+    //  For the same (x,y), there are more city names.
+    //  but xMap/yMap use TreeSet as the value type, it is set
+    //   Comparator.comparingInt(y::get))/ Comparator.comparingInt(x::get)
+    //   index 2 and 3 are "bc", "ab", with same location(2,4)
+    //   the "ab" is ignore.
+    //   System.out.println(xMap.get(2)); is  [1, 2, 4] the 3 is ignore
+  }
+
+  public static List<String> closestStraightCity(
+      List<String> c, List<Integer> x, List<Integer> y, List<String> queries) {
+    HashMap<Integer, TreeSet<Integer>> xMap = new HashMap<>(); // x line: index of y
+    HashMap<Integer, TreeSet<Integer>> yMap = new HashMap<>(); // y line: index of x
+    HashMap<String, Integer> nameIndex = new HashMap<>(); // name: index
+    int n = x.size();
+    for (int i = 0; i < n; i++) {
+      xMap.computeIfAbsent(x.get(i), a -> new TreeSet<>(Comparator.comparingInt(y::get))).add(i);
+      yMap.computeIfAbsent(y.get(i), a -> new TreeSet<>(Comparator.comparingInt(x::get))).add(i);
+      nameIndex.put(c.get(i), i);
+    }
+
+    List<String> ans = new ArrayList<>();
+    for (String name : queries) {
+      int i_ = nameIndex.get(name);
+      int x_ = x.get(i_);
+      int y_ = y.get(i_);
+      int i = -1; // nearest city index
+
+      Integer lxi = yMap.get(y_).lower(i_);
+      if (lxi != null) i = lxi;
+
+      Integer hxi = yMap.get(y_).higher(i_);
+      if (hxi != null && isCloser(c, x, y, hxi, i, x_, y_)) i = hxi;
+
+      Integer lyi = xMap.get(x_).lower(i_);
+      if (lyi != null && isCloser(c, x, y, lyi, i, x_, y_)) i = lyi;
+
+      Integer hyi = xMap.get(x_).higher(i_);
+      if (hyi != null && isCloser(c, x, y, hyi, i, x_, y_)) i = hyi;
+
+      if (i == -1) {
+        ans.add("None");
+      } else {
+        ans.add(c.get(i));
+      }
+    }
+    return ans;
+  }
+
+  private static boolean isCloser(
+      List<String> c, List<Integer> x, List<Integer> y, int index, int i, int x_, int y_) {
+    if (i == -1) return true;
+    int diff1 = Math.abs(x.get(index) - x_) + Math.abs(y.get(index) - y_);
+    int diff2 = Math.abs(x.get(i) - x_) + Math.abs(y.get(i) - y_);
+    if (diff1 < diff2) return true;
+    else if (diff1 > diff2) return false;
+    else return c.get(index).compareTo(c.get(i)) < 0;
   }
 }
