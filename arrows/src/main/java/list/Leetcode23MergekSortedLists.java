@@ -15,6 +15,9 @@
 
 package list;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Leetcode23MergekSortedLists {
   /*
     23. Merge k Sorted Lists
@@ -153,5 +156,72 @@ public class Leetcode23MergekSortedLists {
     if any give array is too large to be consumed in memory, but all value in the range 1-10
     int[] A=new int[11];
     A[v] keep the frequency of v and keep them in order.
+  */
+  /*
+
+  Queston:
+     - takes 3 parameters
+       - “list1” - list of signed integers sorted in ascending order
+       - “list2" - list of signed integers sorted in ascending order
+       - “maxSize” - maximum number of elements in the result
+     - output
+       - merged list of list1 and list2, maintaining the ascending sort,
+         of up to “maxSize” elements in length
+
+     Example:
+       ( [0,2,6], [-1,7,9], 4) = [-1,0,2,6]
+
+       assume
+        - list1 and list 2 will not be null? yeah
+    */
+
+  /*
+   Runtime and space is O(maxSize)
+  */
+  public static List<Integer> mergeListWithSize(int[] list1, int[] list2, int maxSize) {
+    List<Integer> ans = new LinkedList<>();
+    if (list1 == null && list2 == null) return ans;
+    int[] list;
+    if (list1 == null || list2 == null) {
+      list = list1 == null ? list2 : list1;
+      if (maxSize > list.length) maxSize = list.length;
+      int i = 0;
+      while (i < list.length && ans.size() != maxSize) ans.add(list[i++]);
+      return ans;
+    }
+
+    if (maxSize <= 0) return ans;
+    if (maxSize > list1.length + list2.length) maxSize = list1.length + list2.length;
+
+    int i = 0, j = 0;
+    while (0 <= i && i < list1.length && 0 <= j && j < list2.length) {
+      if (list1[i] < list2[j]) {
+        ans.add(list1[i]);
+        i++;
+        if (ans.size() == maxSize) break;
+      } else {
+        ans.add(list2[j]);
+        j++;
+        if (ans.size() == maxSize) break;
+      }
+    }
+    if (ans.size() != maxSize) {
+      if (i == list1.length) {
+        while (ans.size() != maxSize && j < list2.length) {
+          ans.add(list2[j++]);
+        }
+      } else {
+        while (ans.size() != maxSize && i < list1.length) {
+          ans.add(list1[i++]);
+        }
+      }
+    }
+    return ans;
+  }
+  // test cases need cover all code lines
+  /*
+   Follow up:   public static List<Integer> mergeListWithSize(List<List<Integer>>, int maxSize) {
+
+   }
   */
 }
