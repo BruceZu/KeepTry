@@ -76,4 +76,10 @@ public class Leetcode53MaximumSubarray {
      try coding another solution using the divide and conquer approach,
   which is more subtle.
   see `Finding subsegments with the maximal sum`*/
+
+  /*
+  Follow up:
+    find the sub-array
+    if there are more of them find out the first one
+  */
 }
