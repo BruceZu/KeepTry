@@ -156,11 +156,11 @@ public class Leetcode126WordLadderII {
     while (!q.isEmpty()) {
       Set<String> layer = new HashSet(); // reduce duplicate strings in next layer
       for (int i = q.size(); i >= 1; i--) {
-        String cur = q.poll();
-        Set<String> inexts = transformed(cur, D);
+        String w = q.poll();
+        Set<String> ts = transformed(w, D);
 
-        graph.put(cur, inexts);
-        layer.addAll(inexts);
+        graph.put(w, ts);
+        layer.addAll(ts);
       }
       if (layer.contains(E)) return true; // exist from here normally
       for (String str : layer) q.offer(str);
@@ -172,20 +172,20 @@ public class Leetcode126WordLadderII {
   // only change one char: K is word length, K*25
   // check existence in directory O(K)
   // in total K*25*K, O(k^2) time
-  private Set<String> transformed(String str, Set<String> D) {
-    Set<String> r = new HashSet();
-    char[] a = str.toCharArray();
+  private Set<String> transformed(String w, Set<String> D) {
+    Set<String> ans = new HashSet();
+    char[] a = w.toCharArray();
     for (int i = 0; i < a.length; i++) {
       char ci = a[i];
       for (char c = 'a'; c <= 'z'; c++) {
         if (c == ci) continue;
         a[i] = c; // note
         String s = String.valueOf(a);
-        if (D.contains(s)) r.add(s);
+        if (D.contains(s)) ans.add(s);
       }
       a[i] = ci;
     }
-    return r;
+    return ans;
   }
 
   private void dfsPaths(String w, int size) {
