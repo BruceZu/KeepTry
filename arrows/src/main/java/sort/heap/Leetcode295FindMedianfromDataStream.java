@@ -18,6 +18,7 @@ package sort.heap;
 import java.util.PriorityQueue;
 
 /*
+Leetcode 295. Find Median from Data Stream
 The median is the middle value in an ordered integer list.
 If the size of the list is even, there is no middle value and the median
 is the mean of the two middle values.
@@ -57,9 +58,11 @@ At most 5 * 104 calls will be made to addNum and findMedian.
 Follow up:
 
 If all integer numbers from the stream are in the range [0, 100], how would you optimize your solution?
+ -  Segment Trees
 If 99% of all integer numbers from the stream are in the range [0, 100], how would you optimize your solution?
 */
 public class Leetcode295FindMedianfromDataStream {
+
   class MedianFinder {
     private PriorityQueue<Integer> L;
     private PriorityQueue<Integer> R;
@@ -74,7 +77,7 @@ public class Leetcode295FindMedianfromDataStream {
       R = new PriorityQueue<>();
     }
 
-    // o(logN)
+    // O(logN) time O(N) space
     public void addNum(int num) {
       // keep size relation
       if (L.size() == R.size()) {
@@ -90,7 +93,7 @@ public class Leetcode295FindMedianfromDataStream {
         }
       }
     }
-
+   // O(1)
     public double findMedian() {
       if (L.size() == R.size()) {
         return (L.peek() * 1L + R.peek()) * 0.5;

@@ -19,7 +19,7 @@ import java.util.*;
 
 public class Leetcode212wordsearchII {
   /*
-   212. Word Search II
+   Leetcode 212. Word Search II
    Given an m x n board of characters and a list of strings words,
    return all words on the board.
 
