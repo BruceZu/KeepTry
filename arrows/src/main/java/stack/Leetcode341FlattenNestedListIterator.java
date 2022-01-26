@@ -120,8 +120,8 @@ class NestedIterator_ implements Iterator<Integer> {
 }
 
 /*
-Idea: use Java ListIterator
-use Stock<ListIterator> not Stock<List>
+Idea: use Java Iterator
+use Stock<Iterator> not Stock<List>
 
 N be the total number of integers within the nested list
 L be the total number of lists within the nested list
@@ -149,13 +149,13 @@ class NestedIterator implements Iterator<Integer> {
     List<NestedInteger> getList();
   }
 
-  private Stack<ListIterator<NestedInteger>> stack = new Stack<>();
+  private Stack<Iterator<NestedInteger>> stack = new Stack<>();
   private Integer v = null;
   boolean removed = false;
 
   public NestedIterator(List<NestedInteger> input) {
     // creating a list iterator is an O(1) operation.
-    stack.push(input.listIterator());
+    stack.push(input.iterator());
   }
 
   private void setNext() {
@@ -175,7 +175,7 @@ class NestedIterator implements Iterator<Integer> {
         return;
       }
 
-      stack.push(out.getList().listIterator());
+      stack.push(out.getList().iterator());
     }
   }
 

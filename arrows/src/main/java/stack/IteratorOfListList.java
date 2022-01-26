@@ -172,7 +172,7 @@ class Solution_ {
 }
 
 /*
-use Iterator<List<Integer>>
+use Iterator
 */
 class Solution {
   Iterator<List<Integer>> is; // Iterator(s)
@@ -186,7 +186,7 @@ class Solution {
     if (i == null || !i.hasNext()) {
       while (is.hasNext()) {
         List<Integer> t = is.next();
-        if (t.size() == 0) continue;
+        if (t.size() == 0) continue; // skip empty list
 
         i = t.iterator();
         break;
@@ -205,13 +205,11 @@ class Solution {
     return i.next();
   }
 
-  /*
-  this require keep the current list not current iterator
-  */
+  // Use iterator
   void remove() {
     i.remove();
   }
-
+  // test ---------------------------------------------------------------------
   public static void main(String[] args) throws Exception {
     List<List<Integer>> input = IteratorOfListList.getInput();
     Solution s = new Solution(input);
