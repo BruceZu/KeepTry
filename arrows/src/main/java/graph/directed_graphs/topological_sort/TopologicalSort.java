@@ -275,16 +275,19 @@ public class TopologicalSort {
       //     2, 1, 0 -> // 0 , 1 ,2
     }
 
+    // return true if find circle
     private boolean dfs(
         int t, Map<Integer, Set<Integer>> g, List<Integer> r, Map<Integer, Boolean> visit) {
       if (visit.containsKey(t)) return visit.get(t);
+      // if it is false, still return, as false means previous dfs visited it
+
       visit.put(t, true);
 
       if (g.get(t) == null) { // when some task has not following tasks
         g.putIfAbsent(t, new HashSet<>());
       }
       for (int c : g.get(t)) {
-        if (dfs(c, g, r, visit)) return true;
+        if (dfs(c, g, r, visit)) return true; // find circle on the currentpath
       }
       visit.put(t, false);
 

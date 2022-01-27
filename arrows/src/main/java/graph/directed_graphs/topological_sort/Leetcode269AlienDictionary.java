@@ -188,7 +188,9 @@ public class Leetcode269AlienDictionary {
       Character c, Map<Character, Boolean> v, StringBuilder r, Map<Character, Set<Character>> out) {
     if (v.containsKey(c)) return v.get(c);
     v.put(c, true);
-    for (char o : out.get(c)) if (dfs(o, v, r, out)) return true;
+    for (char o : out.get(c)){
+      if (dfs(o, v, r, out)) return true; // find circle/loop
+    }
     r.append(c);
     v.put(c, false);
     return false;
