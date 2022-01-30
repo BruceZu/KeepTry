@@ -57,7 +57,10 @@ public class Leetcode322CoinChange {
    dp[0]=0, other default is MAX
 
   */
-  // Time Limit Exceeded -------------------------------------------------------
+  /*Time Limit Exceeded -------------------------------------------------------
+   reduce the coins choice scope
+   without cache which should be 2 dimension cache: target value and choice scope[j, length-1]
+  */
   public int coinChange_____(int[] coins, int T) {
     return bt(0, coins, T);
   }
@@ -77,7 +80,10 @@ public class Leetcode322CoinChange {
     }
     return -1;
   }
-  // Time Limit Exceeded -------------------------------------------------------
+  /* Time Limit Exceeded -------------------------------------------------------
+     reduce the target and not change the coins choice scope
+     without cache which is one dimension: target value
+  */
   private int min;
 
   public int coinChange____(int[] coins, int T) {
@@ -102,8 +108,9 @@ public class Leetcode322CoinChange {
 
   /* top down  ----------------------------------------------------------------
   Watch the above solution process https://imgur.com/3Jk18aZ
-  Observer: there is repeated work when current target t changed in different layer
-  for keeping the repeated work: cache current target t and related min counts
+  Observer:
+  There is repeated work when current target t changed in different layer.
+  So, for keeping the repeated work: cache current target t and related min counts
   and the comparison will be moved from the end of backtracking into inner loop
   check all possible way top down layer by layer but with a cache
   */
@@ -119,23 +126,27 @@ public class Leetcode322CoinChange {
     int min = Integer.MAX_VALUE;
     for (int v : coins) {
       if (T - v >= 0) {
-        int res = bt(coins, T - v, cache);
-        if (res >= 0 && res + 1 < min) min = res + 1;
+        int count = bt(coins, T - v, cache);
+        if (count != -1 && count + 1 < min) min = count + 1; // 1 is one coin, the current coin.
       }
     }
-    // use -1, because Integer.MAX_VALUE+1 will be negative in rest+1
+    // -1 means no solution, required by 'If that amount of money cannot be made up by any
+    // combination of the coins, return -1.'
+
     cache[T] = (min == Integer.MAX_VALUE) ? -1 : min;
     //
     return cache[T];
   }
 
-  // Runtime complexity O(A*coins.length) -------------------------------------
-  // bottom up and using the already calculated previous value
-  public static int coinChange_(int[] coins, int T) {
+  /* --------------------------------------------------------------------------
+  Runtime complexity O(T*N)
+  bottom up and using the already calculated previous value
+  */
+  public static int coinChange__(int[] coins, int T) {
     if (T < 1) return 0;
     int[] dp = new int[T + 1];
     // Arrays.sort(coins);
-    dp[0] = 0;
+    dp[0] = 0; // dp[i]:  min counts of coins with sum value as i
     // bottom up
     for (int t = 1; t <= T; t++) {
       dp[t] = Integer.MAX_VALUE;
@@ -149,7 +160,7 @@ public class Leetcode322CoinChange {
     return dp[T] == Integer.MAX_VALUE ? -1 : dp[T];
   }
   // do not use Integer.MAX_VALUE
-  public int coinChange__(int[] coins, int T) {
+  public int coinChange_(int[] coins, int T) {
     int MAX = T + 1;
     int[] dp = new int[T + 1];
     Arrays.fill(dp, MAX);
@@ -161,28 +172,56 @@ public class Leetcode322CoinChange {
         }
       }
     }
-    return dp[T] >= MAX ? -1 : dp[T];
+    return dp[T] == MAX ? -1 : dp[T];
   }
-  // bottom up: extend out from current valid value ---------------------------
+  // bottom up: from current valid value to extend ---------------------------
   public static int coinChange(int[] coins, int T) {
     if (T < 1) return 0;
-    int[] dp = new int[T + 1];
+    int MAX = T + 1;
+    int[] dp = new int[MAX];
     for (int i = 1; i <= T; i++) {
-      dp[i] = Integer.MAX_VALUE;
+      dp[i] = MAX;
     }
     // dp[0] is 0;
 
-    Arrays.sort(coins);
+    Arrays.sort(coins); // when logN < T
     // bottom up from valid dp[t]
     for (int t = 0; t < T; t++) {
-      if (dp[t] == Integer.MAX_VALUE) continue; // not valid
+      if (dp[t] == MAX) continue;
       for (int v : coins) {
         if (0 <= t + v && t + v <= T) {
           dp[t + v] = Math.min(dp[t + v], dp[t] + 1);
-        } else break;
+        } else break; // benefit from sorted coin values
       }
     }
-    return dp[T] == Integer.MAX_VALUE ? -1 : dp[T];
+    return dp[T] == MAX ? -1 : dp[T];
+  }
+
+  /* Complete Knapsack => minimum count of coins with target value ------------
+
+   Runtime O(T*N), Space O(N) N is coins type number. T is target value
+   dp[i] is minimum count of coins with target value i with the coins type from
+         coins[0] to coins[current index]
+  */
+  public static int coinChangeCK(int[] coins, int T) {
+    if (T < 1) return 0;
+    int MAX = T + 1;
+    int[] dp = new int[MAX];
+    for (int i = 1; i <= T; i++) {
+      dp[i] = MAX;
+    }
+    // dp[0] is 0;
+
+    Arrays.sort(coins); // when logN < T
+    for (int i = 0; i < coins.length; i++) {
+      int v = coins[i];
+      for (int t = 1; t <= T; t++) {
+        if (0 <= t - v && dp[t - v] != MAX) {
+          dp[t] = Math.min(dp[t], dp[t - v] + 1);
+        }
+      }
+    }
+    return dp[T] == MAX ? -1 : dp[T];
   }
   // -----------------------------------------------------------------------------
   public static void main(String[] args) {
