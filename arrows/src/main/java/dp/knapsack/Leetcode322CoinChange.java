@@ -1,4 +1,4 @@
-//  Copyright 2017 The KeepTry Open Source Project
+//  Copyright 2022 The KeepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package dp;
+package dp.knapsack;
 
 import java.util.Arrays;
 
@@ -55,9 +55,9 @@ public class Leetcode322CoinChange {
    backtracking all possible way is polynomial time
    dp[t] = min{ dp[t-vi] | vi in given v[] and vi<=t}
    dp[0]=0, other default is MAX
-
   */
-  /*Time Limit Exceeded -------------------------------------------------------
+  /* --------------------------------------------------------------------------
+   Time Limit Exceeded
    reduce the coins choice scope
    without cache which should be 2 dimension cache: target value and choice scope[j, length-1]
   */
@@ -80,9 +80,10 @@ public class Leetcode322CoinChange {
     }
     return -1;
   }
-  /* Time Limit Exceeded -------------------------------------------------------
+  /* --------------------------------------------------------------------------
+   Time Limit Exceeded
      reduce the target and not change the coins choice scope
-     without cache which is one dimension: target value
+     without cache which should be one dimension: target value
   */
   private int min;
 
@@ -106,7 +107,8 @@ public class Leetcode322CoinChange {
     }
   }
 
-  /* top down  ----------------------------------------------------------------
+  /* --------------------------------------------------------------------------
+  top down + cache
   Watch the above solution process https://imgur.com/3Jk18aZ
   Observer:
   There is repeated work when current target t changed in different layer.
@@ -140,6 +142,8 @@ public class Leetcode322CoinChange {
 
   /* --------------------------------------------------------------------------
   Runtime complexity O(T*N)
+  dp[i] is minimum count of coins with target vale i. selected from
+         all coin type each has unlimited counts
   bottom up and using the already calculated previous value
   */
   public static int coinChange__(int[] coins, int T) {
@@ -174,7 +178,11 @@ public class Leetcode322CoinChange {
     }
     return dp[T] == MAX ? -1 : dp[T];
   }
-  // bottom up: from current valid value to extend ---------------------------
+  /* --------------------------------------------------------------------------
+  dp[i] is minimum count of coins with target vale i. selected from
+        all coin type each has unlimited counts
+  bottom up: from current valid value to extend
+  */
   public static int coinChange(int[] coins, int T) {
     if (T < 1) return 0;
     int MAX = T + 1;
@@ -197,11 +205,17 @@ public class Leetcode322CoinChange {
     return dp[T] == MAX ? -1 : dp[T];
   }
 
-  /* Complete Knapsack => minimum count of coins with target value ------------
-
-   Runtime O(T*N), Space O(N) N is coins type number. T is target value
+  /* --------------------------------------------------------------------------
+   Complete Knapsack => minimum count of coins with target value
    dp[i] is minimum count of coins with target value i with the coins type from
          coins[0] to coins[current index]
+   dp[i] is minimum count of coins with target vale i. selected from
+         coin type range from coins[0] to coins[current index], each type has unlimited counts
+
+   Runtime O(T*N),
+   Space O(N)
+   N is coins type number.
+   T is target value
   */
   public static int coinChangeCK(int[] coins, int T) {
     if (T < 1) return 0;

@@ -85,13 +85,13 @@ public class Leetcode1586BinarySearchTreeIteratorII {
    Idea:
      in BST, for a given node
      - it has next
-       -- if it has right sub-tree: the next one is the left most node of the right sub-tree
-       -- else if its parent exists and it is its parent's left node:
+       -1- if it has right sub-tree: the next one is the left most node of the right sub-tree
+       -2- else if its parent exists and it is its parent's left node:
            the next is its parent node
            note: when a node has parent node, and it is parent' right node. parent will not be in stack
            see https://imgur.com/a/geSjfeq
-       O(N) runtime: in worst case, the BST is a line
-       O(N) space: to use a stack to kee cur node's all parent(s)
+       These 2 scenarios are actually 2 perspectives of the same thing, if take a give BST tree is also
+       a right subtree of a virtual node.
      similar logic apply `it has pre`, while use a list can make the runtime to be O(1).
        all pre comes from all next() operation;
    Note:
