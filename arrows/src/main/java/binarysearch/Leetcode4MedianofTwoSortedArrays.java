@@ -17,243 +17,341 @@ package binarysearch;
 
 public class Leetcode4MedianofTwoSortedArrays {
   /*
-  Ask:
-    Given two sorted arrays nums1 and nums2 of size m and n respectively,
-    return the median of the two sorted arrays.
+   Leetcode 4. Median of Two Sorted Arrays
+   Given two sorted arrays nums1 and nums2 of size m and n respectively,
+   return the median of the two sorted arrays.
+   The overall run time complexity should be O(log (m+n)).
 
-      nums1.length == m
-      nums2.length == n
-      0 <= m <= 1000
-      0 <= n <= 1000
-      1 <= m + n <= 2000
-      -10^6 <= nums1[i], nums2[i] <= 10^6
+    Constraints:
+    nums1.length == m
+    nums2.length == n
+    0 <= m <= 1000
+    0 <= n <= 1000
+    1 <= m + n <= 2000
+    -10^6 <= nums1[i], nums2[i] <= 10^6
 
 
-     The overall run time complexity should be O(log (m+n)).
+          nums1 = [1,3],
+          nums2 = [2]
+          Output: 2.00000
 
-      nums1 = [1,3], nums2 = [2]
-      Output: 2.00000
+          nums1 = [1,2],
+          nums2 = [3,4]
+          Output: 2.50000
 
-      nums1 = [1,2], nums2 = [3,4]
-      Output: 2.50000
+          nums1 = [3,4],
+          nums2 = [2]
+          Output: 3.00000
 
-      nums1 = [0,0], nums2 = [0,0]
-      Output: 0.00000
+          nums1 = [2, 2, 4, 4],
+          nums2 = [2, 2, 4, 4],
+          Output: 3.00000
 
-      nums1 = [], nums2 = [1]
-      Output: 1.00000
+          nums1 = [9],
+          nums2 = [7,8],
+          Output: 8.00000
 
-      nums1 = [2], nums2 = []
-      Output: 2.00000
+          nums1 = [6,7,8,9,10,12],
+          nums2 = [1],
+          Output: 8.00000
 
-      nums1 = [1,3], nums2 = [2，2，2]
-      Output: 2.00000
+          nums1 = [1,2,3,4,5,7],
+          nums2 = [6],
+          Output: 4.00000
 
-      nums1 = [], nums2 = []
-      Output: this will not happen as '1 <= m + n <= 2000'
+          nums1 = [0,0],
+          nums2 = [0,0]
+          Output: 0.00000
 
-      nums1 = null, nums2 = []
-      Output: this will not happen as
-      ' 0 <= m <= 1000
-        0 <= n <= 1000'
+          nums1 = [],
+          nums2 = [1]
+          Output: 1.00000
+
+          nums1 = [2],
+          nums2 = []
+          Output: 2.00000
+
+          nums1 = [1,3],
+          nums2 = [2，2，2]
+          Output: 2.00000
+
+          nums1 = [],
+          nums2 = []
+          Output: this will not happen as '1 <= m + n <= 2000'
+
+          nums1 = null,
+          nums2 = []
+          Output: this will not happen as
+          ' 0 <= m <= 1000
+            0 <= n <= 1000'
   */
+  /*
+    Keep value then check count
+    https://imgur.com/lTxLjOn
+    https://imgur.com/jvMbfTi
+    use same median equation:  not matter total length a + b  is even or odd
+    1-based count1 =  ((m+n)-1)/2+1;
+    1-based count2 =  ((m+n))/2+1;
+    find out the count1_th number v1 and count2_th number v2
+    median = (v1+v2)/2
+    E.g.
+    [1,2]
+    [3,4]
 
-  /*---------------------------------------------------------------------------
-   no array is null, at least one array has at least one element.
-   B[j-1] | B[j]
-   A[m-1] | A[m]
+    4/2+1 =  3
+    (4-1)/2+1 =  2
 
-   m is index in A, j is index in B.
-   m + j = half = M + N >>> 1
-   m =  l + r >>>1
-   1>.
-   l and r is possible index range of m in A, initialed as
-   [0,  half or Math.min(half,A.length)] of
-   (right) median index of A+B array
-   0:
-       in the merged A+B the left x elements are all from B
-             min | A[0]
-       B[half-1] | B[half]
-   half or Math.min(half,A.length)
-       in the merged A+B the left x elements are all from A
-       A[half-1] | A[half]
-             min | B[0]
-   use 'while (true)' not use 'while (l <= r)' because it the result always can be
-   find.
-   need not check if (l > r) return -1; because always find the right m and j
+    [1]
+    [3,4]
 
-   2.
-   with m to get j by half:
-   m + j = half which is A.length + B.length >>> 1, it is:
-               the x in the even length 2*x   of A+B
-               the x in the odd  length 2*x+1 of A+B
-               (right) median index of merged A+B array
+    3/2+1 = 2
+    (3-1)/2+1 =  2
 
-   try m with l and r and binary search
-   evaluate the candidate m by j and 4 values in
-   B[j-1] | B[j]
-   A[m-1] | A[m]
-   A, B and merged A+B may have repeated value, so use <= not < in:
-     B[j-1]<=A[m] && A[m-1]<=B[j]
-  Note
-     e.g. A = [3,4], B = []
-     Output: 3.5
-     M:2, N:0, half:1
-     l:0, r:1,
-     m:0, j:1, j-1:0 (Note: in   v(int[] X, int i) method use >= in
-       `if (i >= X.length) return Integer.MAX_VALUE;`
-     A: min|3
-     B: max|max
-     l:1, r:1,
-     m:1, j:0, j-1:-1
-     A:   3|4
-     B: min|max
+    now question is how to find out the number with given count ( 1-based)
+    in  array a valid index scope [i, ie] to get the number v= a[mi]; mi= i+ie>>>1
+    in  array b valid index scope [j, je] to find the right most index mj, to make b[mj] <=v; which can be j-1.
+    not get total tmp_count=  mi-i +1  +  mj-j+1;
 
-   Algorithm pros: need not care which array is short or long
-   O(log(M)) time, O(1) space;
+    not compare the tmp_count with the given count
+      - tmp_count <  count: cut tmp_count numbers from a and b; continue find
+                            from a valid index scope [mi+1, ie] and b valid index scope [ mj+1, je] to find number with given
+                            count-tmp_count; if either array has not valid index scope now, question is convert to find the number
+                            from the left one array;
+      - tmp_count ==   count:  find the answer and it is the max { a[i+ie>>>1], b[mj]}
+      - tmp_count >   count:  cutout half number but note here:
+                              from the valid scope also need delete the max one, to avoid endless loop
+                             a    [9]  | cut nothing
+                             b   [7,8] | cut nothing
+                             Note mj can be j-1 with current valid index scope[j, je]. E.g.
+                             find number with given count=4 => 1
+                             a    [1, 2, 3 |  4, 5, 7]  => [4,5| 7]       => [4]
+                             b    [6]                   => [6]   mj =-1   => []
+
+  Runtime: O((logM)(logN)) not reach required  O(log (m+n))
+  Space O(1)
   */
-  public double findMedianSortedArrays(int[] A, int[] B) {
-    // neither array is null and at least one array has at least one element
-    int M = A.length, N = B.length, half = M + N >>> 1;
-    int l = 0, r = Math.min(M, half);
-    int m = 0, j = 0;
-    while (l <= r) {
-      m = l + r >>> 1;
-      j = half - m;
-      // A[m-1]|A[m]
-      // B[j-1]|B[j]
-      if (v(A, m - 1) <= v(B, j) && v(B, j - 1) <= v(A, m)) break;
-      if (v(A, m - 1) > v(B, j)) r = m - 1;
-      else l = m + 1; // v(B,j-1)>v(A,m))
+  public double findMedianSortedArrays__(int[] a, int[] b) {
+    /* 0 <= m <= 1000, 0 <= n <= 1000, 1 <= m + n <= 2000 */
+    int tc = a.length + b.length;
+    int c1 = (tc - 1) / 2 + 1;
+    int c2 = tc / 2 + 1;
+    int v2 = findCount(a, 0, a.length - 1, b, 0, b.length - 1, c2);
+    if (c1 != c2) {
+      int vl = findCount(a, 0, a.length - 1, b, 0, b.length - 1, c1);
+      return (vl + v2) * 1.0 / 2;
     }
-    if ((M + N & 1) == 1) return Math.min(v(A, m), v(B, j));
-    return (Math.max(v(A, m - 1), v(B, j - 1)) + Math.min(v(A, m), v(B, j))) * 0.5;
+    return v2;
   }
 
-  private double v(int[] x, int i) {
-    if (i < 0) return Integer.MIN_VALUE;
-    if (i >= x.length) return Integer.MAX_VALUE;
-    return x[i];
+  /*
+  Get 1 based `count`th number from a with index range [i, ie] and b with index range [j, je].
+  any array with invalid index scope will enable converting question to
+  finding `count`th number from the other array which at least has 1 element as
+  1 <= m + n <= 2000, so from + count-1 is valid
+
+  O(logM) time M is the long of array A
+  O(1) space
+  */
+  public int findCount(int[] a, int i, int ie, int[] b, int j, int je, int count) {
+    if (ie < i || je < j) {
+      int[] A = ie < i ? b : a;
+      int from = ie < i ? j : i;
+      return A[from + count - 1];
+    }
+    // both has at least 1 number
+    int mi = i + ie >>> 1;
+    int mj = rightBoundary(b, j, je, a[mi]);
+    int LC = mi - i + 1 + mj - j + 1;
+    if (LC < count) return findCount(a, mi + 1, ie, b, mj + 1, je, count - LC);
+    else if (LC == count) return mj == j - 1 ? a[mi] : Math.max(a[mi], b[mj]);
+    else {
+      if (mj == j - 1 || b[mj] < a[mi]) return findCount(a, i, mi - 1, b, j, mj, count);
+      return findCount(a, i, mi, b, j, mj - 1, count);
+    }
   }
+
+  /* find right boundary index mj, A[mj]<=v from A index range [l, r],  mj can l-1 or r
+   when b is [], l=0, r=-1;
+   O(logN) time. N is the long of array B
+   O(1) space
+  */
+  public int rightBoundary(int[] A, int l, int r, int v) {
+    if (A[r] <= v) return r;
+    if (A[l] > v) return l - 1;
+    // now  l<=v  and v<r
+    while (l + 1 < r) {
+      int m = l + r >>> 1;
+      int mv = A[m];
+      if (mv <= v) l = m;
+      else r = m;
+    }
+    return l;
+  }
+  /*---------------------------------------------------------------------------
+   keep count condition. then using binary search to find the expected allocation of i and j.
+   i and j is count in A and B. i+j= total count/2
+   There is only one solution match the value condition
+   https://imgur.com/XyINItc
+
+     Total count C=A.length+B.length;
+     half count  H=A.length+B.length>>>1;
+        when C is even, H = C - H, both half has the same count => find the max left half and min right half => median
+        when C is odd, H is the shorter half =>  median is the min{right half}
+
+     possible part of C in A:
+      count i:  0 or 1,    2 , ....   min(A.length,H )
+     then left part will be in B
+      count j:  C or C-1, C-2, ...   C-min(A.length,H ) which can be 0
+
+     Now the count is guaranteed, there are many above options, but there is only one option who can match
+     value restriction. try ci using binary search to find it.
+      A     i |  i+1
+      B     j |  j+1
+   Assume: 0 <= m <= 1000, 0 <= n <= 1000, 1 <= m + n <= 2000
+           neither A and B is null. total count is at least 1.
+   O(log(C)) =  O(log (m+n)) time,
+   O(1) space;
+  */
+  /*
+  in this method 6 variables are 1-based idx or count, not 0-based index:
+    - C,H   : for merged A and B
+    - l,r,i : in A
+    - j     : in B
+  */
+  public double findMedianSortedArrays_(int[] A, int[] B) {
+    int C = A.length + B.length;
+    int H = A.length + B.length >>> 1;
+    int l = 0, r = Math.min(A.length, H); // un-tried valid count scope
+
+    int i = 0, j = 0;
+    while (l <= r) { // un-tried
+      i = l + r >>> 1; // try to allocate part  i of H in A
+      j = H - i; //  j is the left part of H in B
+      // count view:
+      // A:     i | next: i+1_th.   right part in A: A.length - i
+      // B:     j | next: j+1_th.   right part in B: B.length - j
+      //        H | C-H
+      if (v(A, i) <= v(B, j + 1) && v(B, j) <= v(A, i + 1))
+        break; // expected allocation of i and j. Only one solution.
+      // current location does not work
+      if (v(A, i) > v(B, j + 1)) r = i - 1; // <- ci
+      else l = i + 1; // v(B,cj)>v(A,ci+1)): ci->
+    }
+    if ((C & 1) == 1) return Math.min(v(A, i + 1), v(B, j + 1));
+    return (Math.max(v(A, i), v(B, j)) + Math.min(v(A, i + 1), v(B, j + 1))) * 0.5;
+  }
+
+  private double v(int[] A, int count) {
+    int i = count - 1; // idx-> index
+    if (i < 0) return Integer.MIN_VALUE;
+    if (i >= A.length) return Integer.MAX_VALUE;
+    return A[i];
+  }
+
   /*---------------------------------------------------------------------------
   Idea:
-       median may be 1 for odd(M+N)
-       - median may be in A or B
-       median may be 2 for even (M+N)
-       - left or right median may be in A or B
+   https://imgur.com/CRwAFyY
+   using virtual enhanced array by adding `#`, after that, total count is even
+   keep left count M+N, right count M+N, cut use 2 virtual element
+   then check value condition using original value
+   original left value  <= cut value  ( == : when cut is not on #)
+   original right value >= cut value  ( == : when cut is not on #)
 
-       median 0-based index: left: m+n-1/2, right: m+n/2
-          m=2, n=3, left:2, right: 2
-          m=3, n=3, left:2, right: 3
-       median 1-based index: left: m+n+1/2, right: m+n+2/2
-          m=2, n=3, left:3, right: 3
-          m=3, n=3, left:3, right: 4
+   Details:
+    no matter the total count is even or odd. median can be represented as (left one +  right one)/2
+    0-based index of left and right median :  (m+n-1)/2,   (m+n)/2
+    1-based idx or count of them           :  (m+n-1)/2+1, (m+n)/2+1
 
-    where to cut?
-    Name the shorter sorted array is B[] with length N, longer one as A[] with length M.
-    B have 2*N+1 position to cut,
-    (This is not true for the longer array. as its cut position is decided by the cut position in B)
-    '|' is the cut position, it can be:
-     <a>: between B[i] and B[j] ,  0<= i<j <=N, assume N>=2
-       E.g.:
-        B[]: [1,2] | max
-        A[]:   [3, | 4,5,6]
-     <b>: on B[i] itself  0<=i<=N, assume N>=1
-       E.g.:
-        B[]:   [3]
-                | cut on 3 itself, means median is it, this can took as median = (it + it)/2
-                                                                        it median it
-                                                                        it   |    it
-        A[]: [1,| 2]
+    A[] with length M
+    B[] with length N
+    Assume B is the shorter one:  N<=M,
 
-    use enhanced B: EB and enhance A: EA, then no concern of cut
-    within 2 array elements,and need not care the the total length is odd or even
-    only cut on EB[i]:
-      <a> become:
+    possible location to cut in B:
+     -a- N+1 position: before after and within number, assume N>=2
+                     E.g.:
+                          B[]: [1,2] | max
+                          A[]:   [3, | 4,5,6]
+     -b- N position:  on number itself, assume N>=1, means median is the number itself = (it + it)/2
+                    E.g.:  B  [2]
+                           A [1, 3]
+    In total 2*N+1
+    cut position in A is decided the position in B
+
+    Enhanced B-> `EB`, A->`EA` by adding `#`
+      - no scenario -a-
+      - total counts is always even
+
+    case in -a- becomes:
         EB[]: [#,1,#,2,#] max
                        | cut on '#'
 
         EA[]:   [#,3,#,4,#,5,#,6,#]
                      | cut on '#'
-     <b> become:
+        M+N is even: both cut on #)
+   case in -b- becomes:
        E.g.:
         B[]:   [#,3,#]
                   | cut on 3 itself
                   | cut on '#'
         A[]: [#,1,#,2,#]
+        M+N is odd: there is a cut on value number
 
      enhanced 2 arrays total length is 2*M+2*N+2
-     EA length: 2*M+1
-     EB length: 2*N+1
-     each cut take one position, left element without cut is 2*M+2*N.
-     rule: in EA and EB to keep the total element of left side of 2 cuts is M+N, thus
-           the right side of 2 cuts in EA and EB in total is M+N too.
-     2 cuts position as:
-      EA[i-1] or min , EA[i] with cut, EA[i+1] or max
-      EB[j-1] or min , EB[j] with cut, EB[j+1] or max
+     EA length: 2*M+1, cut hold on a element, left are 2M
+     EB length: 2*N+1, cut hold on a element, left are 2N
 
-      Let L1 =EA[i-1] or min,   R1=EA[i+1] or max
-          L2 =EB[j-1] or min,   R2=EB[j+1] or max
+               j (index)
+               |
+     EB   ..., X, ...
+     EA   ..., Y, ...
+               |
+               i (index)
 
-     try each possible cut position in EB by binary search and adjust the cut position in EB by
-     Check   L1|R1
-             L2|R2
-     accordingly adjust the cut position in EA by keeping the above rule.
+    in EB and EA:  keep both sides elements count as M+N
+      enhanced array B: the count of elements left to j is j;  cut index is j
+      enhanced array A: the count of elements left to i is i;  cut index is i
 
+     original array index = enhanced array index/2
+     E.g.:  original array index  :    0      1      2      3
+                                    #  v,  #  v,  #  v,  #  v,  #
+            enhanced array index j: 0  1,  2  3,  4  5,  6  7,  8
 
-     if L1<=R2 and L2<=R1 the cuts is expected that give the median(s) value
-     else if L1 > R2:  the expected cutting position in EB on the right of current one
-     else if L2 > R1:  the expected cutting position in EB on the left of current one
+    L is value in original array of
+       - cut index j: j is odd at `v`
+       - left to cut index j: j is even at `#`
+    R is value in original array of
+       - cut index j: j is odd at `v`
+       - right to cut index j: j is even at `#`
 
-    index in original array = idx in enhanced array/2 and
-     original index:    0     1     2     3
-              idx:   0  1  2  3  4  5  6  7  8
-    if idx is odd, and it is cut or median is it, then
-       L2=B[idx>>1] | R2=B[idx>>1]
-    else
-      L2=B[idx-1>>1] | R2=B[idx+1>>1]
-    E.g.:
-    original index       0
-                      [# 2 #]
-    idx                0 1 2
+    When cut on v, the L = R = j original value. share it.
+    when cut on #, the L and R are 2 neighbor of j original value.
 
-    original index       0   1
-                      [# 1 # 3 #]
-    idx                0 1 2 3 4
-
-   E.g.:
-            |
-     [# 1 # 2 # ]
-        |
-     [# 3 # 4 # ]
-
-
-     `double R = (c & 1) == 1 ? B[c >>> 1] : (c == 2 * N) ? Integer.MAX_VALUE : B[c + 1 >>> 1];`
-      Because the enhanced array length is odd, last index is even,
-      when cut index is even the element value right next to it in original array is
-        B[c + 1 >>> 1]
-      it is same as
-        B[c >>> 1]
-      so R = (c == 2 * N) ? Integer.MAX_VALUE : B[c >>> 1];
+   O(log(M+N)) time
+   O(1) space
   */
-  double findMedianSortedArrays2(int[] A, int[] B) {
+  static double findMedianSortedArrays(int[] A, int[] B) {
     int M = A.length, N = B.length;
-    if (M < N) return findMedianSortedArrays2(B, A);
+    if (M < N) return findMedianSortedArrays(B, A);
+    // N<=M. B is the shorter one
 
-    int l = 0, r = 2 * N;
+    int l = 0, r = 2 * N; // untried possible cut location index in enhanced B
     while (l <= r) {
-      int c = l + r >>> 1; // cut position index in B
-      double L = (c == 0) ? Integer.MIN_VALUE : B[c - 1 >>> 1];
-      double R = (c & 1) == 1 ? B[c >>> 1] : (c == 2 * N) ? Integer.MAX_VALUE : B[c + 1 >>> 1];
+      int j = l + r >>> 1;
+      double L = (j == 0) ? Integer.MIN_VALUE : B[j - 1 >>> 1];
+      double R = (j & 1) == 1 ? B[j >>> 1] : (j == 2 * N) ? Integer.MAX_VALUE : B[j + 1 >>> 1];
 
-      int c2 = M + N - c;
-      double La = (c2 == 0) ? Integer.MIN_VALUE : A[c2 - 1 >>> 1];
-      double Ra = (c2 & 1) == 1 ? A[c2 >>> 1] : (c2 == 2 * M) ? Integer.MAX_VALUE : A[c2 + 1 >>> 1];
+      int i = M + N - j;
+      double La = (i == 0) ? Integer.MIN_VALUE : A[i - 1 >>> 1];
+      double Ra = (i & 1) == 1 ? A[i >>> 1] : (i == 2 * M) ? Integer.MAX_VALUE : A[i + 1 >>> 1];
 
-      if (La > R) l = c + 1; // binary search  O(logN)
-      else if (L > Ra) r = c - 1;
+      if (La > R) l = j + 1;
+      else if (L > Ra) r = j - 1;
       else return (Math.max(La, L) + Math.min(Ra, R)) / 2;
     }
     return -1;
+  }
+
+  public static void main(String[] args) {
+    findMedianSortedArrays(new int[] {2, 4}, new int[] {2, 2, 4, 4});
   }
 }
