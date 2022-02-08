@@ -236,7 +236,7 @@ public class Leetcode692TopKFrequentWords {
       if (compare(a[i], pv) < 0) swap(a, i++, n++);
       else i++;
     }
-    n--; // note here
+    n--; // note here because pivot is at left end.
     swap(a, n, l);
     return n;
   }
