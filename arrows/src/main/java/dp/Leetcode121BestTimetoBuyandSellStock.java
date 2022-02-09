@@ -17,33 +17,42 @@ package dp;
 
 /*
 121. Best Time to Buy and Sell Stock
-You are given an array prices where p is
-the price of a given stock on the ith day.
 
-You want to maximize your profit by choosing
-a single day to buy one stock and choosing a
-different day in the future to sell that stock.
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+You want to maximize your profit by choosing a single day to buy one stock and choosing
+a different day in the future to sell that stock.
 
-Return the maximum profit you can achieve from
-this transaction. If you cannot achieve any profit,
-return 0.
+Return the maximum profit you can achieve from this transaction.
+If you cannot achieve any profit, return 0.
+
+
+
+Input: prices = [7,1,5,3,6,4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+
+
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transactions are done and the max profit = 0.
+
+
+Constraints:
+1 <= prices.length <= 10^5
+0 <= prices[i] <= 10^4
 */
 /*
-Idea:
-which is the bottom point to buy in?
-once find the bottom point it is easy to get max profit by comparing diff/profit
+Watch: must buy before sell
+
+keep min and max price does not work
+need make sure the max is after min price
+
+keep tacking the min price from start to current price
+calculate the diff = current price - min price in the scope [start, current price]
+select the max one;
  */
 public class Leetcode121BestTimetoBuyandSellStock {
-  public int maxProfit2(int prices[]) {
-    int min = Integer.MAX_VALUE;
-    int r = 0;
-    for (int p : prices) {
-      if (p < min) min = p;
-      else if (p - min > r) r = p - min;
-    }
-    return r;
-  }
-
   public int maxProfit(int ps[]) {
     int min = ps[0];
     int r = 0;
