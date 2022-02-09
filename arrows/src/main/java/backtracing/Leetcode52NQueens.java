@@ -18,40 +18,101 @@ package backtracing;
 import java.util.*;
 
 public class Leetcode52NQueens {
-    private Set<Integer> occupiedCol = new HashSet();
-    private Set<Integer> occupiedDiagonals135 = new HashSet();
-    private Set<Integer> occupiedDiagonals45 = new HashSet();
+  /*
+   Leetcode   52. N-Queens II
 
-    public int totalNQueens(int n) {
-        int[] resolutions = new int[1];
-        backtracking(0, n, resolutions);
-        return resolutions[0];
+    The n-queens puzzle is the problem of placing n queens on an n x n chessboard
+    such that no two queens attack each other.
+
+    Given an integer n, return the number of distinct solutions to the n-queens puzzle.
+
+    Input: n = 4
+    Output: 2
+    Explanation: There are two distinct solutions to the 4-queens puzzle as shown.
+
+
+    Input: n = 1
+    Output: 1
+
+    Constraints:
+
+    1 <= n <= 9
+  */
+  /*
+   O(N!) time. N is the number of queens (which is the same as the width and height of the board).
+   O(N) space. 3 sets
+  */
+  private Set<Integer> col = new HashSet(); // occupied Column
+  private Set<Integer> dg135 = new HashSet(); // occupied Diagonals 135
+  private Set<Integer> dg45 = new HashSet(); // occupied Diagonals 45
+
+  public int totalNQueens(int n) {
+    int[] ans = new int[1];
+    backtracking(0, n, ans);
+    return ans[0];
+  }
+
+  private void backtracking(int r, int N, int[] ans) {
+    if (r == N) {
+      ans[0]++;
+      return;
     }
 
-    private void backtracking(int row, int N, int[] solutions) {
-        if (row == N) {
-            solutions[0]++;
-            return;
-        }
+    int diff, sum;
+    for (int c = 0; c < N; c++) { // check each column
+      if (col.contains(c)) continue;
 
-        int delta, sum;
-        for (int optionalCol = 0; optionalCol < N; optionalCol++) {
-            if (occupiedCol.contains(optionalCol)) continue;
+      diff = r - c;
+      if (dg135.contains(diff)) continue;
 
-            delta = row - optionalCol;
-            if (occupiedDiagonals135.contains(delta)) continue;
+      sum = r + c;
+      if (dg45.contains(sum)) continue;
+      // -----
+      col.add(c);
+      dg135.add(diff);
+      dg45.add(sum);
 
-            sum = row + optionalCol;
-            if (occupiedDiagonals45.contains(sum)) continue;
-            //
-            occupiedCol.add(optionalCol);
-            occupiedDiagonals135.add(delta);
-            occupiedDiagonals45.add(sum);
-            backtracking(row + 1, N, solutions);
+      backtracking(r + 1, N, ans);
 
-            occupiedCol.remove(optionalCol);
-            occupiedDiagonals135.remove(delta);
-            occupiedDiagonals45.remove(sum);
-        }
+      col.remove(c);
+      dg135.remove(diff);
+      dg45.remove(sum);
+      // -----
     }
+  }
+}
+
+class Solution {
+  private int size;
+
+  public int totalNQueens(int n) {
+    size = n;
+    return backtrack(0, new HashSet<>(), new HashSet<>(), new HashSet<>());
+  }
+
+  private int backtrack(int r, Set<Integer> dg135, Set<Integer> dg45, Set<Integer> cols) {
+    if (r == size) return 1;
+
+    int ans = 0;
+    for (int c = 0; c < size; c++) {
+      int diff = r - c;
+      int sum = r + c;
+
+      if (cols.contains(c) || dg135.contains(diff) || dg45.contains(sum)) {
+        continue;
+      }
+
+      cols.add(c);
+      dg135.add(diff);
+      dg45.add(sum);
+
+      ans += backtrack(r + 1, dg135, dg45, cols);
+
+      cols.remove(c);
+      dg135.remove(diff);
+      dg45.remove(sum);
+    }
+
+    return ans;
+  }
 }
