@@ -57,15 +57,15 @@ public class Leetcode309BestTimetoBuyandSellStockwithCooldown {
   }
 
   public int maxProfit(int[] prices) {
-    int cool = Integer.MIN_VALUE, h1 = Integer.MIN_VALUE, h0 = 0;
+    int cool0 = Integer.MIN_VALUE, h1 = Integer.MIN_VALUE, h0 = 0;
     for (int p : prices) {
-      int tmp = cool;
-      cool = h1 + p;
+      int tmp = cool0;
+      cool0 = h1 + p;
       h1 = Math.max(h1, h0 - p);
       h0 = Math.max(h0, tmp);
       // Notice the order: s, then h, then r.
       // at last here s has been updated and not the previous s, that is why need a `preS`
     }
-    return Math.max(cool, h0);
+    return Math.max(cool0, h0);
   }
 }
