@@ -18,62 +18,54 @@ package dp;
 public class Leetcode309BestTimetoBuyandSellStockwithCooldown {
 
   /*
-    At any moment, we can only be in one state.
+   At any moment, we can only be in one state.
+    -  must sell the stock before you buy again)
+    -  sell your stock, cooldown one day
     https://en.wikipedia.org/wiki/Finite-state_machine
     Assemble the above states and actions into a state machine,
-    - `You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).'
-    -  `After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day)`
+    So, 3 status and 3 Action:
 
-    cooldown is a action, with it comes a `reset` status. plus to sold and hold status
-    only `reset` could buy,
+    1 ---(sell)---> coo down(0)
+    1 ---(keep)---> 1 ||  0---(buy)--> 1
+    0---(keep)--> 0   || coo down(0) ---( forced cool)--> 0
 
-    3 status and 4 actions:
-    what status and action can reach sold, hold, reset?
-    hold ---(sell)---> sold
-    hold ---(rest)---> hold ||  reset---(buy)--> hold
-    reset---(rest)--> reset ||  sold ---( forced cool down/rest)--> reset
-
-    at last check the bigger one of profit of `sold` and `reset`
-    Need not care `hold` which bought in the stock at the last price point, which only leads
+    At last, check the bigger one of profit of 0 and coo down(0)
+    Need not care 1 which bought in the stock at the last price point, which only leads
     to the reduction of profits.
 
     Use Integer.MIN_VALUE as the initial profit value of `sold` and `hold`
     which are intended to render the paths that start from these two states impossible.
 
   O(N) time O(1) space
-
-  Code:
-    s, h, r are the max profit of previous status `sold`, `hold` and `reset`
-    they could got from their previous action + status transform path
   */
   public int maxProfit2(int[] p) {
     if (p.length == 0) return 0;
 
-    int s_ = Integer.MIN_VALUE;
-    int r_ = 0; // only `reset` could buy
-    int h_ = Integer.MIN_VALUE;
+    int pre0 = Integer.MIN_VALUE;
+    int preCool0 = 0; // only after cool down could buy
+    int pre1 = Integer.MIN_VALUE;
 
     for (int i = 0; i < p.length; i++) {
-      int s = h_ + p[i]; // current sold
-      int h = Math.max(r_ - p[i], h_); // current hold
-      int r = Math.max(r_, s_); // current reset
-      s_ = s;
-      h_ = h;
-      r_ = r;
+      int curCool0 = pre1 + p[i];
+      int cur1 = Math.max(preCool0 - p[i], pre1); // current hold
+      int cur0 = Math.max(preCool0, pre0); // current not hold
+      pre0 = curCool0;
+      pre1 = cur1;
+      preCool0 = cur0;
     }
-    return Math.max(s_, r_);
+    return Math.max(pre0, preCool0);
   }
 
   public int maxProfit(int[] prices) {
-    int s = Integer.MIN_VALUE, h = Integer.MIN_VALUE, r = 0;
+    int cool = Integer.MIN_VALUE, h1 = Integer.MIN_VALUE, h0 = 0;
     for (int p : prices) {
-      int tmp = s;
-      s = h + p;
-      h = Math.max(h, r - p);
-      r = Math.max(r, tmp);
+      int tmp = cool;
+      cool = h1 + p;
+      h1 = Math.max(h1, h0 - p);
+      h0 = Math.max(h0, tmp);
       // Notice the order: s, then h, then r.
       // at last here s has been updated and not the previous s, that is why need a `preS`
     }
-    return Math.max(s, r);
+    return Math.max(cool, h0);
   }
 }
