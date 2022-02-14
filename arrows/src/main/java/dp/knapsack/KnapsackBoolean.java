@@ -19,92 +19,9 @@ import java.util.Arrays;
 
 /**
  * Apply basic idea in BackPackMax to calculate boolean logic E.g. If it is possible to use existing
- * coin ( type, counts) to exactly make number of price
+ * coin (type, counts) to exactly make number of price
  */
 public class KnapsackBoolean {
-  // boolean dp[]
-  // initial: dp[0] = true;
-  // dp[j] = false; 1<= j <= W;
-
-  private static void as01knapsack(int coinValue, boolean dp[]) {
-    for (int price = dp.length - 1; price >= coinValue; price--) {
-      dp[price] = dp[price] || dp[price - coinValue];
-    }
-  }
-  // unbounded knapsack problem (UKP)
-  private static void asCompleteKnapsack(int coinValue, boolean dp[]) {
-    for (int price = coinValue; price <= dp.length - 1; ++price) {
-      dp[price] = dp[price] || dp[price - coinValue];
-    }
-  }
-
-  /*
-       dp[i][j] = ||{ dp[i-1][ j - k*v]}
-       where
-           0 <= j <= W,
-           0 <= k <= min{count, j/v}
-           d = j % v
-           cnt = j/v
-           v = coin Value
-       when k=0
-         dp[i-1][j - k*v]
-       = dp[i-1][j]
-
-       Cut dp[i-1][j] into groups, groups number = cost, by the value of j % cost.
-       Each group elements dp[i-1][Jd] can form a queue, thus O(1) time is possible
-       by sliding window to calculate the dp[i][j].
-       The queue elements come from dp[i-1][Jd] and it is not changed by dp[i][Jd]
-       So
-       1> One dimensional dp[Jd] is possible,
-       2> It is reasonable to calculate dp[Jd] with left to right order
-
-          queue 0            queue 1            queue 2           ...   queue v-1
-          dp[i-1][0],        dp[i-1][1],        dp[i-1][2],       ... , dp[i-1][v-1],
-       Calculate the new element with translate equation with k=1, so each queue followed by
-          dp[i-1][0 +   v] , dp[i-1][1 +   v] , dp[i-1][2 +   v], ... , dp[i-1][v-1 +   v],
-          dp[i-1][0 + 2*v] , dp[i-1][1 + 2*v] , dp[i-1][2 + 2*v], ... , dp[i-1][v-1 + 2*v],
-          dp[i-1][0 + 3*v] , dp[i-1][1 + 3*v] , dp[i-1][2 + 3*v], ... , dp[i-1][v-1 + 3*v],
-          dp[i-1][0 + 4*v] , dp[i-1][1 + 4*v] , dp[i-1][2 + 4*v], ... , dp[i-1][v-1 + 4*v],
-          dp[i-1][0 + 5*v] , dp[i-1][1 + 5*v] , dp[i-1][2 + 5*v], ... , dp[i-1][v-1 + 5*v],
-          dp[i-1][0 + 6*v] , dp[i-1][1 + 6*v] , dp[i-1][2 + 6*v], ... , dp[i-1][v-1 + 6*v],
-          ...
-          dp[i-1][W-1],      dp[i-1][W]
-                             (assume W%cost == 1)
-
-
-       window size is k+1,  k=min{count, j/v}
-       to make simple use 1 dimensional array dp[j]
-
-       dp index: 0 .. W;
-       O(W) W is the cost/pack‘s volume
-       value: current object type's value,
-       count: current object type's quantity
-  */
-  // bounded knapsack problem (BKP)
-  private static void asMultipleKnapsack(int value, int count, boolean dp[]) {
-    // Slide window size is count +1. need keep element in advance of window to let imq refer.
-    boolean[] q = new boolean[dp.length];
-    for (int d = 0; d < value; d++) { // group by j%cost[i]
-      // cnt = j/value. cnt value is 0, 1, 2, 3, ..., with j is d, d+value, d+2*value, ...
-      int i = -1;
-      // use 1 and 0 mapping to true and false then use sum of
-      // slide window each element to represent the result of || is easy.
-      int possible = 0;
-      for (int j = d; j <= dp.length - 1; j += value) {
-        i++;
-        boolean e = dp[j]; // new element
-        // =======  [calculate the "||" of each element in slide window of queue] START ====
-        q[i] = e;
-        possible += e ? 1 : 0;
-        // index of element just out of window
-        int idx = i - (count + 1); // window size is count+1
-        if (idx >= 0) possible -= (q[idx] ? 1 : 0);
-        // =======  [calculate the "||" of each element in slide window of queue] END =======
-        dp[j] = possible > 0;
-      }
-    }
-  }
-
   public static void knapsack(int value, int count, boolean dp[]) {
     int W = dp.length - 1; // dp length = 0 .. W;  W is the top limitation of the backpack
     if (count == 0) return; // it is initial value.
@@ -116,35 +33,52 @@ public class KnapsackBoolean {
       asMultipleKnapsack(value, count, dp);
     }
   }
+  // boolean dp[]
+  // initial: dp[0] = true;
+  // dp[j] = false; 1<= j <= W;
 
-  // POJ 1742 Coins.  Multiple backpack  O(N*P) time.
-  static int multipleKnapsackInt(int[] coinsValue, int[] coinCounts, int P) {
-    int N = coinsValue.length;
+  static void as01knapsack(int coinValue, boolean dp[]) {
+    for (int price = dp.length - 1; price >= coinValue; price--) {
+      dp[price] = dp[price] || dp[price - coinValue];
+    }
+  }
+  // unbounded knapsack problem (UKP)
+  static void asCompleteKnapsack(int coinValue, boolean dp[]) {
+    for (int price = coinValue; price <= dp.length - 1; ++price) {
+      dp[price] = dp[price] || dp[price - coinValue];
+    }
+  }
 
-    int dp[] = new int[P + 1];
-    Arrays.fill(dp, -1);
-    // Check if each price possible  can be compose with current coins exactly. So initial
-    // P>=1 with -1 not 0.
+  /*
+   refer KnapsackMax.asMultipleKnapsack
+   diff: it is boolean, not max.
+   boolean dp[j] = ||{ dp[ j - k*v]}
+           v = coin Value
 
-    dp[0] = 0; // one dimensional array
-    // O(N*P) time. N: coins type number, P: target price exactly can be got without change is
-    // Note: how to control the quantity limitation of each coin type.
-    // Thus apply complete backpack algorithm to multiple backpack.
-    for (int i = 0; i < N; i++) { // row coin value and quantity
-      for (int p = 0; p <= P; p++) { // column  price
-        if (dp[p] >= 0) dp[p] = coinCounts[i];
-        if (dp[p] < 0 && p - coinsValue[i] >= 0 && dp[p - coinsValue[i]] >= 1) {
-          dp[p] = dp[p - coinsValue[i]] - 1;
-        }
+   window size is current coin count+1
+  */
+  // bounded knapsack problem (BKP)
+  private static void asMultipleKnapsack(int coinValue, int count, boolean dp[]) {
+    int L = dp.length;
+    int W = L - 1;
+    boolean[] v = new boolean[L];
+    for (int g = 0; g < coinValue; g++) { // group by j%cost[i]
+      // use 1 and 0 mapping to true and false then use sum of
+      // slide window to represent the result of ||
+      int sum = 0; // not deque.
+      for (int j = g, cnt = 0; j <= W; cnt++, j += coinValue) {
+        boolean rv = dp[j];
+        // ======= "||" in slide window =======
+        v[cnt] = rv;
+        sum += rv ? 1 : 0;
+        int l = cnt - (count + 1);
+        if (l >= 0) sum -= (v[l] ? 1 : 0);
+        // ======= "||" in slide window =======
+        dp[j] = sum >= 1;
       }
     }
-    int sum = 0; // Number of price that can be pay by current coins exactly without change back
-    for (int i = 1; i <= P; i++) { // P=0 is not be taken account in
-      if (dp[i] >= 0) // It means the P is possible be composed with current coins exactly
-      sum++;
-    }
-    return sum;
   }
+
   // ----- no comments version  --------------------------------------------------------------
   private static void asMultipleKnapsack2(int value, int count, boolean dp[]) {
     boolean[] q = new boolean[dp.length + 1];
@@ -162,7 +96,58 @@ public class KnapsackBoolean {
       }
     }
   }
-  // POJ 1742 Coins.  Multiple backpack  O(N*P) time.
+
+  /*
+    POJ 1742 Coins
+    Description
+
+    People in Silverland use coins.
+    They have coins of value A1,A2,A3...An Silverland dollar.
+    One day Tony opened his money-box and found there were some coins.
+    He decided to buy a very nice watch in a nearby shop.
+    He wanted to pay the exact price(without change) and he knows the price would not more than m.
+    But he didn't know the exact price of the watch.
+    You are to write a program which reads
+    n,m,  // two integers n(1<=n<=100),m(m<=100000)
+    A1,A2,A3...An C1,C2,C3...Cn // 2n integers, denoting A1,A2,A3...An,C1,C2,C3...Cn (1<=Ai<=100000,1<=Ci<=1000)
+                                // the number of Tony's coins of value
+    A1,A2,A3...An
+
+    then calculate how many prices(form 1 to m)
+    Tony can pay use these coins.
+  */
+
+  /* Multiple backpack  O(N*P) time.
+    see https://imgur.com/H1o1kLC
+    dp[i]=-1: for price i if no exactly solution with coins in box
+    dp[i]>=0 : there is exactly solution with coins in box without change
+               now the dp[i] is the current coin left counts
+  */
+  // coin value, counts, price P>=1;
+  static int multipleKnapsackInt(int[] V, int[] C, int P) {
+    int N = V.length;
+    int dp[] = new int[P + 1];
+    Arrays.fill(dp, -1);
+    dp[0] = 0;
+
+    // Note: how to control the quantity limitation of each coin type.
+    // Thus apply complete backpack algorithm to multiple backpack.
+    for (int i = 0; i < N; i++) {
+      int count = C[i], v = V[i]; // coin count and value
+      for (int p = 0; p <= P; p++) { // price
+        if (dp[p] >= 0) dp[p] = count;
+        if (dp[p] < 0 && p - v >= 0 && dp[p - v] >= 1) {
+          dp[p] = dp[p - v] - 1;
+        }
+      }
+    }
+    int sum = 0; // Number of price
+    for (int i = 1; i <= P; i++) { // P=0 is not be taken account in
+      if (dp[i] >= 0) sum++;
+    }
+    return sum;
+  }
+  // Multiple backpack  O(N*P) time.
   static int multipleKnapsack2(int[] coinsValue, int[] coinCounts, int P) {
     int N = coinsValue.length;
     int dp[] = new int[P + 1];
@@ -185,43 +170,6 @@ public class KnapsackBoolean {
   // ------------------------- test ----------------------------------------------------------
   public static void main(String[] args) {
     // First test case of POJ 1742 Coins with asMultiplePack()
-    /*
-       POJ 1742 Coins
-      Description
-
-      People in Silverland use coins.
-      They have coins of value A1,A2,A3...An Silverland dollar.
-      One day Tony opened his money-box and found there were some coins.
-      He decided to buy a very nice watch in a nearby shop.
-      He wanted to pay the exact price(without change) and he knows the price would not more than m.
-      But he didn't know the exact price of the watch.
-      You are to write a program which reads
-      n,m,
-      A1,A2,A3...An and
-      C1,C2,C3...Cn corresponding to the number of Tony's coins of value
-      A1,A2,A3...An then calculate how many prices(form 1 to m)
-      Tony can pay use these coins.
-
-      Input
-      The first line of each test case contains two integers n(1<=n<=100),m(m<=100000).
-      The second line contains 2n integers, denoting A1,A2,A3...An,C1,C2,C3...Cn (1<=Ai<=100000,1<=Ci<=1000).
-      The last test case is followed by two zeros.
-      Output
-
-      For each test case output the answer on a single line.
-      Sample Input
-
-      3 10
-      1 2 4 2 1 1
-      2 5
-      1 4 2 1
-      0 0
-      Sample Output
-
-      8
-      4
-
-    */
     // the value[i] = cost[i]
     int items[][] =
         new int[][] {
