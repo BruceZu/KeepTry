@@ -171,7 +171,7 @@ class Solution_ {
   }
 }
 
-/*
+/* ----------------------------------------------------------------------------
 use Iterator
 */
 class Solution {
@@ -184,7 +184,7 @@ class Solution {
 
   private void findNonEmptyI() {
     if (i == null || !i.hasNext()) {
-      while (is.hasNext()) {
+      while (is != null && is.hasNext()) {
         List<Integer> t = is.next();
         if (t.size() == 0) continue; // skip empty list
 
@@ -223,5 +223,45 @@ class Solution {
     for (List<Integer> l : input) {
       System.out.println(l);
     }
+  }
+}
+// follow up ---------------------------------------------------------------------
+
+class FlatternIterator<T> implements Iterator {
+  private Iterator<Iterator<T>> its = null;
+  private Iterator<T> cur = null;
+
+  public FlatternIterator(List<Iterator<T>> input) {
+    its = input.iterator();
+  }
+
+  @Override
+  public boolean hasNext() {
+    if (cur == null || !cur.hasNext()) {
+      while (its != null && its.hasNext() && !(cur = its.next()).hasNext())
+        ;
+    }
+    return cur != null && cur.hasNext();
+  }
+
+  @Override
+  public Object next() {
+    if (!hasNext()) throw new RuntimeException("No more item is left");
+    return cur.next();
+  }
+
+  public static void main(String[] args) {
+    System.out.println("start");
+    // < <4,2>,<7,8>,<1,3>,<>>
+    List<Iterator<Integer>> data = new LinkedList<>();
+    data.add(Arrays.asList(4, 2).iterator());
+    data.add(Arrays.asList(7, 8).iterator());
+    data.add(Arrays.asList(1, 3).iterator());
+    List<Integer> empty = new ArrayList<>();
+    data.add(empty.iterator());
+
+    FlatternIterator<Integer> it = new FlatternIterator<>(data);
+    while (it.hasNext()) System.out.println(it.next());
+    System.out.println("End");
   }
 }
