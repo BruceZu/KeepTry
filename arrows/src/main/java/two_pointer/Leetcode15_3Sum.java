@@ -90,10 +90,10 @@ public class Leetcode15_3Sum {
     Arrays.binarySearch(i, j+1, k) find k from [i,j]
     "sorted  range contains multiple elements with the specified value,
     there is no guarantee which one will be found"
-     -i-1=y; so i=-y-1;
-     if y='01', -y ='11', -y-1='10'
-     so ~y=-y-1
-     i=~y;
+     -i-1=r; so i=-r-1;
+     if r='101', -r ='011', -r-1='010'
+     so ~r=-r-1
+     i=~r;
   */
   public List<List<Integer>> threeSumBS(int[] a) {
     int N = a.length;
@@ -104,11 +104,12 @@ public class Leetcode15_3Sum {
       if (i > 0 && a[i] == a[i - 1]) continue; // duplicate of a[i]
       int L = i + 1, R = N - 1; // i, [L, R]
       while (L < R) {
+        // find index of the third one
         int r = Arrays.binarySearch(a, L + 1, R + 1, 0 - a[i] - a[L]);
         if (r >= 0) {
           re.add(Arrays.asList(a[i], a[L], a[r]));
           R = r - 1;
-        } else R = ~r - 1;
+        } else R = ~r - 1; // (-r -1 ) -1
 
         while (L < R && a[L] == a[L + 1]) L++; // duplicate of a[L]
         L++;
