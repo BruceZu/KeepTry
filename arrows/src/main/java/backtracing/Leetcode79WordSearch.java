@@ -203,7 +203,7 @@ public class Leetcode79WordSearch {
   }
 
   /* --------------------------------------------------------------------------
-  get one of matched paths' location if it exists
+  get only one of matched paths' location if it exists
   */
   public static List<int[]> find(char[][] g, String w) {
     if (g == null) return new ArrayList<>();
