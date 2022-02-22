@@ -55,18 +55,18 @@ public class Leetcode315CountofSmallerNumbersAfterSelf3 {
       the ascending sorting process.
    O(NlogN) time
   */
-  private static void mergesort(N[] A, int s, int e, N[] T, Integer[] a) {
+  private static void mergesort(N[] A, int s, int e, N[] T, Integer[] tmp) {
     if (s == e) return;
     int m = s + e >>> 1;
-    mergesort(A, s, m, T, a);
-    mergesort(A, m + 1, e, T, a);
+    mergesort(A, s, m, T, tmp);
+    mergesort(A, m + 1, e, T, tmp);
     System.arraycopy(A, s, T, s, e - s + 1);
 
     int i = s, j = m + 1, k = s;
     while (i <= m || j <= e) {
       if (j == e + 1 || i <= m && T[i].v <= T[j].v) {
         A[k] = T[i++];
-        a[A[k].i] += j - (m + 1);
+        tmp[A[k].i] += j - (m + 1);
         // cumulate the sum of smaller ones on the right of A[K].v  during sorting
         k++;
       } else A[k++] = T[j++];

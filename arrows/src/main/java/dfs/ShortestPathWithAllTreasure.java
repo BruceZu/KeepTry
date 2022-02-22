@@ -21,7 +21,8 @@ import java.util.*;
 
 public class ShortestPathWithAllTreasure {
   /*
-     given board and start, end location
+     given board and start, end location.
+     cell value:
       1 is treasure.
      -1 is can not walk through
       0 is able to walk through
