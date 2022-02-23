@@ -19,6 +19,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 // Leetcode 146. LRU Cache
+/*
+  0.75f  is float
+  @Override
+
+ */
 public class LRU_LinkedHashMap {
 
   private Map<Integer, Integer> map;
