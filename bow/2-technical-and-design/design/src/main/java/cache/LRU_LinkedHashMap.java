@@ -15,15 +15,17 @@
 
 package cache;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 // Leetcode 146. LRU Cache
 /*
-  0.75f  is float
-  @Override
+ 0.75f  is float
+ @Override
 
- */
+*/
 public class LRU_LinkedHashMap {
 
   private Map<Integer, Integer> map;
@@ -46,5 +48,27 @@ public class LRU_LinkedHashMap {
   public void set(int key, int value) {
     map.put(key, value);
     //
+  }
+
+  @Override
+  public String toString() {
+    return map.toString();
+  }
+
+  public static void main(String[] args) {
+    LRU_LinkedHashMap cache = new LRU_LinkedHashMap(3);
+    cache.set(1, 1);
+    cache.set(2, 2);
+    cache.set(3, 3);
+    cache.set(4, 4);
+    System.out.println(cache);
+
+    System.out.println(cache.get(1));
+
+    cache.get(2);
+    System.out.println(cache);
+
+    cache.set(3, 32); // update also be taken as accessed
+    System.out.println(cache);
   }
 }
