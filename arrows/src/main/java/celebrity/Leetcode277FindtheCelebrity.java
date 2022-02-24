@@ -87,15 +87,16 @@ public class Leetcode277FindtheCelebrity {
 
    Observe
     each call to knows(...), we can conclusively determine that
-    exactly 1 of the people is not a celebrity:
+    exactly 1 of the people is NOT a celebrity:
     if (I know you) then
-        I am not celebrity
+        I am NOT celebrity
     else (I do not know you) then
-        you are not celebrity: because there is at most only one celebrity
+        you are NOT celebrity: because there is at most only one celebrity
         if there would be 2 celebrities then this logic will not right.
     if
 
-    So loop the nodes will kick off n-1 nodes and only one node left in unknown status. this need N API call
+    So loop the nodes will kick off n-1 nodes and only one node left in unknown status.
+    this need N API call
     if the left `I` node is celebrity need match
       I know nobody and anybody knows me
     this need 2*N API call
@@ -106,10 +107,15 @@ public class Leetcode277FindtheCelebrity {
   public int findCelebrity(int n) {
     int i = 0;
     for (int y = 1; y < n; y++) {
-      if (knows(i, y)) i = y;
+      if (knows(i, y)) i = y; // I am not celebrity
+      // else you are not the celebrity
     }
+    // now:
+    //  - n-1 people is determined to be not the celebrity
+    //  - i is the only candidate now.
     for (int y = 0; y < n; y++) {
       if (i != y && (!knows(y, i) || knows(i, y))) return -1;
+      // celebrity known none, every body know celebrity.
     }
     return i;
   }
