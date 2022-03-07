@@ -68,7 +68,7 @@ public class LRU_LinkedHashMap {
     cache.get(2);
     System.out.println(cache);
 
-    cache.set(3, 32); // update also be taken as accessed
+    cache.set(3, 32); // update also be taken as a read time
     System.out.println(cache);
   }
 }

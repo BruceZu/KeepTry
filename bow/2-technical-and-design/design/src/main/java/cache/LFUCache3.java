@@ -16,6 +16,7 @@
 package cache;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 /*
@@ -45,51 +46,74 @@ Leetcode 460 LFU Cache
    - minf
  */
 public class LFUCache3 { // about 46 lines
-  HashMap<Integer, Integer> map;
+  HashMap<Integer, Integer> kv;
   HashMap<Integer, Integer> kf;
-  HashMap<Integer, LinkedHashSet<Integer>> LFU;
-  int cap;
+  HashMap<Integer, LinkedHashSet<Integer>> fVset;
+  int capcty;
   int minf = 0;
 
   public LFUCache3(int capacity) {
-    cap = capacity;
-    map = new HashMap<>();
+    capcty = capacity;
+    kv = new HashMap<>();
     kf = new HashMap<>();
-    LFU = new HashMap<>();
+    fVset = new HashMap<>();
   }
 
   public int get(int k) {
-    if (!map.containsKey(k)) return -1;
+    if (!kv.containsKey(k)) return -1;
 
     int f = kf.get(k);
-    LFU.get(f).remove(k);
-    if(minf==f && LFU.get(f).isEmpty()) minf++;
+    fVset.get(f).remove(k);
+    if (minf == f && fVset.get(f).isEmpty()) minf++; // not remove it
 
-    LFU.putIfAbsent(f+1,new LinkedHashSet<>());
-    LFU.get(f+1).add(k);
+    fVset.putIfAbsent(f + 1, new LinkedHashSet<>());
+    fVset.get(f + 1).add(k); // insert order
     kf.put(k, f + 1);
 
-    return map.get(k);
+    return kv.get(k);
   }
 
   public void put(int k, int v) {
-    if (cap <= 0) return;
-    if (map.containsKey(k)) {
-      map.put(k, v);
-      get(k);
+    if (kv.containsKey(k)) {
+      kv.put(k, v);
+      get(k); // put is also taken as a read time
       return;
     }
-    if (map.size() >= cap) {
-      int removeK = LFU.get(minf).iterator().next();
-      LFU.get(minf).remove(removeK);
-      map.remove(removeK);
-      //kf.remove(removeK);
+
+    if (capcty <= 0) return;
+    if (kv.size() >= capcty) {
+      int removeK = fVset.get(minf).iterator().next(); // O(1)
+      fVset.get(minf).remove(removeK);
+      kv.remove(removeK);
+      // kf.remove(removeK);
     }
 
     minf = 1;
-    map.put(k, v);
+    kv.put(k, v);
     kf.put(k, 1);
-    LFU.putIfAbsent(1,new LinkedHashSet<>());
-    LFU.get(1).add(k) ;
+    fVset.computeIfAbsent(1, x -> new LinkedHashSet<>()).add(k);
+  }
+
+  public static void main(String[] args) {
+    LinkedHashSet<Integer> set = new LinkedHashSet<>();
+    set.add(1);
+    set.add(2);
+    set.add(3);
+    //  This linked list defines the iteration ordering,
+    //  which is the order in which elements were inserted into the set (insertion-order)
+
+    Iterator<Integer> it = set.iterator();
+    while (it.hasNext()) {
+      System.out.println(it.next());
+    }
+    // Note that insertion order is not affected if an element is re-inserted into the set.
+    set.add(3);
+    set.add(2);
+    set.add(1);
+
+    it = set.iterator();
+    while (it.hasNext()) {
+      System.out.println(it.next());
+    }
   }
 }

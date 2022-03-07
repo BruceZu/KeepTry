@@ -150,7 +150,7 @@ Summary:
  */
 
 class LFUCache { // about 138 line
-  private F s, b;
+  private F s, b; // smallest ... biggest
   private Map<Integer, N> map;
   private int capacity;
 
