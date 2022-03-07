@@ -59,13 +59,14 @@ public class Leetcode212wordsearchII {
   */
 
   /* --------------------------------------------------------------------------
-   BFS does not work see https://imgur.com/aBmIMgD
+   BFS does not work with visited cell value. see https://imgur.com/aBmIMgD
+   instead use visited cell location
   */
   public static List<String> findWords__(char[][] a, String[] words) {
     List<String> r = new LinkedList<>();
     if (a == null || words == null) return r;
     int M = a.length, N = a[0].length;
-    Map<Character, List<Integer>> map = new HashMap<>();
+    Map<Character, List<Integer>> map = new HashMap<>(); // value: locations
     for (int i = 0; i < M; i++) {
       for (int j = 0; j < N; j++) {
         map.computeIfAbsent(a[i][j], k -> new LinkedList<>()).add(i * N + j);
@@ -88,10 +89,10 @@ public class Leetcode212wordsearchII {
 
   private static boolean bfs(int location, String word, char[][] a, int M, int N) {
     Queue<Integer> q = new LinkedList<>();
-    Set<Integer> vis = new HashSet<>();
-    q.offer(location);
+    Set<Integer> vis = new HashSet<>(); // visited cell location, not cell value
+    q.offer(location); // matched char locations
     vis.add(location);
-    int layer = 0; // next layer
+    int layer = 0; // next layer, check it with given string length
 
     char[] w = word.toCharArray();
     int[][] d4 = new int[][] {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
@@ -228,27 +229,31 @@ public class Leetcode212wordsearchII {
     }
 
     private void backtracking(int r, int c, TrieNode head) {
+      if (r < 0 || r >= A.length || c < 0 || c >= A[0].length) return;
+      if (A[r][c] == '#') return;
+      if (!head.children.containsKey(A[r][c])) return;
+
       Character v = A[r][c];
       TrieNode vnode = head.children.get(v);
 
-      //  there is any match word?
+      // there is any match word?
       if (vnode.w != null) {
         ans.add(vnode.w);
-        vnode.w = null; // avoid duplicated, this is why ans is list till works, not use set.
+        vnode.w = null;
+        // remove the string from trie tree avoid duplicated result, this is why ans is
+        // list till works, not use set.
       }
 
       A[r][c] = '#'; //  visited
+
       int[] rOff = {-1, 0, 1, 0};
       int[] cOff = {0, 1, 0, -1};
       for (int i = 0; i < 4; ++i) {
         int r_ = r + rOff[i];
         int c_ = c + cOff[i];
-        if (r_ < 0 || r_ >= A.length || c_ < 0 || c_ >= A[0].length) continue;
-
-        if (vnode.children.containsKey(A[r_][c_])) { // neighbor
-          backtracking(r_, c_, vnode);
-        }
+        backtracking(r_, c_, vnode);
       }
+
       A[r][c] = v;
 
       // Optimization: incrementally remove the visited leaf node which w is guarantee to be null
@@ -260,7 +265,6 @@ public class Leetcode212wordsearchII {
   Trie node use array[26] not map.
   cons: no way to trim the leaf node
   pros:
-
   */
   class Solution2 {
     public List<String> findWords(char[][] A, String[] words) {
@@ -277,6 +281,7 @@ public class Leetcode212wordsearchII {
     public void backtracking(char[][] A, int i, int j, TrieNode root, List<String> ans) {
       char c = A[i][j];
       if (c == '#' || root.children[c - 'a'] == null) return;
+
       root = root.children[c - 'a'];
       if (root.word != null) { // found
         ans.add(root.word);
@@ -284,12 +289,13 @@ public class Leetcode212wordsearchII {
       }
 
       A[i][j] = '#';
+
       if (i > 0) backtracking(A, i - 1, j, root, ans);
       if (i < A.length - 1) backtracking(A, i + 1, j, root, ans);
       if (j > 0) backtracking(A, i, j - 1, root, ans);
       if (j < A[0].length - 1) backtracking(A, i, j + 1, root, ans);
-      A[i][j] = c;
 
+      A[i][j] = c;
       // no way to trim the leaf node
     }
 
