@@ -15,7 +15,7 @@
 
 package sort.radixsort;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Leetcode164MaximumGap {
   /*
@@ -203,5 +203,52 @@ public class Leetcode164MaximumGap {
     System.out.println(maximumGap_(new int[] {1, 5}));
     System.out.println(maximumGap_(new int[] {3, 6, 9, 1}));
     System.out.println(maximumGap(new int[] {3, 6, 6, 9, 1, 10}));
+
+    System.out.println("======");
+    int[] a = new int[] {3, 2, 9, 22, 6, 78, 1};
+    MsdRadixSortInPlace(a);
+    System.out.println(Arrays.toString(a));
+  }
+  /* --------------------------------------------------------------------------
+    MSD Radix sort in place
+    Assume
+       - the array A is positive number
+       - sort in ascending order
+
+    swap(): determine the algorithm is not stable sorting algorithm.
+            it can be fixed  by using a buffer array
+  */
+  public static void MsdRadixSortInPlace(int[] A) {
+    int max = Arrays.stream(A).max().getAsInt();
+    int w = 0; // number of 1s and 0s of max value in binary format
+    while (max > 0) {
+      max >>= 1;
+      w++;
+    }
+    dfs(0, A.length - 1, w - 1, A);
+  }
+  /*
+   l and r is next insert index in array A
+   separate array in 2 ways using current bit
+  */
+  private static void dfs(int from, int to, int MSB, int[] A) {
+    if (MSB == -1 || from == to) return;
+    int e = 1 << MSB;
+    int i = from, l = from, r = to;
+    while (i <= r) {
+      int bit = (A[i] / e) % 2;
+      if (bit == 1) swap(A, i, r--);
+      else swap(A, i++, l++);
+    }
+    dfs(from, l - 1, MSB - 1, A);
+    dfs(r + 1, to, MSB - 1, A);
+  }
+
+  private static void swap(int[] A, int i, int j) {
+    if (i != j) {
+      int tmp = A[i] ^ A[j];
+      A[i] = A[i] ^ tmp;
+      A[j] = A[j] ^ tmp;
+    }
   }
 }
