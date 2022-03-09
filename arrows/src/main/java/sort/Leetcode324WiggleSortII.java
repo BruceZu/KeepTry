@@ -16,6 +16,7 @@
 package sort;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Leetcode324WiggleSortII {
   /*
@@ -26,11 +27,11 @@ public class Leetcode324WiggleSortII {
 
 
     Input: nums = [1,5,1,1,6,4]
-    Output: [1,6,1,5,1,4]
+    Output:       [1,6,1,5,1,4]
     Explanation: [1,4,1,5,1,6] is also accepted.
 
     Input: nums = [1,3,2,2,3,1]
-    Output: [2,3,1,3,1,2]
+    Output:       [2,3,1,3,1,2]
 
     Constraints:
         1 <= nums.length <= 5 * 10^4
@@ -40,35 +41,41 @@ public class Leetcode324WiggleSortII {
 
   */
   /*---------------------------------------------------------------------------
-    Understand:
-     arrange number from bigger -> small order to target location
-         1,    3,   5, ..., then
-      0,    2,    4, ...
+  Understand:
+  1 `assume the input array always has a valid answer`
+      [7,8,9,5,5,5,5,5,3]
+      =>
+      [  7   8   9   5  ]
+      [5   5   5   5   3]
+     "You may assume the input array always has a valid answer."
+  2 Observe:
+     need not sort, just separate array into 2 groups with quick select O(N) time O(1) space
+  3 distribution
+   - the median numbers are separated on both sides
+   - keep same median number larger distance as they can.
+   So, the wiggle sort order decide the order used to distribute the separated array
+    https://imgur.com/oJSklty.png
 
-               [biggers ->      medians]  odd index
-     [medians ->        smallers]            even index
-     - the median numbers are separated on both sides
-     - in `small, bigger, small` wiggle sort
+  3 index relation between the separated array and wiggle sorted array
+    https://imgur.com/80RkGIp.png
+
+  4 distributed the separated array in-place, without extra space
+     once get the pivot = A[N/2] by quick select
+     with it if we directly apply the 3-way partition with order [biggers, pivot(s) , smallers] to original array.
+     as a result the original array would become the expected 3 ways.
+
+     Actually with the index mapping relation between
+       - the 3 ways [biggers, pivot(s) , smallers] array and
+       - `small, biggle, small` wiggle order sorted array
+     passing the partition operation directly to target array index.
+     so as the result, the original array is becomes `small, biggle, small` wiggle order sorted array.
+     https://imgur.com/kl9AKX4.png
   */
-  /*---------------------------------------------------------------------------
-   Idea:
-   Sort array + clone + arrange
-   N is 6: left median at the target array end
-   [1,1,2,2,2,3]
-   [  3   2   2] else does not work:  [1   1   2  ] or [  1   1   2]
-   [2 3 1 2 1 2]                      [1 2 1 2 2 3]    [2 1 2 1 3 2] not `small, big, small` wiggle sort
 
-   N is 5:  median is at the target array start
-    0 1 2 3 4  original index
-   [1,1,2,2,3]
-   [  3   2  ]
-   [2 3 1 2 1]
-    0 1 2 3 4  target index
-
-   target index=(2 * (N - original index ) + 1) % (N | 1)
-
-  O(NlgN) time and O(N) extra space
-   */
+  /*
+  General solution:
+   O(NlgN) time and O(N) extra space
+  */
   public static void wiggleSort_(int[] a) {
     int N = a.length;
     Arrays.sort(a);
@@ -78,85 +85,25 @@ public class Leetcode324WiggleSortII {
       a[(2 * (N - 1 - i) + 1) % (N | 1)] = o[i];
     }
   }
-  /* --------------------------------------------------------------------------
-    Observe:
-    1> If medians are at their right location
-      it still works
-      [7,8,9,5,5,5,1,2,3]
-      arrange number in descending order to target index 1, 3 ,5,....0, 2, 4...
-      [  7   8   9   5  ]
-      [5 7 5 8 1 9 2 5 3]
-      how about   [7,5,5,5,5,5,5,5,3]? "You may assume the input array always has a valid answer."
-
-      So: need not sort with O(nlogn) time
-      Instead, apply partition with pivotal idea:
-      - with quick select to get the (left) median value,(with median pivotal to make O(N) time O(1) space)
-      - with the median value to part array in 3 way.  [>p] [=p] [<p]. Thus, the medians are collected together. Then arrange as above said
-
-    2> Observe: from within the wiggle sorted array to find the 3 ways partitioned result by
-       pivotal or (left) median along the member,bigger-> pivot-> smaller,arranged order
-       which is a function of general index 0,1,2...N-1
-
-      2-1> N=6 even length array
-       0  1  2  3  4  5  index (original)
-      [3, 2  2  2, 1  1]  the order of number being arranged. Descending.
-
-      [2, 3  1  2, 1  2]  target array, wiggle sorted
-          0     1     2   index (original)
-       3     4     5      index (original)
-       0  1  2  3  4  5   current index, N=6, N|1=7
-
-      Observe:
-           3 2 2 2 1 1  number value   line a
-           0 1 2 3 4 5  original index line b
-           1 3 5 0 2 4  target index   line c
-
-      2-2> N=5 odd length array
-      [13212] quick select -> median is 2 -> partition into 3 way in descending:
-       0 1 2 3 4  index (original)
-      [3 2 2 1 1]  the order of number being arranged. Descending.
-
-      [2 3 1 2 1]  target array, wiggle sorted
-         0   1     index (original)
-       2   3   4   index (original)
-       0 1 2 3 4   current index, N=5
-    Observe:
-           3 2 2 2 1    number value    line a
-           0 1 2 3 4    original index  line b
-           1 3 0 2 4    target index    line c
-  Find:
-        - from lines b and c: target index of each A[i] is (i*2 +1) % (N|1)
-        - loop along line b to apply partition idea, it works.
-          it also works for line c, no matter line a is a sorted array or not, only
-          if the median value is provided. with this order we find partitioned descending
-          array in wiggle sorted array.
-
-         The order is the one with it to arrange imaged descending partitioned/sorted array
-         [biggers, pivot(s) , smallers] number to its target index of `small, biggle, small`
-         wiggle sorted array.
-         [ 7      2      5     4     8      5    9    6    5 ]
-                1(0)          3(1)         5(2)      7(3)
-          0(4)          2(5)        4(6)        6(7)      8(8)
-         quick select -> (left median) is 5
-         partition array   [ 7 2 5 4 8 5 9 6 5 ] with 5 along the order:
-         1  3  5  7; 0  2  4  6  8   target index of `small, biggle, small` wiggle sorted array.
-        (0, 1, 2, 3, 4, 5, 6, 7, 8)  index of imaged descending partitioned/sorted array
-
-    partition with pivotal is O(N) time O(1) space
-   */
-
+  /*---------------------------------------------------------------------------
+   O(N) time and O(1) space
+  */
   int N;
 
-  public void wiggleSort(int[] a) {
-    N = a.length;
-    // index of (left) median;
-    int m = N - 1 >> 1;
-    quickSelect(a, 0, N - 1, m);
-    partIn3ways(a, a[m]);
+  public void wiggleSort(int[] A) {
+    N = A.length;
+    // index of
+    //   - median (odd length) or
+    //   - left or right median (even length)
+    //   in ascending order
+    int m = N - 1 >> 1; //  N >> 1;
+    quickSelect(A, 0, N - 1, m); // target is to get the A[m]
+    partIn3ways(A, A[m]);
   }
 
+  // K is 0-based index
   public void quickSelect(int[] a, int l, int r, int k) {
-    while (true) {
+    while (true) { //   while (l < r) {
       int p = separate(a, l, r);
       if (p == k) return;
       else if (p > k) r = p - 1;
