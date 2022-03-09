@@ -69,7 +69,7 @@ public class Leetcode324WiggleSortII {
        - `small, biggle, small` wiggle order sorted array
      passing the partition operation directly to target array index.
      so as the result, the original array is becomes `small, biggle, small` wiggle order sorted array.
-     https://imgur.com/kl9AKX4.png
+     https://imgur.com/oXYCgmy.png
   */
 
   /*
