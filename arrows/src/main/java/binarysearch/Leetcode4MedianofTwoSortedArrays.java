@@ -85,8 +85,10 @@ public class Leetcode4MedianofTwoSortedArrays {
           ' 0 <= m <= 1000
             0 <= n <= 1000'
   */
-  /*
-    Keep value then check count
+  /* --------------------------------------------------------------------------
+    General idea: Keep value then check count
+      Runtime: O((logM)(logN)) not reach required  O(log (m+n))
+      Space O(1)
     https://imgur.com/lTxLjOn
     https://imgur.com/jvMbfTi
     use same median equation:  not matter total length a + b  is even or odd
@@ -127,8 +129,6 @@ public class Leetcode4MedianofTwoSortedArrays {
                              a    [1, 2, 3 |  4, 5, 7]  => [4,5| 7]       => [4]
                              b    [6]                   => [6]   mj =-1   => []
 
-  Runtime: O((logM)(logN)) not reach required  O(log (m+n))
-  Space O(1)
   */
   public double findMedianSortedArrays__(int[] a, int[] b) {
     /* 0 <= m <= 1000, 0 <= n <= 1000, 1 <= m + n <= 2000 */
@@ -188,15 +188,22 @@ public class Leetcode4MedianofTwoSortedArrays {
     return l;
   }
   /*---------------------------------------------------------------------------
-   keep count condition. then using binary search to find the expected allocation of i and j.
-   i and j is count in A and B. i+j= total count/2
+   keep count condition, then check value condition.
+   then using binary search to find the expected allocation of count: i in A,
+   which then decide allocation of count: j in B.
+
+   i and j is count in A and B. i+j= total count/2; it is
+     - half when total count is even
+     - small half when total count is odd
+   possible value of count i if A is  [0, Math.min(A.length, total count/2)]
+
    There is only one solution match the value condition
-   https://imgur.com/XyINItc
+   https://imgur.com/XyINItc.png
 
      Total count C=A.length+B.length;
      half count  H=A.length+B.length>>>1;
         when C is even, H = C - H, both half has the same count => find the max left half and min right half => median
-        when C is odd, H is the shorter half =>  median is the min{right half}
+        when C is odd,  H is the shorter half =>  median is the min{right half}
 
      possible part of C in A:
       count i:  0 or 1,    2 , ....   min(A.length,H )
