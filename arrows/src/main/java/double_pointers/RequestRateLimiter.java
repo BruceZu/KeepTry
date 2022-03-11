@@ -15,13 +15,15 @@
 
 package double_pointers;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /*
- Fixed window size sliding window
- Estimated approach
- */
+Fixed window size sliding window
+Estimated approach
+*/
 public class RequestRateLimiter {
   // Map<String URL> , RequestRateLimiterPerAPI limiter>
   static Map<String, RequestRateLimiterPerAPI> proxy = new ConcurrentHashMap<>();
@@ -38,13 +40,17 @@ public class RequestRateLimiter {
     - distributed cache?
 */
 class RequestRateLimiterPerAPI {
+  // configuration
   private int WIN_WIDTH = 500; // in milliseconds
   private int LIMIT_REQUESTS = 10; // per window
 
-  private int preWCounter = 0;
+  //  fixed pre window and current window
   private Long preWStart = null;
-  private int wCounter = 0;
+  private int preWCounter = 0;
+
   private Long wStart = null;
+  private int wCounter = 0;
+
   private String api = "";
 
   public RequestRateLimiterPerAPI(String URL) {
@@ -111,12 +117,45 @@ class RequestRateLimiterPerAPI {
     return preWCounter * (1 - per) + wCounter * per <= LIMIT_REQUESTS;
   }
 }
-/*
-Not fixed window sliding window
-accurate
-a lot of space of memory
 
-maintain the left valid boundary:
-  backend thread clean staled element => not accurate result
-  log(n) TreeSet<timestamp>
+/*-----------------------------------------------------------------------------
+Not fixed sliding window
+
+Compared with fixed sliding window:
+cons: O(m*n) space. M is API number, n is the limitation of request in given time window
+pros: accurate result
 */
+class RequestRateLimiterSlidingWindow {
+  private Map<String, Deque<Integer>> his; // history request access time logs
+
+  public RequestRateLimiterSlidingWindow() {
+    his = new ConcurrentHashMap<>();
+  }
+
+  public boolean shouldReject(String key, int window, int max) {
+    synchronized (key) {
+      int currentTime = (int) System.currentTimeMillis() / 1000; // seconds
+      int curWstartTime = currentTime - window + 1;
+      his.putIfAbsent(key, new LinkedList<>());
+      Deque<Integer> logs = his.get(key);
+      while (logs.size() > 0 && logs.peekFirst() < curWstartTime) logs.removeFirst();
+      if (logs.size() >= max) return true;
+      logs.addLast(currentTime);
+      return false;
+    }
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+    RequestRateLimiterSlidingWindow test = new RequestRateLimiterSlidingWindow();
+
+    System.out.println(test.shouldReject("device_info", 30, 3));
+    System.out.println(test.shouldReject("device_info", 30, 3));
+    System.out.println(test.shouldReject("device_info", 30, 3));
+
+    // Return true
+    System.out.println(test.shouldReject("device_info", 30, 3));
+    System.out.println(test.shouldReject("device_info", 30, 3));
+    Thread.sleep(30 * 1000);
+    System.out.println(test.shouldReject("device_info", 30, 3));
+  }
+}
