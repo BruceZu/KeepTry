@@ -1,4 +1,4 @@
-//  Copyright 2017 The keepTry Open Source Project
+//  Copyright 2022 The KeepTry Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-package double_pointers;
+package two_pointer;
 
 /**
  * <a href="https://leetcode.com/problems/minimum-size-subarray-sum/">leetcode</a>
